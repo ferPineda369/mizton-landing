@@ -46,16 +46,13 @@ try {
     }
     
     // Determinar número de WhatsApp según preferencia del usuario
-    $whatsappNumber = '2226536090'; // Número predeterminado
+    $whatsappNumber = DEFAULT_WHATSAPP; // Número predeterminado desde .env
     $landingPreference = $validation['user']['landing_preference'] ?? 0;
     $hasWhatsApp = ($validation['user']['waUser'] ?? 0) == 1;
     
-    if ($landingPreference == 1 && $hasWhatsApp && !empty($validation['user']['celularUser'])) {
-        // Usar número personal del usuario si tiene preferencia personal, WhatsApp confirmado y número válido
-        $personalNumber = preg_replace('/[^0-9]/', '', $validation['user']['celularUser']);
-        if (strlen($personalNumber) >= 8 && strlen($personalNumber) <= 14) {
-            $whatsappNumber = $personalNumber;
-        }
+    if ($landingPreference == 1 && $hasWhatsApp && !empty($validation['user']['celularUser']) && !empty($validation['user']['countryUser'])) {
+        // Construir número completo usando countryUser + celularUser
+        $whatsappNumber = buildWhatsAppNumber($validation['user']['countryUser'], $validation['user']['celularUser']);
     }
     
     // Preparar respuesta con información del referido

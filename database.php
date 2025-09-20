@@ -24,6 +24,7 @@ function getUserByReferralCode($referralCode) {
                 activeUser,
                 regUser,
                 celularUser,
+                countryUser,
                 landing_preference,
                 waUser
             FROM tbluser 
@@ -123,5 +124,26 @@ function validateReferralCode($referralCode) {
         'stats' => $stats,
         'message' => 'Código válido'
     ];
+}
+
+/**
+ * Construye el número de WhatsApp completo con código de país
+ */
+function buildWhatsAppNumber($countryUser, $celularUser) {
+    // Mapeo de códigos de país a códigos telefónicos
+    $countryCodes = [
+        'mx' => '52', 'us' => '1', 'ca' => '1', 'gt' => '502', 'sv' => '503',
+        'hn' => '504', 'ni' => '505', 'cr' => '506', 'pa' => '507', 'pe' => '51',
+        'ar' => '54', 'br' => '55', 'cl' => '56', 'co' => '57', 've' => '58',
+        'ec' => '593', 'py' => '595', 'uy' => '598', 'bo' => '591', 'do' => '1',
+        'cu' => '53', 'es' => '34'
+    ];
+    
+    $phoneCode = $countryCodes[$countryUser] ?? '52'; // Default México
+    
+    // Limpiar el número de celular (solo dígitos)
+    $cleanNumber = preg_replace('/[^0-9]/', '', $celularUser);
+    
+    return $phoneCode . $cleanNumber;
 }
 ?>
