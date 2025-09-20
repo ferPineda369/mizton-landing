@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 
                 // Usar número de WhatsApp de la configuración
-                const whatsappNumber = window.MIZTON_CONFIG?.whatsapp_number || '2226536090';
+                const whatsappNumber = window.MIZTON_CONFIG?.whatsapp_number || '522215695942';
                 const message = encodeURIComponent('¡Hola! Me interesa conocer más sobre Mizton y su membresía garantizada.');
                 const whatsappURL = `https://wa.me/${whatsappNumber}?text=${message}`;
                 

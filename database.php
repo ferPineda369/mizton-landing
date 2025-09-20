@@ -4,8 +4,8 @@
  * Utiliza las mismas credenciales que el panel según el entorno
  */
 
-// Incluir configuración de entornos
-require_once '../panel/bootstrap.php';
+// Incluir configuración de entornos (bootstrap simplificado para landing)
+require_once __DIR__ . '/bootstrap-landing.php';
 
 /**
  * Obtiene información del usuario por código de referido
