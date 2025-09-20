@@ -470,7 +470,7 @@ function updateCTAsWithReferral(referralCode, whatsappNumber) {
                 e.preventDefault();
                 
                 const message = encodeURIComponent('¡Hola! Me interesa saber más sobre Mizton y su membresía garantizada.');
-                const whatsappURL = `https://wa.me/52${whatsappNumber}?text=${message}`;
+                const whatsappURL = `https://wa.me/${whatsappNumber}?text=${message}`;
                 
                 console.log('📱 Abriendo WhatsApp:', whatsappURL);
                 window.open(whatsappURL, '_blank');

@@ -144,6 +144,12 @@ function buildWhatsAppNumber($countryUser, $celularUser) {
     // Limpiar el número de celular (solo dígitos)
     $cleanNumber = preg_replace('/[^0-9]/', '', $celularUser);
     
-    return $phoneCode . $cleanNumber;
+    // Si el número ya incluye código de país, devolverlo tal como está
+    // Si no, agregar el código de país correspondiente
+    if (strlen($cleanNumber) > 10 && strpos($cleanNumber, $phoneCode) === 0) {
+        return $cleanNumber; // Ya tiene el código correcto
+    } else {
+        return $phoneCode . $cleanNumber; // Agregar código de país
+    }
 }
 ?>
