@@ -417,8 +417,8 @@ function displayReferralInfo(referralData) {
         referrerType.textContent = referralData.referrer.founder_type;
         bonusPercentage.textContent = referralData.stats.first_level_bonus;
         
-        // Mostrar la información con animación
-        referralInfo.style.display = 'block';
+        // OCULTAR la información del referido (no mostrar el cuadro)
+        referralInfo.style.display = 'none';
         
         // Actualizar CTAs para incluir el código de referido
         updateCTAsWithReferral(referralData.referral_code, referralData.contact.whatsapp_number);
@@ -444,16 +444,39 @@ function updateCTAsWithReferral(referralCode, whatsappNumber) {
         });
     });
     
-    // Actualizar botones de WhatsApp con el número correcto
-    const whatsappButtons = document.querySelectorAll('a[href="#whatsapp"]');
-    whatsappButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
+    // Actualizar TODOS los botones de WhatsApp con el número correcto
+    console.log('🔄 Actualizando botones de WhatsApp con número:', whatsappNumber);
+    
+    // Buscar todos los botones que pueden ser de WhatsApp
+    const allButtons = document.querySelectorAll('a, button');
+    let whatsappButtonsFound = 0;
+    
+    allButtons.forEach(button => {
+        const text = button.textContent.toLowerCase();
+        const href = button.getAttribute('href') || '';
+        
+        // Detectar botones de WhatsApp por texto o href
+        if (text.includes('whatsapp') || text.includes('contactar') || text.includes('saber más') || 
+            text.includes('quiero saber') || href.includes('wa.me') || href.includes('whatsapp')) {
             
-            const message = encodeURIComponent('¡Hola! Me interesa conocer más sobre Mizton y la membresía de inversión. Vengo por el código de referido: ' + referralCode);
-            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${message}`;
+            whatsappButtonsFound++;
+            console.log('📱 Botón WhatsApp encontrado:', button.textContent.trim());
             
-            window.open(whatsappURL, '_blank');
-        });
+            // Remover eventos anteriores clonando el elemento
+            const newButton = button.cloneNode(true);
+            button.parentNode.replaceChild(newButton, button);
+            
+            newButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const message = encodeURIComponent('¡Hola! Vengo de la landing de Mizton y me interesa conocer más sobre la oportunidad de inversión. Mi código de referido es: ' + referralCode);
+                const whatsappURL = `https://wa.me/52${whatsappNumber}?text=${message}`;
+                
+                console.log('📱 Abriendo WhatsApp:', whatsappURL);
+                window.open(whatsappURL, '_blank');
+            });
+        }
     });
+    
+    console.log(`✅ ${whatsappButtonsFound} botones de WhatsApp actualizados con número: ${whatsappNumber}`);
 }
