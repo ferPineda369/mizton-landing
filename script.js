@@ -469,7 +469,7 @@ function updateCTAsWithReferral(referralCode, whatsappNumber) {
             newButton.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                const message = encodeURIComponent('¡Hola! Vengo de la landing de Mizton y me interesa conocer más sobre la oportunidad de inversión. Mi código de referido es: ' + referralCode);
+                const message = encodeURIComponent('¡Hola! Me interesa saber más sobre Mizton y su membresía garantizada.');
                 const whatsappURL = `https://wa.me/52${whatsappNumber}?text=${message}`;
                 
                 console.log('📱 Abriendo WhatsApp:', whatsappURL);
