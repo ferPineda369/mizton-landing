@@ -372,6 +372,9 @@ document.addEventListener('DOMContentLoaded', function() {
     document.head.appendChild(style);
     
     console.log('Mizton Landing Page cargada correctamente ✅');
+    
+    // Manejar códigos de referido al cargar la página
+    handleReferralCode();
 });
 
 // Función para manejar códigos de referido
