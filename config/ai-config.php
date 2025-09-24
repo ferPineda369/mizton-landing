@@ -114,4 +114,30 @@ function createAILogsTable() {
         error_log("Error creating AI logs table: " . $e->getMessage());
     }
 }
+
+/**
+ * Crear tabla de escalamientos si no existe
+ */
+function createEscalationLogsTable() {
+    global $pdo;
+    
+    try {
+        $pdo->exec("
+            CREATE TABLE IF NOT EXISTS escalation_logs (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                session_id VARCHAR(100) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                contact_method VARCHAR(50) NOT NULL,
+                contact_info JSON NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                INDEX idx_session (session_id),
+                INDEX idx_email (email),
+                INDEX idx_method (contact_method),
+                INDEX idx_created (created_at)
+            )
+        ");
+    } catch (Exception $e) {
+        error_log("Error creating escalation logs table: " . $e->getMessage());
+    }
+}
 ?>

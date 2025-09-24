@@ -30,7 +30,7 @@ class MiztonAIHandler {
         1. Te registras en la plataforma
         2. Adquieres un paquete de participación (Membresía)
         3. Accedes a los dividendos globales de Mizton
-        4. Al final del período si decides no continuar, recuperas el 100% de tu inversión inicial + el incentivo de al menos un 15%
+        4. Al final del período si decides no continuar, recuperas el 100% de tu compra inicial + el incentivo de al menos un 15%
         
         QUÉ RECIBES CON LA MEMBRESÍA:
         - Paquete de Tokens Corporativos
@@ -41,10 +41,10 @@ class MiztonAIHandler {
         PRECIOS Y ACCESIBILIDAD:
         - Desde $50 USD ya estás participando de los dividendos globales
         - Puedes adquirir más paquetes para obtener más ganancias
-        - Sistema escalable según tu capacidad de inversión
+        - Sistema escalable según tu capacidad de compra
         
         GARANTÍAS Y SEGURIDAD:
-        - 100% de recuperación de inversión inicial
+        - 100% de recuperación de compra inicial
         - Incentivo mínimo garantizado del 15%
         - Sistema de respaldo sólido y transparente
         - Seguridad financiera como prioridad
@@ -147,14 +147,26 @@ class MiztonAIHandler {
     }
     
     private function getFallbackResponse($message) {
-        // FAQ básicas como fallback
+        // FAQ básicas como fallback (sincronizadas con chat-handler.php)
         $message = strtolower($message);
         
         $faqs = [
-            'hola' => '¡Hola! 👋 Soy el asistente de Mizton. ¿En qué puedo ayudarte hoy?',
-            'que es mizton' => 'Mizton es una plataforma de inversión que garantiza la recuperación del 100% de tu inversión más ganancias adicionales.',
-            'como funciona' => 'Es simple: inviertes, generas ganancias mensuales y al final recuperas el 100% de tu inversión inicial.',
-            'precio' => 'Tenemos diferentes tipos de membresía con distintos precios. ¿Te gustaría que te conecte con un asesor para conocer los detalles?'
+            'hola' => '¡Hola! 👋 Bienvenido a Mizton. Soy tu asistente virtual y estoy aquí para ayudarte con cualquier pregunta sobre nuestra plataforma.',
+            
+            'que es mizton' => 'Mizton es una plataforma innovadora que ofrece membresías garantizadas con recuperación del 100% más ganancias adicionales.',
+            
+            'como funciona' => 'Nuestro sistema funciona así: 1) Te registras, 2) Adquieres un paquete de participación (Membresía), 3) Accedes a los dividendos globales de Mizton, 4) Al final del período si decides no continuar, recuperas el 100% de tu inversión inicial + el incentivo de al menos un 15%. ¡Es así de simple!',
+            
+            'cuanto puedo ganar' => 'Las ganancias varían según la cantidad de Tokens que poseas. Recuerda que hablamos de ganancias globales, más bonos adicionales. ¿Te interesa conocer los detalles específicos?',
+            
+            'es seguro' => 'Absolutamente. Mizton garantiza la recuperación del 100% de tu inversión inicial. Además, contamos con un sistema de respaldo sólido y transparente. Tu seguridad financiera es nuestra prioridad.',
+            
+            'como empezar' => 'Para empezar es muy fácil: 1) Regístrate en nuestra plataforma, 2) Obtén tu primera membresía, 3) ¡Comienza a generar ganancias!. ¿Te ayudo con el registro?',
+            
+            'precio' => 'Desde un paquete de $50 usd ya estás participando de los dividendos globales de Mizton. ¿Te gustaría adquirir más paquetes para obtener más ganancias?',
+            
+            'hablar con humano' => 'Por supuesto! Te voy a conectar con uno de nuestros asesores especializados. Por favor espera un momento mientras te redirijo...',
+            'asesor humano' => 'Perfecto! Te conectaré con un asesor humano especializado. Un momento por favor...'
         ];
         
         foreach ($faqs as $keyword => $answer) {

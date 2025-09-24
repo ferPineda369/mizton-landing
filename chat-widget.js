@@ -281,6 +281,13 @@ class MiztonChatWidget {
             if (data.success) {
                 this.addMessage('bot', data.data.response);
                 
+                // Verificar si requiere escalamiento a humano
+                if (data.data.requires_human) {
+                    setTimeout(() => {
+                        this.escalateToHuman();
+                    }, 2000); // Esperar 2 segundos antes de escalar
+                }
+                
                 // Actualizar conversación con respuesta del bot
                 await fetch(this.chatAPI, {
                     method: 'POST',
@@ -302,7 +309,71 @@ class MiztonChatWidget {
         }
     }
 
-    addMessage(sender, text) {
+    async escalateToHuman() {
+        try {
+            const response = await fetch(this.chatAPI, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'escalate_to_human',
+                    session_id: this.sessionId,
+                    email: this.userEmail,
+                    referral_code: this.referralCode
+                })
+            });
+
+            const data = await response.json();
+            
+            if (data.success && data.data.escalated) {
+                const contactInfo = data.data;
+                let escalationMessage = '';
+                
+                if (contactInfo.contact_method === 'whatsapp_personal') {
+                    escalationMessage = `${contactInfo.message} 
+                    
+                    🔗 <a href="https://wa.me/${contactInfo.contact_info}?text=${encodeURIComponent('Hola! Vengo del chat de la landing page y me gustaría hablar con un asesor.')}" target="_blank" style="color: #667eea; text-decoration: underline;">
+                    👤 Contactar a ${contactInfo.referrer_name || 'tu asesor'} por WhatsApp
+                    </a>`;
+                } else {
+                    escalationMessage = `${contactInfo.message}
+                    
+                    🔗 <a href="https://wa.me/${contactInfo.contact_info}?text=${encodeURIComponent('Hola! Vengo del chat de la landing page y me gustaría hablar con un asesor.')}" target="_blank" style="color: #667eea; text-decoration: underline;">
+                    📱 Contactar equipo de asesores por WhatsApp
+                    </a>`;
+                }
+                
+                this.addMessage('bot', escalationMessage, true); // true para permitir HTML
+                
+                // Deshabilitar input después del escalamiento
+                this.disableChatInput();
+                
+            } else {
+                this.addMessage('bot', 'Disculpa, hubo un problema al conectarte con un asesor. ¿Podrías intentar más tarde?');
+            }
+            
+        } catch (error) {
+            console.error('Error escalando a humano:', error);
+            this.addMessage('bot', 'Disculpa, hay un problema técnico. ¿Podrías intentar contactarnos directamente por WhatsApp?');
+        }
+    }
+
+    disableChatInput() {
+        const input = document.getElementById('chat-input');
+        const sendBtn = document.getElementById('send-message');
+        
+        if (input) {
+            input.disabled = true;
+            input.placeholder = 'Chat transferido a asesor humano...';
+            input.style.backgroundColor = '#f5f5f5';
+        }
+        
+        if (sendBtn) {
+            sendBtn.disabled = true;
+            sendBtn.style.backgroundColor = '#ccc';
+        }
+    }
+
+    addMessage(sender, text, allowHTML = false) {
         const messages = document.getElementById('chat-messages');
         const messageDiv = document.createElement('div');
         messageDiv.className = `${sender}-message`;
@@ -316,7 +387,13 @@ class MiztonChatWidget {
                 'background: white; border: 1px solid #eee;'
             }
         `;
-        messageDiv.textContent = text;
+        
+        if (allowHTML) {
+            messageDiv.innerHTML = text;
+        } else {
+            messageDiv.textContent = text;
+        }
+        
         messages.appendChild(messageDiv);
         messages.scrollTop = messages.scrollHeight;
     }

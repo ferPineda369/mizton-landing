@@ -50,6 +50,13 @@ SELECT email, referral_code, status, created_at
 FROM chat_leads 
 ORDER BY created_at DESC 
 LIMIT 20;
+
+-- Ver escalamientos a humanos
+SELECT el.email, el.contact_method, el.created_at,
+       JSON_EXTRACT(el.contact_info, '$.message') as escalation_message
+FROM escalation_logs el 
+ORDER BY el.created_at DESC 
+LIMIT 10;
 ```
 
 ## 🔧 CONFIGURACIÓN AVANZADA
