@@ -547,6 +547,7 @@ include 'config.php';
     </footer>
 
     <script src="script.js"></script>
+    <script src="chat-widget.js"></script>
 </body>
 </html>
 <!-- Test deployment -->

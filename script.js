@@ -420,8 +420,15 @@ function displayReferralInfo(referralData) {
         // OCULTAR la información del referido (no mostrar el cuadro)
         referralInfo.style.display = 'none';
         
-        // Actualizar CTAs para incluir el código de referido
-        updateCTAsWithReferral(referralData.referral_code, referralData.contact.whatsapp_number);
+        // Determinar método de atención basado en landing_preference
+        if (referralData.contact.is_personal) {
+            // Atención personal vía WhatsApp
+            updateCTAsWithReferral(referralData.referral_code, referralData.contact.whatsapp_number);
+            console.log('🔄 Configurando atención personal vía WhatsApp');
+        } else {
+            // Atención automatizada vía chat (se maneja en chat-widget.js)
+            console.log('🤖 Atención automatizada activada');
+        }
     }
 }
 
