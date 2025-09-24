@@ -453,7 +453,6 @@ function handleEscalateToHuman($input) {
 function determineHumanContactMethod($referrerInfo) {
     // Si hay referidor con atención personal
     if ($referrerInfo && $referrerInfo['landing_preference'] == 1 && $referrerInfo['waUser'] == 1) {
-        require_once '../database.php';
         $whatsappNumber = buildWhatsAppNumber($referrerInfo['countryUser'], $referrerInfo['celularUser']);
         
         return [
@@ -473,6 +472,27 @@ function determineHumanContactMethod($referrerInfo) {
         'message' => 'Te conectaré con nuestro equipo de asesores especializados de Mizton.',
         'referrer_name' => null
     ];
+}
+
+/**
+ * Construir número de WhatsApp completo
+ */
+function buildWhatsAppNumber($countryCode, $phoneNumber) {
+    // Limpiar número de teléfono
+    $cleanPhone = preg_replace('/[^0-9]/', '', $phoneNumber);
+    
+    // Si ya tiene código de país, devolverlo
+    if (strlen($cleanPhone) > 10) {
+        return $cleanPhone;
+    }
+    
+    // Agregar código de país por defecto (México)
+    $defaultCountryCode = '52';
+    if ($countryCode && is_numeric($countryCode)) {
+        $defaultCountryCode = $countryCode;
+    }
+    
+    return $defaultCountryCode . $cleanPhone;
 }
 
 /**

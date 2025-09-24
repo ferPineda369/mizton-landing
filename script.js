@@ -373,11 +373,23 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Mizton Landing Page cargada correctamente ✅');
     
-    // Manejar códigos de referido al cargar la página
-    handleReferralCode();
+    // Configurar botones híbridos después de cargar la página
+    setTimeout(() => {
+        // Obtener código de referido de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const referralCode = urlParams.get('ref');
+        
+        if (referralCode) {
+            console.log('🔗 Código de referido detectado:', referralCode);
+            loadReferralInfo(referralCode);
+        } else {
+            console.log('ℹ️ No hay código de referido - configurando botones híbridos');
+            updateCTAsWithReferral('', '');
+        }
+    }, 1000); // Esperar 1 segundo para que carguen todos los elementos
 });
 
-// Función para manejar códigos de referido
+// Función para manejar códigos de referido al cargar la página
 function handleReferralCode() {
     // Obtener código de referido de la URL
     const urlParams = new URLSearchParams(window.location.search);
@@ -424,16 +436,14 @@ function displayReferralInfo(referralData) {
         // El chat se activa siempre, independientemente de landing_preference
         console.log('🤖 Chat automatizado activado para todos los usuarios');
         
-        // Los botones de WhatsApp se mantienen como opción adicional
-        if (referralData.contact.is_personal) {
-            updateCTAsWithReferral(referralData.referral_code, referralData.contact.whatsapp_number);
-            console.log('📱 WhatsApp personal también disponible como opción directa');
-        }
+        // Configurar botones híbridos SIEMPRE
+        updateCTAsWithReferral(referralData.referral_code, referralData.contact.whatsapp_number);
+        console.log('🔄 Botones híbridos configurados');
     }
 }
 
 // Función para configurar CTAs con nuevo flujo híbrido
-function updateCTAsWithReferral(referralCode, whatsappNumber) {
+function updateCTAsWithReferral(referralCode = '', whatsappNumber = '') {
     // Separar botones por tipo - INCLUIR botones con #whatsapp para convertirlos a chat
     const chatButtons = document.querySelectorAll('a[href="#info"], a[href="#saber-mas"], a[href="#whatsapp"]');
     const registerButtons = document.querySelectorAll('a[href="#unirse"], a[href="#registro"]');

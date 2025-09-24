@@ -583,7 +583,7 @@ class MiztonChatWidget {
 
             const data = await response.json();
             
-            if (data.success && data.data.escalated) {
+            if (data.success && data.data) {
                 const contactInfo = data.data;
                 // Generar mensaje con contexto
                 const contextMessage = await this.generateContextMessage(contactInfo);
