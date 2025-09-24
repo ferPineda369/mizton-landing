@@ -262,6 +262,9 @@ class MiztonChatWidget {
 
         this.addMessage('user', message);
         input.value = '';
+        
+        // Mostrar spinner de "escribiendo..."
+        this.showTypingIndicator();
 
         // Procesar mensaje según el paso actual
         if (this.currentStep === 'initial' || this.currentStep === 'waiting_email') {
@@ -291,14 +294,23 @@ class MiztonChatWidget {
                         session_id: this.sessionId
                     })
                 });
-
+                
                 const data = await response.json();
                 
                 if (data.success) {
+                    this.userEmail = message;
                     this.currentStep = 'chatting';
-                    this.addMessage('bot', `¡Perfecto, ${message}! 🎉 Ya estás registrado. Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?`);
+                    
+                    if (data.existing_user && data.data.conversation_history) {
+                        // Usuario existente - cargar historial
+                        this.loadConversationHistory(data.data.conversation_history);
+                        this.addMessage('bot', data.message); // "Bienvenido de vuelta! Continuemos donde lo dejamos."
+                    } else {
+                        // Usuario nuevo
+                        this.addMessage('bot', data.message); // "Perfecto! Ahora puedo ayudarte..."
+                    }
                 } else {
-                    this.addMessage('bot', 'Hubo un problema al registrar tu email. ¿Podrías intentar nuevamente?');
+                    this.addMessage('bot', 'Hubo un problema guardando tu información. ¿Podrías intentar de nuevo?');
                 }
             } catch (error) {
                 console.error('Error guardando lead:', error);
@@ -306,6 +318,104 @@ class MiztonChatWidget {
             }
         } else {
             this.addMessage('bot', 'Por favor ingresa un email válido (ejemplo: tu@email.com) para continuar.');
+        }
+    }
+
+    loadConversationHistory(conversationHistory) {
+        // Limpiar mensajes actuales excepto el inicial
+        const messages = document.getElementById('chat-messages');
+        const initialMessage = messages.querySelector('.bot-message');
+        messages.innerHTML = '';
+        
+        // Restaurar mensaje inicial
+        if (initialMessage) {
+            messages.appendChild(initialMessage);
+        }
+        
+        // Cargar historial
+        conversationHistory.forEach(msg => {
+            this.addMessage(msg.sender, msg.message, false, false); // Sin scroll automático
+        });
+        
+        // Scroll al final después de cargar todo
+        setTimeout(() => {
+            messages.scrollTop = messages.scrollHeight;
+        }, 100);
+        
+        console.log('📜 Historial de conversación cargado:', conversationHistory.length, 'mensajes');
+    }
+
+    showTypingIndicator() {
+        const messages = document.getElementById('chat-messages');
+        const typingDiv = document.createElement('div');
+        typingDiv.id = 'typing-indicator';
+        typingDiv.className = 'bot-message';
+        typingDiv.style.cssText = `
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+            background: white;
+            border: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        `;
+        
+        typingDiv.innerHTML = `
+            <div style="display: flex; gap: 4px;">
+                <div class="typing-dot" style="
+                    width: 8px;
+                    height: 8px;
+                    background: #667eea;
+                    border-radius: 50%;
+                    animation: typing 1.4s infinite ease-in-out;
+                "></div>
+                <div class="typing-dot" style="
+                    width: 8px;
+                    height: 8px;
+                    background: #667eea;
+                    border-radius: 50%;
+                    animation: typing 1.4s infinite ease-in-out 0.2s;
+                "></div>
+                <div class="typing-dot" style="
+                    width: 8px;
+                    height: 8px;
+                    background: #667eea;
+                    border-radius: 50%;
+                    animation: typing 1.4s infinite ease-in-out 0.4s;
+                "></div>
+            </div>
+            <span style="color: #888; font-style: italic;">Escribiendo...</span>
+        `;
+        
+        // Agregar CSS para animación
+        if (!document.getElementById('typing-animation-css')) {
+            const style = document.createElement('style');
+            style.id = 'typing-animation-css';
+            style.textContent = `
+                @keyframes typing {
+                    0%, 60%, 100% {
+                        transform: translateY(0);
+                        opacity: 0.4;
+                    }
+                    30% {
+                        transform: translateY(-10px);
+                        opacity: 1;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        messages.appendChild(typingDiv);
+        messages.scrollTop = messages.scrollHeight;
+    }
+
+    hideTypingIndicator() {
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) {
+            typingIndicator.remove();
         }
     }
 
@@ -337,13 +447,32 @@ class MiztonChatWidget {
             const data = await response.json();
             
             if (data.success) {
-                this.addMessage('bot', data.data.response);
+                // Determinar si es respuesta FAQ o IA
+                const isFAQResponse = !data.data.powered_by || data.data.powered_by === 'faq';
                 
-                // Verificar si requiere escalamiento a humano
-                if (data.data.requires_human) {
+                if (isFAQResponse) {
+                    // Para FAQ: delay de 3 segundos para simular escritura humana
                     setTimeout(() => {
-                        this.showEscalationButton();
-                    }, 1000); // Mostrar botón después de 1 segundo
+                        this.hideTypingIndicator();
+                        this.addMessage('bot', data.data.response);
+                        
+                        // Verificar escalamiento después del mensaje
+                        if (data.data.requires_human) {
+                            setTimeout(() => {
+                                this.showEscalationButton();
+                            }, 1000);
+                        }
+                    }, 3000);
+                } else {
+                    // Para IA: respuesta inmediata (la IA ya tiene su propio delay)
+                    this.hideTypingIndicator();
+                    this.addMessage('bot', data.data.response);
+                    
+                    if (data.data.requires_human) {
+                        setTimeout(() => {
+                            this.showEscalationButton();
+                        }, 1000);
+                    }
                 }
                 
                 // Actualizar conversación con respuesta del bot
@@ -358,11 +487,13 @@ class MiztonChatWidget {
                     })
                 });
             } else {
+                this.hideTypingIndicator();
                 this.addMessage('bot', 'Lo siento, no pude procesar tu mensaje. ¿Podrías reformularlo?');
             }
             
         } catch (error) {
             console.error('Error procesando mensaje:', error);
+            this.hideTypingIndicator();
             this.addMessage('bot', 'Disculpa, hay un problema técnico. ¿Podrías intentar más tarde?');
         }
     }
@@ -554,7 +685,7 @@ class MiztonChatWidget {
         }
     }
 
-    addMessage(sender, text, allowHTML = false) {
+    addMessage(sender, text, allowHTML = false, autoScroll = true) {
         const messages = document.getElementById('chat-messages');
         const messageDiv = document.createElement('div');
         messageDiv.className = `${sender}-message`;
@@ -576,7 +707,10 @@ class MiztonChatWidget {
         }
         
         messages.appendChild(messageDiv);
-        messages.scrollTop = messages.scrollHeight;
+        
+        if (autoScroll) {
+            messages.scrollTop = messages.scrollHeight;
+        }
     }
 }
 

@@ -115,7 +115,7 @@ function handleValidateReferral($input) {
 }
 
 /**
- * Guardar nuevo lead del chat
+ * Guardar lead en base de datos o recuperar existente
  */
 function handleSaveLead($input) {
     global $pdo;
@@ -123,39 +123,79 @@ function handleSaveLead($input) {
     $email = trim($input['email'] ?? '');
     $referralCode = trim($input['referral_code'] ?? '');
     $sessionId = trim($input['session_id'] ?? '');
-    $referrerId = $input['referrer_id'] ?? null;
     
     if (empty($email) || empty($sessionId)) {
-        throw new Exception('Email y session_id son requeridos');
+        throw new Exception('email y session_id son requeridos');
     }
     
-    // Validar formato de email
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        throw new Exception('Formato de email inválido');
-    }
-    
-    // Verificar si ya existe el lead
-    $stmt = $pdo->prepare("SELECT id FROM chat_leads WHERE session_id = ?");
-    $stmt->execute([$sessionId]);
-    
-    if ($stmt->fetch()) {
-        // Actualizar email si ya existe
-        $stmt = $pdo->prepare("UPDATE chat_leads SET email = ?, status = 'email_captured', updated_at = NOW() WHERE session_id = ?");
-        $stmt->execute([$email, $sessionId]);
-    } else {
-        // Crear nuevo lead
+    try {
+        // Verificar si ya existe un lead con este email
+        $stmt = $pdo->prepare("SELECT * FROM chat_leads WHERE email = ? ORDER BY created_at DESC LIMIT 1");
+        $stmt->execute([$email]);
+        $existingLead = $stmt->fetch();
+        
+        if ($existingLead) {
+            // Email ya existe - actualizar session_id y devolver historial
+            $stmt = $pdo->prepare("
+                UPDATE chat_leads 
+                SET session_id = ?, updated_at = CURRENT_TIMESTAMP 
+                WHERE email = ?
+            ");
+            $stmt->execute([$sessionId, $email]);
+            
+            // Devolver información del lead existente con historial
+            $conversationData = json_decode($existingLead['conversation_data'], true) ?? [];
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'Bienvenido de vuelta! Continuemos donde lo dejamos.',
+                'existing_user' => true,
+                'data' => [
+                    'lead_id' => $existingLead['id'],
+                    'email' => $existingLead['email'],
+                    'referral_code' => $existingLead['referral_code'],
+                    'conversation_history' => $conversationData,
+                    'status' => $existingLead['status']
+                ]
+            ]);
+            return;
+        }
+        
+        // Email nuevo - crear nuevo lead
+        $referrerId = null;
+        if (!empty($referralCode)) {
+            $stmt = $pdo->prepare("SELECT idUser FROM tbluser WHERE codigoUser = ?");
+            $stmt->execute([$referralCode]);
+            $referrer = $stmt->fetch();
+            if ($referrer) {
+                $referrerId = $referrer['idUser'];
+            }
+        }
+        
+        // Insertar nuevo lead
         $stmt = $pdo->prepare("
-            INSERT INTO chat_leads (email, referral_code, referrer_id, session_id, status) 
-            VALUES (?, ?, ?, ?, 'email_captured')
+            INSERT INTO chat_leads (email, referral_code, referrer_id, session_id, status, conversation_data) 
+            VALUES (?, ?, ?, ?, 'email_captured', '[]')
         ");
+        
         $stmt->execute([$email, $referralCode, $referrerId, $sessionId]);
+        $leadId = $pdo->lastInsertId();
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Perfecto! Ahora puedo ayudarte con cualquier pregunta sobre Mizton.',
+            'existing_user' => false,
+            'data' => [
+                'lead_id' => $leadId,
+                'email' => $email,
+                'referral_code' => $referralCode
+            ]
+        ]);
+        
+    } catch (Exception $e) {
+        error_log("Error guardando lead: " . $e->getMessage());
+        throw new Exception('Error guardando información');
     }
-    
-    echo json_encode([
-        'success' => true,
-        'message' => 'Lead guardado correctamente',
-        'data' => ['email' => $email]
-    ]);
 }
 
 /**
@@ -209,32 +249,59 @@ function handleUpdateConversation($input) {
 function handleFAQResponse($input) {
     $message = strtolower(trim($input['message'] ?? ''));
     
-    // FAQ básicas de Mizton
+    // FAQ básicas de Mizton - Más conversacionales y con más variaciones
     $faqs = [
+        // Saludos
         'hola' => '¡Hola! 👋 Bienvenido a Mizton. Soy tu asistente virtual y estoy aquí para ayudarte con cualquier pregunta sobre nuestra plataforma.',
+        'buenos dias' => '¡Buenos días! 🌅 ¡Qué gusto tenerte aquí! Soy el asistente de Mizton y estoy listo para resolver todas tus dudas.',
+        'buenas tardes' => '¡Buenas tardes! ☀️ Perfecto momento para conocer sobre Mizton. ¿En qué puedo ayudarte hoy?',
+        'buenas noches' => '¡Buenas noches! 🌙 Aunque sea tarde, estoy aquí 24/7 para ayudarte con Mizton. ¿Qué te gustaría saber?',
         
-        'que es mizton' => 'Mizton es una plataforma innovadora que ofrece membresías garantizadas con recuperación del 100% más ganancias adicionales.',
+        // Qué es Mizton
+        'que es mizton' => 'Mizton es una plataforma innovadora que ofrece membresías garantizadas con recuperación del 100% más ganancias adicionales. ¡Es como tener lo mejor de ambos mundos! 🚀',
+        'mizton' => 'Mizton es tu oportunidad de participar en dividendos globales con total seguridad. ¿Te gustaría saber cómo funciona exactamente?',
+        'plataforma' => 'Nuestra plataforma está diseñada para que obtengas ganancias de forma segura y transparente. ¿Hay algo específico que te gustaría conocer?',
         
-        'como funciona' => 'Nuestro sistema funciona así: 1) Te registras, 2) Aquieres un paquete de participación (Membresía), 3) Accedes a los dividendos globales de Mizton, 4) Al final del período si decides no continuar, recuperas el 100% de tu inversión inicial + el incentivo de al menos un 15%. ¡Es así de simple!',
+        // Funcionamiento
+        'como funciona' => 'Nuestro sistema funciona así: 1) Te registras, 2) Adquieres un paquete de participación (Membresía), 3) Accedes a los dividendos globales de Mizton, 4) Al final del período si decides no continuar, recuperas el 100% de tu inversión inicial + el incentivo de al menos un 15%. ¡Es así de simple! 🎯',
+        'funciona' => '¡Es súper sencillo! Básicamente inviertes, generas ganancias mensuales y al final recuperas todo tu dinero más ganancias. ¿Te explico paso a paso?',
+        'sistema' => 'Nuestro sistema está basado en dividendos globales. Tú participas con tokens corporativos y recibes tu parte proporcional. ¿Quieres más detalles?',
         
-        'qué recibo con la membresía' => 'Recibes un paquete de Tokens Corporativos que te dan acceso a los dividendos globales de Mizton. ¿Te gustaría conocer los detalles?',
+        // Membresías y tokens
+        'membresia' => 'Las membresías son tu entrada a los dividendos globales de Mizton. Cada membresía incluye tokens corporativos que generan ganancias. ¿Te interesa saber los precios?',
+        'tokens' => 'Los tokens corporativos son tu participación en Mizton. Mientras más tokens tengas, mayor será tu parte de los dividendos globales. ¡Es proporcional! 📈',
+        'que recibo' => 'Recibes un paquete de Tokens Corporativos que te dan acceso a los dividendos globales de Mizton. ¿Te gustaría conocer los detalles específicos?',
         
-        'cuanto puedo ganar' => 'Las ganancias varían según la cantidad de Tokens que poseas. Recuerda que hablamos de ganancias globales, más bonos adicionales. ¿Te interesa conocer los detalles específicos?',
+        // Ganancias
+        'cuanto puedo ganar' => 'Las ganancias varían según la cantidad de Tokens que poseas. Recuerda que hablamos de ganancias globales, más bonos adicionales por referidos. ¿Te interesa conocer los detalles específicos? 💰',
+        'ganancias' => '¡Las ganancias son lo emocionante! Participas de dividendos globales más bonos por referir personas. ¿Quieres que te explique cómo se calculan?',
+        'dinero' => 'Con Mizton puedes generar ingresos de dos formas: dividendos por tus tokens y bonos por referir personas. ¿Te gustaría saber más sobre alguna?',
+        'ingresos' => 'Los ingresos en Mizton provienen de los dividendos globales que se reparten entre todos los miembros según sus tokens. ¡Es transparente y justo! ⚖️',
         
-        'es seguro' => 'Absolutamente. Mizton garantiza la recuperación del 100% de tu inversión inicial. Además, contamos con un sistema de respaldo sólido y transparente. Tu seguridad financiera es nuestra prioridad.',
+        // Seguridad
+        'es seguro' => 'Absolutamente. Mizton garantiza la recuperación del 100% de tu inversión inicial más un incentivo mínimo del 15%. Además, contamos con un sistema de respaldo sólido y transparente. Tu seguridad financiera es nuestra prioridad. 🛡️',
+        'seguro' => '¡Totalmente seguro! Tienes garantía del 100% de recuperación más ganancias mínimas del 15%. ¿Te gustaría conocer más sobre nuestras garantías?',
+        'confiable' => 'Mizton es completamente confiable. Tenemos sistemas de respaldo y transparencia total. ¿Hay algo específico sobre la seguridad que te preocupe?',
+        'garantia' => 'Nuestra garantía es simple: recuperas el 100% de tu inversión inicial + mínimo 15% de incentivo. ¡Sin letra pequeña! 📋',
         
-        'como empezar' => 'Para empezar es muy fácil: 1) Regístrate en nuestra plataforma, 2) Obtén tu primera membresía, 3) ¡Comienza a generar ganancias!. ¿Te ayudo con el registro?',
+        // Registro y inicio
+        'como empezar' => 'Para empezar es muy fácil: 1) Regístrate en nuestra plataforma, 2) Obtén tu primera membresía, 3) ¡Comienza a generar ganancias! ¿Te ayudo con el proceso de registro? 🚀',
+        'empezar' => '¡Perfecto que quieras empezar! El proceso es súper simple. ¿Prefieres que te guíe paso a paso o que te conecte directamente con un asesor?',
+        'registro' => 'El proceso de registro es simple y seguro. Solo necesitas tu email y haber sido invitado por uno de nuestros Miembros. Una vez registrado, podrás acceder a tu panel personal y adquirir tu membresía. ¿Quieres que te ayude a registrarte? 📝',
+        'unirse' => '¡Excelente decisión! Para unirte solo necesitas registrarte con tu email. ¿Ya tienes el código de referido de quien te invitó?',
         
-        'registro' => 'El proceso de registro es simple y seguro. Solo necesitas tu email y haber sido invitado por uno de nuestros Miembros. Una vez registrado, podrás acceder a tu panel personal y adquirir tu membresía. ¿Quieres que te ayude a registrarte?',
+        // Precios
+        'precio' => 'Desde un paquete de $50 USD ya estás participando de los dividendos globales de Mizton. ¿Te gustaría adquirir más paquetes para obtener más ganancias? 💵',
+        'costo' => 'El costo mínimo es de $50 USD para tu primera membresía. ¡Es súper accesible! ¿Te interesa conocer los diferentes paquetes disponibles?',
+        'cuanto cuesta' => 'Puedes empezar con solo $50 USD. Es una inversión muy accesible considerando que recuperas el 100% más ganancias. ¿Quieres ver las opciones?',
         
-        'contacto' => 'Puedes contactarnos de varias formas: a través de este chat, por WhatsApp, o por email. Nuestro equipo está disponible para resolver todas tus dudas. ¿Prefieres que te conecte con un asesor humano?',
-        
-        'hablar con humano' => 'Por supuesto! Te voy a conectar con uno de nuestros asesores especializados. Por favor espera un momento mientras te redirijo...',
-        'asesor humano' => 'Perfecto! Te conectaré con un asesor humano especializado. Un momento por favor...',
-        'hablar con alguien' => '¡Claro! Te voy a conectar con uno de nuestros asesores. Ellos podrán resolver todas tus dudas específicas.',
-        'quiero hablar con una persona' => 'Entendido! Te conectaré con un asesor humano especializado en Mizton. Un momento por favor...',
-        
-        'precio' => 'Desde un paquete de $50 usd ya estás participando de los dividendos globales de Mizton. ¿Te gustaría adquirir más paquetes para obtener más ganancias?'
+        // Contacto y escalamiento
+        'contacto' => 'Puedes contactarnos de varias formas: a través de este chat, por WhatsApp, o por email. Nuestro equipo está disponible para resolver todas tus dudas. ¿Prefieres que te conecte con un asesor humano? 📞',
+        'hablar con humano' => 'Por supuesto! Te voy a conectar con uno de nuestros asesores especializados. Por favor espera un momento mientras te redirijo... 👤',
+        'asesor humano' => 'Perfecto! Te conectaré con un asesor humano especializado. Un momento por favor... 🤝',
+        'hablar con alguien' => '¡Claro! Te voy a conectar con uno de nuestros asesores. Ellos podrán resolver todas tus dudas específicas. 💬',
+        'quiero hablar con una persona' => 'Entendido! Te conectaré con un asesor humano especializado en Mizton. Un momento por favor... 🙋‍♂️',
+        'persona real' => '¡Por supuesto! Nada como hablar con una persona real. Te conecto con un asesor especializado ahora mismo. ⏰'
     ];
     
     // Buscar respuesta
@@ -246,16 +313,29 @@ function handleFAQResponse($input) {
             $response = $answer;
             
             // Detectar si solicita escalamiento a humano
-            if (in_array($keyword, ['hablar con humano', 'asesor humano', 'hablar con alguien', 'quiero hablar con una persona'])) {
+            if (in_array($keyword, ['hablar con humano', 'asesor humano', 'hablar con alguien', 'quiero hablar con una persona', 'persona real'])) {
                 $requiresHuman = true;
             }
             break;
         }
     }
     
-    // Respuesta por defecto
+    // Respuestas por defecto más naturales y variadas
     if (!$response) {
-        $response = 'Entiendo tu pregunta. Para brindarte la información más precisa y personalizada, ¿te gustaría que te conecte con uno de nuestros asesores especializados? Ellos podrán resolver todas tus dudas específicas sobre Mizton.';
+        $defaultResponses = [
+            'Interesante pregunta! 🤔 Mizton tiene muchos aspectos fascinantes. ¿Te gustaría que profundice en algún tema específico como las ganancias, la seguridad o el proceso de registro?',
+            
+            'Me encanta que preguntes eso! 😊 Mizton es realmente innovador. ¿Hay algo particular sobre nuestro sistema de membresías que te gustaría conocer mejor?',
+            
+            'Excelente consulta! 👍 Cada aspecto de Mizton está diseñado pensando en nuestros miembros. ¿Te interesa saber más sobre cómo funciona, los precios, o tal vez las garantías?',
+            
+            'Esa es una pregunta muy común! 💡 Muchos de nuestros miembros tenían la misma duda. ¿Te gustaría que te explique paso a paso cómo funciona Mizton?',
+            
+            'Perfecto que preguntes eso! 🎯 Es importante entender bien antes de tomar una decisión. ¿Prefieres que te conecte con un asesor especializado para una explicación personalizada?'
+        ];
+        
+        // Seleccionar respuesta aleatoria
+        $response = $defaultResponses[array_rand($defaultResponses)];
     }
     
     echo json_encode([
@@ -385,7 +465,7 @@ function determineHumanContactMethod($referrerInfo) {
     }
     
     // Contacto por defecto (WhatsApp oficial)
-    $defaultWhatsapp = $_ENV['DEFAULT_WHATSAPP'] ?? '5212226536090';
+    $defaultWhatsapp = $_ENV['DEFAULT_WHATSAPP'] ?? '5212215695942';
     
     return [
         'type' => 'whatsapp_default',

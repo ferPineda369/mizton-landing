@@ -434,8 +434,8 @@ function displayReferralInfo(referralData) {
 
 // Función para configurar CTAs con nuevo flujo híbrido
 function updateCTAsWithReferral(referralCode, whatsappNumber) {
-    // Separar botones por tipo
-    const chatButtons = document.querySelectorAll('a[href="#info"], a[href="#saber-mas"]');
+    // Separar botones por tipo - INCLUIR botones con #whatsapp para convertirlos a chat
+    const chatButtons = document.querySelectorAll('a[href="#info"], a[href="#saber-mas"], a[href="#whatsapp"]');
     const registerButtons = document.querySelectorAll('a[href="#unirse"], a[href="#registro"]');
     
     // BOTONES DE CHAT: Cambiar a "Quiero saber más"
@@ -530,9 +530,11 @@ function hideWhatsAppButtons() {
         const text = button.textContent.toLowerCase();
         const href = button.getAttribute('href') || '';
         
-        // Detectar botones de WhatsApp por texto o href
-        if (text.includes('whatsapp') || text.includes('contactar') || 
-            href.includes('wa.me') || href.includes('whatsapp')) {
+        // Detectar botones de WhatsApp por texto o href (EXCLUIR los que ya se convirtieron a chat)
+        if ((text.includes('whatsapp') || text.includes('contactar') || 
+            href.includes('wa.me')) && 
+            !text.includes('quiero saber más') && 
+            href !== '#whatsapp') {
             
             button.style.display = 'none';
             button.setAttribute('data-whatsapp-hidden', 'true');
