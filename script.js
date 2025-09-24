@@ -420,22 +420,43 @@ function displayReferralInfo(referralData) {
         // OCULTAR la información del referido (no mostrar el cuadro)
         referralInfo.style.display = 'none';
         
-        // Determinar método de atención basado en landing_preference
+        // NUEVO ENFOQUE: Siempre activar chat, escalamiento inteligente
+        // El chat se activa siempre, independientemente de landing_preference
+        console.log('🤖 Chat automatizado activado para todos los usuarios');
+        
+        // Los botones de WhatsApp se mantienen como opción adicional
         if (referralData.contact.is_personal) {
-            // Atención personal vía WhatsApp
             updateCTAsWithReferral(referralData.referral_code, referralData.contact.whatsapp_number);
-            console.log('🔄 Configurando atención personal vía WhatsApp');
-        } else {
-            // Atención automatizada vía chat (se maneja en chat-widget.js)
-            console.log('🤖 Atención automatizada activada');
+            console.log('📱 WhatsApp personal también disponible como opción directa');
         }
     }
 }
 
-// Función para actualizar CTAs con código de referido
+// Función para configurar CTAs con nuevo flujo híbrido
 function updateCTAsWithReferral(referralCode, whatsappNumber) {
-    const ctaButtons = document.querySelectorAll('a[href="#unirse"], a[href="#registro"]');
-    ctaButtons.forEach(button => {
+    // Separar botones por tipo
+    const chatButtons = document.querySelectorAll('a[href="#info"], a[href="#saber-mas"]');
+    const registerButtons = document.querySelectorAll('a[href="#unirse"], a[href="#registro"]');
+    
+    // BOTONES DE CHAT: Cambiar a "Quiero saber más"
+    chatButtons.forEach(button => {
+        button.textContent = '💬 Quiero saber más';
+        button.innerHTML = '💬 Quiero saber más';
+        
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            openChatWidget();
+        });
+    });
+    
+    // BOTONES DE REGISTRO: Mantener funcionalidad original
+    registerButtons.forEach(button => {
+        // Mantener texto original o cambiarlo ligeramente
+        if (button.textContent.includes('Únete')) {
+            button.textContent = '🚀 Únete ya';
+            button.innerHTML = '🚀 Únete ya';
+        }
+        
         button.addEventListener('click', function(e) {
             e.preventDefault();
             
@@ -448,13 +469,60 @@ function updateCTAsWithReferral(referralCode, whatsappNumber) {
             }
             
             window.open(registerUrl, '_blank');
+            console.log('🚀 Registro directo activado');
         });
     });
     
-    // Actualizar TODOS los botones de WhatsApp con el número correcto
-    console.log('🔄 Actualizando botones de WhatsApp con número:', whatsappNumber);
+    // Si no hay botones específicos de chat, convertir algunos de registro
+    if (chatButtons.length === 0 && registerButtons.length > 1) {
+        // Convertir el primer botón en "Quiero saber más"
+        const firstButton = registerButtons[0];
+        firstButton.textContent = '💬 Quiero saber más';
+        firstButton.innerHTML = '💬 Quiero saber más';
+        
+        // Remover eventos anteriores
+        const newButton = firstButton.cloneNode(true);
+        firstButton.parentNode.replaceChild(newButton, firstButton);
+        
+        newButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            openChatWidget();
+        });
+    }
     
-    // Buscar todos los botones que pueden ser de WhatsApp
+    // OCULTAR botones de WhatsApp inicialmente - solo se mostrarán después del escalamiento
+    hideWhatsAppButtons();
+    
+    // Guardar información del referidor para usar después del escalamiento
+    window.MIZTON_REFERRER_INFO = {
+        code: referralCode,
+        whatsapp: whatsappNumber,
+        is_personal: true
+    };
+    
+    console.log('🔄 Botones de WhatsApp ocultos hasta escalamiento');
+}
+
+// Función helper para abrir el chat widget
+function openChatWidget() {
+    const chatWidget = document.getElementById('chat-widget');
+    if (chatWidget) {
+        chatWidget.style.display = 'block';
+        chatWidget.scrollIntoView({ behavior: 'smooth' });
+        
+        // Focus en el input del chat después de un momento
+        setTimeout(() => {
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput) {
+                chatInput.focus();
+            }
+        }, 500);
+    }
+    console.log('💬 Chat activado desde botón');
+}
+
+// Función para ocultar botones de WhatsApp
+function hideWhatsAppButtons() {
     const allButtons = document.querySelectorAll('a, button');
     let whatsappButtonsFound = 0;
     
@@ -463,27 +531,50 @@ function updateCTAsWithReferral(referralCode, whatsappNumber) {
         const href = button.getAttribute('href') || '';
         
         // Detectar botones de WhatsApp por texto o href
-        if (text.includes('whatsapp') || text.includes('contactar') || text.includes('saber más') || 
-            text.includes('quiero saber') || href.includes('wa.me') || href.includes('whatsapp')) {
+        if (text.includes('whatsapp') || text.includes('contactar') || 
+            href.includes('wa.me') || href.includes('whatsapp')) {
             
+            button.style.display = 'none';
+            button.setAttribute('data-whatsapp-hidden', 'true');
             whatsappButtonsFound++;
-            console.log('📱 Botón WhatsApp encontrado:', button.textContent.trim());
-            
-            // Remover eventos anteriores clonando el elemento
-            const newButton = button.cloneNode(true);
-            button.parentNode.replaceChild(newButton, button);
-            
-            newButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const message = encodeURIComponent('¡Hola! Me interesa saber más sobre Mizton y su membresía garantizada.');
-                const whatsappURL = `https://wa.me/${whatsappNumber}?text=${message}`;
-                
-                console.log('📱 Abriendo WhatsApp:', whatsappURL);
-                window.open(whatsappURL, '_blank');
-            });
+            console.log('🚫 Ocultando botón WhatsApp:', button.textContent.trim());
         }
     });
     
-    console.log(`✅ ${whatsappButtonsFound} botones de WhatsApp actualizados con número: ${whatsappNumber}`);
+    console.log(`🚫 ${whatsappButtonsFound} botones de WhatsApp ocultados`);
+}
+
+// Función para mostrar botones de WhatsApp después del escalamiento
+function showWhatsAppButtonsAfterEscalation(whatsappNumber, referrerName = null) {
+    const hiddenButtons = document.querySelectorAll('[data-whatsapp-hidden="true"]');
+    let buttonsShown = 0;
+    
+    hiddenButtons.forEach(button => {
+        button.style.display = '';
+        button.removeAttribute('data-whatsapp-hidden');
+        buttonsShown++;
+        
+        // Actualizar texto del botón
+        if (referrerName) {
+            button.textContent = `📱 Contactar a ${referrerName}`;
+        } else {
+            button.textContent = '📱 Contactar asesor';
+        }
+        
+        // Actualizar evento click
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+        
+        newButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const message = encodeURIComponent('¡Hola! Vengo del chat de la landing page y me gustaría hablar con un asesor sobre Mizton.');
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${message}`;
+            
+            console.log('📱 Abriendo WhatsApp post-escalamiento:', whatsappURL);
+            window.open(whatsappURL, '_blank');
+        });
+    });
+    
+    console.log(`✅ ${buttonsShown} botones de WhatsApp mostrados después del escalamiento`);
 }

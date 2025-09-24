@@ -36,14 +36,19 @@ class MiztonChatWidget {
 
             const data = await response.json();
             
-            if (data.success && data.data.use_chat) {
-                // Activar chat automático
+            if (data.success) {
+                // NUEVO ENFOQUE: Siempre activar chat
                 this.referrerData = data.data;
                 this.activate();
-                console.log('🤖 Chat automatizado activado');
+                console.log('🤖 Chat automatizado activado para todos los usuarios');
+                
+                if (data.data.valid && !data.data.use_chat) {
+                    console.log('📱 Referidor tiene atención personal - escalamiento dirigido');
+                }
             } else {
-                // Referidor tiene atención personal - NO activar chat
-                console.log('🚫 Chat desactivado - Atención personal configurada');
+                // En caso de error, activar chat por defecto
+                this.activate();
+                console.log('🤖 Chat activado por defecto');
             }
         } catch (error) {
             console.error('Error verificando referido:', error);
@@ -117,19 +122,24 @@ class MiztonChatWidget {
                                 'Veo que tienes un código de referido. ' :
                                 '¿Conoces el código de referido de quien te invitó? Si no, no te preocupes. '
                         }
-                        Para brindarte mejor atención, ¿podrías compartir tu email?
+                        <br><br>
+                        Puedo ayudarte con información sobre Mizton, responder tus preguntas y ${this.referrerData?.referrer_name ? 
+                            `conectarte directamente con <strong>${this.referrerData.referrer_name}</strong>` : 
+                            'conectarte con nuestros asesores especializados'
+                        } cuando lo necesites.
+                        <br><br>
+                        Para comenzar, ¿podrías compartir tu email?
                     </div>
                 </div>
                 
                 <div id="chat-input-container" style="
-                    padding: 15px;
                     border-top: 1px solid #eee;
                     display: flex;
                     gap: 10px;
                 ">
                     <input 
-                        id="chat-input" 
                         type="text" 
+                        id="chat-input" 
                         placeholder="Escribe tu mensaje..."
                         style="
                             flex: 1;
@@ -139,15 +149,42 @@ class MiztonChatWidget {
                             outline: none;
                         "
                     />
-                    <button id="send-message" style="
-                        background: #667eea;
-                        color: white;
-                        border: none;
-                        border-radius: 50%;
-                        width: 40px;
-                        height: 40px;
-                        cursor: pointer;
-                    ">➤</button>
+                    <button 
+                        id="send-message"
+                        style="
+                            padding: 10px 15px;
+                            background: #667eea;
+                            color: white;
+                            border: none;
+                            border-radius: 50%;
+                            cursor: pointer;
+                        "
+                    >
+                        ➤
+                    </button>
+                </div>
+                
+                <div style="
+                    padding: 10px 15px;
+                    text-align: center;
+                    border-top: 1px solid #eee;
+                    background: #f9f9f9;
+                ">
+                    <button 
+                        id="escalate-button-permanent"
+                        style="
+                            background: transparent;
+                            border: 1px solid #667eea;
+                            color: #667eea;
+                            padding: 8px 16px;
+                            border-radius: 20px;
+                            cursor: pointer;
+                            font-size: 12px;
+                            transition: all 0.3s ease;
+                        "
+                    >
+                        👤 ¿Necesitas hablar con un asesor?
+                    </button>
                 </div>
             </div>
             
@@ -192,8 +229,29 @@ class MiztonChatWidget {
 
         sendBtn.addEventListener('click', () => this.sendMessage());
         input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.sendMessage();
+            if (e.key === 'Enter') {
+                this.sendMessage();
+            }
         });
+        
+        // Event listener para botón permanente de escalamiento
+        const escalatePermanentBtn = document.getElementById('escalate-button-permanent');
+        if (escalatePermanentBtn) {
+            escalatePermanentBtn.addEventListener('click', () => {
+                this.escalateToHuman();
+            });
+            
+            // Hover effects
+            escalatePermanentBtn.addEventListener('mouseenter', () => {
+                escalatePermanentBtn.style.background = '#667eea';
+                escalatePermanentBtn.style.color = 'white';
+            });
+            
+            escalatePermanentBtn.addEventListener('mouseleave', () => {
+                escalatePermanentBtn.style.background = 'transparent';
+                escalatePermanentBtn.style.color = '#667eea';
+            });
+        }
     }
 
     async sendMessage() {
@@ -284,8 +342,8 @@ class MiztonChatWidget {
                 // Verificar si requiere escalamiento a humano
                 if (data.data.requires_human) {
                     setTimeout(() => {
-                        this.escalateToHuman();
-                    }, 2000); // Esperar 2 segundos antes de escalar
+                        this.showEscalationButton();
+                    }, 1000); // Mostrar botón después de 1 segundo
                 }
                 
                 // Actualizar conversación con respuesta del bot
@@ -309,6 +367,76 @@ class MiztonChatWidget {
         }
     }
 
+    showEscalationButton() {
+        // Verificar si el botón ya existe
+        if (document.getElementById('escalation-button')) {
+            return;
+        }
+        
+        const chatContainer = document.getElementById('chat-widget');
+        if (!chatContainer) return;
+        
+        // Crear botón de escalamiento
+        const escalationButton = document.createElement('div');
+        escalationButton.id = 'escalation-button';
+        escalationButton.style.cssText = `
+            margin: 10px;
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        `;
+        
+        escalationButton.innerHTML = `
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <span>👤</span>
+                <span>Hablar con asesor especializado</span>
+                <span>📱</span>
+            </div>
+        `;
+        
+        // Agregar animación CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
+                50% { box-shadow: 0 4px 25px rgba(102, 126, 234, 0.6); }
+                100% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Evento click
+        escalationButton.addEventListener('click', () => {
+            this.escalateToHuman();
+        });
+        
+        // Hover effects
+        escalationButton.addEventListener('mouseenter', () => {
+            escalationButton.style.transform = 'scale(1.05)';
+        });
+        
+        escalationButton.addEventListener('mouseleave', () => {
+            escalationButton.style.transform = 'scale(1)';
+        });
+        
+        // Insertar antes del input container
+        const inputContainer = document.getElementById('chat-input-container');
+        if (inputContainer) {
+            chatContainer.insertBefore(escalationButton, inputContainer);
+        } else {
+            chatContainer.appendChild(escalationButton);
+        }
+        
+        console.log('👤 Botón de escalamiento mostrado');
+    }
+
     async escalateToHuman() {
         try {
             const response = await fetch(this.chatAPI, {
@@ -326,18 +454,24 @@ class MiztonChatWidget {
             
             if (data.success && data.data.escalated) {
                 const contactInfo = data.data;
+                // Generar mensaje con contexto
+                const contextMessage = await this.generateContextMessage(contactInfo);
                 let escalationMessage = '';
                 
                 if (contactInfo.contact_method === 'whatsapp_personal') {
                     escalationMessage = `${contactInfo.message} 
                     
-                    🔗 <a href="https://wa.me/${contactInfo.contact_info}?text=${encodeURIComponent('Hola! Vengo del chat de la landing page y me gustaría hablar con un asesor.')}" target="_blank" style="color: #667eea; text-decoration: underline;">
+                    📋 <strong>Se enviará un resumen de nuestra conversación para que ${contactInfo.referrer_name} tenga el contexto completo.</strong>
+                    
+                    🔗 <a href="https://wa.me/${contactInfo.contact_info}?text=${encodeURIComponent(contextMessage)}" target="_blank" style="color: #667eea; text-decoration: underline;">
                     👤 Contactar a ${contactInfo.referrer_name || 'tu asesor'} por WhatsApp
                     </a>`;
                 } else {
                     escalationMessage = `${contactInfo.message}
                     
-                    🔗 <a href="https://wa.me/${contactInfo.contact_info}?text=${encodeURIComponent('Hola! Vengo del chat de la landing page y me gustaría hablar con un asesor.')}" target="_blank" style="color: #667eea; text-decoration: underline;">
+                    📋 <strong>Se enviará un resumen de nuestra conversación al asesor.</strong>
+                    
+                    🔗 <a href="https://wa.me/${contactInfo.contact_info}?text=${encodeURIComponent(contextMessage)}" target="_blank" style="color: #667eea; text-decoration: underline;">
                     📱 Contactar equipo de asesores por WhatsApp
                     </a>`;
                 }
@@ -347,6 +481,9 @@ class MiztonChatWidget {
                 // Deshabilitar input después del escalamiento
                 this.disableChatInput();
                 
+                // Mostrar botones de WhatsApp en la landing
+                this.showWhatsAppButtons(contactInfo);
+                
             } else {
                 this.addMessage('bot', 'Disculpa, hubo un problema al conectarte con un asesor. ¿Podrías intentar más tarde?');
             }
@@ -355,6 +492,50 @@ class MiztonChatWidget {
             console.error('Error escalando a humano:', error);
             this.addMessage('bot', 'Disculpa, hay un problema técnico. ¿Podrías intentar contactarnos directamente por WhatsApp?');
         }
+    }
+
+    async generateContextMessage(contactInfo) {
+        try {
+            const response = await fetch('/api/context-handler.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'get_conversation_context',
+                    session_id: this.sessionId,
+                    referrer_name: contactInfo.referrer_name
+                })
+            });
+
+            const data = await response.json();
+            
+            if (data.success) {
+                return data.data.whatsapp_message;
+            } else {
+                // Mensaje fallback
+                return `Hola! Soy ${this.userEmail || 'un prospecto'} y vengo del chat de la landing page de Mizton. Me gustaría hablar contigo sobre las membresías. ¡Gracias!`;
+            }
+            
+        } catch (error) {
+            console.error('Error generando contexto:', error);
+            // Mensaje fallback
+            return `Hola! Soy ${this.userEmail || 'un prospecto'} y vengo del chat de la landing page de Mizton. Me gustaría hablar contigo sobre las membresías. ¡Gracias!`;
+        }
+    }
+
+    showWhatsAppButtons(contactInfo) {
+        // Llamar función global para mostrar botones de WhatsApp
+        if (typeof showWhatsAppButtonsAfterEscalation === 'function') {
+            const referrerName = contactInfo.referrer_name || null;
+            showWhatsAppButtonsAfterEscalation(contactInfo.contact_info, referrerName);
+        }
+        
+        // Remover botón de escalamiento
+        const escalationButton = document.getElementById('escalation-button');
+        if (escalationButton) {
+            escalationButton.remove();
+        }
+        
+        console.log('📱 Botones de WhatsApp activados después del escalamiento');
     }
 
     disableChatInput() {
