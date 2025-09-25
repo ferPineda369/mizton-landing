@@ -328,9 +328,13 @@ class MiztonChatWidget {
         this.showTypingIndicator();
 
         // Procesar mensaje según el paso actual
-        if (this.currentStep === 'initial' || this.currentStep === 'waiting_email') {
+        console.log('🔍 Current step:', this.currentStep, 'Message:', message);
+        
+        if (this.currentStep === 'email_capture') {
+            console.log('📧 Procesando captura de email');
             await this.handleEmailCapture(message);
         } else {
+            console.log('💬 Procesando mensaje de chat');
             await this.handleChatMessage(message);
         }
     }
@@ -358,6 +362,8 @@ class MiztonChatWidget {
 
                 const data = await response.json();
                 
+                this.hideTypingIndicator();
+                
                 if (data.success) {
                     this.currentStep = 'chatting';
                     
@@ -374,9 +380,11 @@ class MiztonChatWidget {
                 }
             } catch (error) {
                 console.error('Error guardando lead:', error);
+                this.hideTypingIndicator();
                 this.addMessage('bot', 'Disculpa, hay un problema técnico. ¿Podrías intentar más tarde?');
             }
         } else {
+            this.hideTypingIndicator();
             this.addMessage('bot', 'Por favor ingresa un email válido (ejemplo: tu@email.com) para continuar.');
         }
     }
