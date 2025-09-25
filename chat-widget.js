@@ -278,9 +278,20 @@ class MiztonChatWidget {
         const input = document.getElementById('chat-input');
 
         toggle.addEventListener('click', () => {
+            console.log('🔘 Botón flotante clickeado');
             const isVisible = container.style.display === 'flex';
             container.style.display = isVisible ? 'none' : 'flex';
             toggle.style.display = isVisible ? 'block' : 'none';
+            
+            // Focus en input si se abre
+            if (!isVisible) {
+                setTimeout(() => {
+                    const chatInput = document.getElementById('chat-input');
+                    if (chatInput) {
+                        chatInput.focus();
+                    }
+                }, 300);
+            }
         });
 
         closeBtn.addEventListener('click', () => {
@@ -677,24 +688,22 @@ class MiztonChatWidget {
             
             if (data.success && data.data) {
                 const contactInfo = data.data;
-                // Generar mensaje con contexto
-                const contextMessage = await this.generateContextMessage(contactInfo);
+                
+                // Mensaje básico para WhatsApp
+                const basicMessage = `Hola! Vengo de la landing page de Mizton y me gustaría obtener más información. Mi email es: ${this.userEmail}`;
+                
                 let escalationMessage = '';
                 
                 if (contactInfo.contact_method === 'whatsapp_personal') {
                     escalationMessage = `${contactInfo.message} 
                     
-                    📋 <strong>Se enviará un resumen de nuestra conversación para que ${contactInfo.referrer_name} tenga el contexto completo.</strong>
-                    
-                    🔗 <a href="https://wa.me/${contactInfo.contact_info}?text=${encodeURIComponent(contextMessage)}" target="_blank" style="color: #667eea; text-decoration: underline;">
+                    🔗 <a href="https://wa.me/${contactInfo.contact_info}?text=${encodeURIComponent(basicMessage)}" target="_blank" style="color: #40916C; text-decoration: underline; font-weight: bold;">
                     👤 Contactar a ${contactInfo.referrer_name || 'tu asesor'} por WhatsApp
                     </a>`;
                 } else {
                     escalationMessage = `${contactInfo.message}
                     
-                    📋 <strong>Se enviará un resumen de nuestra conversación al asesor.</strong>
-                    
-                    🔗 <a href="https://wa.me/${contactInfo.contact_info}?text=${encodeURIComponent(contextMessage)}" target="_blank" style="color: #667eea; text-decoration: underline;">
+                    🔗 <a href="https://wa.me/${contactInfo.contact_info}?text=${encodeURIComponent(basicMessage)}" target="_blank" style="color: #40916C; text-decoration: underline; font-weight: bold;">
                     📱 Contactar equipo de asesores por WhatsApp
                     </a>`;
                 }

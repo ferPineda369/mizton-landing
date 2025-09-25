@@ -469,7 +469,7 @@ function displayReferralInfo(referralData) {
 function updateCTAsWithReferral(referralCode = '', whatsappNumber = '') {
     console.log('🔄 Iniciando configuración de botones...');
     
-    // Separar botones por tipo - INCLUIR botones con #whatsapp para convertirlos a chat
+    // Separar botones por tipo - SOLO convertir #whatsapp a chat, NO tocar #unirse
     const chatButtons = document.querySelectorAll('a[href="#info"], a[href="#saber-mas"], a[href="#whatsapp"]');
     const registerButtons = document.querySelectorAll('a[href="#unirse"], a[href="#registro"]');
     
@@ -513,46 +513,13 @@ function updateCTAsWithReferral(referralCode = '', whatsappNumber = '') {
         console.log('✅ Botón configurado para chat:', newButton.textContent);
     });
     
-    // BOTONES DE REGISTRO: Mantener funcionalidad original
-    registerButtons.forEach(button => {
-        // Mantener texto original o cambiarlo ligeramente
-        if (button.textContent.includes('Únete')) {
-            button.textContent = '🚀 Únete ya';
-            button.innerHTML = '🚀 Únete ya';
-        }
-        
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Construir URL con código de referido
-            let registerUrl = '';
-            if (window.MIZTON_CONFIG && window.MIZTON_CONFIG.register_url) {
-                registerUrl = window.MIZTON_CONFIG.register_url + '?ref=' + encodeURIComponent(referralCode);
-            } else {
-                registerUrl = '/panel/register.php?ref=' + encodeURIComponent(referralCode);
-            }
-            
-            window.open(registerUrl, '_blank');
-            console.log('🚀 Registro directo activado');
-        });
+    // BOTONES DE REGISTRO: NO TOCAR - mantener funcionalidad original
+    registerButtons.forEach((button, index) => {
+        console.log(`✅ Botón de registro ${index + 1} mantenido:`, button.href, button.textContent);
+        // NO hacer nada - mantener como está para preservar funcionalidad de registro
     });
     
-    // Si no hay botones específicos de chat, convertir algunos de registro
-    if (chatButtons.length === 0 && registerButtons.length > 1) {
-        // Convertir el primer botón en "Quiero saber más"
-        const firstButton = registerButtons[0];
-        firstButton.textContent = '💬 Quiero saber más';
-        firstButton.innerHTML = '💬 Quiero saber más';
-        
-        // Remover eventos anteriores
-        const newButton = firstButton.cloneNode(true);
-        firstButton.parentNode.replaceChild(newButton, firstButton);
-        
-        newButton.addEventListener('click', function(e) {
-            e.preventDefault();
-            openChatWidget();
-        });
-    }
+    console.log('🔄 Configuración de botones completada');
     
     // OCULTAR botones de WhatsApp inicialmente - solo se mostrarán después del escalamiento
     hideWhatsAppButtons();
@@ -563,8 +530,6 @@ function updateCTAsWithReferral(referralCode = '', whatsappNumber = '') {
         whatsapp: whatsappNumber,
         is_personal: true
     };
-    
-    console.log('🔄 Botones de WhatsApp ocultos hasta escalamiento');
 }
 
 // Función helper para abrir el chat widget - SIMPLIFICADA
