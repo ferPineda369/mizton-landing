@@ -5,13 +5,35 @@
 
 class MiztonChatWidget {
     constructor() {
-        this.isActive = false;
-        this.sessionId = this.generateSessionId();
-        this.referralCode = this.getReferralFromURL();
-        this.chatAPI = '/api/chat-handler.php';
-        this.currentStep = 'initial'; // initial, waiting_email, chatting
+        this.chatAPI = './api/chat-handler.php';
+        this.sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         this.userEmail = null;
+        this.currentStep = 'email_capture'; // email_capture, chatting
+        this.referralCode = null;
         this.referrerData = null;
+        this.isActive = false;
+        
+        this.init();
+    }
+
+    init() {
+        this.checkIfShouldActivate();
+    }
+
+    // Método para abrir el chat
+    open() {
+        const chatContainer = document.getElementById('chat-container');
+        if (chatContainer) {
+            chatContainer.style.display = 'flex';
+            
+            // Focus en el input después de un momento
+            setTimeout(() => {
+                const chatInput = document.getElementById('chat-input');
+                if (chatInput) {
+                    chatInput.focus();
+                }
+            }, 300);
+        }
     }
 
     getReferralFromURL() {
@@ -321,9 +343,6 @@ class MiztonChatWidget {
             this.userEmail = message;
             
             try {
-                // Ocultar spinner mientras procesamos email
-                this.hideTypingIndicator();
-                
                 // Guardar lead en la base de datos
                 const response = await fetch(this.chatAPI, {
                     method: 'POST',
@@ -336,90 +355,29 @@ class MiztonChatWidget {
                         session_id: this.sessionId
                     })
                 });
-                
+
                 const data = await response.json();
                 
                 if (data.success) {
-                    this.userEmail = message;
                     this.currentStep = 'chatting';
                     
-                    if (data.existing_user && data.data.conversation_history) {
-                        // Usuario existente - cargar historial
+                    if (data.data.conversation_history && data.data.conversation_history.length > 0) {
+                        // Usuario existente con historial
                         this.loadConversationHistory(data.data.conversation_history);
-                        this.addMessage('bot', data.message); // "Bienvenido de vuelta! Continuemos donde lo dejamos."
+                        this.addMessage('bot', '¡Bienvenido de vuelta! Continuemos donde lo dejamos.');
                     } else {
                         // Usuario nuevo
-                        this.addMessage('bot', data.message); // "Perfecto! Ahora puedo ayudarte..."
+                        this.addMessage('bot', '¡Perfecto! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
                     }
                 } else {
                     this.addMessage('bot', 'Hubo un problema guardando tu información. ¿Podrías intentar de nuevo?');
                 }
             } catch (error) {
                 console.error('Error guardando lead:', error);
-                this.hideTypingIndicator();
-                
-                // Intentar guardar de forma más simple
-                try {
-                    console.log('🔄 Intentando guardado simplificado...');
-                    const simpleResponse = await fetch(this.chatAPI, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            action: 'save_lead',
-                            email: message,
-                            session_id: this.sessionId,
-                            referral_code: this.referralCode || '',
-                            referrer_id: this.referrerData?.referrer_id || null
-                        })
-                    });
-                    
-                    const simpleData = await simpleResponse.json();
-                    
-                    if (simpleData.success) {
-                        console.log('✅ Guardado simplificado exitoso');
-                        this.addMessage('bot', '¡Perfecto! Tu email se registró correctamente. Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
-                        this.currentStep = 'chatting';
-                        return;
-                    }
-                } catch (secondError) {
-                    console.error('Error en guardado simplificado:', secondError);
-                }
-                
-                // Si todo falla, al menos continuar
-                this.addMessage('bot', 'Hubo un problema técnico guardando tu email, pero puedes continuar. ¿Qué te gustaría saber sobre Mizton?');
-                this.currentStep = 'chatting';
+                this.addMessage('bot', 'Disculpa, hay un problema técnico. ¿Podrías intentar más tarde?');
             }
         } else {
-            this.hideTypingIndicator();
-            
-            // Detectar si dice que no tiene email
-            const noEmailPhrases = ['no tengo', 'no tengo email', 'no tengo correo', 'sin email', 'sin correo'];
-            const hasNoEmail = noEmailPhrases.some(phrase => message.toLowerCase().includes(phrase));
-            
-            if (hasNoEmail) {
-                this.addMessage('bot', '¡No hay problema! 😊 Puedes continuar sin email. Solo dime, ¿qué te gustaría saber sobre Mizton?');
-                this.currentStep = 'chatting';
-                this.userEmail = 'sin-email-' + Date.now(); // Email temporal para el sistema
-                
-                // Guardar lead temporal
-                try {
-                    await fetch(this.chatAPI, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            action: 'save_lead',
-                            email: this.userEmail,
-                            referral_code: this.referralCode,
-                            referrer_id: this.referrerData?.referrer_id,
-                            session_id: this.sessionId
-                        })
-                    });
-                } catch (error) {
-                    console.error('Error guardando lead temporal:', error);
-                }
-            } else {
-                this.addMessage('bot', 'Por favor ingresa un email válido (ejemplo: tu@email.com) para continuar. Si no tienes email, escribe "no tengo email".');
-            }
+            this.addMessage('bot', 'Por favor ingresa un email válido (ejemplo: tu@email.com) para continuar.');
         }
     }
 

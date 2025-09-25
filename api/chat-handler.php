@@ -127,11 +127,6 @@ function handleValidateReferral($input) {
 function handleSaveLead($input) {
     global $pdo;
     
-    // Verificar conexión a BD
-    if (!$pdo) {
-        throw new Exception('No hay conexión a la base de datos');
-    }
-    
     $email = trim($input['email'] ?? '');
     $referralCode = trim($input['referral_code'] ?? '');
     $sessionId = trim($input['session_id'] ?? '');
@@ -141,18 +136,10 @@ function handleSaveLead($input) {
     }
     
     try {
-        // Verificar si ya existe un lead con este email (solo si no es temporal)
-        $existingLead = null;
-        if (strpos($email, 'sin-email-') !== 0) {
-            try {
-                $stmt = $pdo->prepare("SELECT * FROM chat_leads WHERE email = ? ORDER BY created_at DESC LIMIT 1");
-                $stmt->execute([$email]);
-                $existingLead = $stmt->fetch();
-            } catch (Exception $e) {
-                error_log("Error consultando lead existente: " . $e->getMessage());
-                // Continuar sin verificar duplicados
-            }
-        }
+        // Verificar si ya existe un lead con este email
+        $stmt = $pdo->prepare("SELECT * FROM chat_leads WHERE email = ? ORDER BY created_at DESC LIMIT 1");
+        $stmt->execute([$email]);
+        $existingLead = $stmt->fetch();
         
         if ($existingLead) {
             // Email ya existe - actualizar session_id y devolver historial
@@ -183,50 +170,28 @@ function handleSaveLead($input) {
             // Nuevo lead - obtener referrer_id si existe código
             $referrerId = null;
             if ($referralCode) {
-                try {
-                    $stmt = $pdo->prepare("SELECT idUser FROM tbluser WHERE codigoUser = ?");
-                    $stmt->execute([$referralCode]);
-                    $referrer = $stmt->fetch();
-                    if ($referrer) {
-                        $referrerId = $referrer['idUser'];
-                    }
-                } catch (Exception $e) {
-                    error_log("Error consultando referrer: " . $e->getMessage());
-                    // Continuar sin referrer
+                $stmt = $pdo->prepare("SELECT idUser FROM tbluser WHERE codigoUser = ?");
+                $stmt->execute([$referralCode]);
+                $referrer = $stmt->fetch();
+                if ($referrer) {
+                    $referrerId = $referrer['idUser'];
                 }
             }
             
-            // Crear nuevo lead con manejo de errores
-            try {
-                $stmt = $pdo->prepare("
-                    INSERT INTO chat_leads (email, session_id, referral_code, referrer_id, status, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, 'active', NOW(), NOW())
-                ");
-                
-                $stmt->execute([$email, $sessionId, $referralCode, $referrerId]);
-                
-                echo json_encode([
-                    'success' => true,
-                    'message' => '¡Perfecto! Tu email se registró correctamente. Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?',
-                    'data' => [
-                        'is_new_user' => true,
-                        'conversation_history' => []
-                    ]
-                ]);
-            } catch (Exception $e) {
-                error_log("Error insertando nuevo lead: " . $e->getMessage());
-                
-                // Respuesta de éxito aunque falle el insert
-                echo json_encode([
-                    'success' => true,
-                    'message' => '¡Perfecto! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?',
-                    'data' => [
-                        'is_new_user' => true,
-                        'conversation_history' => [],
-                        'note' => 'Guardado con limitaciones técnicas'
-                    ]
-                ]);
-            }
+            // Crear nuevo lead
+            $stmt = $pdo->prepare("
+                INSERT INTO chat_leads (email, session_id, referral_code, referrer_id, status, created_at, updated_at) 
+                VALUES (?, ?, ?, ?, 'active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+            ");
+            
+            $stmt->execute([$email, $sessionId, $referralCode, $referrerId]);
+            
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    'conversation_history' => []
+                ]
+            ]);
         }
         
     } catch (Exception $e) {

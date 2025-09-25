@@ -4,12 +4,25 @@
  * Endpoint: /landing/api/referral-info.php
  */
 
+// Suprimir errores PHP que pueden romper JSON
+error_reporting(0);
+ini_set('display_errors', 0);
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once '../database.php';
+try {
+    require_once '../database.php';
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error de conexión a base de datos',
+        'data' => null
+    ]);
+    exit;
+}
 
 try {
     $referralCode = '';

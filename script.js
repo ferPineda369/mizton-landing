@@ -567,63 +567,36 @@ function updateCTAsWithReferral(referralCode = '', whatsappNumber = '') {
     console.log('🔄 Botones de WhatsApp ocultos hasta escalamiento');
 }
 
-// Función helper para abrir el chat widget - MEJORADA
+// Función helper para abrir el chat widget - SIMPLIFICADA
 function openChatWidget() {
-    console.log('🤖 Intentando abrir chat widget...');
+    console.log('🤖 Abriendo chat widget...');
     
     try {
-        // Primero verificar si ya existe el widget en el DOM
-        let chatWidget = document.getElementById('chat-widget');
-        
-        if (chatWidget) {
-            console.log('✅ Widget encontrado, mostrando...');
-            chatWidget.style.display = 'block';
-            chatWidget.scrollIntoView({ behavior: 'smooth' });
-            
-            // Focus en el input del chat después de un momento
-            setTimeout(() => {
-                const chatInput = document.getElementById('chat-input');
-                if (chatInput) {
-                    chatInput.focus();
-                }
-            }, 500);
+        // Verificar si ya existe una instancia
+        if (window.miztonChatInstance && typeof window.miztonChatInstance.open === 'function') {
+            console.log('✅ Usando instancia existente');
+            window.miztonChatInstance.open();
             return;
         }
         
-        // Si no existe, verificar si tenemos la clase MiztonChatWidget
+        // Verificar si MiztonChatWidget está disponible
         if (typeof MiztonChatWidget !== 'undefined') {
-            console.log('🆕 Creando nueva instancia de MiztonChatWidget...');
-            
-            // Verificar si ya existe una instancia global
-            if (window.miztonChatInstance) {
-                window.miztonChatInstance.open();
-                return;
-            }
-            
-            // Crear nueva instancia
+            console.log('🆕 Creando nueva instancia');
             window.miztonChatInstance = new MiztonChatWidget();
+            
+            // Abrir inmediatamente si tiene el método
+            if (typeof window.miztonChatInstance.open === 'function') {
+                window.miztonChatInstance.open();
+            }
             return;
         }
         
-        // Si no tenemos la clase, intentar cargar el script
-        console.log('📥 Cargando script de chat widget...');
-        if (!document.querySelector('script[src*="chat-widget.js"]')) {
-            const script = document.createElement('script');
-            script.src = './chat-widget.js';
-            script.onload = () => {
-                console.log('✅ Chat widget script cargado, creando instancia...');
-                window.miztonChatInstance = new MiztonChatWidget();
-            };
-            script.onerror = () => {
-                console.error('❌ Error cargando chat widget script');
-                alert('Error cargando el chat. Por favor recarga la página.');
-            };
-            document.head.appendChild(script);
-        }
+        console.error('❌ MiztonChatWidget no disponible');
+        alert('El chat no está disponible. Por favor recarga la página.');
         
     } catch (error) {
         console.error('❌ Error en openChatWidget:', error);
-        alert('Disculpa, hay un problema técnico con el chat. Intenta recargar la página.');
+        alert('Error abriendo el chat. Intenta recargar la página.');
     }
 }
 
