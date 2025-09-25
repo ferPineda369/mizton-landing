@@ -386,7 +386,16 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('ℹ️ No hay código de referido - configurando botones híbridos');
             updateCTAsWithReferral('', '');
         }
-    }, 1000); // Esperar 1 segundo para que carguen todos los elementos
+    }, 2000); // Esperar 2 segundos para que carguen todos los elementos
+    
+    // Configuración adicional cada 3 segundos por si acaso
+    setInterval(() => {
+        const whatsappButtons = document.querySelectorAll('a[href="#whatsapp"]');
+        if (whatsappButtons.length > 0) {
+            console.log('🔄 Re-configurando botones WhatsApp encontrados');
+            updateCTAsWithReferral('', '');
+        }
+    }, 3000);
 });
 
 // Función para manejar códigos de referido al cargar la página
@@ -453,10 +462,19 @@ function updateCTAsWithReferral(referralCode = '', whatsappNumber = '') {
         button.textContent = '💬 Quiero saber más';
         button.innerHTML = '💬 Quiero saber más';
         
-        button.addEventListener('click', function(e) {
+        // Remover todos los event listeners existentes
+        const newButton = button.cloneNode(true);
+        button.parentNode.replaceChild(newButton, button);
+        
+        // Agregar nuevo event listener
+        newButton.addEventListener('click', function(e) {
             e.preventDefault();
+            e.stopPropagation();
             openChatWidget();
+            console.log('🔄 Botón chat clickeado - abriendo widget');
         });
+        
+        console.log('🔄 Botón configurado para chat:', newButton.textContent);
     });
     
     // BOTONES DE REGISTRO: Mantener funcionalidad original

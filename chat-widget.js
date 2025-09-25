@@ -81,17 +81,31 @@ class MiztonChatWidget {
                 z-index: 1000;
             ">
                 <div id="chat-header" style="
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    background: linear-gradient(135deg, #1B4332 0%, #2D5A3D 100%);
                     color: white;
                     padding: 15px;
                     border-radius: 15px 15px 0 0;
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
+                    box-shadow: 0 4px 12px rgba(27, 67, 50, 0.15);
                 ">
-                    <div>
-                        <h4 style="margin: 0; font-size: 16px;">Asistente Mizton 🤖</h4>
-                        <small>Estamos aquí para ayudarte</small>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="
+                            width: 40px;
+                            height: 40px;
+                            background: rgba(116, 198, 157, 0.2);
+                            border-radius: 50%;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 20px;
+                            border: 2px solid rgba(116, 198, 157, 0.3);
+                        ">🌱</div>
+                        <div>
+                            <div style="font-weight: 600; font-size: 16px;">Asistente Mizton</div>
+                            <div style="font-size: 12px; opacity: 0.9; color: #95D5B2;">En línea</div>
+                        </div>
                     </div>
                     <button id="close-chat" style="
                         background: none;
@@ -99,29 +113,34 @@ class MiztonChatWidget {
                         color: white;
                         font-size: 20px;
                         cursor: pointer;
-                    ">×</button>
+                        padding: 5px;
+                        border-radius: 50%;
+                        width: 30px;
+                        height: 30px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transition: background 0.3s ease;
+                    " onmouseover="this.style.background='rgba(116, 198, 157, 0.2)'" onmouseout="this.style.background='none'">×</button>
                 </div>
                 
                 <div id="chat-messages" style="
                     flex: 1;
                     padding: 15px;
                     overflow-y: auto;
-                    background: #f8f9fa;
+                    background: #F8F9FA;
                 ">
                     <div class="bot-message" style="
                         background: white;
-                        border: 1px solid #eee;
-                        padding: 10px;
-                        border-radius: 10px;
-                        margin-bottom: 10px;
+                        padding: 12px 16px;
+                        border-radius: 18px 18px 18px 4px;
+                        margin-bottom: 12px;
+                        box-shadow: 0 2px 4px rgba(27, 67, 50, 0.1);
+                        border-left: 3px solid #40916C;
+                        max-width: 85%;
+                        color: #343A40;
                     ">
-                        ¡Hola! 👋 Soy el asistente virtual de Mizton. 
-                        ${this.referrerData?.referrer_name ? 
-                            `Veo que vienes por recomendación de <strong>${this.referrerData.referrer_name}</strong>. ` : 
-                            this.referralCode ? 
-                                'Veo que tienes un código de referido. ' :
-                                '¿Conoces el código de referido de quien te invitó? Si no, no te preocupes. '
-                        }
+                        ¡Hola! 👋 Soy el asistente virtual de Mizton. Para comenzar, ¿podrías compartir tu email?
                         <br><br>
                         Puedo ayudarte con información sobre Mizton, responder tus preguntas y ${this.referrerData?.referrer_name ? 
                             `conectarte directamente con <strong>${this.referrerData.referrer_name}</strong>` : 
@@ -133,9 +152,11 @@ class MiztonChatWidget {
                 </div>
                 
                 <div id="chat-input-container" style="
-                    border-top: 1px solid #eee;
+                    border-top: 1px solid #E9ECEF;
+                    padding: 15px;
                     display: flex;
                     gap: 10px;
+                    background: white;
                 ">
                     <input 
                         type="text" 
@@ -143,45 +164,62 @@ class MiztonChatWidget {
                         placeholder="Escribe tu mensaje..."
                         style="
                             flex: 1;
-                            padding: 10px;
-                            border: 1px solid #ddd;
-                            border-radius: 20px;
+                            padding: 12px 16px;
+                            border: 1px solid #DEE2E6;
+                            border-radius: 25px;
                             outline: none;
+                            font-size: 14px;
+                            transition: border-color 0.3s ease;
+                            color: #343A40;
                         "
+                        onkeypress="if(event.key==='Enter') document.getElementById('send-message').click()"
+                        onfocus="this.style.borderColor='#40916C'"
+                        onblur="this.style.borderColor='#DEE2E6'"
                     />
                     <button 
-                        id="send-message"
+                        id="send-message" 
                         style="
-                            padding: 10px 15px;
-                            background: #667eea;
+                            background: linear-gradient(135deg, #40916C 0%, #52B788 100%);
                             color: white;
                             border: none;
                             border-radius: 50%;
+                            width: 45px;
+                            height: 45px;
                             cursor: pointer;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: 18px;
+                            transition: all 0.3s ease;
+                            box-shadow: 0 2px 8px rgba(64, 145, 108, 0.3);
                         "
-                    >
-                        ➤
-                    </button>
+                        onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 4px 12px rgba(64, 145, 108, 0.4)'"
+                        onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(64, 145, 108, 0.3)'"
+                    >➤</button>
                 </div>
                 
                 <div style="
                     padding: 10px 15px;
                     text-align: center;
-                    border-top: 1px solid #eee;
-                    background: #f9f9f9;
+                    border-top: 1px solid #E9ECEF;
+                    background: #F8F9FA;
                 ">
                     <button 
                         id="escalate-button-permanent"
                         style="
-                            background: transparent;
-                            border: 1px solid #667eea;
-                            color: #667eea;
+                            background: linear-gradient(135deg, #52B788 0%, #74C69D 100%);
+                            color: white;
+                            border: none;
                             padding: 8px 16px;
                             border-radius: 20px;
-                            cursor: pointer;
                             font-size: 12px;
+                            cursor: pointer;
                             transition: all 0.3s ease;
+                            box-shadow: 0 2px 6px rgba(82, 183, 136, 0.3);
+                            font-weight: 500;
                         "
+                        onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 12px rgba(82, 183, 136, 0.4)'"
+                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 6px rgba(82, 183, 136, 0.3)'"
                     >
                         👤 ¿Necesitas hablar con un asesor?
                     </button>
@@ -195,14 +233,15 @@ class MiztonChatWidget {
                 width: 60px;
                 height: 60px;
                 border-radius: 50%;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: linear-gradient(135deg, #1B4332 0%, #2D5A3D 100%);
                 color: white;
                 border: none;
                 font-size: 24px;
                 cursor: pointer;
-                box-shadow: 0 3px 15px rgba(0,0,0,0.2);
+                box-shadow: 0 4px 12px rgba(27, 67, 50, 0.25);
                 z-index: 1001;
-            ">💬</button>
+                transition: all 0.3s ease;
+            " onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 6px 20px rgba(27, 67, 50, 0.35)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(27, 67, 50, 0.25)'">🌱</button>
         `;
 
         document.body.appendChild(widget);
@@ -282,6 +321,9 @@ class MiztonChatWidget {
             this.userEmail = message;
             
             try {
+                // Ocultar spinner mientras procesamos email
+                this.hideTypingIndicator();
+                
                 // Guardar lead en la base de datos
                 const response = await fetch(this.chatAPI, {
                     method: 'POST',
@@ -317,7 +359,36 @@ class MiztonChatWidget {
                 this.addMessage('bot', 'Disculpa, hay un problema técnico. ¿Podrías intentar más tarde?');
             }
         } else {
-            this.addMessage('bot', 'Por favor ingresa un email válido (ejemplo: tu@email.com) para continuar.');
+            this.hideTypingIndicator();
+            
+            // Detectar si dice que no tiene email
+            const noEmailPhrases = ['no tengo', 'no tengo email', 'no tengo correo', 'sin email', 'sin correo'];
+            const hasNoEmail = noEmailPhrases.some(phrase => message.toLowerCase().includes(phrase));
+            
+            if (hasNoEmail) {
+                this.addMessage('bot', '¡No hay problema! 😊 Puedes continuar sin email. Solo dime, ¿qué te gustaría saber sobre Mizton?');
+                this.currentStep = 'chatting';
+                this.userEmail = 'sin-email-' + Date.now(); // Email temporal para el sistema
+                
+                // Guardar lead temporal
+                try {
+                    await fetch(this.chatAPI, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'save_lead',
+                            email: this.userEmail,
+                            referral_code: this.referralCode,
+                            referrer_id: this.referrerData?.referrer_id,
+                            session_id: this.sessionId
+                        })
+                    });
+                } catch (error) {
+                    console.error('Error guardando lead temporal:', error);
+                }
+            } else {
+                this.addMessage('bot', 'Por favor ingresa un email válido (ejemplo: tu@email.com) para continuar. Si no tienes email, escribe "no tengo email".');
+            }
         }
     }
 
@@ -367,21 +438,21 @@ class MiztonChatWidget {
                 <div class="typing-dot" style="
                     width: 8px;
                     height: 8px;
-                    background: #667eea;
+                    background: #40916C;
                     border-radius: 50%;
                     animation: typing 1.4s infinite ease-in-out;
                 "></div>
                 <div class="typing-dot" style="
                     width: 8px;
                     height: 8px;
-                    background: #667eea;
+                    background: #52B788;
                     border-radius: 50%;
                     animation: typing 1.4s infinite ease-in-out 0.2s;
                 "></div>
                 <div class="typing-dot" style="
                     width: 8px;
                     height: 8px;
-                    background: #667eea;
+                    background: #74C69D;
                     border-radius: 50%;
                     animation: typing 1.4s infinite ease-in-out 0.4s;
                 "></div>
@@ -691,12 +762,12 @@ class MiztonChatWidget {
         messageDiv.className = `${sender}-message`;
         messageDiv.style.cssText = `
             margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 10px;
+            padding: 12px 16px;
+            border-radius: 18px;
             max-width: 80%;
             ${sender === 'user' ? 
-                'background: #667eea; color: white; margin-left: auto; text-align: right;' : 
-                'background: white; border: 1px solid #eee;'
+                'background: linear-gradient(135deg, #40916C 0%, #52B788 100%); color: white; margin-left: auto; text-align: right; border-radius: 18px 18px 4px 18px; box-shadow: 0 2px 4px rgba(64, 145, 108, 0.2);' : 
+                'background: white; border-left: 3px solid #40916C; color: #343A40; border-radius: 18px 18px 18px 4px; box-shadow: 0 2px 4px rgba(27, 67, 50, 0.1);'
             }
         `;
         

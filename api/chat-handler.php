@@ -129,10 +129,13 @@ function handleSaveLead($input) {
     }
     
     try {
-        // Verificar si ya existe un lead con este email
-        $stmt = $pdo->prepare("SELECT * FROM chat_leads WHERE email = ? ORDER BY created_at DESC LIMIT 1");
-        $stmt->execute([$email]);
-        $existingLead = $stmt->fetch();
+        // Verificar si ya existe un lead con este email (solo si no es temporal)
+        $existingLead = null;
+        if (strpos($email, 'sin-email-') !== 0) {
+            $stmt = $pdo->prepare("SELECT * FROM chat_leads WHERE email = ? ORDER BY created_at DESC LIMIT 1");
+            $stmt->execute([$email]);
+            $existingLead = $stmt->fetch();
+        }
         
         if ($existingLead) {
             // Email ya existe - actualizar session_id y devolver historial
