@@ -301,23 +301,6 @@ class MiztonChatWidget {
 
         sendBtn.addEventListener('click', () => this.sendMessage());
         input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.sendMessage();
-            }
-        });
-        
-        // Event listener para botón permanente de escalamiento
-        const escalatePermanentBtn = document.getElementById('escalate-button-permanent');
-        if (escalatePermanentBtn) {
-            escalatePermanentBtn.addEventListener('click', () => {
-                this.escalateToHuman();
-            });
-            
-            // Hover effects
-            escalatePermanentBtn.addEventListener('mouseenter', () => {
-                escalatePermanentBtn.style.background = '#667eea';
-                escalatePermanentBtn.style.color = 'white';
-            });
             
             escalatePermanentBtn.addEventListener('mouseleave', () => {
                 escalatePermanentBtn.style.background = 'transparent';
@@ -597,78 +580,41 @@ class MiztonChatWidget {
                 this.addMessage('bot', fallbackResponse);
             } else {
                 this.addMessage('bot', 'Disculpa el inconveniente técnico. ¿Podrías reformular tu pregunta? Puedo ayudarte con información sobre Mizton, precios, funcionamiento o seguridad.');
+        }
+        
+    } catch (error) {
+        console.error('Error procesando mensaje:', error);
+        this.hideTypingIndicator();
+        
+        // Intentar respuesta FAQ básica como fallback
+        const basicFAQs = {
+            'hola': '¡Hola! 👋 Soy el asistente de Mizton. ¿En qué puedo ayudarte?',
+            'mizton': 'Mizton es una plataforma de membresías garantizadas. ¿Te gustaría saber más?',
+            'como funciona': 'Te explico: 1) Te registras, 2) Adquieres membresía, 3) Generas ganancias, 4) Recuperas 100% + 15% mínimo.',
+            'precio': 'Desde $50 USD ya participas en los dividendos globales de Mizton.',
+            'seguro': 'Totalmente seguro. Garantizamos 100% de recuperación más ganancias mínimas del 15%.'
+        };
+        
+        const userMessage = message.toLowerCase();
+        let fallbackResponse = null;
+        
+        for (const [key, response] of Object.entries(basicFAQs)) {
+            if (userMessage.includes(key)) {
+                fallbackResponse = response;
+                break;
             }
+        }
+        
+        if (fallbackResponse) {
+            this.addMessage('bot', fallbackResponse);
+        } else {
+            this.addMessage('bot', 'Disculpa el inconveniente técnico. ¿Podrías reformular tu pregunta? Puedo ayudarte con información sobre Mizton, precios, funcionamiento o seguridad.');
         }
     }
-
+    
     showEscalationButton() {
-        // Verificar si el botón ya existe
-        if (document.getElementById('escalation-button')) {
-            return;
-        }
-        
-        const chatContainer = document.getElementById('chat-widget');
-        if (!chatContainer) return;
-        
-        // Crear botón de escalamiento
-        const escalationButton = document.createElement('div');
-        escalationButton.id = 'escalation-button';
-        escalationButton.style.cssText = `
-            margin: 10px;
-            text-align: center;
-            padding: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s ease;
-            animation: pulse 2s infinite;
-        `;
-        
-        escalationButton.innerHTML = `
-            <div style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                <span>👤</span>
-                <span>Hablar con asesor especializado</span>
-                <span>📱</span>
-            </div>
-        `;
-        
-        // Agregar animación CSS
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes pulse {
-                0% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
-                50% { box-shadow: 0 4px 25px rgba(102, 126, 234, 0.6); }
-                100% { box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); }
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Evento click
-        escalationButton.addEventListener('click', () => {
-            this.escalateToHuman();
-        });
-        
-        // Hover effects
-        escalationButton.addEventListener('mouseenter', () => {
-            escalationButton.style.transform = 'scale(1.05)';
-        });
-        
-        escalationButton.addEventListener('mouseleave', () => {
-            escalationButton.style.transform = 'scale(1)';
-        });
-        
-        // Insertar antes del input container
-        const inputContainer = document.getElementById('chat-input-container');
-        if (inputContainer) {
-            chatContainer.insertBefore(escalationButton, inputContainer);
-        } else {
-            chatContainer.appendChild(escalationButton);
-        }
-        
-        console.log('👤 Botón de escalamiento mostrado');
+        // El botón permanente ya existe en el widget, no necesitamos crear otro
+        console.log('👤 Botón de escalamiento permanente ya disponible');
     }
 
     async escalateToHuman() {
