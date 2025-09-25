@@ -356,7 +356,9 @@ class MiztonChatWidget {
                 }
             } catch (error) {
                 console.error('Error guardando lead:', error);
-                this.addMessage('bot', 'Disculpa, hay un problema técnico. ¿Podrías intentar más tarde?');
+                this.hideTypingIndicator();
+                this.addMessage('bot', 'Hubo un problema guardando tu información, pero puedes continuar. ¿Qué te gustaría saber sobre Mizton?');
+                this.currentStep = 'chatting'; // Permitir continuar aunque falle el guardado
             }
         } else {
             this.hideTypingIndicator();
@@ -565,7 +567,31 @@ class MiztonChatWidget {
         } catch (error) {
             console.error('Error procesando mensaje:', error);
             this.hideTypingIndicator();
-            this.addMessage('bot', 'Disculpa, hay un problema técnico. ¿Podrías intentar más tarde?');
+            
+            // Intentar respuesta FAQ básica como fallback
+            const basicFAQs = {
+                'hola': '¡Hola! 👋 Soy el asistente de Mizton. ¿En qué puedo ayudarte?',
+                'mizton': 'Mizton es una plataforma de membresías garantizadas. ¿Te gustaría saber más?',
+                'como funciona': 'Te explico: 1) Te registras, 2) Adquieres membresía, 3) Generas ganancias, 4) Recuperas 100% + 15% mínimo.',
+                'precio': 'Desde $50 USD ya participas en los dividendos globales de Mizton.',
+                'seguro': 'Totalmente seguro. Garantizamos 100% de recuperación más ganancias mínimas del 15%.'
+            };
+            
+            const userMessage = message.toLowerCase();
+            let fallbackResponse = null;
+            
+            for (const [key, response] of Object.entries(basicFAQs)) {
+                if (userMessage.includes(key)) {
+                    fallbackResponse = response;
+                    break;
+                }
+            }
+            
+            if (fallbackResponse) {
+                this.addMessage('bot', fallbackResponse);
+            } else {
+                this.addMessage('bot', 'Disculpa el inconveniente técnico. ¿Podrías reformular tu pregunta? Puedo ayudarte con información sobre Mizton, precios, funcionamiento o seguridad.');
+            }
         }
     }
 

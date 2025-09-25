@@ -57,11 +57,18 @@ try {
     
 } catch (Exception $e) {
     error_log("Error en chat-handler.php: " . $e->getMessage());
+    error_log("Stack trace: " . $e->getTraceAsString());
     
     echo json_encode([
         'success' => false,
-        'message' => $e->getMessage(),
-        'data' => null
+        'message' => 'Error técnico: ' . $e->getMessage(),
+        'data' => null,
+        'debug' => [
+            'action' => $action ?? 'unknown',
+            'error' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ]
     ]);
 }
 
@@ -119,6 +126,11 @@ function handleValidateReferral($input) {
  */
 function handleSaveLead($input) {
     global $pdo;
+    
+    // Verificar conexión a BD
+    if (!$pdo) {
+        throw new Exception('No hay conexión a la base de datos');
+    }
     
     $email = trim($input['email'] ?? '');
     $referralCode = trim($input['referral_code'] ?? '');
@@ -252,6 +264,18 @@ function handleUpdateConversation($input) {
 function handleFAQResponse($input) {
     $message = strtolower(trim($input['message'] ?? ''));
     
+    if (empty($message)) {
+        echo json_encode([
+            'success' => true,
+            'data' => [
+                'response' => '¿En qué puedo ayudarte? Puedo responder sobre Mizton, precios, funcionamiento o seguridad.',
+                'requires_human' => false,
+                'powered_by' => 'faq'
+            ]
+        ]);
+        return;
+    }
+    
     // FAQ básicas de Mizton - Más conversacionales y con más variaciones
     $faqs = [
         // Saludos
@@ -345,7 +369,8 @@ function handleFAQResponse($input) {
         'success' => true,
         'data' => [
             'response' => $response,
-            'requires_human' => $requiresHuman
+            'requires_human' => $requiresHuman,
+            'powered_by' => 'faq'
         ]
     ]);
 }
