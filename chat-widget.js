@@ -357,8 +357,37 @@ class MiztonChatWidget {
             } catch (error) {
                 console.error('Error guardando lead:', error);
                 this.hideTypingIndicator();
-                this.addMessage('bot', 'Hubo un problema guardando tu información, pero puedes continuar. ¿Qué te gustaría saber sobre Mizton?');
-                this.currentStep = 'chatting'; // Permitir continuar aunque falle el guardado
+                
+                // Intentar guardar de forma más simple
+                try {
+                    console.log('🔄 Intentando guardado simplificado...');
+                    const simpleResponse = await fetch(this.chatAPI, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'save_lead',
+                            email: message,
+                            session_id: this.sessionId,
+                            referral_code: this.referralCode || '',
+                            referrer_id: this.referrerData?.referrer_id || null
+                        })
+                    });
+                    
+                    const simpleData = await simpleResponse.json();
+                    
+                    if (simpleData.success) {
+                        console.log('✅ Guardado simplificado exitoso');
+                        this.addMessage('bot', '¡Perfecto! Tu email se registró correctamente. Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
+                        this.currentStep = 'chatting';
+                        return;
+                    }
+                } catch (secondError) {
+                    console.error('Error en guardado simplificado:', secondError);
+                }
+                
+                // Si todo falla, al menos continuar
+                this.addMessage('bot', 'Hubo un problema técnico guardando tu email, pero puedes continuar. ¿Qué te gustaría saber sobre Mizton?');
+                this.currentStep = 'chatting';
             }
         } else {
             this.hideTypingIndicator();

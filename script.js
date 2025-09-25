@@ -388,14 +388,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 2000); // Esperar 2 segundos para que carguen todos los elementos
     
-    // Configuración adicional cada 3 segundos por si acaso
+    // Configuración adicional cada 2 segundos por si acaso
     setInterval(() => {
         const whatsappButtons = document.querySelectorAll('a[href="#whatsapp"]');
         if (whatsappButtons.length > 0) {
             console.log('🔄 Re-configurando botones WhatsApp encontrados');
             updateCTAsWithReferral('', '');
         }
-    }, 3000);
+    }, 2000);
+    
+    // Configuración inmediata con MutationObserver para detectar cambios en DOM
+    const buttonObserver = new MutationObserver(() => {
+        const whatsappButtons = document.querySelectorAll('a[href="#whatsapp"]');
+        if (whatsappButtons.length > 0) {
+            console.log('🔄 DOM cambió - Re-configurando botones');
+            updateCTAsWithReferral('', '');
+        }
+    });
+    
+    buttonObserver.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
 });
 
 // Función para manejar códigos de referido al cargar la página
@@ -453,28 +467,50 @@ function displayReferralInfo(referralData) {
 
 // Función para configurar CTAs con nuevo flujo híbrido
 function updateCTAsWithReferral(referralCode = '', whatsappNumber = '') {
+    console.log('🔄 Iniciando configuración de botones...');
+    
     // Separar botones por tipo - INCLUIR botones con #whatsapp para convertirlos a chat
     const chatButtons = document.querySelectorAll('a[href="#info"], a[href="#saber-mas"], a[href="#whatsapp"]');
     const registerButtons = document.querySelectorAll('a[href="#unirse"], a[href="#registro"]');
     
+    console.log(`🔍 Encontrados ${chatButtons.length} botones de chat y ${registerButtons.length} botones de registro`);
+    
     // BOTONES DE CHAT: Cambiar a "Quiero saber más"
-    chatButtons.forEach(button => {
+    chatButtons.forEach((button, index) => {
+        console.log(`🔄 Configurando botón ${index + 1}:`, button.href, button.textContent);
+        
+        // Cambiar texto y href
         button.textContent = '💬 Quiero saber más';
         button.innerHTML = '💬 Quiero saber más';
+        button.href = '#chat';
         
-        // Remover todos los event listeners existentes
+        // Remover TODOS los event listeners existentes
         const newButton = button.cloneNode(true);
         button.parentNode.replaceChild(newButton, button);
         
-        // Agregar nuevo event listener
+        // Agregar nuevo event listener con máxima prioridad
         newButton.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            openChatWidget();
-            console.log('🔄 Botón chat clickeado - abriendo widget');
-        });
+            e.stopImmediatePropagation();
+            
+            console.log('🎯 Botón chat clickeado - abriendo widget');
+            
+            // Asegurar que openChatWidget existe
+            if (typeof openChatWidget === 'function') {
+                openChatWidget();
+            } else {
+                console.error('❌ openChatWidget no está definida');
+                // Fallback: crear widget manualmente
+                if (typeof MiztonChatWidget !== 'undefined') {
+                    new MiztonChatWidget();
+                }
+            }
+            
+            return false;
+        }, { capture: true, passive: false });
         
-        console.log('🔄 Botón configurado para chat:', newButton.textContent);
+        console.log('✅ Botón configurado para chat:', newButton.textContent);
     });
     
     // BOTONES DE REGISTRO: Mantener funcionalidad original
@@ -531,22 +567,64 @@ function updateCTAsWithReferral(referralCode = '', whatsappNumber = '') {
     console.log('🔄 Botones de WhatsApp ocultos hasta escalamiento');
 }
 
-// Función helper para abrir el chat widget
+// Función helper para abrir el chat widget - MEJORADA
 function openChatWidget() {
-    const chatWidget = document.getElementById('chat-widget');
-    if (chatWidget) {
-        chatWidget.style.display = 'block';
-        chatWidget.scrollIntoView({ behavior: 'smooth' });
+    console.log('🤖 Intentando abrir chat widget...');
+    
+    try {
+        // Primero verificar si ya existe el widget en el DOM
+        let chatWidget = document.getElementById('chat-widget');
         
-        // Focus en el input del chat después de un momento
-        setTimeout(() => {
-            const chatInput = document.getElementById('chat-input');
-            if (chatInput) {
-                chatInput.focus();
+        if (chatWidget) {
+            console.log('✅ Widget encontrado, mostrando...');
+            chatWidget.style.display = 'block';
+            chatWidget.scrollIntoView({ behavior: 'smooth' });
+            
+            // Focus en el input del chat después de un momento
+            setTimeout(() => {
+                const chatInput = document.getElementById('chat-input');
+                if (chatInput) {
+                    chatInput.focus();
+                }
+            }, 500);
+            return;
+        }
+        
+        // Si no existe, verificar si tenemos la clase MiztonChatWidget
+        if (typeof MiztonChatWidget !== 'undefined') {
+            console.log('🆕 Creando nueva instancia de MiztonChatWidget...');
+            
+            // Verificar si ya existe una instancia global
+            if (window.miztonChatInstance) {
+                window.miztonChatInstance.open();
+                return;
             }
-        }, 500);
+            
+            // Crear nueva instancia
+            window.miztonChatInstance = new MiztonChatWidget();
+            return;
+        }
+        
+        // Si no tenemos la clase, intentar cargar el script
+        console.log('📥 Cargando script de chat widget...');
+        if (!document.querySelector('script[src*="chat-widget.js"]')) {
+            const script = document.createElement('script');
+            script.src = './chat-widget.js';
+            script.onload = () => {
+                console.log('✅ Chat widget script cargado, creando instancia...');
+                window.miztonChatInstance = new MiztonChatWidget();
+            };
+            script.onerror = () => {
+                console.error('❌ Error cargando chat widget script');
+                alert('Error cargando el chat. Por favor recarga la página.');
+            };
+            document.head.appendChild(script);
+        }
+        
+    } catch (error) {
+        console.error('❌ Error en openChatWidget:', error);
+        alert('Disculpa, hay un problema técnico con el chat. Intenta recargar la página.');
     }
-    console.log('💬 Chat activado desde botón');
 }
 
 // Función para ocultar botones de WhatsApp
