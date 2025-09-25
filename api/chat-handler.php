@@ -401,27 +401,38 @@ function handleAIResponse($input) {
 function handleEscalateToHuman($input) {
     global $pdo;
     
+    error_log("=== ESCALAMIENTO INICIADO ===");
+    error_log("Input: " . json_encode($input));
+    
     $sessionId = trim($input['session_id'] ?? '');
     $email = trim($input['email'] ?? '');
     $referralCode = trim($input['referral_code'] ?? '');
     
     if (empty($sessionId)) {
+        error_log("ERROR: session_id vacío");
         throw new Exception('session_id es requerido');
     }
     
+    error_log("Session ID: " . $sessionId);
+    
     try {
         // Obtener información del lead
+        error_log("Buscando lead con session_id: " . $sessionId);
         $stmt = $pdo->prepare("SELECT * FROM chat_leads WHERE session_id = ?");
         $stmt->execute([$sessionId]);
         $lead = $stmt->fetch();
         
         if (!$lead) {
+            error_log("ERROR: Lead no encontrado para session_id: " . $sessionId);
             throw new Exception('Sesión no encontrada');
         }
+        
+        error_log("Lead encontrado: " . json_encode($lead));
         
         // Obtener información del referidor si existe
         $referrerInfo = null;
         if ($lead['referrer_id']) {
+            error_log("Buscando referrer_id: " . $lead['referrer_id']);
             $stmt = $pdo->prepare("
                 SELECT nameUser, emailUser, celularUser, countryUser, waUser, landing_preference 
                 FROM tbluser 
@@ -429,17 +440,32 @@ function handleEscalateToHuman($input) {
             ");
             $stmt->execute([$lead['referrer_id']]);
             $referrerInfo = $stmt->fetch();
+            error_log("Referrer info: " . json_encode($referrerInfo));
+        } else {
+            error_log("No hay referrer_id");
         }
         
         // Determinar método de contacto
+        error_log("Determinando método de contacto...");
         $contactMethod = determineHumanContactMethod($referrerInfo);
+        error_log("Método de contacto: " . json_encode($contactMethod));
         
-        // Actualizar estado del lead
-        $stmt = $pdo->prepare("UPDATE chat_leads SET status = 'escalated_to_human', updated_at = NOW() WHERE session_id = ?");
-        $stmt->execute([$sessionId]);
+        // Actualizar estado del lead (con manejo de errores)
+        try {
+            $stmt = $pdo->prepare("UPDATE chat_leads SET status = 'escalated_to_human', updated_at = NOW() WHERE session_id = ?");
+            $stmt->execute([$sessionId]);
+        } catch (Exception $updateError) {
+            error_log("Error updating lead status: " . $updateError->getMessage());
+            // Continuar aunque falle la actualización
+        }
         
-        // Registrar escalamiento
-        logEscalation($sessionId, $lead['email'], $contactMethod);
+        // Registrar escalamiento (opcional)
+        try {
+            logEscalation($sessionId, $lead['email'], $contactMethod);
+        } catch (Exception $logError) {
+            error_log("Error logging escalation: " . $logError->getMessage());
+            // Continuar aunque falle el logging
+        }
         
         echo json_encode([
             'success' => true,
@@ -447,7 +473,8 @@ function handleEscalateToHuman($input) {
                 'escalated' => true,
                 'contact_method' => $contactMethod['type'],
                 'contact_info' => $contactMethod['info'],
-                'message' => $contactMethod['message']
+                'message' => $contactMethod['message'],
+                'referrer_name' => $contactMethod['referrer_name'] ?? null
             ]
         ]);
         
