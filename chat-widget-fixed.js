@@ -8,9 +8,11 @@ class MiztonChatWidget {
         this.chatAPI = './api/chat-handler.php';
         this.sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
         this.userEmail = null;
-        this.currentStep = 'email_capture'; // email_capture, chatting
+        this.currentStep = 'email_capture'; // email_capture, referral_code_capture, referral_confirmation, chatting
         this.referralCode = null;
         this.referrerData = null;
+        this.pendingReferralCode = null;
+        this.pendingReferrerName = null;
         this.isActive = false;
         
         this.init();
@@ -154,12 +156,13 @@ class MiztonChatWidget {
                     </div>
                 </div>
 
-                <!-- Escalation Button -->
-                <div style="
+                <!-- Escalation Button (Initially Hidden) -->
+                <div id="escalation-container" style="
                     padding: 10px 15px;
                     text-align: center;
                     border-top: 1px solid #E9ECEF;
                     background: #F8F9FA;
+                    display: none;
                 ">
                     <button 
                         id="escalate-button-permanent"
@@ -179,6 +182,65 @@ class MiztonChatWidget {
                     >
                         👤 ¿Necesitas hablar con un asesor?
                     </button>
+                </div>
+
+                <!-- Suggestion Buttons -->
+                <div id="suggestion-buttons" style="
+                    padding: 15px;
+                    border-top: 1px solid #E9ECEF;
+                    background: #F8F9FA;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 8px;
+                    justify-content: center;
+                ">
+                    <button class="suggestion-btn" data-query="que es mizton" style="
+                        background: rgba(64, 145, 108, 0.1);
+                        color: #1B4332;
+                        border: 1px solid rgba(64, 145, 108, 0.3);
+                        padding: 6px 12px;
+                        border-radius: 15px;
+                        font-size: 11px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        font-weight: 500;
+                    ">¿Qué es Mizton?</button>
+                    
+                    <button class="suggestion-btn" data-query="como funciona" style="
+                        background: rgba(64, 145, 108, 0.1);
+                        color: #1B4332;
+                        border: 1px solid rgba(64, 145, 108, 0.3);
+                        padding: 6px 12px;
+                        border-radius: 15px;
+                        font-size: 11px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        font-weight: 500;
+                    ">¿Cómo funciona?</button>
+                    
+                    <button class="suggestion-btn" data-query="membresia" style="
+                        background: rgba(64, 145, 108, 0.1);
+                        color: #1B4332;
+                        border: 1px solid rgba(64, 145, 108, 0.3);
+                        padding: 6px 12px;
+                        border-radius: 15px;
+                        font-size: 11px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        font-weight: 500;
+                    ">Membresía</button>
+                    
+                    <button class="suggestion-btn" data-query="cuanto puedo ganar" style="
+                        background: rgba(64, 145, 108, 0.1);
+                        color: #1B4332;
+                        border: 1px solid rgba(64, 145, 108, 0.3);
+                        padding: 6px 12px;
+                        border-radius: 15px;
+                        font-size: 11px;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        font-weight: 500;
+                    ">¿Cuánto se gana?</button>
                 </div>
 
                 <!-- Input -->
@@ -294,6 +356,28 @@ class MiztonChatWidget {
                 this.escalateToHuman();
             });
         }
+
+        // Event listeners para botones de sugerencias
+        const suggestionButtons = document.querySelectorAll('.suggestion-btn');
+        suggestionButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const query = button.getAttribute('data-query');
+                const input = document.getElementById('chat-input');
+                input.value = query;
+                this.sendMessage();
+            });
+
+            // Efectos hover
+            button.addEventListener('mouseenter', () => {
+                button.style.background = 'rgba(64, 145, 108, 0.2)';
+                button.style.transform = 'translateY(-1px)';
+            });
+
+            button.addEventListener('mouseleave', () => {
+                button.style.background = 'rgba(64, 145, 108, 0.1)';
+                button.style.transform = 'translateY(0)';
+            });
+        });
     }
 
     async sendMessage() {
@@ -312,6 +396,12 @@ class MiztonChatWidget {
         if (this.currentStep === 'email_capture') {
             console.log('📧 Procesando captura de email');
             await this.handleEmailCapture(message);
+        } else if (this.currentStep === 'referral_code_capture') {
+            console.log('🔗 Procesando captura de código de referido');
+            await this.handleReferralCodeCapture(message);
+        } else if (this.currentStep === 'referral_confirmation') {
+            console.log('✅ Procesando confirmación de referidor');
+            await this.handleReferralConfirmation(message);
         } else {
             console.log('💬 Procesando mensaje de chat');
             await this.handleChatMessage(message);
@@ -342,13 +432,19 @@ class MiztonChatWidget {
                 this.hideTypingIndicator();
                 
                 if (data.success) {
-                    this.currentStep = 'chatting';
-                    
-                    if (data.data.conversation_history && data.data.conversation_history.length > 0) {
-                        this.loadConversationHistory(data.data.conversation_history);
-                        this.addMessage('bot', '¡Bienvenido de vuelta! Continuemos donde lo dejamos.');
+                    // Si no hay código de referido, preguntar por él
+                    if (!this.referralCode) {
+                        this.currentStep = 'referral_code_capture';
+                        this.addMessage('bot', '¡Perfecto! Una pregunta más: ¿conoces el código de la persona que te invitó a Mizton? Si es así, por favor compártelo (son 6 caracteres alfanuméricos). Si no lo conoces, simplemente escribe "no".');
                     } else {
-                        this.addMessage('bot', '¡Perfecto! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
+                        this.currentStep = 'chatting';
+                        if (data.data.conversation_history && data.data.conversation_history.length > 0) {
+                            this.loadConversationHistory(data.data.conversation_history);
+                            this.addMessage('bot', '¡Bienvenido de vuelta! Continuemos donde lo dejamos.');
+                        } else {
+                            this.addMessage('bot', '¡Perfecto! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
+                            this.hideSuggestionButtons();
+                        }
                     }
                 } else {
                     this.addMessage('bot', 'Hubo un problema guardando tu información. ¿Podrías intentar de nuevo?');
@@ -361,6 +457,99 @@ class MiztonChatWidget {
         } else {
             this.hideTypingIndicator();
             this.addMessage('bot', 'Por favor ingresa un email válido (ejemplo: tu@email.com) para continuar.');
+        }
+    }
+
+    async handleReferralCodeCapture(message) {
+        const cleanMessage = message.toLowerCase().trim();
+        
+        if (cleanMessage === 'no' || cleanMessage === 'no lo conozco' || cleanMessage === 'no tengo') {
+            this.hideTypingIndicator();
+            this.currentStep = 'chatting';
+            this.addMessage('bot', '¡No hay problema! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
+            this.hideSuggestionButtons();
+            return;
+        }
+
+        // Verificar que sea un código de 6 caracteres alfanuméricos
+        const codeRegex = /^[a-zA-Z0-9]{6}$/;
+        if (!codeRegex.test(message)) {
+            this.hideTypingIndicator();
+            this.addMessage('bot', 'El código debe tener exactamente 6 caracteres alfanuméricos. Por favor intenta de nuevo o escribe "no" si no lo conoces.');
+            return;
+        }
+
+        try {
+            // Verificar el código en el backend
+            const response = await fetch(this.chatAPI, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'verify_referral_code',
+                    referral_code: message,
+                    session_id: this.sessionId
+                })
+            });
+
+            const data = await response.json();
+            this.hideTypingIndicator();
+
+            if (data.success && data.data.referrer_name) {
+                this.pendingReferralCode = message;
+                this.pendingReferrerName = data.data.referrer_name;
+                this.currentStep = 'referral_confirmation';
+                this.addMessage('bot', `¿La persona que te invitó fue ${data.data.referrer_name}? Responde "sí" o "no".`);
+            } else {
+                this.addMessage('bot', 'No encontré ese código en nuestro sistema. ¿Podrías verificarlo e intentar de nuevo? O escribe "no" si prefieres continuar sin código.');
+            }
+        } catch (error) {
+            console.error('Error verificando código:', error);
+            this.hideTypingIndicator();
+            this.addMessage('bot', 'Hubo un problema verificando el código. ¿Podrías intentar de nuevo?');
+        }
+    }
+
+    async handleReferralConfirmation(message) {
+        const cleanMessage = message.toLowerCase().trim();
+        
+        if (cleanMessage === 'sí' || cleanMessage === 'si' || cleanMessage === 'yes' || cleanMessage === 'correcto') {
+            try {
+                // Actualizar el lead con el código de referido
+                const response = await fetch(this.chatAPI, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'update_referral_code',
+                        session_id: this.sessionId,
+                        referral_code: this.pendingReferralCode
+                    })
+                });
+
+                const data = await response.json();
+                this.hideTypingIndicator();
+
+                if (data.success) {
+                    this.referralCode = this.pendingReferralCode;
+                    this.currentStep = 'chatting';
+                    this.addMessage('bot', `¡Perfecto! He registrado que ${this.pendingReferrerName} te invitó. Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?`);
+                    this.hideSuggestionButtons();
+                } else {
+                    this.addMessage('bot', 'Hubo un problema actualizando la información. Pero no te preocupes, puedo ayudarte con cualquier pregunta sobre Mizton.');
+                    this.currentStep = 'chatting';
+                    this.hideSuggestionButtons();
+                }
+            } catch (error) {
+                console.error('Error actualizando referido:', error);
+                this.hideTypingIndicator();
+                this.addMessage('bot', 'Hubo un problema técnico, pero puedo ayudarte con cualquier pregunta sobre Mizton.');
+                this.currentStep = 'chatting';
+                this.hideSuggestionButtons();
+            }
+        } else {
+            this.hideTypingIndicator();
+            this.currentStep = 'chatting';
+            this.addMessage('bot', '¡No hay problema! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
+            this.hideSuggestionButtons();
         }
     }
 
@@ -550,6 +739,20 @@ class MiztonChatWidget {
     loadConversationHistory(conversationHistory) {
         // Implementar si es necesario
         console.log('Cargando historial:', conversationHistory);
+    }
+
+    hideSuggestionButtons() {
+        const suggestionButtons = document.getElementById('suggestion-buttons');
+        if (suggestionButtons) {
+            suggestionButtons.style.display = 'none';
+        }
+    }
+
+    showEscalationButton() {
+        const escalationContainer = document.getElementById('escalation-container');
+        if (escalationContainer) {
+            escalationContainer.style.display = 'block';
+        }
     }
 }
 

@@ -51,6 +51,14 @@ try {
             handleEscalateToHuman($input);
             break;
             
+        case 'verify_referral_code':
+            handleVerifyReferralCode($input);
+            break;
+            
+        case 'update_referral_code':
+            handleUpdateReferralCode($input);
+            break;
+            
         default:
             throw new Exception('Acción no válida');
     }
@@ -311,11 +319,11 @@ function handleFAQResponse($input) {
         
         // Funcionamiento
         'como funciona' => 'Nuestro sistema funciona así: 1) Te registras, 2) Adquieres un paquete de participación (Membresía), 3) Accedes a los dividendos globales de Mizton, 4) Al final del período si decides no continuar, recuperas el 100% de tu inversión inicial + el incentivo de al menos un 15%. ¡Es así de simple! 🎯',
-        'funciona' => '¡Es súper sencillo! Básicamente inviertes, generas ganancias mensuales y al final recuperas todo tu dinero más ganancias. ¿Te explico paso a paso?',
+        'funciona' => '¡Es súper sencillo! Básicamente con tu membresía, generas ganancias mensuales y al final recuperas todo tu dinero más ganancias. ¿Te explico paso a paso?',
         'sistema' => 'Nuestro sistema está basado en dividendos globales. Tú participas con tokens corporativos y recibes tu parte proporcional. ¿Quieres más detalles?',
         
         // Membresías y tokens
-        'membresia' => 'Las membresías son tu entrada a los dividendos globales de Mizton. Cada membresía incluye tokens corporativos que generan ganancias. ¿Te interesa saber los precios?',
+        'membresia' => 'Las membresías son tu entrada a los dividendos globales de Mizton. Cada membresía incluye tokens corporativos que generan ganancias. ¿Qué te interesa saber?',
         'tokens' => 'Los tokens corporativos son tu participación en Mizton. Mientras más tokens tengas, mayor será tu parte de los dividendos globales. ¡Es proporcional! 📈',
         'que recibo' => 'Recibes un paquete de Tokens Corporativos que te dan acceso a los dividendos globales de Mizton. ¿Te gustaría conocer los detalles específicos?',
         
@@ -326,10 +334,10 @@ function handleFAQResponse($input) {
         'ingresos' => 'Los ingresos en Mizton provienen de los dividendos globales que se reparten entre todos los miembros según sus tokens. ¡Es transparente y justo! ⚖️',
         
         // Seguridad
-        'es seguro' => 'Absolutamente. Mizton garantiza la recuperación del 100% de tu inversión inicial más un incentivo mínimo del 15%. Además, contamos con un sistema de respaldo sólido y transparente. Tu seguridad financiera es nuestra prioridad. 🛡️',
+        'es seguro' => 'Absolutamente. Mizton garantiza la recuperación del 100% de tu compra inicial más un incentivo mínimo del 15%. Además, contamos con un sistema de respaldo sólido y transparente. Tu seguridad financiera es nuestra prioridad. 🛡️',
         'seguro' => '¡Totalmente seguro! Tienes garantía del 100% de recuperación más ganancias mínimas del 15%. ¿Te gustaría conocer más sobre nuestras garantías?',
         'confiable' => 'Mizton es completamente confiable. Tenemos sistemas de respaldo y transparencia total. ¿Hay algo específico sobre la seguridad que te preocupe?',
-        'garantia' => 'Nuestra garantía es simple: recuperas el 100% de tu inversión inicial + mínimo 15% de incentivo. ¡Sin letra pequeña! 📋',
+        'garantia' => 'Nuestra garantía es simple: recuperas el 100% de tu compra inicial + mínimo 15% de incentivo. ¡Sin letra pequeña! 📋',
         
         // Registro y inicio
         'como empezar' => 'Para empezar es muy fácil: 1) Regístrate en nuestra plataforma, 2) Obtén tu primera membresía, 3) ¡Comienza a generar ganancias! ¿Te ayudo con el proceso de registro? 🚀',
@@ -338,12 +346,12 @@ function handleFAQResponse($input) {
         'unirse' => '¡Excelente decisión! Para unirte solo necesitas registrarte con tu email. ¿Ya tienes el código de referido de quien te invitó?',
         
         // Precios
-        'precio' => 'Desde un paquete de $50 USD ya estás participando de los dividendos globales de Mizton. ¿Te gustaría adquirir más paquetes para obtener más ganancias? 💵',
+        'precio' => 'Desde un paquete de $50 USD ya estás participando de los dividendos globales de Mizton. ¿Te guío para obtener tu registro y poder adquirir tu primera membresía? 💵',
         'costo' => 'El costo mínimo es de $50 USD para tu primera membresía. ¡Es súper accesible! ¿Te interesa conocer los diferentes paquetes disponibles?',
-        'cuanto cuesta' => 'Puedes empezar con solo $50 USD. Es una inversión muy accesible considerando que recuperas el 100% más ganancias. ¿Quieres ver las opciones?',
+        'cuanto cuesta' => 'Puedes empezar con solo $50 USD. Es una compra muy accesible considerando que recuperas el 100% más ganancias. ¿Quieres ver las opciones?',
         
         // Contacto y escalamiento
-        'contacto' => 'Puedes contactarnos de varias formas: a través de este chat, por WhatsApp, o por email. Nuestro equipo está disponible para resolver todas tus dudas. ¿Prefieres que te conecte con un asesor humano? 📞',
+        'contacto' => 'Puedes contactarnos a través de este chat y por WhatsApp. Nuestro equipo está disponible para resolver todas tus dudas. ¿Prefieres que te conecte con un asesor humano? 📞',
         'hablar con humano' => 'Por supuesto! Te voy a conectar con uno de nuestros asesores especializados. Por favor espera un momento mientras te redirijo... 👤',
         'asesor humano' => 'Perfecto! Te conectaré con un asesor humano especializado. Un momento por favor... 🤝',
         'hablar con alguien' => '¡Claro! Te voy a conectar con uno de nuestros asesores. Ellos podrán resolver todas tus dudas específicas. 💬',
@@ -570,6 +578,91 @@ function logEscalation($sessionId, $email, $contactMethod) {
         ]);
     } catch (Exception $e) {
         error_log("Error logging escalation: " . $e->getMessage());
+    }
+}
+
+/**
+ * Verificar código de referido
+ */
+function handleVerifyReferralCode($input) {
+    global $pdo;
+    
+    $referralCode = trim($input['referral_code'] ?? '');
+    
+    if (empty($referralCode)) {
+        throw new Exception('referral_code es requerido');
+    }
+    
+    try {
+        // Buscar el código en tbluser
+        $stmt = $pdo->prepare("SELECT idUser, nameUser FROM tbluser WHERE userUser = ?");
+        $stmt->execute([$referralCode]);
+        $referrer = $stmt->fetch();
+        
+        if ($referrer) {
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    'referrer_id' => $referrer['idUser'],
+                    'referrer_name' => $referrer['nameUser']
+                ]
+            ]);
+        } else {
+            echo json_encode([
+                'success' => false,
+                'message' => 'Código de referido no encontrado',
+                'data' => null
+            ]);
+        }
+        
+    } catch (Exception $e) {
+        error_log("Error verificando código de referido: " . $e->getMessage());
+        throw new Exception('Error verificando código de referido');
+    }
+}
+
+/**
+ * Actualizar código de referido en lead existente
+ */
+function handleUpdateReferralCode($input) {
+    global $pdo;
+    
+    $sessionId = trim($input['session_id'] ?? '');
+    $referralCode = trim($input['referral_code'] ?? '');
+    
+    if (empty($sessionId) || empty($referralCode)) {
+        throw new Exception('session_id y referral_code son requeridos');
+    }
+    
+    try {
+        // Obtener referrer_id
+        $stmt = $pdo->prepare("SELECT idUser FROM tbluser WHERE userUser = ?");
+        $stmt->execute([$referralCode]);
+        $referrer = $stmt->fetch();
+        
+        if (!$referrer) {
+            throw new Exception('Código de referido no válido');
+        }
+        
+        // Actualizar el lead
+        $stmt = $pdo->prepare("
+            UPDATE chat_leads 
+            SET referral_code = ?, referrer_id = ?, updated_at = NOW() 
+            WHERE session_id = ?
+        ");
+        $stmt->execute([$referralCode, $referrer['idUser'], $sessionId]);
+        
+        echo json_encode([
+            'success' => true,
+            'data' => [
+                'referral_code' => $referralCode,
+                'referrer_id' => $referrer['idUser']
+            ]
+        ]);
+        
+    } catch (Exception $e) {
+        error_log("Error actualizando código de referido: " . $e->getMessage());
+        throw new Exception('Error actualizando código de referido');
     }
 }
 ?>
