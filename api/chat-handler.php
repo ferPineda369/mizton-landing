@@ -127,11 +127,17 @@ function handleValidateReferral($input) {
 function handleSaveLead($input) {
     global $pdo;
     
+    error_log("=== GUARDANDO LEAD ===");
+    error_log("Input: " . json_encode($input));
+    
     $email = trim($input['email'] ?? '');
     $referralCode = trim($input['referral_code'] ?? '');
     $sessionId = trim($input['session_id'] ?? '');
     
+    error_log("Email: $email, SessionId: $sessionId, ReferralCode: $referralCode");
+    
     if (empty($email) || empty($sessionId)) {
+        error_log("ERROR: Datos faltantes - email o session_id vacíos");
         throw new Exception('email y session_id son requeridos');
     }
     
@@ -142,13 +148,15 @@ function handleSaveLead($input) {
         $existingLead = $stmt->fetch();
         
         if ($existingLead) {
+            error_log("Lead existente encontrado, actualizando session_id");
             // Email ya existe - actualizar session_id y devolver historial
             $stmt = $pdo->prepare("
                 UPDATE chat_leads 
-                SET session_id = ?, updated_at = CURRENT_TIMESTAMP 
+                SET session_id = ?, updated_at = NOW() 
                 WHERE email = ?
             ");
             $stmt->execute([$sessionId, $email]);
+            error_log("Session_id actualizado correctamente");
             
             // Devolver información del lead existente con historial
             $conversationData = json_decode($existingLead['conversation_data'], true) ?? [];
@@ -167,24 +175,49 @@ function handleSaveLead($input) {
             ]);
             return;
         } else {
+            error_log("Creando nuevo lead");
             // Nuevo lead - obtener referrer_id si existe código
             $referrerId = null;
             if ($referralCode) {
-                $stmt = $pdo->prepare("SELECT idUser FROM tbluser WHERE codigoUser = ?");
+                error_log("Buscando referrer con código: $referralCode");
+                // Buscar por código de referido en userUser
+                $stmt = $pdo->prepare("SELECT idUser FROM tbluser WHERE userUser = ?");
                 $stmt->execute([$referralCode]);
                 $referrer = $stmt->fetch();
                 if ($referrer) {
                     $referrerId = $referrer['idUser'];
+                    error_log("Referrer encontrado: $referrerId");
+                } else {
+                    error_log("Referrer no encontrado para código: $referralCode");
                 }
             }
             
             // Crear nuevo lead
-            $stmt = $pdo->prepare("
-                INSERT INTO chat_leads (email, session_id, referral_code, referrer_id, status, created_at, updated_at) 
-                VALUES (?, ?, ?, ?, 'active', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
-            ");
-            
-            $stmt->execute([$email, $sessionId, $referralCode, $referrerId]);
+            error_log("Insertando nuevo lead en BD");
+            try {
+                $stmt = $pdo->prepare("
+                    INSERT INTO chat_leads (email, session_id, referral_code, referrer_id, status, created_at, updated_at) 
+                    VALUES (?, ?, ?, ?, 'active', NOW(), NOW())
+                ");
+                
+                $stmt->execute([$email, $sessionId, $referralCode, $referrerId]);
+                error_log("Lead creado correctamente");
+            } catch (Exception $insertError) {
+                error_log("Error en INSERT: " . $insertError->getMessage());
+                
+                // Intentar con estructura más simple si falla
+                try {
+                    $stmt = $pdo->prepare("
+                        INSERT INTO chat_leads (email, session_id, referral_code, status) 
+                        VALUES (?, ?, ?, 'active')
+                    ");
+                    $stmt->execute([$email, $sessionId, $referralCode]);
+                    error_log("Lead creado con estructura simple");
+                } catch (Exception $simpleError) {
+                    error_log("Error en INSERT simple: " . $simpleError->getMessage());
+                    throw $insertError; // Lanzar el error original
+                }
+            }
             
             echo json_encode([
                 'success' => true,
