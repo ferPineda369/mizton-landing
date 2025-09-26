@@ -19,6 +19,7 @@ require_once '../database.php';
 require_once '../config/ai-config.php';
 
 // Crear tablas necesarias
+createChatLeadsTable();
 createAILogsTable();
 createEscalationLogsTable();
 
@@ -150,10 +151,23 @@ function handleSaveLead($input) {
     }
     
     try {
+        // Verificar que la tabla existe
+        error_log("Verificando tabla chat_leads...");
+        $stmt = $pdo->prepare("SHOW TABLES LIKE 'chat_leads'");
+        $stmt->execute();
+        $tableExists = $stmt->fetch();
+        
+        if (!$tableExists) {
+            error_log("ERROR: Tabla chat_leads no existe");
+            throw new Exception('Tabla chat_leads no existe');
+        }
+        
         // Verificar si ya existe un lead con este email
+        error_log("Buscando lead existente con email: $email");
         $stmt = $pdo->prepare("SELECT * FROM chat_leads WHERE email = ? ORDER BY created_at DESC LIMIT 1");
         $stmt->execute([$email]);
         $existingLead = $stmt->fetch();
+        error_log("Lead existente encontrado: " . ($existingLead ? "SÍ" : "NO"));
         
         if ($existingLead) {
             error_log("Lead existente encontrado, actualizando session_id");
@@ -202,30 +216,13 @@ function handleSaveLead($input) {
             
             // Crear nuevo lead
             error_log("Insertando nuevo lead en BD");
-            try {
-                $stmt = $pdo->prepare("
-                    INSERT INTO chat_leads (email, session_id, referral_code, referrer_id, status, created_at, updated_at) 
-                    VALUES (?, ?, ?, ?, 'active', NOW(), NOW())
-                ");
-                
-                $stmt->execute([$email, $sessionId, $referralCode, $referrerId]);
-                error_log("Lead creado correctamente");
-            } catch (Exception $insertError) {
-                error_log("Error en INSERT: " . $insertError->getMessage());
-                
-                // Intentar con estructura más simple si falla
-                try {
-                    $stmt = $pdo->prepare("
-                        INSERT INTO chat_leads (email, session_id, referral_code, status) 
-                        VALUES (?, ?, ?, 'active')
-                    ");
-                    $stmt->execute([$email, $sessionId, $referralCode]);
-                    error_log("Lead creado con estructura simple");
-                } catch (Exception $simpleError) {
-                    error_log("Error en INSERT simple: " . $simpleError->getMessage());
-                    throw $insertError; // Lanzar el error original
-                }
-            }
+            $stmt = $pdo->prepare("
+                INSERT INTO chat_leads (email, session_id, referral_code, referrer_id, status) 
+                VALUES (?, ?, ?, ?, 'active')
+            ");
+            
+            $stmt->execute([$email, $sessionId, $referralCode, $referrerId]);
+            error_log("Lead creado correctamente");
             
             echo json_encode([
                 'success' => true,
@@ -236,8 +233,15 @@ function handleSaveLead($input) {
         }
         
     } catch (Exception $e) {
-        error_log("Error guardando lead: " . $e->getMessage());
-        throw new Exception('Error guardando información');
+        error_log("=== ERROR DETALLADO GUARDANDO LEAD ===");
+        error_log("Error: " . $e->getMessage());
+        error_log("File: " . $e->getFile());
+        error_log("Line: " . $e->getLine());
+        error_log("Trace: " . $e->getTraceAsString());
+        error_log("Email: $email");
+        error_log("SessionId: $sessionId");
+        error_log("ReferralCode: $referralCode");
+        throw new Exception('Error guardando información: ' . $e->getMessage());
     }
 }
 
@@ -578,6 +582,37 @@ function logEscalation($sessionId, $email, $contactMethod) {
         ]);
     } catch (Exception $e) {
         error_log("Error logging escalation: " . $e->getMessage());
+    }
+}
+
+/**
+ * Crear tabla chat_leads si no existe
+ */
+function createChatLeadsTable() {
+    global $pdo;
+    
+    try {
+        $sql = "CREATE TABLE IF NOT EXISTS chat_leads (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            email VARCHAR(255) NOT NULL,
+            referral_code VARCHAR(50) NULL,
+            referrer_id INT NULL,
+            session_id VARCHAR(100) NULL UNIQUE,
+            conversation_data LONGTEXT NULL,
+            status ENUM('active', 'email_captured', 'converted', 'abandoned', 'escalated_to_human') DEFAULT 'active',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            INDEX idx_email (email),
+            INDEX idx_referral_code (referral_code),
+            INDEX idx_referrer_id (referrer_id),
+            INDEX idx_session_id (session_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+        
+        $pdo->exec($sql);
+        error_log("Tabla chat_leads verificada/creada correctamente");
+        
+    } catch (Exception $e) {
+        error_log("Error creando tabla chat_leads: " . $e->getMessage());
     }
 }
 
