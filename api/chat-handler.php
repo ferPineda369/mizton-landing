@@ -63,13 +63,10 @@ try {
             
         case 'escalate_to_human':
             handleEscalateToHuman($input);
+            break;
             
         case 'verify_referral_code':
             handleVerifyReferralCode($input);
-            break;
-            
-        case 'escalate_to_human':
-            handleEscalateToHuman($input);
             break;
             
         case 'debug_ai_config':
@@ -79,7 +76,6 @@ try {
         default:
             throw new Exception('Acción no válida');
     }
-{{ ... }}
     
 } catch (Exception $e) {
     error_log("Error en chat-handler.php: " . $e->getMessage());
