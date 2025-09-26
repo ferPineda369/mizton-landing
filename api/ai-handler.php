@@ -213,7 +213,7 @@ class MiztonAIHandler {
         try {
             // Obtener información del lead y su referrer
             $stmt = $pdo->prepare("
-                SELECT cl.*, u.celularUser, u.nombreUser 
+                SELECT cl.*, u.celularUser, u.nameUser, u.landing_preference 
                 FROM chat_leads cl 
                 LEFT JOIN tbluser u ON cl.referrer_id = u.idUser 
                 WHERE cl.session_id = ?
@@ -221,15 +221,24 @@ class MiztonAIHandler {
             $stmt->execute([$sessionId]);
             $leadData = $stmt->fetch();
             
-            if ($leadData && !empty($leadData['celularUser'])) {
-                // Usar WhatsApp del referrer
+            // Verificar si el referrer existe y tiene configurada atención personal
+            if ($leadData && !empty($leadData['celularUser']) && $leadData['landing_preference'] == 1) {
+                // Referrer tiene atención personal activada - usar su WhatsApp
                 $whatsappNumber = $leadData['celularUser'];
-                $referrerName = $leadData['nombreUser'];
-                $message = "¡Perfecto! Te voy a conectar con {$referrerName}, quien te invitó a Mizton. Él podrá brindarte asesoramiento personalizado y resolver todas tus dudas específicas.";
+                $referrerName = $leadData['nameUser'] ?? 'tu patrocinador';
+                $message = "¡Perfecto! Te voy a conectar con {$referrerName}, quien te invitó a Mizton. Él tiene configurada la atención personalizada y podrá brindarte asesoramiento directo para resolver todas tus dudas específicas.";
+                error_log("AI: Using referrer WhatsApp (personal attention enabled): {$whatsappNumber}");
             } else {
-                // Usar WhatsApp oficial de Mizton
+                // Sin referrer O referrer sin atención personal - usar WhatsApp oficial
                 $whatsappNumber = $_ENV['DEFAULT_WHATSAPP'] ?? '5212215695942';
-                $message = "¡Perfecto! Te voy a conectar con uno de nuestros asesores especializados de Mizton. Ellos podrán brindarte asesoramiento personalizado y resolver todas tus dudas específicas.";
+                
+                if ($leadData && !empty($leadData['celularUser']) && $leadData['landing_preference'] != 1) {
+                    $message = "Te voy a conectar con nuestro equipo oficial de asesores de Mizton. Tu patrocinador ha configurado que las consultas se dirijan a nuestro equipo especializado para brindarte la mejor atención.";
+                    error_log("AI: Referrer exists but personal attention disabled, using official WhatsApp");
+                } else {
+                    $message = "¡Perfecto! Te voy a conectar con uno de nuestros asesores especializados de Mizton. Ellos podrán brindarte asesoramiento personalizado y resolver todas tus dudas específicas.";
+                    error_log("AI: No referrer found, using official WhatsApp");
+                }
             }
             
             // Generar mensaje para WhatsApp
