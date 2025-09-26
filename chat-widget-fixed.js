@@ -14,6 +14,20 @@ class MiztonChatWidget {
         this.pendingReferralCode = null;
         this.pendingReferrerName = null;
         this.isActive = false;
+        this.buttonsEnabled = false;
+        
+        // Sistema de rotación de botones
+        this.allSuggestionButtons = [
+            { text: '¿Qué es Mizton?', query: 'que es mizton' },
+            { text: '¿Cómo funciona?', query: 'como funciona' },
+            { text: 'Membresía', query: 'membresia' },
+            { text: '¿Cuánto se gana?', query: 'cuanto puedo ganar' },
+            { text: '¿Es seguro?', query: 'es seguro' },
+            { text: '¿Cómo empezar?', query: 'como empezar' },
+            { text: 'Precio', query: 'precio' }
+        ];
+        this.currentButtonsShown = [0, 1, 2, 3]; // Índices de botones mostrados
+        this.nextButtonIndex = 4; // Próximo botón a mostrar
         
         this.init();
     }
@@ -194,53 +208,57 @@ class MiztonChatWidget {
                     gap: 8px;
                     justify-content: center;
                 ">
-                    <button class="suggestion-btn" data-query="que es mizton" style="
-                        background: rgba(64, 145, 108, 0.1);
-                        color: #1B4332;
-                        border: 1px solid rgba(64, 145, 108, 0.3);
+                    <button class="suggestion-btn" data-query="que es mizton" data-button-id="0" style="
+                        background: rgba(128, 128, 128, 0.1);
+                        color: #999;
+                        border: 1px solid rgba(128, 128, 128, 0.3);
                         padding: 6px 12px;
                         border-radius: 15px;
                         font-size: 11px;
-                        cursor: pointer;
+                        cursor: not-allowed;
                         transition: all 0.3s ease;
                         font-weight: 500;
-                    ">¿Qué es Mizton?</button>
+                        opacity: 0.6;
+                    " disabled>¿Qué es Mizton?</button>
                     
-                    <button class="suggestion-btn" data-query="como funciona" style="
-                        background: rgba(64, 145, 108, 0.1);
-                        color: #1B4332;
-                        border: 1px solid rgba(64, 145, 108, 0.3);
+                    <button class="suggestion-btn" data-query="como funciona" data-button-id="1" style="
+                        background: rgba(128, 128, 128, 0.1);
+                        color: #999;
+                        border: 1px solid rgba(128, 128, 128, 0.3);
                         padding: 6px 12px;
                         border-radius: 15px;
                         font-size: 11px;
-                        cursor: pointer;
+                        cursor: not-allowed;
                         transition: all 0.3s ease;
                         font-weight: 500;
-                    ">¿Cómo funciona?</button>
+                        opacity: 0.6;
+                    " disabled>¿Cómo funciona?</button>
                     
-                    <button class="suggestion-btn" data-query="membresia" style="
-                        background: rgba(64, 145, 108, 0.1);
-                        color: #1B4332;
-                        border: 1px solid rgba(64, 145, 108, 0.3);
+                    <button class="suggestion-btn" data-query="membresia" data-button-id="2" style="
+                        background: rgba(128, 128, 128, 0.1);
+                        color: #999;
+                        border: 1px solid rgba(128, 128, 128, 0.3);
                         padding: 6px 12px;
                         border-radius: 15px;
                         font-size: 11px;
-                        cursor: pointer;
+                        cursor: not-allowed;
                         transition: all 0.3s ease;
                         font-weight: 500;
-                    ">Membresía</button>
+                        opacity: 0.6;
+                    " disabled>Membresía</button>
                     
-                    <button class="suggestion-btn" data-query="cuanto puedo ganar" style="
-                        background: rgba(64, 145, 108, 0.1);
-                        color: #1B4332;
-                        border: 1px solid rgba(64, 145, 108, 0.3);
+                    <button class="suggestion-btn" data-query="cuanto puedo ganar" data-button-id="3" style="
+                        background: rgba(128, 128, 128, 0.1);
+                        color: #999;
+                        border: 1px solid rgba(128, 128, 128, 0.3);
                         padding: 6px 12px;
                         border-radius: 15px;
                         font-size: 11px;
-                        cursor: pointer;
+                        cursor: not-allowed;
                         transition: all 0.3s ease;
                         font-weight: 500;
-                    ">¿Cuánto se gana?</button>
+                        opacity: 0.6;
+                    " disabled>¿Cuánto se gana?</button>
                 </div>
 
                 <!-- Input -->
@@ -358,26 +376,7 @@ class MiztonChatWidget {
         }
 
         // Event listeners para botones de sugerencias
-        const suggestionButtons = document.querySelectorAll('.suggestion-btn');
-        suggestionButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const query = button.getAttribute('data-query');
-                const input = document.getElementById('chat-input');
-                input.value = query;
-                this.sendMessage();
-            });
-
-            // Efectos hover
-            button.addEventListener('mouseenter', () => {
-                button.style.background = 'rgba(64, 145, 108, 0.2)';
-                button.style.transform = 'translateY(-1px)';
-            });
-
-            button.addEventListener('mouseleave', () => {
-                button.style.background = 'rgba(64, 145, 108, 0.1)';
-                button.style.transform = 'translateY(0)';
-            });
-        });
+        this.setupSuggestionButtonListeners();
     }
 
     async sendMessage() {
@@ -432,19 +431,36 @@ class MiztonChatWidget {
                 this.hideTypingIndicator();
                 
                 if (data.success) {
-                    // Si no hay código de referido, preguntar por él
-                    if (!this.referralCode) {
-                        this.currentStep = 'referral_code_capture';
-                        this.addMessage('bot', '¡Perfecto! Una pregunta más: ¿conoces el código de la persona que te invitó a Mizton? Si es así, por favor compártelo (son 6 caracteres alfanuméricos). Si no lo conoces, simplemente escribe "no".');
-                    } else {
+                    // Verificar si es usuario existente
+                    if (data.existing_user) {
                         this.currentStep = 'chatting';
+                        
+                        // Si tiene historial, cargarlo
                         if (data.data.conversation_history && data.data.conversation_history.length > 0) {
                             this.loadConversationHistory(data.data.conversation_history);
                             this.addMessage('bot', '¡Bienvenido de vuelta! Continuemos donde lo dejamos.');
-                            this.hideSuggestionButtons(); // Ocultar botones si hay historial
                         } else {
+                            this.addMessage('bot', '¡Hola de nuevo! ¿En qué puedo ayudarte hoy?');
+                        }
+                        
+                        // Activar botones si ya tiene referral_code o si vino con código en URL
+                        if (data.data.has_referral_code || this.referralCode) {
+                            this.enableSuggestionButtons();
+                        }
+                        
+                        // Guardar datos del referral si existen
+                        if (data.data.referral_code) {
+                            this.referralCode = data.data.referral_code;
+                        }
+                    } else {
+                        // Usuario nuevo
+                        if (!this.referralCode && !data.data.has_referral_code) {
+                            this.currentStep = 'referral_code_capture';
+                            this.addMessage('bot', '¡Perfecto! Una pregunta más: ¿conoces el código de la persona que te invitó a Mizton? Si es así, por favor compártelo (son 6 caracteres alfanuméricos). Si no lo conoces, simplemente escribe "no".');
+                        } else {
+                            this.currentStep = 'chatting';
                             this.addMessage('bot', '¡Perfecto! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
-                            // Mantener botones visibles para nuevos usuarios con referral code
+                            this.enableSuggestionButtons(); // Activar botones para nuevos usuarios con código
                         }
                     }
                 } else {
@@ -468,7 +484,7 @@ class MiztonChatWidget {
             this.hideTypingIndicator();
             this.currentStep = 'chatting';
             this.addMessage('bot', '¡No hay problema! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
-            // Mantener botones visibles para usuarios sin código
+            this.enableSuggestionButtons(); // Activar botones para usuarios sin código
             return;
         }
 
@@ -533,11 +549,11 @@ class MiztonChatWidget {
                     this.referralCode = this.pendingReferralCode;
                     this.currentStep = 'chatting';
                     this.addMessage('bot', `¡Perfecto! He registrado que ${this.pendingReferrerName} te invitó. Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?`);
-                    // Mantener botones visibles después de confirmar referido
+                    this.enableSuggestionButtons(); // Activar botones después de confirmar referido
                 } else {
                     this.addMessage('bot', 'Hubo un problema actualizando la información. Pero no te preocupes, puedo ayudarte con cualquier pregunta sobre Mizton.');
                     this.currentStep = 'chatting';
-                    // Mantener botones visibles
+                    this.enableSuggestionButtons(); // Activar botones aunque haya error
                 }
             } catch (error) {
                 console.error('Error actualizando referido:', error);
@@ -550,7 +566,7 @@ class MiztonChatWidget {
             this.hideTypingIndicator();
             this.currentStep = 'chatting';
             this.addMessage('bot', '¡No hay problema! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
-            // Mantener botones visibles si no confirma referido
+            this.enableSuggestionButtons(); // Activar botones si no confirma referido
         }
     }
 
@@ -571,11 +587,11 @@ class MiztonChatWidget {
             if (data.success) {
                 this.hideTypingIndicator();
                 this.addMessage('bot', data.data.response);
-                this.hideSuggestionButtons(); // Ocultar botones después del primer chat
+                // Mantener botones visibles durante el chat
             } else {
                 this.hideTypingIndicator();
                 this.addMessage('bot', 'Lo siento, no pude procesar tu mensaje. ¿Podrías reformularlo?');
-                this.hideSuggestionButtons(); // Ocultar botones después del primer chat
+                // Mantener botones visibles durante el chat
             }
             
         } catch (error) {
@@ -603,10 +619,10 @@ class MiztonChatWidget {
             
             if (fallbackResponse) {
                 this.addMessage('bot', fallbackResponse);
-                this.hideSuggestionButtons(); // Ocultar botones después del fallback
+                // Mantener botones visibles en fallback
             } else {
                 this.addMessage('bot', 'Disculpa el inconveniente técnico. ¿Podrías reformular tu pregunta? Puedo ayudarte con información sobre Mizton, precios, funcionamiento o seguridad.');
-                this.hideSuggestionButtons(); // Ocultar botones después del fallback
+                // Mantener botones visibles en fallback
             }
         }
     }
@@ -820,6 +836,80 @@ class MiztonChatWidget {
         } catch (error) {
             console.error('Error guardando mensaje en historial:', error);
         }
+    }
+
+    setupSuggestionButtonListeners() {
+        const suggestionButtons = document.querySelectorAll('.suggestion-btn');
+        suggestionButtons.forEach((button, index) => {
+            button.addEventListener('click', () => {
+                if (!this.buttonsEnabled) return;
+                
+                const query = button.getAttribute('data-query');
+                const buttonId = parseInt(button.getAttribute('data-button-id'));
+                
+                // Enviar mensaje
+                const input = document.getElementById('chat-input');
+                input.value = query;
+                this.sendMessage();
+                
+                // Rotar botón (ocultar cliqueado, mostrar siguiente)
+                this.rotateSuggestionButton(buttonId);
+            });
+
+            // Efectos hover solo si están habilitados
+            button.addEventListener('mouseenter', () => {
+                if (this.buttonsEnabled) {
+                    button.style.background = 'rgba(64, 145, 108, 0.2)';
+                    button.style.transform = 'translateY(-1px)';
+                }
+            });
+
+            button.addEventListener('mouseleave', () => {
+                if (this.buttonsEnabled) {
+                    button.style.background = 'rgba(64, 145, 108, 0.1)';
+                    button.style.transform = 'translateY(0)';
+                }
+            });
+        });
+    }
+
+    enableSuggestionButtons() {
+        this.buttonsEnabled = true;
+        const suggestionButtons = document.querySelectorAll('.suggestion-btn');
+        
+        suggestionButtons.forEach(button => {
+            button.disabled = false;
+            button.style.background = 'rgba(64, 145, 108, 0.1)';
+            button.style.color = '#1B4332';
+            button.style.border = '1px solid rgba(64, 145, 108, 0.3)';
+            button.style.cursor = 'pointer';
+            button.style.opacity = '1';
+        });
+    }
+
+    rotateSuggestionButton(clickedButtonId) {
+        // Encontrar el botón cliqueado
+        const clickedButton = document.querySelector(`[data-button-id="${clickedButtonId}"]`);
+        if (!clickedButton) return;
+
+        // Si no hay más botones para mostrar, solo ocultar el cliqueado
+        if (this.nextButtonIndex >= this.allSuggestionButtons.length) {
+            clickedButton.style.display = 'none';
+            return;
+        }
+
+        // Obtener el siguiente botón a mostrar
+        const nextButton = this.allSuggestionButtons[this.nextButtonIndex];
+        
+        // Actualizar el botón cliqueado con el nuevo contenido
+        clickedButton.textContent = nextButton.text;
+        clickedButton.setAttribute('data-query', nextButton.query);
+        
+        // Actualizar índices
+        this.currentButtonsShown[clickedButtonId] = this.nextButtonIndex;
+        this.nextButtonIndex++;
+        
+        console.log(`Botón rotado: ${nextButton.text}`);
     }
 }
 

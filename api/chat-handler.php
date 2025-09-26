@@ -183,6 +183,9 @@ function handleSaveLead($input) {
             // Devolver información del lead existente con historial
             $conversationData = json_decode($existingLead['conversation_data'], true) ?? [];
             
+            // Verificar si ya tiene referral_code
+            $hasReferralCode = !empty($existingLead['referral_code']) && !empty($existingLead['referrer_id']);
+            
             echo json_encode([
                 'success' => true,
                 'message' => 'Bienvenido de vuelta! Continuemos donde lo dejamos.',
@@ -192,7 +195,9 @@ function handleSaveLead($input) {
                     'email' => $existingLead['email'],
                     'referral_code' => $existingLead['referral_code'],
                     'conversation_history' => $conversationData,
-                    'status' => $existingLead['status']
+                    'status' => $existingLead['status'],
+                    'has_referral_code' => $hasReferralCode,
+                    'referrer_id' => $existingLead['referrer_id']
                 ]
             ]);
             return;
