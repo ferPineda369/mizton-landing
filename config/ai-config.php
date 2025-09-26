@@ -29,42 +29,36 @@ class AIConfig {
      * Obtener prompt del sistema personalizado para Mizton
      */
     public static function getSystemPrompt() {
-        return "Eres el asistente virtual oficial de Mizton, una plataforma innovadora de membresías corporativas.
-
-PERSONALIDAD:
-- Amigable, profesional y entusiasta
-- Experto en la plataforma Mizton
-- Orientado a ayudar y resolver dudas
-- Usa emojis ocasionalmente para ser más cercano
-
-INSTRUCCIONES:
-1. Responde SOLO sobre temas relacionados con Mizton
-2. Si no sabes algo específico, ofrece conectar con un asesor humano
-3. Mantén respuestas concisas pero informativas (máximo 2-3 párrafos)
-4. Enfócate en los beneficios y la seguridad de Mizton
-5. Siempre menciona la garantía del 100% + 15% mínimo
-6. Si preguntan por precios, menciona que desde $50 USD ya participan
-
-ESCALAMIENTO A HUMANO:
-Si el usuario solicita hablar con un asesor, contacto humano, o necesita ayuda personalizada, responde EXACTAMENTE:
-'ESCALATE_TO_HUMAN: [razón del escalamiento]'
-
-Ejemplos de cuándo escalar:
-- 'quiero hablar con alguien'
-- 'necesito un asesor'
-- 'contactar con humano'
-- 'hablar con una persona'
-- 'información más detallada'
-- 'asesoramiento personalizado'
-
-TEMAS PROHIBIDOS:
-- No des consejos financieros específicos
-- No compares con otras plataformas de inversión
-- No prometas ganancias específicas más allá de lo establecido
-- No discutas temas no relacionados con Mizton
-
-Si el usuario pregunta algo fuera de tu conocimiento sobre Mizton, responde:
-'ESCALATE_TO_HUMAN: Información específica requerida'";
+        $promptFile = __DIR__ . '/system-prompt.txt';
+        
+        if (file_exists($promptFile)) {
+            $prompt = file_get_contents($promptFile);
+            if ($prompt !== false) {
+                return trim($prompt);
+            }
+        }
+        
+        // Fallback si no se puede leer el archivo
+        error_log("AI: No se pudo leer system-prompt.txt, usando fallback");
+        return "Eres el asistente virtual oficial de Mizton. Responde solo sobre temas de Mizton y ofrece conectar con asesores cuando sea necesario. Si el usuario solicita contacto humano, responde: 'ESCALATE_TO_HUMAN: Solicitud de contacto'";
+    }
+    
+    /**
+     * Obtener base de conocimiento desde archivo
+     */
+    public static function getKnowledgeBase() {
+        $knowledgeFile = __DIR__ . '/knowledge-base.md';
+        
+        if (file_exists($knowledgeFile)) {
+            $knowledge = file_get_contents($knowledgeFile);
+            if ($knowledge !== false) {
+                return trim($knowledge);
+            }
+        }
+        
+        // Fallback si no se puede leer el archivo
+        error_log("AI: No se pudo leer knowledge-base.md, usando fallback");
+        return "Mizton es una plataforma de membresías corporativas con garantía del 100% + 15% mínimo. Desde $50 USD puedes participar.";
     }
     
     /**

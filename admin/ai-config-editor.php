@@ -1,0 +1,223 @@
+<?php
+/**
+ * Editor de Configuración de IA - Mizton
+ * Panel simple para editar knowledge-base.md y system-prompt.txt
+ */
+
+// Verificación de seguridad básica
+session_start();
+$adminPassword = 'mizton2024admin'; // Cambiar por algo más seguro
+
+if (!isset($_SESSION['ai_admin']) && (!isset($_POST['password']) || $_POST['password'] !== $adminPassword)) {
+    ?>
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>Admin IA - Mizton</title>
+        <style>
+            body { font-family: Arial, sans-serif; max-width: 400px; margin: 100px auto; padding: 20px; }
+            input, button { width: 100%; padding: 10px; margin: 10px 0; }
+            button { background: #40916C; color: white; border: none; cursor: pointer; }
+        </style>
+    </head>
+    <body>
+        <h2>🔐 Acceso Admin IA</h2>
+        <form method="post">
+            <input type="password" name="password" placeholder="Contraseña de administrador" required>
+            <button type="submit">Acceder</button>
+        </form>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
+$_SESSION['ai_admin'] = true;
+
+// Rutas de archivos
+$knowledgeFile = __DIR__ . '/../config/knowledge-base.md';
+$promptFile = __DIR__ . '/../config/system-prompt.txt';
+
+// Procesar guardado
+if ($_POST['action'] ?? '' === 'save') {
+    $file = $_POST['file'] === 'knowledge' ? $knowledgeFile : $promptFile;
+    $content = $_POST['content'] ?? '';
+    
+    if (file_put_contents($file, $content)) {
+        $message = "✅ Archivo guardado correctamente";
+    } else {
+        $message = "❌ Error al guardar archivo";
+    }
+}
+
+// Leer contenidos actuales
+$knowledgeContent = file_exists($knowledgeFile) ? file_get_contents($knowledgeFile) : '';
+$promptContent = file_exists($promptFile) ? file_get_contents($promptFile) : '';
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor IA - Mizton</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+        .tab {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background: #40916C;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        textarea {
+            width: 100%;
+            height: 500px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            resize: vertical;
+        }
+        .save-btn {
+            background: #40916C;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .save-btn:hover {
+            background: #52B788;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .info {
+            background: #e7f3ff;
+            color: #0066cc;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .logout {
+            float: right;
+            background: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1>🤖 Editor de IA - Mizton</h1>
+            <a href="?logout=1" class="logout">Cerrar Sesión</a>
+        </div>
+
+        <?php if (isset($message)): ?>
+            <div class="message"><?= $message ?></div>
+        <?php endif; ?>
+
+        <div class="info">
+            <strong>💡 Instrucciones:</strong><br>
+            • <strong>Base de Conocimiento:</strong> Información que la IA usará para responder preguntas<br>
+            • <strong>System Prompt:</strong> Instrucciones de comportamiento para la IA<br>
+            • Los cambios se aplican inmediatamente después de guardar<br>
+            • Usa Markdown en la base de conocimiento para mejor formato
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('knowledge')">📚 Base de Conocimiento</button>
+            <button class="tab" onclick="showTab('prompt')">⚙️ System Prompt</button>
+        </div>
+
+        <!-- Tab Base de Conocimiento -->
+        <div id="knowledge-tab" class="tab-content active">
+            <h3>📚 Base de Conocimiento (knowledge-base.md)</h3>
+            <form method="post">
+                <input type="hidden" name="action" value="save">
+                <input type="hidden" name="file" value="knowledge">
+                <textarea name="content" placeholder="Escribe aquí la base de conocimiento en formato Markdown..."><?= htmlspecialchars($knowledgeContent) ?></textarea>
+                <button type="submit" class="save-btn">💾 Guardar Base de Conocimiento</button>
+            </form>
+        </div>
+
+        <!-- Tab System Prompt -->
+        <div id="prompt-tab" class="tab-content">
+            <h3>⚙️ System Prompt (system-prompt.txt)</h3>
+            <form method="post">
+                <input type="hidden" name="action" value="save">
+                <input type="hidden" name="file" value="prompt">
+                <textarea name="content" placeholder="Escribe aquí las instrucciones para la IA..."><?= htmlspecialchars($promptContent) ?></textarea>
+                <button type="submit" class="save-btn">💾 Guardar System Prompt</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Ocultar todas las tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Mostrar tab seleccionada
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
+
+<?php
+// Logout
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit;
+}
+?>
