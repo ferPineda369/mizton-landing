@@ -577,7 +577,34 @@ class MiztonChatWidget {
 
     async handleChatMessage(message) {
         try {
-            const response = await fetch(this.chatAPI, {
+            // 1. Intentar primero con FAQ
+            const faqResponse = await fetch(this.chatAPI, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'get_faq_response',
+                    message: message,
+                    session_id: this.sessionId
+                })
+            });
+
+            const faqData = await faqResponse.json();
+            
+            if (faqData.success) {
+                // FAQ encontró respuesta
+                this.hideTypingIndicator();
+                this.addMessage('bot', faqData.data.response);
+                
+                // Verificar si requiere escalamiento a humano
+                if (faqData.data.requires_human) {
+                    this.showEscalationButton();
+                }
+                return;
+            }
+            
+            // 2. Si FAQ no tiene respuesta, intentar con IA
+            console.log('FAQ no encontró respuesta, escalando a IA...');
+            const aiResponse = await fetch(this.chatAPI, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -587,48 +614,55 @@ class MiztonChatWidget {
                 })
             });
 
-            const data = await response.json();
+            const aiData = await aiResponse.json();
             
-            if (data.success) {
+            if (aiData.success) {
                 this.hideTypingIndicator();
-                this.addMessage('bot', data.data.response);
-                // Mantener botones visibles durante el chat
+                this.addMessage('bot', aiData.data.response);
+                
+                // La IA puede decidir mostrar botón de escalamiento
+                if (aiData.data.requires_human) {
+                    this.showEscalationButton();
+                }
             } else {
+                // 3. Fallback de emergencia si tanto FAQ como IA fallan
                 this.hideTypingIndicator();
-                this.addMessage('bot', 'Lo siento, no pude procesar tu mensaje. ¿Podrías reformularlo?');
-                // Mantener botones visibles durante el chat
+                this.handleEmergencyFallback(message);
             }
             
         } catch (error) {
             console.error('Error procesando mensaje:', error);
             this.hideTypingIndicator();
-            
-            // FAQ básicas como fallback
-            const basicFAQs = {
-                'hola': '¡Hola! 👋 Soy el asistente de Mizton. ¿En qué puedo ayudarte?',
-                'mizton': 'Mizton es una plataforma de membresías garantizadas. ¿Te gustaría saber más?',
-                'como funciona': 'Te explico: 1) Te registras, 2) Adquieres membresía, 3) Generas ganancias, 4) Recuperas 100% + 15% mínimo.',
-                'precio': 'Desde $50 USD ya participas en los dividendos globales de Mizton.',
-                'seguro': 'Totalmente seguro. Garantizamos 100% de recuperación más ganancias mínimas del 15%.'
-            };
-            
-            const userMessage = message.toLowerCase();
-            let fallbackResponse = null;
-            
-            for (const [key, response] of Object.entries(basicFAQs)) {
-                if (userMessage.includes(key)) {
-                    fallbackResponse = response;
-                    break;
-                }
+            this.handleEmergencyFallback(message);
+        }
+    }
+
+    handleEmergencyFallback(message) {
+        // Fallback de emergencia cuando todo falla
+        const emergencyFAQs = {
+            'hola': '¡Hola! 👋 Soy el asistente de Mizton. ¿En qué puedo ayudarte?',
+            'mizton': 'Mizton es una plataforma de membresías garantizadas. ¿Te gustaría saber más?',
+            'como funciona': 'Te explico: 1) Te registras, 2) Adquieres membresía, 3) Generas ganancias, 4) Recuperas 100% + 15% mínimo.',
+            'precio': 'Desde $50 USD ya participas en los dividendos globales de Mizton.',
+            'seguro': 'Totalmente seguro. Garantizamos 100% de recuperación más ganancias mínimas del 15%.',
+            'empezar': 'Para empezar: 1) Registro, 2) Membresía, 3) ¡Ganancias! ¿Te ayudo?'
+        };
+        
+        const userMessage = message.toLowerCase();
+        let fallbackResponse = null;
+        
+        for (const [key, response] of Object.entries(emergencyFAQs)) {
+            if (userMessage.includes(key)) {
+                fallbackResponse = response;
+                break;
             }
-            
-            if (fallbackResponse) {
-                this.addMessage('bot', fallbackResponse);
-                // Mantener botones visibles en fallback
-            } else {
-                this.addMessage('bot', 'Disculpa el inconveniente técnico. ¿Podrías reformular tu pregunta? Puedo ayudarte con información sobre Mizton, precios, funcionamiento o seguridad.');
-                // Mantener botones visibles en fallback
-            }
+        }
+        
+        if (fallbackResponse) {
+            this.addMessage('bot', fallbackResponse);
+        } else {
+            this.addMessage('bot', 'Disculpa el inconveniente técnico. ¿Podrías reformular tu pregunta? Puedo ayudarte con información sobre Mizton, precios, funcionamiento o seguridad. También puedes contactar a un asesor humano.');
+            this.showEscalationButton(); // Mostrar escalamiento en caso de fallo técnico
         }
     }
 

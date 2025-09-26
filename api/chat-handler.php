@@ -375,49 +375,24 @@ function handleFAQResponse($input) {
         
         // Qué es Mizton
         'que es mizton' => 'Mizton es una plataforma innovadora que ofrece membresías garantizadas con recuperación del 100% más ganancias adicionales. ¡Es como tener lo mejor de ambos mundos! 🚀',
-        'mizton' => 'Mizton es tu oportunidad de participar en dividendos globales con total seguridad. ¿Te gustaría saber cómo funciona exactamente?',
-        'plataforma' => 'Nuestra plataforma está diseñada para que obtengas ganancias de forma segura y transparente. ¿Hay algo específico que te gustaría conocer?',
-        
+
         // Funcionamiento
         'como funciona' => 'Nuestro sistema funciona así: 1) Te registras, 2) Adquieres un paquete de participación (Membresía), 3) Accedes a los dividendos globales de Mizton, 4) Al final del período si decides no continuar, recuperas el 100% de tu inversión inicial + el incentivo de al menos un 15%. ¡Es así de simple! 🎯',
-        'funciona' => '¡Es súper sencillo! Básicamente con tu membresía, generas ganancias mensuales y al final recuperas todo tu dinero más ganancias. ¿Te explico paso a paso?',
-        'sistema' => 'Nuestro sistema está basado en dividendos globales. Tú participas con tokens corporativos y recibes tu parte proporcional. ¿Quieres más detalles?',
         
         // Membresías y tokens
         'membresia' => 'Las membresías son tu entrada a los dividendos globales de Mizton. Cada membresía incluye tokens corporativos que generan ganancias. ¿Qué te interesa saber?',
-        'tokens' => 'Los tokens corporativos son tu participación en Mizton. Mientras más tokens tengas, mayor será tu parte de los dividendos globales. ¡Es proporcional! 📈',
-        'que recibo' => 'Recibes un paquete de Tokens Corporativos que te dan acceso a los dividendos globales de Mizton. ¿Te gustaría conocer los detalles específicos?',
         
         // Ganancias
         'cuanto puedo ganar' => 'Las ganancias varían según la cantidad de Tokens que poseas. Recuerda que hablamos de ganancias globales, más bonos adicionales por referidos. ¿Te interesa conocer los detalles específicos? 💰',
-        'ganancias' => '¡Las ganancias son lo emocionante! Participas de dividendos globales más bonos por referir personas. ¿Quieres que te explique cómo se calculan?',
-        'dinero' => 'Con Mizton puedes generar ingresos de dos formas: dividendos por tus tokens y bonos por referir personas. ¿Te gustaría saber más sobre alguna?',
-        'ingresos' => 'Los ingresos en Mizton provienen de los dividendos globales que se reparten entre todos los miembros según sus tokens. ¡Es transparente y justo! ⚖️',
         
         // Seguridad
         'es seguro' => 'Absolutamente. Mizton garantiza la recuperación del 100% de tu compra inicial más un incentivo mínimo del 15%. Además, contamos con un sistema de respaldo sólido y transparente. Tu seguridad financiera es nuestra prioridad. 🛡️',
-        'seguro' => '¡Totalmente seguro! Tienes garantía del 100% de recuperación más ganancias mínimas del 15%. ¿Te gustaría conocer más sobre nuestras garantías?',
-        'confiable' => 'Mizton es completamente confiable. Tenemos sistemas de respaldo y transparencia total. ¿Hay algo específico sobre la seguridad que te preocupe?',
-        'garantia' => 'Nuestra garantía es simple: recuperas el 100% de tu compra inicial + mínimo 15% de incentivo. ¡Sin letra pequeña! 📋',
         
         // Registro y inicio
         'como empezar' => 'Para empezar es muy fácil: 1) Regístrate en nuestra plataforma, 2) Obtén tu primera membresía, 3) ¡Comienza a generar ganancias! ¿Te ayudo con el proceso de registro? 🚀',
-        'empezar' => '¡Perfecto que quieras empezar! El proceso es súper simple. ¿Prefieres que te guíe paso a paso o que te conecte directamente con un asesor?',
-        'registro' => 'El proceso de registro es simple y seguro. Solo necesitas tu email y haber sido invitado por uno de nuestros Miembros. Una vez registrado, podrás acceder a tu panel personal y adquirir tu membresía. ¿Quieres que te ayude a registrarte? 📝',
-        'unirse' => '¡Excelente decisión! Para unirte solo necesitas registrarte con tu email. ¿Ya tienes el código de referido de quien te invitó?',
         
         // Precios
-        'precio' => 'Desde un paquete de $50 USD ya estás participando de los dividendos globales de Mizton. ¿Te guío para obtener tu registro y poder adquirir tu primera membresía? 💵',
-        'costo' => 'El costo mínimo es de $50 USD para tu primera membresía. ¡Es súper accesible! ¿Te interesa conocer los diferentes paquetes disponibles?',
-        'cuanto cuesta' => 'Puedes empezar con solo $50 USD. Es una compra muy accesible considerando que recuperas el 100% más ganancias. ¿Quieres ver las opciones?',
-        
-        // Contacto y escalamiento
-        'contacto' => 'Puedes contactarnos a través de este chat y por WhatsApp. Nuestro equipo está disponible para resolver todas tus dudas. ¿Prefieres que te conecte con un asesor humano? 📞',
-        'hablar con humano' => 'Por supuesto! Te voy a conectar con uno de nuestros asesores especializados. Por favor espera un momento mientras te redirijo... 👤',
-        'asesor humano' => 'Perfecto! Te conectaré con un asesor humano especializado. Un momento por favor... 🤝',
-        'hablar con alguien' => '¡Claro! Te voy a conectar con uno de nuestros asesores. Ellos podrán resolver todas tus dudas específicas. 💬',
-        'quiero hablar con una persona' => 'Entendido! Te conectaré con un asesor humano especializado en Mizton. Un momento por favor... 🙋‍♂️',
-        'persona real' => '¡Por supuesto! Nada como hablar con una persona real. Te conecto con un asesor especializado ahora mismo. ⏰'
+        'precio' => 'Desde un paquete de $50 USD ya estás participando de los dividendos globales de Mizton. ¿Te guío para obtener tu registro y poder adquirir tu primera membresía? 💵'
     ];
     
     // Buscar respuesta
@@ -436,22 +411,18 @@ function handleFAQResponse($input) {
         }
     }
     
-    // Respuestas por defecto más naturales y variadas
+    // Fallback solo si no hay respuesta FAQ (la IA manejará el resto)
     if (!$response) {
-        $defaultResponses = [
-            'Interesante pregunta! 🤔 Mizton tiene muchos aspectos fascinantes. ¿Te gustaría que profundice en algún tema específico como las ganancias, la seguridad o el proceso de registro?',
-            
-            'Me encanta que preguntes eso! 😊 Mizton es realmente innovador. ¿Hay algo particular sobre nuestro sistema de membresías que te gustaría conocer mejor?',
-            
-            'Excelente consulta! 👍 Cada aspecto de Mizton está diseñado pensando en nuestros miembros. ¿Te interesa saber más sobre cómo funciona, los precios, o tal vez las garantías?',
-            
-            'Esa es una pregunta muy común! 💡 Muchos de nuestros miembros tenían la misma duda. ¿Te gustaría que te explique paso a paso cómo funciona Mizton?',
-            
-            'Perfecto que preguntes eso! 🎯 Es importante entender bien antes de tomar una decisión. ¿Prefieres que te conecte con un asesor especializado para una explicación personalizada?'
-        ];
-        
-        // Seleccionar respuesta aleatoria
-        $response = $defaultResponses[array_rand($defaultResponses)];
+        // Si no hay respuesta FAQ, devolver null para que la IA tome el control
+        echo json_encode([
+            'success' => false,
+            'data' => [
+                'response' => null,
+                'requires_ai' => true,
+                'message' => 'No FAQ match - escalate to AI'
+            ]
+        ]);
+        return;
     }
     
     echo json_encode([
