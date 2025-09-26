@@ -6,7 +6,7 @@
 class MiztonChatWidget {
     constructor() {
         this.chatAPI = './api/chat-handler.php';
-        this.sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        this.sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9) + '_' + performance.now().toString(36).substr(2, 5);
         this.userEmail = null;
         this.currentStep = 'email_capture'; // email_capture, referral_code_capture, referral_confirmation, chatting
         this.referralCode = null;

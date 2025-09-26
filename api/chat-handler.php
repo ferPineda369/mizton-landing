@@ -181,7 +181,10 @@ function handleSaveLead($input) {
             error_log("Session_id actualizado correctamente");
             
             // Devolver información del lead existente con historial
-            $conversationData = json_decode($existingLead['conversation_data'], true) ?? [];
+            $conversationData = [];
+            if (!empty($existingLead['conversation_data'])) {
+                $conversationData = json_decode($existingLead['conversation_data'], true) ?? [];
+            }
             
             // Verificar si ya tiene referral_code
             $hasReferralCode = !empty($existingLead['referral_code']) && !empty($existingLead['referrer_id']);
@@ -221,13 +224,25 @@ function handleSaveLead($input) {
             
             // Crear nuevo lead
             error_log("Insertando nuevo lead en BD");
+            
+            // Verificar que el session_id no exista
+            $stmt = $pdo->prepare("SELECT id FROM chat_leads WHERE session_id = ?");
+            $stmt->execute([$sessionId]);
+            $existingSession = $stmt->fetch();
+            
+            if ($existingSession) {
+                // Generar nuevo session_id único
+                $sessionId = 'session_' . time() . '_' . uniqid() . '_' . mt_rand(1000, 9999);
+                error_log("Session_id duplicado, generando nuevo: $sessionId");
+            }
+            
             $stmt = $pdo->prepare("
                 INSERT INTO chat_leads (email, session_id, referral_code, referrer_id, status) 
                 VALUES (?, ?, ?, ?, 'active')
             ");
             
             $stmt->execute([$email, $sessionId, $referralCode, $referrerId]);
-            error_log("Lead creado correctamente");
+            error_log("Lead creado correctamente con session_id: $sessionId");
             
             echo json_encode([
                 'success' => true,
@@ -270,7 +285,7 @@ function handleUpdateConversation($input) {
     $result = $stmt->fetch();
     
     $conversation = [];
-    if ($result && $result['conversation_data']) {
+    if ($result && !empty($result['conversation_data'])) {
         $conversation = json_decode($result['conversation_data'], true) ?? [];
     }
     
@@ -308,7 +323,10 @@ function saveMessageToHistory($sessionId, $sender, $message) {
         $lead = $stmt->fetch();
         
         if ($lead) {
-            $conversationData = json_decode($lead['conversation_data'], true) ?? [];
+            $conversationData = [];
+            if (!empty($lead['conversation_data'])) {
+                $conversationData = json_decode($lead['conversation_data'], true) ?? [];
+            }
             
             // Agregar nuevo mensaje
             $conversationData[] = [
