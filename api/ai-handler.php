@@ -104,6 +104,13 @@ class MiztonAIHandler {
         if ($response) {
             error_log("AI: OpenAI response received successfully");
             AIConfig::logAIUsage($sessionId, $message, $response, $this->config['model']);
+            
+            // Detectar si la IA solicita escalamiento
+            if (strpos($response, 'ESCALATE_TO_HUMAN:') === 0) {
+                error_log("AI: Escalamiento detectado, generando WhatsApp link");
+                return $this->generateWhatsAppEscalation($sessionId, $response);
+            }
+            
             return $response;
         } else {
             error_log("AI: OpenAI call failed, using fallback");
@@ -198,6 +205,52 @@ class MiztonAIHandler {
         }
         
         return 'Entiendo tu pregunta. Para darte la mejor respuesta, ¿te gustaría que te conecte con uno de nuestros asesores especializados?';
+    }
+    
+    private function generateWhatsAppEscalation($sessionId, $aiResponse) {
+        global $pdo;
+        
+        try {
+            // Obtener información del lead y su referrer
+            $stmt = $pdo->prepare("
+                SELECT cl.*, u.celularUser, u.nombreUser 
+                FROM chat_leads cl 
+                LEFT JOIN tbluser u ON cl.referrer_id = u.idUser 
+                WHERE cl.session_id = ?
+            ");
+            $stmt->execute([$sessionId]);
+            $leadData = $stmt->fetch();
+            
+            if ($leadData && !empty($leadData['celularUser'])) {
+                // Usar WhatsApp del referrer
+                $whatsappNumber = $leadData['celularUser'];
+                $referrerName = $leadData['nombreUser'];
+                $message = "¡Perfecto! Te voy a conectar con {$referrerName}, quien te invitó a Mizton. Él podrá brindarte asesoramiento personalizado y resolver todas tus dudas específicas.";
+            } else {
+                // Usar WhatsApp oficial de Mizton
+                $whatsappNumber = $_ENV['DEFAULT_WHATSAPP'] ?? '5212215695942';
+                $message = "¡Perfecto! Te voy a conectar con uno de nuestros asesores especializados de Mizton. Ellos podrán brindarte asesoramiento personalizado y resolver todas tus dudas específicas.";
+            }
+            
+            // Generar mensaje para WhatsApp
+            $whatsappMessage = urlencode("Hola! Vengo del chat de Mizton y me gustaría recibir más información sobre las membresías corporativas. ¡Gracias!");
+            $whatsappLink = "https://wa.me/{$whatsappNumber}?text={$whatsappMessage}";
+            
+            $finalMessage = $message . "\n\n👤 [Contactar Asesor]({$whatsappLink})\n\n¡Gracias por tu interés en Mizton! 🚀";
+            
+            error_log("AI: WhatsApp escalation generated for number: {$whatsappNumber}");
+            return $finalMessage;
+            
+        } catch (Exception $e) {
+            error_log("AI: Error generating WhatsApp escalation: " . $e->getMessage());
+            
+            // Fallback a WhatsApp oficial
+            $defaultWhatsApp = $_ENV['DEFAULT_WHATSAPP'] ?? '5212215695942';
+            $whatsappMessage = urlencode("Hola! Vengo del chat de Mizton y me gustaría recibir más información. ¡Gracias!");
+            $whatsappLink = "https://wa.me/{$defaultWhatsApp}?text={$whatsappMessage}";
+            
+            return "Te conectaré con nuestro equipo de asesores especializados:\n\n👤 [Contactar Asesor Mizton]({$whatsappLink})\n\n¡Gracias por tu interés en Mizton! 🚀";
+        }
     }
 }
 

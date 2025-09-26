@@ -746,7 +746,13 @@ class MiztonChatWidget {
         if (allowHTML) {
             messageDiv.innerHTML = message;
         } else {
-            messageDiv.textContent = message;
+            // Convertir links de WhatsApp a HTML clickeable
+            const processedMessage = this.processWhatsAppLinks(message);
+            if (processedMessage !== message) {
+                messageDiv.innerHTML = processedMessage;
+            } else {
+                messageDiv.textContent = message;
+            }
         }
         
         messagesContainer.appendChild(messageDiv);
@@ -949,6 +955,29 @@ class MiztonChatWidget {
         this.nextButtonIndex++;
         
         console.log(`Botón rotado: ${nextButton.text}`);
+    }
+
+    processWhatsAppLinks(message) {
+        // Detectar y convertir links de WhatsApp en formato [Texto](URL)
+        const linkRegex = /\[([^\]]+)\]\((https:\/\/wa\.me\/[^)]+)\)/g;
+        
+        return message.replace(linkRegex, (match, text, url) => {
+            return `<a href="${url}" target="_blank" style="
+                background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+                color: white;
+                padding: 8px 16px;
+                border-radius: 20px;
+                text-decoration: none;
+                display: inline-block;
+                margin: 5px 0;
+                font-weight: 500;
+                box-shadow: 0 2px 4px rgba(37, 211, 102, 0.3);
+                transition: all 0.3s ease;
+            " onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(37, 211, 102, 0.4)';" 
+               onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(37, 211, 102, 0.3)';">
+                📱 ${text}
+            </a>`;
+        });
     }
 }
 
