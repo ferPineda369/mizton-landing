@@ -72,10 +72,13 @@ class MiztonAIHandler {
     
     public function getAIResponse($message, $conversationHistory = [], $sessionId = '') {
         if (empty($this->config['api_key'])) {
+            error_log("AI: API key is empty");
             $fallbackResponse = $this->getFallbackResponse($message);
             AIConfig::logAIUsage($sessionId, $message, $fallbackResponse, 'faq_fallback');
             return $fallbackResponse;
         }
+        
+        error_log("AI: Starting OpenAI call for message: " . substr($message, 0, 50) . "...");
         
         $context = $this->buildContext($message, $conversationHistory);
         
@@ -95,12 +98,15 @@ class MiztonAIHandler {
             'temperature' => $this->config['temperature']
         ];
         
+        error_log("AI: Payload prepared, calling OpenAI...");
         $response = $this->callOpenAI($payload);
         
         if ($response) {
+            error_log("AI: OpenAI response received successfully");
             AIConfig::logAIUsage($sessionId, $message, $response, $this->config['model']);
             return $response;
         } else {
+            error_log("AI: OpenAI call failed, using fallback");
             $fallbackResponse = $this->getFallbackResponse($message);
             AIConfig::logAIUsage($sessionId, $message, $fallbackResponse, 'faq_error_fallback');
             return $fallbackResponse;
@@ -132,17 +138,33 @@ class MiztonAIHandler {
             'Authorization: Bearer ' . $this->config['api_key']
         ]);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
         
+        error_log("AI: Making cURL request to OpenAI...");
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
         curl_close($ch);
+        
+        if ($curlError) {
+            error_log("OpenAI cURL Error: " . $curlError);
+            return null;
+        }
+        
+        error_log("AI: OpenAI HTTP Response Code: " . $httpCode);
         
         if ($httpCode === 200) {
             $data = json_decode($response, true);
-            return $data['choices'][0]['message']['content'] ?? null;
+            if (isset($data['choices'][0]['message']['content'])) {
+                error_log("AI: Successfully parsed OpenAI response");
+                return $data['choices'][0]['message']['content'];
+            } else {
+                error_log("AI: Invalid OpenAI response structure: " . json_encode($data));
+                return null;
+            }
         }
         
-        error_log("OpenAI API Error: HTTP {$httpCode} - {$response}");
+        error_log("OpenAI API Error: HTTP {$httpCode} - " . substr($response, 0, 500));
         return null;
     }
     
