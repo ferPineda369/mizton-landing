@@ -291,6 +291,40 @@ function handleUpdateConversation($input) {
 }
 
 /**
+ * Guardar mensaje en historial automáticamente
+ */
+function saveMessageToHistory($sessionId, $sender, $message) {
+    global $pdo;
+    
+    try {
+        // Obtener conversación actual
+        $stmt = $pdo->prepare("SELECT conversation_data FROM chat_leads WHERE session_id = ?");
+        $stmt->execute([$sessionId]);
+        $lead = $stmt->fetch();
+        
+        if ($lead) {
+            $conversationData = json_decode($lead['conversation_data'], true) ?? [];
+            
+            // Agregar nuevo mensaje
+            $conversationData[] = [
+                'sender' => $sender,
+                'message' => $message,
+                'timestamp' => date('Y-m-d H:i:s')
+            ];
+            
+            // Actualizar en base de datos
+            $stmt = $pdo->prepare("UPDATE chat_leads SET conversation_data = ? WHERE session_id = ?");
+            $stmt->execute([json_encode($conversationData), $sessionId]);
+            
+            error_log("Mensaje guardado en historial: $sender - " . substr($message, 0, 50));
+        }
+        
+    } catch (Exception $e) {
+        error_log("Error guardando mensaje en historial: " . $e->getMessage());
+    }
+}
+
+/**
  * Obtener respuesta FAQ automatizada
  */
 function handleFAQResponse($input) {

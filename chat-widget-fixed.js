@@ -441,9 +441,10 @@ class MiztonChatWidget {
                         if (data.data.conversation_history && data.data.conversation_history.length > 0) {
                             this.loadConversationHistory(data.data.conversation_history);
                             this.addMessage('bot', '¡Bienvenido de vuelta! Continuemos donde lo dejamos.');
+                            this.hideSuggestionButtons(); // Ocultar botones si hay historial
                         } else {
                             this.addMessage('bot', '¡Perfecto! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
-                            this.hideSuggestionButtons();
+                            // Mantener botones visibles para nuevos usuarios con referral code
                         }
                     }
                 } else {
@@ -467,7 +468,7 @@ class MiztonChatWidget {
             this.hideTypingIndicator();
             this.currentStep = 'chatting';
             this.addMessage('bot', '¡No hay problema! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
-            this.hideSuggestionButtons();
+            // Mantener botones visibles para usuarios sin código
             return;
         }
 
@@ -532,11 +533,11 @@ class MiztonChatWidget {
                     this.referralCode = this.pendingReferralCode;
                     this.currentStep = 'chatting';
                     this.addMessage('bot', `¡Perfecto! He registrado que ${this.pendingReferrerName} te invitó. Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?`);
-                    this.hideSuggestionButtons();
+                    // Mantener botones visibles después de confirmar referido
                 } else {
                     this.addMessage('bot', 'Hubo un problema actualizando la información. Pero no te preocupes, puedo ayudarte con cualquier pregunta sobre Mizton.');
                     this.currentStep = 'chatting';
-                    this.hideSuggestionButtons();
+                    // Mantener botones visibles
                 }
             } catch (error) {
                 console.error('Error actualizando referido:', error);
@@ -549,7 +550,7 @@ class MiztonChatWidget {
             this.hideTypingIndicator();
             this.currentStep = 'chatting';
             this.addMessage('bot', '¡No hay problema! Ahora puedo ayudarte con cualquier pregunta sobre Mizton. ¿Qué te gustaría saber?');
-            this.hideSuggestionButtons();
+            // Mantener botones visibles si no confirma referido
         }
     }
 
@@ -570,9 +571,11 @@ class MiztonChatWidget {
             if (data.success) {
                 this.hideTypingIndicator();
                 this.addMessage('bot', data.data.response);
+                this.hideSuggestionButtons(); // Ocultar botones después del primer chat
             } else {
                 this.hideTypingIndicator();
                 this.addMessage('bot', 'Lo siento, no pude procesar tu mensaje. ¿Podrías reformularlo?');
+                this.hideSuggestionButtons(); // Ocultar botones después del primer chat
             }
             
         } catch (error) {
@@ -600,8 +603,10 @@ class MiztonChatWidget {
             
             if (fallbackResponse) {
                 this.addMessage('bot', fallbackResponse);
+                this.hideSuggestionButtons(); // Ocultar botones después del fallback
             } else {
                 this.addMessage('bot', 'Disculpa el inconveniente técnico. ¿Podrías reformular tu pregunta? Puedo ayudarte con información sobre Mizton, precios, funcionamiento o seguridad.');
+                this.hideSuggestionButtons(); // Ocultar botones después del fallback
             }
         }
     }
@@ -691,6 +696,9 @@ class MiztonChatWidget {
         
         messagesContainer.appendChild(messageDiv);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        
+        // Guardar mensaje en historial automáticamente
+        this.saveMessageToHistory(sender, message);
     }
 
     showTypingIndicator() {
@@ -737,8 +745,50 @@ class MiztonChatWidget {
     }
 
     loadConversationHistory(conversationHistory) {
-        // Implementar si es necesario
         console.log('Cargando historial:', conversationHistory);
+        
+        if (conversationHistory && conversationHistory.length > 0) {
+            conversationHistory.forEach(msg => {
+                if (msg.sender && msg.message) {
+                    // Agregar mensaje sin guardarlo de nuevo en historial
+                    const messagesContainer = document.getElementById('chat-messages');
+                    const messageDiv = document.createElement('div');
+                    
+                    if (msg.sender === 'user') {
+                        messageDiv.style.cssText = `
+                            background: linear-gradient(135deg, #40916C 0%, #52B788 100%);
+                            color: white;
+                            padding: 12px 16px;
+                            border-radius: 18px 18px 4px 18px;
+                            margin-bottom: 12px;
+                            margin-left: auto;
+                            max-width: 85%;
+                            word-wrap: break-word;
+                            box-shadow: 0 2px 4px rgba(64, 145, 108, 0.2);
+                        `;
+                    } else {
+                        messageDiv.style.cssText = `
+                            background: white;
+                            padding: 12px 16px;
+                            border-radius: 18px 18px 18px 4px;
+                            margin-bottom: 12px;
+                            box-shadow: 0 2px 4px rgba(27, 67, 50, 0.1);
+                            border-left: 3px solid #40916C;
+                            max-width: 85%;
+                            color: #343A40;
+                            word-wrap: break-word;
+                        `;
+                    }
+                    
+                    messageDiv.textContent = msg.message;
+                    messagesContainer.appendChild(messageDiv);
+                }
+            });
+            
+            // Scroll al final
+            const messagesContainer = document.getElementById('chat-messages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
     }
 
     hideSuggestionButtons() {
@@ -752,6 +802,23 @@ class MiztonChatWidget {
         const escalationContainer = document.getElementById('escalation-container');
         if (escalationContainer) {
             escalationContainer.style.display = 'block';
+        }
+    }
+
+    async saveMessageToHistory(sender, message) {
+        try {
+            await fetch(this.chatAPI, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'update_conversation',
+                    session_id: this.sessionId,
+                    sender: sender,
+                    message: message
+                })
+            });
+        } catch (error) {
+            console.error('Error guardando mensaje en historial:', error);
         }
     }
 }
