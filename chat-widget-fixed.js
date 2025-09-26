@@ -433,28 +433,33 @@ class MiztonChatWidget {
                 if (data.success) {
                     // Verificar si es usuario existente
                     if (data.existing_user) {
-                        this.currentStep = 'chatting';
-                        
-                        // Si tiene historial, cargarlo
+                        // Si tiene historial, cargarlo y ir directo al chat
                         if (data.data.conversation_history && data.data.conversation_history.length > 0) {
+                            this.currentStep = 'chatting';
                             this.loadConversationHistory(data.data.conversation_history);
                             this.addMessage('bot', '¡Bienvenido de vuelta! Continuemos donde lo dejamos.');
+                            this.enableSuggestionButtons(); // Activar botones para usuario con historial
                         } else {
-                            this.addMessage('bot', '¡Hola de nuevo! ¿En qué puedo ayudarte hoy?');
-                        }
-                        
-                        // Activar botones si ya tiene referral_code o si vino con código en URL
-                        if (data.data.has_referral_code || this.referralCode) {
-                            this.enableSuggestionButtons();
-                        }
-                        
-                        // Guardar datos del referral si existen
-                        if (data.data.referral_code) {
-                            this.referralCode = data.data.referral_code;
+                            // Usuario existente sin historial - verificar referral_code
+                            if (!data.data.has_referral_code && !this.referralCode) {
+                                // No tiene referral_code y no vino con código en URL - preguntar
+                                this.currentStep = 'referral_code_capture';
+                                this.addMessage('bot', '¡Hola de nuevo! Una pregunta: ¿conoces el código de la persona que te invitó a Mizton? Si es así, por favor compártelo (son 6 caracteres alfanuméricos). Si no lo conoces, simplemente escribe "no".');
+                            } else {
+                                // Ya tiene referral_code o vino con código en URL
+                                this.currentStep = 'chatting';
+                                this.addMessage('bot', '¡Hola de nuevo! ¿En qué puedo ayudarte hoy?');
+                                this.enableSuggestionButtons();
+                                
+                                // Guardar datos del referral si existen
+                                if (data.data.referral_code) {
+                                    this.referralCode = data.data.referral_code;
+                                }
+                            }
                         }
                     } else {
                         // Usuario nuevo
-                        if (!this.referralCode && !data.data.has_referral_code) {
+                        if (!this.referralCode) {
                             this.currentStep = 'referral_code_capture';
                             this.addMessage('bot', '¡Perfecto! Una pregunta más: ¿conoces el código de la persona que te invitó a Mizton? Si es así, por favor compártelo (son 6 caracteres alfanuméricos). Si no lo conoces, simplemente escribe "no".');
                         } else {
