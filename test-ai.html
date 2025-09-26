@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test IA - Mizton Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #40916C;
+        }
+        button {
+            background: #40916C;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #52B788;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #40916C;
+            white-space: pre-wrap;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Test de IA - Mizton Chat</h1>
+        
+        <!-- Test 1: Verificar Configuración -->
+        <div class="test-section">
+            <h3>1. Verificar Configuración de IA</h3>
+            <p>Verifica que las variables de entorno estén cargadas correctamente.</p>
+            <button onclick="testAIConfig()">🔍 Verificar Configuración</button>
+            <div id="config-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test 2: Test FAQ -->
+        <div class="test-section">
+            <h3>2. Test FAQ (Fallback)</h3>
+            <p>Prueba las respuestas FAQ básicas.</p>
+            <input type="text" id="faq-input" placeholder="Escribe: que es mizton" value="que es mizton">
+            <button onclick="testFAQ()">📋 Test FAQ</button>
+            <div id="faq-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test 3: Test IA -->
+        <div class="test-section">
+            <h3>3. Test IA (OpenAI)</h3>
+            <p>Prueba la respuesta de IA con una pregunta compleja.</p>
+            <input type="text" id="ai-input" placeholder="Escribe una pregunta compleja" value="¿Cómo se calculan exactamente las ganancias mensuales en Mizton y qué factores las afectan?">
+            <button onclick="testAI()">🧠 Test IA</button>
+            <div id="ai-result" class="result" style="display:none;"></div>
+        </div>
+
+        <!-- Test 4: Test Flujo Completo -->
+        <div class="test-section">
+            <h3>4. Test Flujo Completo (FAQ → IA)</h3>
+            <p>Simula el flujo completo: FAQ primero, luego IA si no encuentra respuesta.</p>
+            <input type="text" id="flow-input" placeholder="Pregunta que no esté en FAQ" value="¿Qué pasa si quiero cancelar mi membresía antes de tiempo?">
+            <button onclick="testCompleteFlow()">🔄 Test Flujo Completo</button>
+            <div id="flow-result" class="result" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = './api/chat-handler.php';
+        const TEST_SESSION = 'test_session_' + Date.now();
+
+        async function testAIConfig() {
+            const resultDiv = document.getElementById('config-result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Verificando configuración...';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'debug_ai_config'
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.className = 'result success';
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testFAQ() {
+            const input = document.getElementById('faq-input').value;
+            const resultDiv = document.getElementById('faq-result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Probando FAQ...';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'get_faq_response',
+                        message: input,
+                        session_id: TEST_SESSION
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.className = data.success ? 'result success' : 'result error';
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testAI() {
+            const input = document.getElementById('ai-input').value;
+            const resultDiv = document.getElementById('ai-result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Probando IA...';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'get_ai_response',
+                        message: input,
+                        session_id: TEST_SESSION
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.className = data.success ? 'result success' : 'result error';
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testCompleteFlow() {
+            const input = document.getElementById('flow-input').value;
+            const resultDiv = document.getElementById('flow-result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Probando flujo completo...';
+            
+            try {
+                // Simular el flujo del frontend
+                let finalResult = '';
+                
+                // 1. Intentar FAQ primero
+                const faqResponse = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'get_faq_response',
+                        message: input,
+                        session_id: TEST_SESSION
+                    })
+                });
+                
+                const faqData = await faqResponse.json();
+                finalResult += '1. FAQ Response:\n' + JSON.stringify(faqData, null, 2) + '\n\n';
+                
+                if (!faqData.success) {
+                    // 2. Si FAQ falla, intentar IA
+                    finalResult += '2. FAQ no encontró respuesta, escalando a IA...\n';
+                    
+                    const aiResponse = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: 'get_ai_response',
+                            message: input,
+                            session_id: TEST_SESSION
+                        })
+                    });
+                    
+                    const aiData = await aiResponse.json();
+                    finalResult += 'AI Response:\n' + JSON.stringify(aiData, null, 2);
+                    
+                    resultDiv.className = aiData.success ? 'result success' : 'result error';
+                } else {
+                    finalResult += '✅ FAQ respondió exitosamente - No necesita IA';
+                    resultDiv.className = 'result success';
+                }
+                
+                resultDiv.textContent = finalResult;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

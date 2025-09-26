@@ -4,6 +4,19 @@
  * Endpoint: /landing/api/chat-handler.php
  */
 
+// Cargar variables de entorno
+if (file_exists(__DIR__ . '/../.env')) {
+    $envFile = file_get_contents(__DIR__ . '/../.env');
+    $lines = explode("\n", $envFile);
+    foreach ($lines as $line) {
+        if (strpos($line, '=') !== false && !str_starts_with(trim($line), '#')) {
+            list($key, $value) = explode('=', $line, 2);
+            $_ENV[trim($key)] = trim($value);
+            putenv(trim($key) . '=' . trim($value));
+        }
+    }
+}
+
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
@@ -50,19 +63,23 @@ try {
             
         case 'escalate_to_human':
             handleEscalateToHuman($input);
-            break;
             
         case 'verify_referral_code':
             handleVerifyReferralCode($input);
             break;
             
-        case 'update_referral_code':
-            handleUpdateReferralCode($input);
+        case 'escalate_to_human':
+            handleEscalateToHuman($input);
+            break;
+            
+        case 'debug_ai_config':
+            handleDebugAIConfig();
             break;
             
         default:
             throw new Exception('Acción no válida');
     }
+{{ ... }}
     
 } catch (Exception $e) {
     error_log("Error en chat-handler.php: " . $e->getMessage());
@@ -727,5 +744,24 @@ function handleUpdateReferralCode($input) {
         error_log("Error actualizando código de referido: " . $e->getMessage());
         throw new Exception('Error actualizando código de referido');
     }
+}
+
+/**
+ * Debug de configuración de IA
+ */
+function handleDebugAIConfig() {
+    echo json_encode([
+        'success' => true,
+        'data' => [
+            'ai_enabled' => $_ENV['AI_ENABLED'] ?? 'not_set',
+            'openai_key_exists' => !empty($_ENV['OPENAI_API_KEY']),
+            'openai_key_length' => strlen($_ENV['OPENAI_API_KEY'] ?? ''),
+            'ai_model' => $_ENV['AI_MODEL'] ?? 'not_set',
+            'ai_max_tokens' => $_ENV['AI_MAX_TOKENS'] ?? 'not_set',
+            'ai_temperature' => $_ENV['AI_TEMPERATURE'] ?? 'not_set',
+            'env_file_exists' => file_exists(__DIR__ . '/../.env'),
+            'config_loaded' => isset($_ENV['AI_ENABLED'])
+        ]
+    ]);
 }
 ?>
