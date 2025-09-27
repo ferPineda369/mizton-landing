@@ -9,7 +9,7 @@ Mizton es una plataforma innovadora que ofrece membresías garantizadas con recu
 3. Accedes a los dividendos globales de Mizton
 4. Al final del período si decides no continuar, recuperas el 100% de tu compra inicial + el incentivo de al menos un 15%
 
-## QUÉ RECIBES CON LA MEMBRESÍA
+## QUÉ RECIBES CON LA MEMBRESÍA 
 - Paquete de Tokens Corporativos
 - Acceso a dividendos globales de Mizton
 - Ganancias según la cantidad de Tokens que poseas
