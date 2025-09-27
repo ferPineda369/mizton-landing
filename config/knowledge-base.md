@@ -67,7 +67,21 @@ Mizton se enfoca en la tokenización de activos del mundo real, una narrativa qu
 <!-- Agregar aquí promociones temporales -->
 
 ## PREGUNTAS FRECUENTES ADICIONALES
-<!-- Agregar aquí información específica que surja de conversaciones reales -->
+
+### ¿Cuántos niveles tiene el sistema multinivel de Mizton?
+Mizton opera con un sistema multinivel de **exactamente 3 niveles**:
+- **Nivel 1:** 10% sobre las compras de tus referidos directos
+- **Nivel 2:** 6% sobre las compras del segundo nivel
+- **Nivel 3:** 4% sobre las compras del tercer nivel
+
+### ¿Cómo funcionan los porcentajes del multinivel?
+Los porcentajes se aplican sobre cada paquete de participación de $50 USD que compren las personas en tu red:
+- Si alguien en tu **Nivel 1** compra un paquete de $50, recibes $5 (10%)
+- Si alguien en tu **Nivel 2** compra un paquete de $50, recibes $3 (6%)  
+- Si alguien en tu **Nivel 3** compra un paquete de $50, recibes $2 (4%)
+
+### ¿Es diferente a otros sistemas multinivel?
+Sí, Mizton tiene **solo 3 niveles** con porcentajes fijos y transparentes, a diferencia de otros sistemas que pueden tener más niveles o estructuras más complejas.
 
 
 
