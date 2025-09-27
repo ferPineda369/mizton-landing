@@ -36,7 +36,7 @@ Mizton es una plataforma innovadora que ofrece membresías garantizadas con recu
 ## SISTEMA DE REFERIDOS Y MULTINIVEL
 - Cada usuario obtiene un código único
 - Bonos por referir nuevos miembros
-- **Estructura multinivel de 6 niveles con porcentajes específicos**
+- **Estructura multinivel de 3 niveles con porcentajes específicos**
 - Ganancias globales compartidas
 
 ### MATRIZ DE BONOS MULTINIVEL
