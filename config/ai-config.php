@@ -44,14 +44,31 @@ class AIConfig {
     }
     
     /**
-     * Obtener base de conocimiento desde archivo
+     * Obtener base de conocimiento desde archivo con límite de tokens
+     * CONFIGURACIÓN DE COSTOS: Ajusta maxTokens según tu presupuesto
+     * 2000 tokens = ~$0.004 por consulta
+     * 4000 tokens = ~$0.008 por consulta  
+     * 6000 tokens = ~$0.012 por consulta
      */
-    public static function getKnowledgeBase() {
+    public static function getKnowledgeBase($maxTokens = 4000) {
         $knowledgeFile = __DIR__ . '/knowledge-base.md';
         
         if (file_exists($knowledgeFile)) {
             $knowledge = file_get_contents($knowledgeFile);
             if ($knowledge !== false) {
+                // Truncar si excede el límite de tokens (aproximadamente 4 caracteres por token)
+                $maxChars = $maxTokens * 4;
+                if (strlen($knowledge) > $maxChars) {
+                    // Buscar el último punto antes del límite para cortar limpiamente
+                    $truncated = substr($knowledge, 0, $maxChars);
+                    $lastPeriod = strrpos($truncated, '.');
+                    if ($lastPeriod !== false) {
+                        $knowledge = substr($truncated, 0, $lastPeriod + 1);
+                    } else {
+                        $knowledge = $truncated;
+                    }
+                    error_log("AI: Knowledge base truncated to " . strlen($knowledge) . " characters to fit token limit");
+                }
                 return trim($knowledge);
             }
         }

@@ -73,6 +73,14 @@ try {
             handleDebugAIConfig();
             break;
             
+        case 'generate_embeddings':
+            handleGenerateEmbeddings();
+            break;
+            
+        case 'check_ai_costs':
+            handleCheckAICosts();
+            break;
+            
         default:
             throw new Exception('Acción no válida');
     }
@@ -580,7 +588,8 @@ function handleEscalateToHuman($input) {
  */
 function determineHumanContactMethod($referrerInfo) {
     // Si hay referidor con atención personal
-    if ($referrerInfo && $referrerInfo['landing_preference'] == 1 && $referrerInfo['waUser'] == 1) {
+    if ($referrerInfo && $referrerInfo['landing_preference'] == 1 && $referrerInfo['waUser'] == 1 && $referrerInfo['celularUser']) {
+{{ ... }}
         $whatsappNumber = buildWhatsAppNumber($referrerInfo['countryUser'], $referrerInfo['celularUser']);
         
         return [
@@ -746,18 +755,49 @@ function handleUpdateReferralCode($input) {
  * Debug de configuración de IA
  */
 function handleDebugAIConfig() {
+    $config = AIConfig::getOpenAIConfig();
+    
     echo json_encode([
         'success' => true,
         'data' => [
-            'ai_enabled' => $_ENV['AI_ENABLED'] ?? 'not_set',
-            'openai_key_exists' => !empty($_ENV['OPENAI_API_KEY']),
-            'openai_key_length' => strlen($_ENV['OPENAI_API_KEY'] ?? ''),
-            'ai_model' => $_ENV['AI_MODEL'] ?? 'not_set',
-            'ai_max_tokens' => $_ENV['AI_MAX_TOKENS'] ?? 'not_set',
-            'ai_temperature' => $_ENV['AI_TEMPERATURE'] ?? 'not_set',
+            'ai_enabled' => $_ENV['AI_ENABLED'] ?? 'false',
+            'openai_key_exists' => !empty($config['api_key']),
+            'openai_key_length' => strlen($config['api_key'] ?? ''),
+            'ai_model' => $config['model'],
+            'ai_max_tokens' => $config['max_tokens'],
+            'ai_temperature' => $config['temperature'],
             'env_file_exists' => file_exists(__DIR__ . '/../.env'),
-            'config_loaded' => isset($_ENV['AI_ENABLED'])
+            'config_loaded' => !empty($_ENV)
         ]
     ]);
 }
-?>
+
+/**
+ * Generar embeddings para la base de conocimiento
+ */
+function handleGenerateEmbeddings() {
+    try {
+        require_once __DIR__ . '/embeddings-handler.php';
+        
+        $embeddings = new EmbeddingsHandler();
+        $count = $embeddings->createKnowledgeEmbeddings();
+        
+        echo json_encode([
+            'success' => true,
+            'message' => "Embeddings generados exitosamente",
+            'data' => [
+                'vectors_created' => $count,
+                'status' => 'completed'
+            ]
+        ]);
+        
+    } catch (Exception $e) {
+        error_log("Error generating embeddings: " . $e->getMessage());
+        
+        echo json_encode([
+            'success' => false,
+            'message' => 'Error al generar embeddings: ' . $e->getMessage(),
+            'data' => null
+        ]);
+    }
+}

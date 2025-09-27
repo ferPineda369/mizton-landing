@@ -45,12 +45,18 @@ Mizton es una plataforma innovadora que ofrece membresías garantizadas con recu
 - Email de soporte
 - Asesores especializados disponibles
 
+## TOKENIZACIÓN RWA (Real World Assets)
+Mizton se enfoca en la tokenización de activos del mundo real, una narrativa que está revolucionando las finanzas globales. BlackRock y otras grandes gestoras están invirtiendo masivamente en esta tecnología que permite digitalizar cualquier activo físico.
+
+## MODELO DE NEGOCIO
+- **Paquetes de Participación**: $50 USD por paquete
+- **Tokens Corporativos**: Equivalen a acciones de la compañía
+- **Dividendos Globales**: Participación en ganancias según tokens poseídos
+- **Incentivo de Participación**: 15% anual garantizado
+- **Sistema DCA**: Plan de ahorro sistemático mensual
+
 ## PROMOCIONES VIGENTES
 <!-- Agregar aquí promociones temporales -->
-<!-- Ejemplo: -->
-<!-- ### PROMOCIÓN DICIEMBRE 2024 -->
-<!-- - 20% de descuento en primera membresía -->
-<!-- - Válida hasta 31/12/2024 -->
 
 ## PREGUNTAS FRECUENTES ADICIONALES
 <!-- Agregar aquí información específica que surja de conversaciones reales -->

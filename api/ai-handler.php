@@ -25,6 +25,81 @@ class MiztonAIHandler {
         error_log("AI: Knowledge base loaded from file, length: " . strlen($this->base_knowledge));
     }
     
+    /**
+     * Obtener conocimiento relevante basado en la consulta del usuario
+     */
+    private function getRelevantKnowledge($message) {
+        // Intentar usar embeddings si están disponibles
+        if (class_exists('EmbeddingsHandler')) {
+            try {
+                $embeddings = new EmbeddingsHandler();
+                return $embeddings->findRelevantKnowledge($message, 6000);
+            } catch (Exception $e) {
+                error_log("AI: Embeddings failed, using keyword matching: " . $e->getMessage());
+            }
+        }
+        
+        // Fallback: búsqueda por palabras clave
+        return $this->getKeywordBasedKnowledge($message);
+    }
+    
+    /**
+     * Búsqueda de conocimiento basada en palabras clave
+     */
+    private function getKeywordBasedKnowledge($message) {
+        $fullKnowledge = AIConfig::getKnowledgeBase(50000); // Sin límite para buscar
+        $message = strtolower($message);
+        
+        // Palabras clave y sus secciones relacionadas
+        $keywordMap = [
+            'precio' => ['PRECIOS Y ACCESIBILIDAD', 'MODELO DE NEGOCIO'],
+            'costo' => ['PRECIOS Y ACCESIBILIDAD', 'MODELO DE NEGOCIO'],
+            'paquete' => ['MODELO DE NEGOCIO', 'QUÉ RECIBES'],
+            'token' => ['MODELO DE NEGOCIO', 'QUÉ RECIBES'],
+            'ganancia' => ['GARANTÍAS Y SEGURIDAD', 'MODELO DE NEGOCIO'],
+            'dividendo' => ['MODELO DE NEGOCIO', 'QUÉ RECIBES'],
+            'registro' => ['PROCESO DE REGISTRO'],
+            'referido' => ['SISTEMA DE REFERIDOS'],
+            'contacto' => ['CONTACTO Y SOPORTE'],
+            'whatsapp' => ['CONTACTO Y SOPORTE'],
+            'tokenización' => ['TOKENIZACIÓN RWA'],
+            'blockchain' => ['TOKENIZACIÓN RWA'],
+            'blackrock' => ['TOKENIZACIÓN RWA'],
+            'garantía' => ['GARANTÍAS Y SEGURIDAD'],
+            'seguridad' => ['GARANTÍAS Y SEGURIDAD'],
+            'recuperar' => ['GARANTÍAS Y SEGURIDAD'],
+            'funciona' => ['CÓMO FUNCIONA'],
+            'membresía' => ['CONCEPTO GENERAL', 'QUÉ RECIBES']
+        ];
+        
+        // Encontrar secciones relevantes
+        $relevantSections = [];
+        foreach ($keywordMap as $keyword => $sections) {
+            if (strpos($message, $keyword) !== false) {
+                $relevantSections = array_merge($relevantSections, $sections);
+            }
+        }
+        
+        // Si no hay palabras clave específicas, usar secciones básicas
+        if (empty($relevantSections)) {
+            $relevantSections = ['CONCEPTO GENERAL', 'CÓMO FUNCIONA', 'PRECIOS Y ACCESIBILIDAD'];
+        }
+        
+        // Extraer secciones relevantes
+        $selectedContent = [];
+        foreach (array_unique($relevantSections) as $section) {
+            $pattern = '/## ' . preg_quote($section, '/') . '\s*(.*?)(?=## |\z)/s';
+            if (preg_match($pattern, $fullKnowledge, $matches)) {
+                $selectedContent[] = "## " . $section . "\n" . trim($matches[1]);
+            }
+        }
+        
+        $result = implode("\n\n", $selectedContent);
+        error_log("AI: Selected " . count($selectedContent) . " sections based on keywords");
+        
+        return $result ?: AIConfig::getKnowledgeBase(6000);
+    }
+    
     public function getAIResponse($message, $conversationHistory = [], $sessionId = '') {
         if (empty($this->config['api_key'])) {
             error_log("AI: API key is empty");
@@ -33,16 +108,30 @@ class MiztonAIHandler {
             return $fallbackResponse;
         }
         
+        // Verificar límites de costo antes de hacer la consulta
+        require_once __DIR__ . '/cost-monitor.php';
+        $estimatedTokens = 6000; // Estimación conservadora
+        
+        if (!checkAICostLimits($estimatedTokens)) {
+            error_log("AI: Daily cost limit reached, using fallback");
+            $fallbackResponse = $this->getFallbackResponse($message);
+            AIConfig::logAIUsage($sessionId, $message, $fallbackResponse, 'cost_limit_fallback');
+            return $fallbackResponse;
+        }
+        
         error_log("AI: Starting OpenAI call for message: " . substr($message, 0, 50) . "...");
         
         $context = $this->buildContext($message, $conversationHistory);
+        
+        // Obtener conocimiento relevante específico para esta consulta
+        $relevantKnowledge = $this->getRelevantKnowledge($message);
         
         $payload = [
             'model' => $this->config['model'],
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => AIConfig::getSystemPrompt() . "\n\nINFORMACIÓN BASE:\n{$this->base_knowledge}"
+                    'content' => AIConfig::getSystemPrompt() . "\n\nINFORMACIÓN RELEVANTE:\n{$relevantKnowledge}"
                 ],
                 [
                     'role' => 'user', 

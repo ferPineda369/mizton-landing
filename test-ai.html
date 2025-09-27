@@ -94,19 +94,18 @@
             <button onclick="testAI()">🧠 Test IA</button>
             <div id="ai-result" class="result" style="display:none;"></div>
         </div>
-
         <!-- Test 4: Test Flujo Completo -->
         <div class="test-section">
             <h3>4. Test Flujo Completo (FAQ → IA)</h3>
-            <p>Simula el flujo completo: FAQ primero, luego IA si no encuentra respuesta.</p>
+            <p>Simula el flujo completo: FAQ Primero, luego IA si no encuentra respuesta.</p>
             <input type="text" id="flow-input" placeholder="Pregunta que no esté en FAQ" value="¿Qué pasa si quiero cancelar mi membresía antes de tiempo?">
-            <button onclick="testCompleteFlow()">🔄 Test Flujo Completo</button>
+            <button onclick="testFullFlow()">🔄 Test Flujo Completo</button>
+            <button onclick="generateEmbeddings()">🧠 Generar Embeddings</button>
             <div id="flow-result" class="result" style="display:none;"></div>
         </div>
     </div>
 
     <script>
-        const API_URL = './api/chat-handler.php';
         const TEST_SESSION = 'test_session_' + Date.now();
 
         async function testAIConfig() {
@@ -232,6 +231,29 @@
                 }
                 
                 resultDiv.textContent = finalResult;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function generateEmbeddings() {
+            const resultDiv = document.getElementById('flow-result');
+            resultDiv.style.display = 'block';
+            resultDiv.textContent = 'Generando embeddings de la base de conocimiento...';
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'generate_embeddings'
+                    })
+                });
+                
+                const data = await response.json();
+                resultDiv.className = data.success ? 'result success' : 'result error';
+                resultDiv.textContent = JSON.stringify(data, null, 2);
             } catch (error) {
                 resultDiv.className = 'result error';
                 resultDiv.textContent = 'Error: ' + error.message;
