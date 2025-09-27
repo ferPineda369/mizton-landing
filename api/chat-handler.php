@@ -589,7 +589,6 @@ function handleEscalateToHuman($input) {
 function determineHumanContactMethod($referrerInfo) {
     // Si hay referidor con atención personal
     if ($referrerInfo && $referrerInfo['landing_preference'] == 1 && $referrerInfo['waUser'] == 1 && $referrerInfo['celularUser']) {
-{{ ... }}
         $whatsappNumber = buildWhatsAppNumber($referrerInfo['countryUser'], $referrerInfo['celularUser']);
         
         return [
