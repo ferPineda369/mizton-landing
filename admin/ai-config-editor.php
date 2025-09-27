@@ -146,6 +146,22 @@ $promptContent = file_exists($promptFile) ? file_get_contents($promptFile) : '';
             text-decoration: none;
             border-radius: 3px;
         }
+        .regenerate-btn {
+            background: #007bff;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .regenerate-btn:hover {
+            background: #0056b3;
+        }
+        .regenerate-btn:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -179,7 +195,10 @@ $promptContent = file_exists($promptFile) ? file_get_contents($promptFile) : '';
                 <input type="hidden" name="action" value="save">
                 <input type="hidden" name="file" value="knowledge">
                 <textarea name="content" placeholder="Escribe aquí la base de conocimiento en formato Markdown..."><?= htmlspecialchars($knowledgeContent) ?></textarea>
-                <button type="submit" class="save-btn">💾 Guardar Base de Conocimiento</button>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button type="submit" class="save-btn">💾 Guardar Base de Conocimiento</button>
+                    <button type="button" class="regenerate-btn" onclick="regenerateEmbeddings()">🔄 Regenerar Embeddings</button>
+                </div>
             </form>
         </div>
 
@@ -208,6 +227,37 @@ $promptContent = file_exists($promptFile) ? file_get_contents($promptFile) : '';
             // Mostrar tab seleccionada
             document.getElementById(tabName + '-tab').classList.add('active');
             event.target.classList.add('active');
+        }
+        
+        function regenerateEmbeddings() {
+            const btn = document.querySelector('.regenerate-btn');
+            btn.disabled = true;
+            btn.textContent = '🔄 Regenerando...';
+            
+            fetch('../api/chat-handler.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: 'generate_embeddings'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('✅ Embeddings regenerados exitosamente!\n\nLa IA ahora tiene acceso a la información actualizada.');
+                } else {
+                    alert('❌ Error al regenerar embeddings:\n' + (data.message || 'Error desconocido'));
+                }
+            })
+            .catch(error => {
+                alert('❌ Error de conexión:\n' + error.message);
+            })
+            .finally(() => {
+                btn.disabled = false;
+                btn.textContent = '🔄 Regenerar Embeddings';
+            });
         }
     </script>
 </body>
