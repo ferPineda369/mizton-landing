@@ -427,7 +427,7 @@ include 'config.php';
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Al final de 360 días, recuperas el 100% más un 15% extra si decides no continuar.</p>
+                        <p>Al final de 360 días si decides no continuar, solicita tu participación más la posibilidad de bono adicional según los términos del contrato inteligente.</p>
                     </div>
                 </div>
                 <div class="faq-item">
