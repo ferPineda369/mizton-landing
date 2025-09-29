@@ -115,7 +115,7 @@ include 'config.php';
                 </div>
                 <div class="hero-stats">
                     <div class="stat">
-                        <span class="stat-number">100</span>
+                        <span class="stat-number">100%</span>
                         <span class="stat-label">Opcionalmente solicita tu aporte</span>
                     </div>
                     <div class="stat">
@@ -364,7 +364,7 @@ include 'config.php';
             <div class="section-header">
                 <h2>Testimonios y Comunidad</h2>
                 <p class="community-quote">
-                    "Ya somos <strong>cientos de pioneros</strong> formando una comunidad sólida que transforma la forma de invertir."
+                    "Ya somos <strong>cientos de pioneros</strong> formando una comunidad sólida preparada para la nueva economía mundial."
                 </p>
                 <span class="community-signature">- Comunidad Mizton</span>
             </div>
@@ -525,7 +525,7 @@ include 'config.php';
                     <span class="footer-brand-text">Mizton</span>
                 </div>
                 <div class="footer-text">
-                    <p>La revolución financiera comienza contigo. Únete a la comunidad que está transformando el futuro de las inversiones.</p>
+                    <p>La revolución financiera comienza contigo. Únete a la comunidad preparada para la economía mundial.</p>
                 </div>
                 <div class="footer-links">
                     <a href="#privacidad">Política de Privacidad</a>
