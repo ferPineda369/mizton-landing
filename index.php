@@ -84,7 +84,7 @@ include 'config.php';
             <div class="hero-content">
                 <h1 class="hero-title"><br>
                     <span class="hero-title-main">Forma parte del Movimiento que Cambiará la Economía:</span>
-                    <span class="highlight">La única membresía con recuperación programada del 100% + Dividendos y Bonos</span>
+                    <span class="highlight">Una Membresía que podrías recuperar?</span>
                 </h1>
                 <p class="hero-subtitle">
                 Participa desde $50 USD en una propuesta innovadora y comunitaria. Construye junto a nosotros nuevas formas de gestionar tu economía familiar.
@@ -123,12 +123,12 @@ include 'config.php';
                         <span class="stat-label">Recupera tu aporte Opcionalmente</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">+15%</span>
+                        <span class="stat-number">+15</span>
                         <span class="stat-label">Bono opcional según términos</span>
                     </div>
                     <div class="stat">
                         <span class="stat-number">$50</span>
-                        <span class="stat-label">Participación Mínima</span>
+                        <span class="stat-label">Participación desde</span>
                     </div>
                 </div>
             </div>
@@ -139,15 +139,13 @@ include 'config.php';
     <section class="value-proposition">
         <div class="container">
             <div class="section-header">
-                <h2>Tu Participación Inteligente con Garantías Reales</h2>
+                <h2>Participación transparente, gestionada por contratos inteligentes públicos.</h2>
             </div>
             <div class="value-content">
                 <div class="value-text">
                     <p class="value-main">
-                        Participa hoy al menos durante <strong>360 días</strong> para probar la comunidad, 
-                        recibe mínimo un <strong>15% adicional opcional</strong>. 
-                        Mientras tanto, disfruta <strong>dividendos mensuales automáticos</strong> 
-                        gracias a contratos inteligentes.
+                    Participa hoy al menos durante <strong>360 días</strong> para probar la comunidad.
+                    Mientras tanto, disfruta <strong>dividendos mensuales automáticos</strong> gracias a contratos inteligentes.
                     </p>
                     <p class="value-secondary">
                         En Mizton tú decides: <strong>esperar y ganar con la comunidad</strong> o 
@@ -276,14 +274,14 @@ include 'config.php';
                     <div class="step-number">3</div>
                     <div class="step-content">
                         <h3>Tú Decides</h3>
-                        <p>Al final del plazo, decides entre continuar con los dividendos o recibir al menos un <strong>15% adicional</strong> con tu retiro.</p>
+                        <p>Tras el periodo de vesting, puedes optar por retirar tu aporte inicial y acceder a potenciales bonos adicionales conforme al desempeño comunitario y del contrato inteligente.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <h3>Liquidez Garantizada</h3>
-                        <p>Para salir sólo retira tu paquete de tokens y recibe <strong>liquidez inmediata</strong> al finalizar el periodo de vesting.</p>
+                        <h3>Liquidez disponible</h3>
+                        <p>Para salir sólo retira tu paquete de tokens y recibe <strong>liquidez disponible</strong> al finalizar el periodo de vesting sujeta a condiciones de la plataforma y del contrato inteligente.</p>
                     </div>
                 </div>
             </div>
@@ -302,8 +300,8 @@ include 'config.php';
                     <div class="benefit-icon">
                         <i class="fas fa-shield-alt"></i>
                     </div>
-                    <h3>100% Recuperación opcional</h3>
-                    <p>Recupera el 100% de cada membresía si decides retirarte más un bono del 15% opcional.</p>
+                    <h3>Recuperación del 100% programada</h3>
+                    <p>Tras el periodo de participación, más la posibilidad de bono adicional según los términos del contrato inteligente.</p>
                 </div>
                 <div class="benefit-card">
                     <div class="benefit-icon">
@@ -349,7 +347,7 @@ include 'config.php';
         <div class="container">
             <div class="cta-content">
                 <h2>¡Únete hoy mismo!</h2>
-                <p>Asegura tu lugar en la nueva economía y comienza a recibir dividendos desde tu primer mes.</p>
+                <p>Descubre como participar en la nueva economía y comienzar a recibir dividendos desde tu primer mes.</p>
                 <div class="cta-buttons">
                     <a href="#registro" class="btn btn-primary btn-large">
                         <i class="fas fa-rocket"></i>
