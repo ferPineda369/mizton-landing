@@ -119,8 +119,8 @@ include 'config.php';
                         <span class="stat-label">Opcionalmente solicita tu aporte</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">+++</span>
-                        <span class="stat-label">Bono opcional según términos</span>
+                        <span class="stat-number">1000</span>
+                        <span class="stat-label">Comunidad creciente</span>
                     </div>
                     <div class="stat">
                         <span class="stat-number">$50</span>
