@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (element.textContent.includes('$')) {
                 element.textContent = '$' + Math.floor(current);
             } else {
-                element.textContent = Math.floor(current) + '%';
+                element.textContent = Math.floor(current);
             }
         }, 16);
     }
