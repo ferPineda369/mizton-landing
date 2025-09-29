@@ -115,7 +115,7 @@ include 'config.php';
                 </div>
                 <div class="hero-stats">
                     <div class="stat">
-                        <span class="stat-number">100%</span>
+                        <span class="stat-number">100</span>
                         <span class="stat-label">Opcionalmente solicita tu aporte</span>
                     </div>
                     <div class="stat">
