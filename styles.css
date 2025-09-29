@@ -903,6 +903,27 @@ section {
     color: var(--bright-green);
 }
 
+.footer-disclaimer {
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid var(--bright-green);
+}
+
+.disclaimer-text {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0;
+    text-align: center;
+}
+
+.disclaimer-text strong {
+    color: var(--bright-green);
+    font-weight: var(--font-weight-bold);
+}
+
 .footer-bottom {
     text-align: center;
     padding-top: var(--spacing-lg);
@@ -976,6 +997,15 @@ section {
     
     .footer-links {
         justify-content: center;
+    }
+    
+    .footer-disclaimer {
+        margin-top: var(--spacing-md);
+        padding: var(--spacing-sm);
+    }
+    
+    .disclaimer-text {
+        font-size: 0.8rem;
     }
     
     .cta-buttons {

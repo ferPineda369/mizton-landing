@@ -100,10 +100,6 @@ include 'config.php';
                         <div class="referral-content">
                             <h4 id="referrer-name">Cargando...</h4>
                             <p id="referrer-type">Tipo de miembro</p>
-                            <div class="referral-bonus">
-                                <span class="bonus-label">Bono de primer nivel:</span>
-                                <span class="bonus-value" id="bonus-percentage">0%</span>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -120,15 +116,15 @@ include 'config.php';
                 <div class="hero-stats">
                     <div class="stat">
                         <span class="stat-number">100%</span>
-                        <span class="stat-label">Recupera tu aporte Opcionalmente</span>
+                        <span class="stat-label">Opcionalmente solicita tu aporte</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">+15</span>
+                        <span class="stat-number">+++</span>
                         <span class="stat-label">Bono opcional según términos</span>
                     </div>
                     <div class="stat">
                         <span class="stat-number">$50</span>
-                        <span class="stat-label">Participación desde</span>
+                        <span class="stat-label">Participación accesible desde</span>
                     </div>
                 </div>
             </div>
@@ -172,7 +168,7 @@ include 'config.php';
                             <div class="step-icon">
                                 <i class="fas fa-chart-line"></i>
                             </div>
-                            <span>115% respaldado</span>
+                            <span>Beneficios por Smart Contracts</span>
                         </div>
                     </div>
                 </div>
@@ -281,7 +277,7 @@ include 'config.php';
                     <div class="step-number">4</div>
                     <div class="step-content">
                         <h3>Liquidez disponible</h3>
-                        <p>Para salir sólo retira tu paquete de tokens y recibe <strong>liquidez disponible</strong> al finalizar el periodo de vesting sujeta a condiciones de la plataforma y del contrato inteligente.</p>
+                        <p>Para salir sólo retira tu paquete de tokens y recibe <strong>liquidez disponible</strong> al finalizar el periodo de vesting sujeta a condiciones de la plataforma, del contrato inteligente y la dinámica de la comunidad.</p>
                     </div>
                 </div>
             </div>
@@ -300,8 +296,8 @@ include 'config.php';
                     <div class="benefit-icon">
                         <i class="fas fa-shield-alt"></i>
                     </div>
-                    <h3>Recuperación del 100% programada</h3>
-                    <p>Tras el periodo de participación, más la posibilidad de bono adicional según los términos del contrato inteligente.</p>
+                    <h3>Opción de solicitar la devolución del 100% del aporte</h3>
+                    <p>Tras el periodo de participación, más la posibilidad de bono adicional según los términos del contrato inteligente. Consulta términos y condiciones para más detalles.</p>
                 </div>
                 <div class="benefit-card">
                     <div class="benefit-icon">
@@ -347,7 +343,7 @@ include 'config.php';
         <div class="container">
             <div class="cta-content">
                 <h2>¡Únete hoy mismo!</h2>
-                <p>Descubre como participar en la nueva economía y comienzar a recibir dividendos desde tu primer mes.</p>
+                <p>Descubre como participar en la nueva economía y cómo beneficiarte de ello.</p>
                 <div class="cta-buttons">
                     <a href="#registro" class="btn btn-primary btn-large">
                         <i class="fas fa-rocket"></i>
@@ -536,6 +532,11 @@ include 'config.php';
                     <a href="#terminos">Términos y Condiciones</a>
                     <a href="#contacto">Contacto</a>
                 </div>
+            </div>
+            <div class="footer-disclaimer">
+                <p class="disclaimer-text">
+                    <strong>Disclaimer Legal:</strong> La participación en activos digitales implica riesgos. Consulta los términos y condiciones. Mizton no garantiza rendimientos fijos, los beneficios están sujetos al desempeño de la comunidad y la plataforma.
+                </p>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2025 Mizton. Todos los derechos reservados.</p>
