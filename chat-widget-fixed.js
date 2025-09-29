@@ -127,9 +127,9 @@ class MiztonChatWidget {
                             align-items: center;
                             justify-content: center;
                             font-size: 20px;
-                            border: 2px solid rgba(116, 198, 157, 0.3);">🌱</div>
+                            border: 2px solid rgba(116, 198, 157, 0.3);"><i class="fas fa-headset" style="color: #74C69D;"></i></div>
                         <div>
-                            <div style="font-weight: 600; font-size: 16px;">Asistente Mizton</div>
+                            <div style="font-weight: 600; font-size: 16px;">Atención Personal</div>
                             <div style="font-size: 12px; opacity: 0.9; color: #95D5B2;">En línea</div>
                         </div>
                     </div>
@@ -324,7 +324,7 @@ class MiztonChatWidget {
                 cursor: pointer;
                 box-shadow: 0 4px 12px rgba(27, 67, 50, 0.25);
                 z-index: 1001;
-                transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">🌱</button>
+                transition: all 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i class="fas fa-headset"></i></button>
         `;
 
         document.body.appendChild(widget);
