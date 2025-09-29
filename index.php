@@ -84,11 +84,10 @@ include 'config.php';
             <div class="hero-content">
                 <h1 class="hero-title"><br>
                     <span class="hero-title-main">Forma parte del Movimiento que Cambiará la Economía:</span>
-                    <span class="highlight">La ÚNICA Membresía con Recuperación 100% Garantizada + Dividendos y Bonos</span>
+                    <span class="highlight">La única membresía con recuperación programada del 100% + Dividendos y Bonos</span>
                 </h1>
                 <p class="hero-subtitle">
-                    Invierte $50 USD en un futuro financiero seguro, innovador y comunitario.
-                    <strong>¡Tu economía familiar te lo agradecerá!</strong>
+                Participa desde $50 USD en una propuesta innovadora y comunitaria. Construye junto a nosotros nuevas formas de gestionar tu economía familiar.
                 </p>
                 
                 <!-- Información del referido (se muestra si hay código válido) -->
@@ -121,11 +120,11 @@ include 'config.php';
                 <div class="hero-stats">
                     <div class="stat">
                         <span class="stat-number">100%</span>
-                        <span class="stat-label">Recuperación Garantizada</span>
+                        <span class="stat-label">Recupera tu aporte Opcionalmente</span>
                     </div>
                     <div class="stat">
                         <span class="stat-number">+15%</span>
-                        <span class="stat-label">Ganancia Asegurada</span>
+                        <span class="stat-label">Bono opcional según términos</span>
                     </div>
                     <div class="stat">
                         <span class="stat-number">$50</span>
@@ -146,13 +145,13 @@ include 'config.php';
                 <div class="value-text">
                     <p class="value-main">
                         Participa hoy al menos durante <strong>360 días</strong> para probar la comunidad, 
-                        recibe mínimo un <strong>15% adicional de ganancia asegurada</strong>. 
+                        recibe mínimo un <strong>15% adicional opcional</strong>. 
                         Mientras tanto, disfruta <strong>dividendos mensuales automáticos</strong> 
                         gracias a contratos inteligentes.
                     </p>
                     <p class="value-secondary">
                         En Mizton tú decides: <strong>esperar y ganar con la comunidad</strong> o 
-                        acceder a <strong>recompra con liquidez garantizada</strong>.
+                        acceder a <strong>recompra con liquidez real</strong>.
                     </p>
                 </div>
                 <div class="value-visual">
@@ -175,7 +174,7 @@ include 'config.php';
                             <div class="step-icon">
                                 <i class="fas fa-chart-line"></i>
                             </div>
-                            <span>115% garantizado</span>
+                            <span>115% respaldado</span>
                         </div>
                     </div>
                 </div>
@@ -303,8 +302,8 @@ include 'config.php';
                     <div class="benefit-icon">
                         <i class="fas fa-shield-alt"></i>
                     </div>
-                    <h3>100% Recuperación Garantizada</h3>
-                    <p>Recupera el 100% de cada membresía si decides retirarte más un bono del 15% asegurado.</p>
+                    <h3>100% Recuperación opcional</h3>
+                    <p>Recupera el 100% de cada membresía si decides retirarte más un bono del 15% opcional.</p>
                 </div>
                 <div class="benefit-card">
                     <div class="benefit-icon">
@@ -507,7 +506,7 @@ include 'config.php';
             <div class="closing-content">
                 <h2>Mizton es comunidad, transparencia y futuro</h2>
                 <p>
-                    Tú controlas tu inversión mediante <strong>contratos inteligentes públicos</strong>. 
+                    Tú controlas tus aportes mediante <strong>contratos inteligentes públicos</strong>. 
                     La oportunidad para formar parte del cambio está aquí.
                 </p>
                 <div class="closing-question">
