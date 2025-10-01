@@ -146,3 +146,27 @@ window.trackCustomPixelEvent = function(eventName, parameters = {}) {
         console.log('🎯 Custom Pixel Event: ' + eventName, parameters);
     }
 };
+
+// Función de debugging para probar eventos
+window.testAllPixelEvents = function() {
+    console.log('🧪 Iniciando prueba de todos los eventos...');
+    
+    const events = [
+        { name: 'Lead', params: { content_name: 'Test Lead', value: 1, currency: 'USD' }},
+        { name: 'InitiateCheckout', params: { content_name: 'Test Checkout', value: 50, currency: 'USD' }},
+        { name: 'Contact', params: { content_name: 'Test Contact', value: 1, currency: 'USD' }},
+        { name: 'ViewContent', params: { content_name: 'Test View', value: 1, currency: 'USD' }},
+        { name: 'AddToWishlist', params: { content_name: 'Test Wishlist', value: 50, currency: 'USD' }}
+    ];
+    
+    events.forEach((event, index) => {
+        setTimeout(() => {
+            if (typeof fbq !== 'undefined') {
+                fbq('track', event.name, event.params);
+                console.log(`✅ Test Event ${index + 1}/5: ${event.name}`);
+            }
+        }, index * 2000); // 2 segundos entre eventos
+    });
+    
+    console.log('🎯 Todos los eventos de prueba programados. Revisa Facebook Events Manager en 2-3 minutos.');
+};
