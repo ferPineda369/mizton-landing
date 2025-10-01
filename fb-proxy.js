@@ -66,8 +66,14 @@
             window.fbq.queue = [];
         }
         
-        // Inicializar el pixel
-        window.fbq('init', PIXEL_ID);
+        // Inicializar el pixel con datos adicionales
+        window.fbq('init', PIXEL_ID, {
+            em: 'auto', // Email automático
+            fn: 'auto', // Nombre automático  
+            ln: 'auto', // Apellido automático
+            ph: 'auto', // Teléfono automático
+            external_id: 'auto' // ID externo automático
+        });
         window.fbq('track', 'PageView');
         
         console.log('🔥 Facebook Pixel inicializado - ID:', PIXEL_ID);
