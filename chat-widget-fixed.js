@@ -431,6 +431,17 @@ class MiztonChatWidget {
                 this.hideTypingIndicator();
                 
                 if (data.success) {
+                    // Disparar evento de Facebook Pixel para Lead
+                    if (typeof fbq !== 'undefined') {
+                        fbq('track', 'Lead', {
+                            content_name: 'Email Capture Chat',
+                            content_category: 'Lead Generation',
+                            value: 1,
+                            currency: 'USD'
+                        });
+                        console.log('📧 Pixel Event: Lead (Email captured)');
+                    }
+                    
                     // Verificar si es usuario existente
                     if (data.existing_user) {
                         // Si tiene historial, cargarlo y ir directo al chat
