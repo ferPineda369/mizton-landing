@@ -35,7 +35,11 @@ try {
     }
     
     // Decodificar tags JSON
-    $post['tags'] = json_decode($post['tags'], true) ?: [];
+    if (is_string($post['tags'])) {
+        $post['tags'] = json_decode($post['tags'], true) ?: [];
+    } else {
+        $post['tags'] = is_array($post['tags']) ? $post['tags'] : [];
+    }
     
     echo json_encode([
         'success' => true,
