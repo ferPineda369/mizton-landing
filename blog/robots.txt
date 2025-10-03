@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://mizton.cat/blog/sitemap.xml
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /api/
+
+# Allow important files
+Allow: /assets/
+Allow: /index.php
+Allow: /post.php
+
+# Crawl delay
+Crawl-delay: 1

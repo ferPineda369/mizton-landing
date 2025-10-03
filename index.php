@@ -26,13 +26,13 @@ include 'config.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mizton - La ÚNICA Membresía Recuperable</title>
+    <title>Mizton - La ÚNICA Membresía Financiera Colectiva</title>
     <meta name="description" content="Invierte $50 USD en un futuro financiero seguro, innovador y comunitario. Recuperación 100% garantizada + dividendos y bonos.">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mizton.cat/">
-    <meta property="og:title" content="Mizton - La ÚNICA Membresía Recuperable">
+    <meta property="og:title" content="Mizton - La ÚNICA Membresía Financiera Colectiva">
     <meta property="og:description" content="Invierte $50 USD en un futuro financiero seguro, innovador y comunitario. Recuperación 100% garantizada + dividendos y bonos.">
     <meta property="og:image" content="https://mizton.cat/social-preview.jpg">
     <meta property="og:image:width" content="1200">
@@ -42,7 +42,7 @@ include 'config.php';
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://mizton.cat/">
-    <meta property="twitter:title" content="Mizton - La ÚNICA Membresía Recuperable">
+    <meta property="twitter:title" content="Mizton - La ÚNICA Membresía Financiera Colectiva">
     <meta property="twitter:description" content="Invierte $50 USD en un futuro financiero seguro, innovador y comunitario. Recuperación 100% garantizada + dividendos y bonos.">
     <meta property="twitter:image" content="https://mizton.cat/social-preview.jpg">
     
@@ -72,6 +72,7 @@ include 'config.php';
                 <a href="#como-funciona">¿Cómo Funciona?</a>
                 <a href="#beneficios">Beneficios</a>
                 <a href="#faq">FAQ</a>
+                <a href="blog/" target="_blank">Blog</a>
                 <a href="#unirse" class="cta-nav">Únete Ahora</a>
             </div>
             <div class="mobile-menu-toggle">
