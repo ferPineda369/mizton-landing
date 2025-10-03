@@ -10,11 +10,21 @@
 function getBlogPosts($limit = 10, $offset = 0, $category = null, $status = 'published') {
     $db = getBlogDB();
     
-    $sql = "SELECT * FROM blog_posts WHERE status = ?";
-    $params = [$status];
+    $sql = "SELECT * FROM blog_posts";
+    $params = [];
+    
+    // Agregar filtro de status solo si no es 'all'
+    if ($status !== 'all') {
+        $sql .= " WHERE status = ?";
+        $params[] = $status;
+    }
     
     if ($category) {
-        $sql .= " AND category = ?";
+        if ($status === 'all') {
+            $sql .= " WHERE category = ?";
+        } else {
+            $sql .= " AND category = ?";
+        }
         $params[] = $category;
     }
     
