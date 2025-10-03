@@ -40,7 +40,7 @@ try {
     $post = getPostById($testPostId);
     if ($post) {
         echo "<p>✅ <strong>Post encontrado:</strong> " . htmlspecialchars($post['title']) . "</p>";
-        echo "<p><strong>Tags originales:</strong> " . htmlspecialchars($post['tags']) . "</p>";
+        echo "<p><strong>Tags originales:</strong> " . (is_array($post['tags']) ? json_encode($post['tags']) : htmlspecialchars($post['tags'])) . "</p>";
         echo "<p><strong>Tipo de tags:</strong> " . gettype($post['tags']) . "</p>";
         
         // Probar decodificación de tags
