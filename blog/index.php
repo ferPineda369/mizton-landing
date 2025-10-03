@@ -98,7 +98,7 @@ $featuredPost = getFeaturedPost();
                 <div class="featured-content">
                     <div class="post-meta">
                         <span class="category"><?php echo $featuredPost['category']; ?></span>
-                        <span class="date"><?php echo formatDate($featuredPost['date']); ?></span>
+                        <span class="date"><?php echo formatDate($featuredPost['published_at'] ?: $featuredPost['created_at']); ?></span>
                         <span class="read-time"><?php echo $featuredPost['read_time']; ?> min</span>
                     </div>
                     <h2 class="featured-title">
@@ -135,7 +135,7 @@ $featuredPost = getFeaturedPost();
                     </div>
                     <div class="post-content">
                         <div class="post-meta">
-                            <span class="date"><?php echo formatDate($post['date']); ?></span>
+                            <span class="date"><?php echo formatDate($post['published_at'] ?: $post['created_at']); ?></span>
                             <span class="read-time"><?php echo $post['read_time']; ?> min</span>
                         </div>
                         <h3 class="post-title">

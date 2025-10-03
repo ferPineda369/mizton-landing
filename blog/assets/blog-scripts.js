@@ -249,7 +249,7 @@ function createPostElement(post) {
         </div>
         <div class="post-content">
             <div class="post-meta">
-                <span class="date">${formatDate(post.date)}</span>
+                <span class="date">${formatDate(post.published_at || post.created_at)}</span>
                 <span class="read-time">${post.read_time} min</span>
             </div>
             <h3 class="post-title">
@@ -405,7 +405,7 @@ async function performSearch(query, resultsContainer) {
                 <div class="search-result">
                     <h4><a href="post.php?slug=${post.slug}">${post.title}</a></h4>
                     <p>${post.excerpt}</p>
-                    <span class="search-meta">${post.category} • ${formatDate(post.date)}</span>
+                    <span class="search-meta">${post.category} • ${formatDate(post.published_at || post.created_at)}</span>
                 </div>
             `).join('');
             

@@ -116,13 +116,23 @@ function getRelatedPosts($currentPostId, $category, $limit = 3) {
  * Formatear fecha
  */
 function formatDate($date, $format = 'd M Y') {
+    // Verificar si la fecha es válida
+    if (empty($date) || $date === '0000-00-00 00:00:00') {
+        return 'Fecha no disponible';
+    }
+    
     $months = [
         'Jan' => 'Ene', 'Feb' => 'Feb', 'Mar' => 'Mar', 'Apr' => 'Abr',
         'May' => 'May', 'Jun' => 'Jun', 'Jul' => 'Jul', 'Aug' => 'Ago',
         'Sep' => 'Sep', 'Oct' => 'Oct', 'Nov' => 'Nov', 'Dec' => 'Dic'
     ];
     
-    $formatted = date($format, strtotime($date));
+    $timestamp = strtotime($date);
+    if ($timestamp === false) {
+        return 'Fecha inválida';
+    }
+    
+    $formatted = date($format, $timestamp);
     return str_replace(array_keys($months), array_values($months), $formatted);
 }
 
