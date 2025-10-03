@@ -3,7 +3,9 @@
  * API para obtener un post específico para edición
  */
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Verificar autenticación
 if (!isset($_SESSION['blog_admin'])) {
@@ -12,9 +14,9 @@ if (!isset($_SESSION['blog_admin'])) {
     exit;
 }
 
-require_once '../../config/blog-config.php';
-require_once '../../includes/blog-functions.php';
-require_once '../../includes/admin-functions.php';
+require_once dirname(__DIR__) . '/../config/blog-config.php';
+require_once dirname(__DIR__) . '/../includes/blog-functions.php';
+require_once dirname(__DIR__) . '/../includes/admin-functions.php';
 
 header('Content-Type: application/json');
 

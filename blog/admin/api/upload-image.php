@@ -3,7 +3,9 @@
  * API para subir imágenes del blog
  */
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Verificar autenticación
 if (!isset($_SESSION['blog_admin'])) {
@@ -38,7 +40,7 @@ try {
     }
     
     // Crear directorio si no existe
-    $uploadDir = '../../assets/images/';
+    $uploadDir = dirname(__DIR__) . '/../assets/images/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0755, true);
     }
