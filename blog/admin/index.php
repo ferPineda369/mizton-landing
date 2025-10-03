@@ -76,11 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 $posts = getBlogPosts(50, 0, null, 'all'); // Incluir drafts
 $categories = getCategoriesWithCount();
 
-// Debug temporal - remover después
-$debug_info = [
-    'total_posts' => count($posts),
-    'db_connection' => getBlogDB() ? 'OK' : 'FAIL'
-];
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -178,13 +173,6 @@ $debug_info = [
                             <p>Suscriptores</p>
                         </div>
                     </div>
-                </div>
-
-                <!-- Debug Info -->
-                <div class="debug-info" style="background: #f0f0f0; padding: 10px; margin: 10px 0; border-radius: 5px;">
-                    <strong>Debug Info:</strong> 
-                    Posts encontrados: <?php echo $debug_info['total_posts']; ?> | 
-                    BD: <?php echo $debug_info['db_connection']; ?>
                 </div>
 
                 <div class="recent-posts">

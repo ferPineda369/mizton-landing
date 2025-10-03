@@ -1,0 +1,21 @@
+# Admin API - Configuración Apache
+RewriteEngine On
+
+# Permitir acceso a archivos PHP
+<Files "*.php">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# Configuración de seguridad
+<Files "*.log">
+    Order Deny,Allow
+    Deny from all
+</Files>
+
+# Headers de seguridad para APIs
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-Frame-Options DENY
+    Header always set X-XSS-Protection "1; mode=block"
+</IfModule>
