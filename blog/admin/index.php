@@ -52,6 +52,7 @@ if (isset($_POST['password']) && $_POST['password'] === $admin_password) {
 
 require_once '../config/blog-config.php';
 require_once '../includes/blog-functions.php';
+require_once '../includes/admin-functions.php';
 
 // Procesar acciones
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {

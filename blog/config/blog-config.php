@@ -4,8 +4,8 @@
  * Configuración general y conexión a base de datos
  */
 
-// Configuración de la base de datos (usando la misma del panel)
-require_once '../../database.php';
+// Configuración de la base de datos (con fallback robusto)
+require_once __DIR__ . '/database-blog.php';
 
 // Configuración del blog
 define('BLOG_TITLE', 'Mizton Blog');
@@ -56,44 +56,49 @@ $seo_config = [
 
 // Función para obtener la conexión a la base de datos
 function getBlogDB() {
-    global $conn;
-    return $conn;
+    global $pdo;
+    return $pdo;
 }
 
 // Crear tabla de posts si no existe
 function createBlogTables() {
     $db = getBlogDB();
     
-    $sql = "CREATE TABLE IF NOT EXISTS blog_posts (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        title VARCHAR(255) NOT NULL,
-        slug VARCHAR(255) UNIQUE NOT NULL,
-        excerpt TEXT,
-        content LONGTEXT NOT NULL,
-        image VARCHAR(255),
-        category VARCHAR(50) NOT NULL,
-        tags JSON,
-        author VARCHAR(100) DEFAULT 'Mizton Team',
-        status ENUM('draft', 'published') DEFAULT 'draft',
-        featured BOOLEAN DEFAULT FALSE,
-        read_time INT DEFAULT 5,
-        views INT DEFAULT 0,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-        published_at TIMESTAMP NULL
-    )";
-    
-    $db->query($sql);
-    
-    // Tabla para newsletter
-    $sql_newsletter = "CREATE TABLE IF NOT EXISTS blog_newsletter (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        email VARCHAR(255) UNIQUE NOT NULL,
-        status ENUM('active', 'unsubscribed') DEFAULT 'active',
-        subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )";
-    
-    $db->query($sql_newsletter);
+    try {
+        $sql = "CREATE TABLE IF NOT EXISTS blog_posts (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
+            slug VARCHAR(255) UNIQUE NOT NULL,
+            excerpt TEXT,
+            content LONGTEXT NOT NULL,
+            image VARCHAR(255),
+            category VARCHAR(50) NOT NULL,
+            tags JSON,
+            author VARCHAR(100) DEFAULT 'Mizton Team',
+            status ENUM('draft', 'published') DEFAULT 'draft',
+            featured BOOLEAN DEFAULT FALSE,
+            read_time INT DEFAULT 5,
+            views INT DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            published_at TIMESTAMP NULL
+        )";
+        
+        $db->exec($sql);
+        
+        // Tabla para newsletter
+        $sql_newsletter = "CREATE TABLE IF NOT EXISTS blog_newsletter (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            status ENUM('active', 'unsubscribed') DEFAULT 'active',
+            subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )";
+        
+        $db->exec($sql_newsletter);
+        
+    } catch (PDOException $e) {
+        error_log("Error creando tablas del blog: " . $e->getMessage());
+    }
 }
 
 // Inicializar tablas
