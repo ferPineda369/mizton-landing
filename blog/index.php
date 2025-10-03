@@ -78,7 +78,7 @@ $featuredPost = getFeaturedPost();
                         <span class="stat-label">Categorías</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">2024</span>
+                        <span class="stat-number">2025</span>
                         <span class="stat-label">Actualizado</span>
                     </div>
                 </div>
@@ -207,7 +207,7 @@ $featuredPost = getFeaturedPost();
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Mizton Blog. Tecnología e Innovación.</p>
+                <p>&copy; 2025 Mizton Blog. Tecnología e Innovación.</p>
             </div>
         </div>
     </footer>
