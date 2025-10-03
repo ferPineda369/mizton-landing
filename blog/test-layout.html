@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Layout - Post Cards</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/blog-styles.css">
+</head>
+<body>
+    <div class="container" style="padding: 2rem;">
+        <h2>🧪 Prueba de Layout - Tarjetas de Posts</h2>
+        
+        <div class="posts-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+            
+            <!-- Post Card 1 -->
+            <article class="post-card">
+                <div class="post-image">
+                    <img src="https://via.placeholder.com/400x200/95D5B2/FFFFFF?text=RWA+Tokenization" alt="Post 1">
+                    <div class="post-category">RWA</div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span class="date">3 Oct 2024</span>
+                        <span class="read-time">5 min</span>
+                    </div>
+                    <h3 class="post-title">
+                        <a href="#">El Futuro de la Tokenización RWA: Transformando Activos Reales</a>
+                    </h3>
+                    <p class="post-excerpt">
+                        La tokenización de activos del mundo real representa una de las innovaciones más prometedoras en el ecosistema blockchain...
+                    </p>
+                    <div class="post-footer">
+                        <a href="#" class="read-more-link">Leer más</a>
+                        <div class="post-tags">
+                            <span class="tag">tokenización</span>
+                            <span class="tag">RWA</span>
+                            <span class="tag">blockchain</span>
+                            <span class="tag">inversiones</span>
+                            <span class="tag">bienes raíces</span>
+                            <span class="tag">fintech</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Post Card 2 -->
+            <article class="post-card">
+                <div class="post-image">
+                    <img src="https://via.placeholder.com/400x200/74C0FC/FFFFFF?text=Blockchain+Tech" alt="Post 2">
+                    <div class="post-category">Blockchain</div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span class="date">2 Oct 2024</span>
+                        <span class="read-time">7 min</span>
+                    </div>
+                    <h3 class="post-title">
+                        <a href="#">Blockchain: La Tecnología que Está Redefiniendo las Finanzas</a>
+                    </h3>
+                    <p class="post-excerpt">
+                        La tecnología blockchain ha evolucionado mucho más allá de ser simplemente la base de las criptomonedas...
+                    </p>
+                    <div class="post-footer">
+                        <a href="#" class="read-more-link">Leer más</a>
+                        <div class="post-tags">
+                            <span class="tag">blockchain</span>
+                            <span class="tag">fintech</span>
+                            <span class="tag">criptomonedas</span>
+                            <span class="tag">DeFi</span>
+                            <span class="tag">smart contracts</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Post Card 3 - Con muchos tags para probar wrap -->
+            <article class="post-card">
+                <div class="post-image">
+                    <img src="https://via.placeholder.com/400x200/FFB366/FFFFFF?text=Fintech+2024" alt="Post 3">
+                    <div class="post-category">Fintech</div>
+                </div>
+                <div class="post-content">
+                    <div class="post-meta">
+                        <span class="date">1 Oct 2024</span>
+                        <span class="read-time">6 min</span>
+                    </div>
+                    <h3 class="post-title">
+                        <a href="#">Fintech 2024: Las Tendencias que Definirán el Futuro</a>
+                    </h3>
+                    <p class="post-excerpt">
+                        El sector fintech continúa su evolución acelerada, transformando la manera en que interactuamos con el dinero...
+                    </p>
+                    <div class="post-footer">
+                        <a href="#" class="read-more-link">Leer más</a>
+                        <div class="post-tags">
+                            <span class="tag">fintech</span>
+                            <span class="tag">innovación</span>
+                            <span class="tag">pagos digitales</span>
+                            <span class="tag">inteligencia artificial</span>
+                            <span class="tag">banca digital</span>
+                            <span class="tag">tendencias 2024</span>
+                            <span class="tag">tecnología financiera</span>
+                            <span class="tag">disruption</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+        </div>
+
+        <div style="margin-top: 3rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+            <h3>✅ Cambios Aplicados:</h3>
+            <ul>
+                <li><strong>Botón "Leer más":</strong> Ahora está en una línea independiente</li>
+                <li><strong>Tags:</strong> Configurados con <code>flex-wrap: wrap</code> para que se ajusten automáticamente</li>
+                <li><strong>Espaciado:</strong> Mejorado entre el botón y los tags</li>
+                <li><strong>Layout responsive:</strong> Los tags se adaptan al ancho del contenedor</li>
+            </ul>
+            
+            <p><a href="index.php">← Volver al Blog</a> | <a href="admin/">Panel Admin</a></p>
+        </div>
+    </div>
+</body>
+</html>

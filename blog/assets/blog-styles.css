@@ -461,18 +461,17 @@ body {
 }
 
 .post-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-top: var(--spacing-md);
 }
 
 .read-more-link {
+    display: inline-block;
     color: var(--accent-green);
     text-decoration: none;
     font-weight: var(--font-weight-medium);
     font-size: 0.875rem;
     transition: var(--transition-fast);
+    margin-bottom: var(--spacing-sm);
 }
 
 .read-more-link:hover {
@@ -481,7 +480,9 @@ body {
 
 .post-tags {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
 }
 
 .tag {
