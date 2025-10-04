@@ -180,12 +180,14 @@ class MiztonAIHandler {
         // Obtener conocimiento relevante específico para esta consulta
         $relevantKnowledge = $this->getRelevantKnowledge($message);
         
+        $systemContent = AIConfig::getSystemPrompt() . "\n\nINFORMACIÓN RELEVANTE:\n{$relevantKnowledge}";
+        
         $payload = [
             'model' => $this->config['model'],
             'messages' => [
                 [
                     'role' => 'system',
-                    'content' => AIConfig::getSystemPrompt() . "\n\nINFORMACIÓN RELEVANTE:\n{$relevantKnowledge}"
+                    'content' => $systemContent
                 ],
                 [
                     'role' => 'user', 
@@ -196,7 +198,12 @@ class MiztonAIHandler {
             'temperature' => $this->config['temperature']
         ];
         
+        error_log("AI DEBUG: Model being used: " . $this->config['model']);
+        error_log("AI DEBUG: System prompt length: " . strlen($systemContent));
+        error_log("AI DEBUG: User message: " . $context);
+        error_log("AI DEBUG: Relevant knowledge preview: " . substr($relevantKnowledge, 0, 200) . "...");
         error_log("AI: Payload prepared, calling OpenAI...");
+        
         $response = $this->callOpenAI($payload);
         
         if ($response) {
@@ -260,9 +267,12 @@ class MiztonAIHandler {
         
         if ($httpCode === 200) {
             $data = json_decode($response, true);
+            error_log("AI DEBUG: Full OpenAI response: " . substr($response, 0, 1000));
             if (isset($data['choices'][0]['message']['content'])) {
+                $aiResponse = $data['choices'][0]['message']['content'];
+                error_log("AI DEBUG: AI Response: " . $aiResponse);
                 error_log("AI: Successfully parsed OpenAI response");
-                return $data['choices'][0]['message']['content'];
+                return $aiResponse;
             } else {
                 error_log("AI: Invalid OpenAI response structure: " . json_encode($data));
                 return null;

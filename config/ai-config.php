@@ -19,7 +19,7 @@ class AIConfig {
     public static function getOpenAIConfig() {
         return [
             'api_key' => $_ENV['OPENAI_API_KEY'] ?? '',
-            'model' => $_ENV['AI_MODEL'] ?? 'gpt-5-nano',
+            'model' => $_ENV['AI_MODEL'] ?? 'gpt-4o-mini',
             'max_tokens' => intval($_ENV['AI_MAX_TOKENS'] ?? 500),
             'temperature' => floatval($_ENV['AI_TEMPERATURE'] ?? 0.3)
         ];
