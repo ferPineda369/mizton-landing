@@ -49,8 +49,9 @@ class AIConfig {
      * 2000 tokens = ~$0.004 por consulta
      * 4000 tokens = ~$0.008 por consulta  
      * 6000 tokens = ~$0.012 por consulta
+     * 8000 tokens = ~$0.016 por consulta
      */
-    public static function getKnowledgeBase($maxTokens = 4000) {
+    public static function getKnowledgeBase($maxTokens = 8000) {
         $knowledgeFile = __DIR__ . '/knowledge-base.md';
         
         if (file_exists($knowledgeFile)) {
