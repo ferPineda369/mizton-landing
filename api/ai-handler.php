@@ -29,8 +29,12 @@ class MiztonAIHandler {
      * Obtener conocimiento relevante basado en la consulta del usuario
      */
     private function getRelevantKnowledge($message) {
+        // TEMPORAL: Usar palabras clave directamente para probar nueva información
+        // TODO: Reactivar embeddings cuando estén completamente actualizados
+        return $this->getKeywordBasedKnowledge($message);
+        
         // Intentar usar embeddings si están disponibles
-        if (class_exists('EmbeddingsHandler')) {
+        /*if (class_exists('EmbeddingsHandler')) {
             try {
                 $embeddings = new EmbeddingsHandler();
                 return $embeddings->findRelevantKnowledge($message, 6000);
@@ -40,7 +44,7 @@ class MiztonAIHandler {
         }
         
         // Fallback: búsqueda por palabras clave
-        return $this->getKeywordBasedKnowledge($message);
+        return $this->getKeywordBasedKnowledge($message);*/
     }
     
     /**
