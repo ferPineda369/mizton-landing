@@ -75,10 +75,10 @@ class MiztonAIHandler {
             'funciona' => ['CÓMO FUNCIONA'],
             'membresía' => ['CONCEPTO GENERAL', 'QUÉ RECIBES'],
             // NUEVAS PALABRAS CLAVE 2025
-            'fast active' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA'],
-            'fast' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA'],
-            'active' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA'],
-            'bono' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA'],
+            'fast active' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA', 'BONO DE BIENVENIDA'],
+            'fast' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA', 'BONO DE BIENVENIDA'],
+            'active' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA', 'BONO DE BIENVENIDA'],
+            'bono' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA', 'BONO DE BIENVENIDA'],
             'liquidación atómica' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
             'liquidacion' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
             'atomica' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
@@ -120,11 +120,14 @@ class MiztonAIHandler {
         
         // Encontrar secciones relevantes
         $relevantSections = [];
+        error_log("AI DEBUG: Searching for keywords in message: " . $message);
         foreach ($keywordMap as $keyword => $sections) {
             if (strpos($message, $keyword) !== false) {
+                error_log("AI DEBUG: Found keyword '$keyword', adding sections: " . implode(', ', $sections));
                 $relevantSections = array_merge($relevantSections, $sections);
             }
         }
+        error_log("AI DEBUG: Total relevant sections found: " . implode(', ', array_unique($relevantSections)));
         
         // Si no hay palabras clave específicas, usar secciones básicas
         if (empty($relevantSections)) {
@@ -135,13 +138,18 @@ class MiztonAIHandler {
         $selectedContent = [];
         foreach (array_unique($relevantSections) as $section) {
             $pattern = '/## ' . preg_quote($section, '/') . '\s*(.*?)(?=## |\z)/s';
+            error_log("AI DEBUG: Looking for section '$section' with pattern: $pattern");
             if (preg_match($pattern, $fullKnowledge, $matches)) {
-                $selectedContent[] = "## " . $section . "\n" . trim($matches[1]);
+                $content = "## " . $section . "\n" . trim($matches[1]);
+                $selectedContent[] = $content;
+                error_log("AI DEBUG: Found section '$section', content length: " . strlen($content));
+            } else {
+                error_log("AI DEBUG: Section '$section' NOT FOUND in knowledge base");
             }
         }
         
         $result = implode("\n\n", $selectedContent);
-        error_log("AI: Selected " . count($selectedContent) . " sections based on keywords");
+        error_log("AI DEBUG: Final result length: " . strlen($result) . ", sections: " . count($selectedContent));
         
         return $result ?: AIConfig::getKnowledgeBase(6000);
     }
