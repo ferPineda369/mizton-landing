@@ -151,7 +151,7 @@ class MiztonAIHandler {
         $result = implode("\n\n", $selectedContent);
         error_log("AI DEBUG: Final result length: " . strlen($result) . ", sections: " . count($selectedContent));
         
-        return $result ?: AIConfig::getKnowledgeBase(6000);
+        return $result ?: AIConfig::getKnowledgeBase(12000);
     }
     
     public function getAIResponse($message, $conversationHistory = [], $sessionId = '') {

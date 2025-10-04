@@ -46,11 +46,11 @@ class AIConfig {
     /**
      * Obtener base de conocimiento desde archivo con límite de tokens
      * CONFIGURACIÓN DE COSTOS GPT-5-NANO: Costos ultra-bajos
-     * 2000 tokens = ~$0.0005 por consulta (95% ahorro)
-     * 4000 tokens = ~$0.001 por consulta (95% ahorro)
-     * 6000 tokens = ~$0.0015 por consulta (95% ahorro)
-     * 8000 tokens = ~$0.002 por consulta (95% ahorro)
-     * 12000 tokens = ~$0.003 por consulta (Nuevo límite recomendado)
+     * 2000 tokens = ~$0.00005 por consulta (input) + ~$0.0004 (output)
+     * 4000 tokens = ~$0.0001 por consulta (input) + ~$0.0008 (output)
+     * 6000 tokens = ~$0.00015 por consulta (input) + ~$0.0012 (output)
+     * 8000 tokens = ~$0.0002 por consulta (input) + ~$0.0016 (output)
+     * 12000 tokens = ~$0.0003 por consulta (input) + ~$0.0024 (output)
      */
     public static function getKnowledgeBase($maxTokens = 12000) {
         $knowledgeFile = __DIR__ . '/knowledge-base.md';
