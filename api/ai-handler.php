@@ -81,7 +81,11 @@ class MiztonAIHandler {
             'bono' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA', 'BONO DE BIENVENIDA'],
             'liquidación atómica' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
             'liquidacion' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
+            'liquidación' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
             'atomica' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
+            'atómica' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
+            'tiempo toma' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
+            'cuanto tiempo' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
             'instantaneo' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
             'segundos' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
             '5000 tokens' => ['PROMOCIONES VIGENTES 2025'],
@@ -91,7 +95,12 @@ class MiztonAIHandler {
             '2030' => ['TOKENIZACIÓN RWA'],
             '24 billones' => ['TOKENIZACIÓN RWA'],
             'proyeccion' => ['TOKENIZACIÓN RWA'],
+            'proyecciones' => ['TOKENIZACIÓN RWA'],
+            'proyecciones para' => ['TOKENIZACIÓN RWA'],
+            'cuales son las proyecciones' => ['TOKENIZACIÓN RWA'],
             'sectores' => ['TOKENIZACIÓN RWA'],
+            'que sectores' => ['TOKENIZACIÓN RWA'],
+            'sectores se pueden' => ['TOKENIZACIÓN RWA'],
             'inmobiliario' => ['TOKENIZACIÓN RWA'],
             'energetico' => ['TOKENIZACIÓN RWA'],
             'recursos naturales' => ['TOKENIZACIÓN RWA'],
@@ -112,6 +121,9 @@ class MiztonAIHandler {
             'riesgo' => ['RIESGOS Y CONSIDERACIONES'],
             'dca' => ['MODELO DE NEGOCIO DETALLADO'],
             'dollar cost' => ['MODELO DE NEGOCIO DETALLADO'],
+            'como funciona el dca' => ['MODELO DE NEGOCIO DETALLADO'],
+            'que es dca' => ['MODELO DE NEGOCIO DETALLADO'],
+            'funciona el dca' => ['MODELO DE NEGOCIO DETALLADO'],
             'incentivo participacion' => ['MODELO DE NEGOCIO DETALLADO'],
             '180 dias' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
             '300 dias' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
@@ -138,18 +150,13 @@ class MiztonAIHandler {
         $selectedContent = [];
         foreach (array_unique($relevantSections) as $section) {
             $pattern = '/## ' . preg_quote($section, '/') . '\s*(.*?)(?=## |\z)/s';
-            error_log("AI DEBUG: Looking for section '$section' with pattern: $pattern");
             if (preg_match($pattern, $fullKnowledge, $matches)) {
-                $content = "## " . $section . "\n" . trim($matches[1]);
-                $selectedContent[] = $content;
-                error_log("AI DEBUG: Found section '$section', content length: " . strlen($content));
-            } else {
-                error_log("AI DEBUG: Section '$section' NOT FOUND in knowledge base");
+                $selectedContent[] = "## " . $section . "\n" . trim($matches[1]);
             }
         }
         
         $result = implode("\n\n", $selectedContent);
-        error_log("AI DEBUG: Final result length: " . strlen($result) . ", sections: " . count($selectedContent));
+        error_log("AI: Selected " . count($selectedContent) . " sections for query");
         
         return $result ?: AIConfig::getKnowledgeBase(12000);
     }
@@ -198,10 +205,6 @@ class MiztonAIHandler {
             'temperature' => $this->config['temperature']
         ];
         
-        error_log("AI DEBUG: Model being used: " . $this->config['model']);
-        error_log("AI DEBUG: System prompt length: " . strlen($systemContent));
-        error_log("AI DEBUG: User message: " . $context);
-        error_log("AI DEBUG: Relevant knowledge preview: " . substr($relevantKnowledge, 0, 200) . "...");
         error_log("AI: Payload prepared, calling OpenAI...");
         
         $response = $this->callOpenAI($payload);
@@ -267,12 +270,9 @@ class MiztonAIHandler {
         
         if ($httpCode === 200) {
             $data = json_decode($response, true);
-            error_log("AI DEBUG: Full OpenAI response: " . substr($response, 0, 1000));
             if (isset($data['choices'][0]['message']['content'])) {
-                $aiResponse = $data['choices'][0]['message']['content'];
-                error_log("AI DEBUG: AI Response: " . $aiResponse);
                 error_log("AI: Successfully parsed OpenAI response");
-                return $aiResponse;
+                return $data['choices'][0]['message']['content'];
             } else {
                 error_log("AI: Invalid OpenAI response structure: " . json_encode($data));
                 return null;
