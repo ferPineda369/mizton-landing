@@ -19,7 +19,7 @@ class AIConfig {
     public static function getOpenAIConfig() {
         return [
             'api_key' => $_ENV['OPENAI_API_KEY'] ?? '',
-            'model' => $_ENV['AI_MODEL'] ?? 'gpt-4o-mini',
+            'model' => $_ENV['AI_MODEL'] ?? 'gpt-4.1-nano',
             'max_tokens' => intval($_ENV['AI_MAX_TOKENS'] ?? 500),
             'temperature' => floatval($_ENV['AI_TEMPERATURE'] ?? 0.3)
         ];
@@ -45,12 +45,12 @@ class AIConfig {
     
     /**
      * Obtener base de conocimiento desde archivo con límite de tokens
-     * CONFIGURACIÓN DE COSTOS GPT-5-NANO: Costos ultra-bajos
-     * 2000 tokens = ~$0.00005 por consulta (input) + ~$0.0004 (output)
-     * 4000 tokens = ~$0.0001 por consulta (input) + ~$0.0008 (output)
-     * 6000 tokens = ~$0.00015 por consulta (input) + ~$0.0012 (output)
-     * 8000 tokens = ~$0.0002 por consulta (input) + ~$0.0016 (output)
-     * 12000 tokens = ~$0.0003 por consulta (input) + ~$0.0024 (output)
+     * CONFIGURACIÓN DE COSTOS GPT-4.1-NANO: Costos ultra-bajos
+     * 2000 tokens = ~$0.0002 por consulta (input) + ~$0.0008 (output)
+     * 4000 tokens = ~$0.0004 por consulta (input) + ~$0.0016 (output)
+     * 6000 tokens = ~$0.0006 por consulta (input) + ~$0.0024 (output)
+     * 8000 tokens = ~$0.0008 por consulta (input) + ~$0.0032 (output)
+     * 12000 tokens = ~$0.0012 por consulta (input) + ~$0.0048 (output)
      */
     public static function getKnowledgeBase($maxTokens = 12000) {
         $knowledgeFile = __DIR__ . '/knowledge-base.md';
