@@ -87,7 +87,7 @@ if ($search) {
     <meta name="twitter:description" content="<?php echo htmlspecialchars($pageDescription); ?>">
     <meta name="twitter:image" content="https://mizton.cat/social-preview.jpg">
     
-    <link rel="stylesheet" href="assets/css/blog.css">
+    <link rel="stylesheet" href="assets/blog-styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -307,7 +307,7 @@ if ($search) {
         </div>
     </footer>
 
-    <script src="assets/js/blog.js"></script>
+    <script src="assets/blog-scripts.js"></script>
     <script>
         // Newsletter form
         document.getElementById('newsletterForm').addEventListener('submit', function(e) {
