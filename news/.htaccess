@@ -1,25 +1,6 @@
-RewriteEngine On
-
-# Reglas específicas para el directorio news
-# ORDEN IMPORTANTE: Más específico primero
-
-# DEBUG TEMPORAL: Capturar todo para debug
-RewriteRule ^debug-test/(.*)$ debug-rewrite.php?debug=$1 [L,QSA]
-
-# 1. Manejar códigos de referido en index: /news/referido (6 caracteres exactos)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^([a-zA-Z0-9]{6})/?$ index.php?ref=$1 [L,QSA]
-
-# 2. Manejar URLs con referido: slug/codigo-referido
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9]{6})/?$ post.php?slug=$1&ref=$2 [L,QSA]
-
-# 3. Manejar URLs sin referido: slug (debe ir al final)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^([a-zA-Z0-9-]+)/?$ post.php?slug=$1 [L,QSA]
+# News Directory Configuration
+# Las reglas de rewrite principales están en el .htaccess raíz
+# Este archivo solo maneja configuraciones específicas del directorio
 
 # Configuración de seguridad
 <Files "*.php">

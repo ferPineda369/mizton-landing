@@ -1,10 +1,13 @@
 RewriteEngine On
 
-# Reglas para URLs de news (DEBEN IR PRIMERO)
-# Formato: /news/slug-del-post/codigo-referido (con referido)
+# Reglas para URLs de news (ORDEN ESPECÍFICO IMPORTANTE)
+# 1. Códigos de referido en news index: /news/referido (6 caracteres exactos)
+RewriteRule ^news/([a-zA-Z0-9]{6})/?$ news/index.php?ref=$1 [L,QSA]
+
+# 2. Posts con referido: /news/slug-del-post/codigo-referido
 RewriteRule ^news/([a-zA-Z0-9-]+)/([a-zA-Z0-9]{6})/?$ news/post.php?slug=$1&ref=$2 [L,QSA]
 
-# Formato: /news/slug-del-post (sin referido)
+# 3. Posts sin referido: /news/slug-del-post (debe ir al final)
 RewriteRule ^news/([a-zA-Z0-9-]+)/?$ news/post.php?slug=$1 [L,QSA]
 
 # Reglas para códigos de referido en landing (DESPUÉS DE NEWS)
