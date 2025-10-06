@@ -1,8 +1,15 @@
-# News Mizton - Configuración Apache
 RewriteEngine On
 
-# Las reglas de reescritura principales están en el .htaccess raíz
-# Este archivo solo maneja configuraciones específicas del directorio
+# Reglas específicas para el directorio news
+# Manejar URLs con referido: slug/codigo-referido
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9]{6})/?$ post.php?slug=$1&ref=$2 [L,QSA]
+
+# Manejar URLs sin referido: slug
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9-]+)/?$ post.php?slug=$1 [L,QSA]
 
 # Configuración de seguridad
 <Files "*.php">
@@ -40,4 +47,3 @@ RewriteEngine On
     AddOutputFilterByType DEFLATE application/javascript
     AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
-
