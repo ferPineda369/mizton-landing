@@ -44,3 +44,4 @@ RewriteRule ^([a-zA-Z0-9-]+)/?$ post.php?slug=$1 [L,QSA]
     AddOutputFilterByType DEFLATE application/javascript
     AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
+

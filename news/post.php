@@ -28,7 +28,7 @@ if (isset($_GET['ref'])) {
     }
 }
 
-// Obtener slug del post
+// Obtener slug del post 
 $slug = $_GET['slug'] ?? '';
 
 if (empty($slug)) {

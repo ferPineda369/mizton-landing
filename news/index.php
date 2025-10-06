@@ -28,7 +28,7 @@ if (isset($_GET['ref'])) {
     }
 }
 
-// Obtener posts
+// Obtener posts 
 $category = $_GET['category'] ?? '';
 $search = $_GET['search'] ?? '';
 $page = max(1, intval($_GET['page'] ?? 1));
