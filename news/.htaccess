@@ -1,21 +1,22 @@
 RewriteEngine On
 
 # Reglas específicas para el directorio news
-# 1. Manejar URLs con referido: slug/codigo-referido
+# ORDEN IMPORTANTE: Más específico primero
+
+# 1. Manejar códigos de referido en index: /news/referido (6 caracteres exactos)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([a-zA-Z0-9]{6})/?$ index.php?ref=$1 [L,QSA]
+
+# 2. Manejar URLs con referido: slug/codigo-referido
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9]{6})/?$ post.php?slug=$1&ref=$2 [L,QSA]
 
-# 2. Manejar URLs sin referido: slug
+# 3. Manejar URLs sin referido: slug (debe ir al final)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([a-zA-Z0-9-]+)/?$ post.php?slug=$1 [L,QSA]
-
-# 3. Manejar códigos de referido en index: /news/referido
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} ^/news/([a-zA-Z0-9]{6})/?$
-RewriteRule ^([a-zA-Z0-9]{6})/?$ index.php?ref=$1 [L,QSA]
 
 # Configuración de seguridad
 <Files "*.php">
