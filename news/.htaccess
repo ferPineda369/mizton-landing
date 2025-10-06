@@ -1,5 +1,9 @@
 RewriteEngine On
 
+# DEBUG: Mostrar qué está llegando (temporal)
+# RewriteLog /tmp/rewrite.log
+# RewriteLogLevel 3
+
 # Reglas específicas para el directorio news
 # Manejar URLs con referido: slug/codigo-referido
 RewriteCond %{REQUEST_FILENAME} !-f
@@ -10,6 +14,11 @@ RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9]{6})/?$ post.php?slug=$1&ref=$2 [L,QSA]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([a-zA-Z0-9-]+)/?$ post.php?slug=$1 [L,QSA]
+
+# REGLA DE PRUEBA: Capturar cualquier cosa y redirigir a debug
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ debug-advanced.php?captured=$1 [L,QSA]
 
 # Configuración de seguridad
 <Files "*.php">
