@@ -120,20 +120,20 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
         <nav class="blog-nav">
             <div class="container">
                 <div class="nav-brand">
-                    <a href="index.php">
-                        <img src="../logo.gif" alt="Mizton" class="logo">
+                    <a href="/news/">
+                        <img src="/logo.gif" alt="Mizton" class="logo">
                         <span class="brand-text">Mizton <span class="blog-label">News</span></span>
                     </a>
                 </div>
                 <div class="nav-links">
-                    <a href="index.php">Inicio</a>
-                    <a href="index.php#tecnologia">Tecnología</a>
-                    <a href="index.php#blockchain">Blockchain</a>
-                    <a href="index.php#fintech">Fintech</a>
+                    <a href="/news/">Inicio</a>
+                    <a href="/news/#tecnologia">Tecnología</a>
+                    <a href="/news/#blockchain">Blockchain</a>
+                    <a href="/news/#fintech">Fintech</a>
                     <?php if (!empty($currentRef)): ?>
-                    <a href="../?ref=<?php echo $currentRef; ?>" class="cta-link">Únete con <?php echo strtoupper($currentRef); ?></a>
+                    <a href="https://panel.mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-link" target="_blank">Únete con <?php echo strtoupper($currentRef); ?></a>
                     <?php else: ?>
-                    <a href="../" class="cta-link">Volver a Mizton</a>
+                    <a href="/" class="cta-link">Volver a Mizton</a>
                     <?php endif; ?>
                 </div>
                 <div class="mobile-menu-toggle">
@@ -149,7 +149,7 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
     <section class="post-header">
         <div class="container">
             <div class="post-breadcrumb">
-                <a href="index.php">News</a>
+                <a href="/news/">News</a>
                 <span class="separator">/</span>
                 <span class="current"><?php echo htmlspecialchars($post['title']); ?></span>
             </div>
@@ -269,12 +269,12 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                         <h4>¿Interesado en Mizton?</h4>
                         <p>Descubre cómo puedes formar parte de la revolución financiera.</p>
                         <?php if (!empty($currentRef)): ?>
-                        <a href="../?ref=<?php echo $currentRef; ?>" class="cta-button">
+                        <a href="https://panel.mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-button" target="_blank">
                             <i class="fas fa-rocket"></i>
                             Únete con <?php echo strtoupper($currentRef); ?>
                         </a>
                         <?php else: ?>
-                        <a href="../#unirse" class="cta-button">
+                        <a href="/#unirse" class="cta-button">
                             <i class="fas fa-rocket"></i>
                             Únete Ahora
                         </a>
@@ -351,14 +351,14 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
         <div class="container">
             <div class="footer-content">
                 <div class="footer-brand">
-                    <img src="../logo.gif" alt="Mizton" class="footer-logo">
+                    <img src="/logo.gif" alt="Mizton" class="footer-logo">
                     <span class="footer-brand-text">Mizton News</span>
                 </div>
                 <div class="footer-links">
-                    <a href="index.php">News</a>
-                    <a href="../">Inicio</a>
-                    <a href="../#unirse">Únete</a>
-                    <a href="../#contacto">Contacto</a>
+                    <a href="/news/">News</a>
+                    <a href="/">Inicio</a>
+                    <a href="/#unirse">Únete</a>
+                    <a href="/#contacto">Contacto</a>
                 </div>
             </div>
             <div class="footer-bottom">
