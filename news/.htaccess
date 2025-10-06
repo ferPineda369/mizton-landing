@@ -3,6 +3,9 @@ RewriteEngine On
 # Reglas específicas para el directorio news
 # ORDEN IMPORTANTE: Más específico primero
 
+# DEBUG TEMPORAL: Capturar todo para debug
+RewriteRule ^debug-test/(.*)$ debug-rewrite.php?debug=$1 [L,QSA]
+
 # 1. Manejar códigos de referido en index: /news/referido (6 caracteres exactos)
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
