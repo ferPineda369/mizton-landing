@@ -519,8 +519,9 @@
     }
     
     .post-meta-header {
-        flex-direction: column;
-        gap: var(--spacing-xs);
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        font-size: 0.8rem;
     }
     
     .post-author-info {

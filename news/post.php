@@ -234,14 +234,6 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                 
                 <!-- Sidebar Desktop -->
                 <aside class="post-sidebar">
-                    <!-- Table of Contents -->
-                    <div class="sidebar-widget toc-widget">
-                        <h4>Contenido</h4>
-                        <div id="table-of-contents">
-                            <!-- Se genera dinámicamente con JavaScript -->
-                        </div>
-                    </div>
-                    
                     <!-- Newsletter -->
                     <div class="sidebar-widget newsletter-widget">
                         <h4>Mantente Actualizado</h4>
@@ -282,14 +274,6 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
     <!-- Sidebar Mobile (después de compartir) -->
     <section class="post-sidebar-mobile">
         <div class="container">
-            <!-- Table of Contents -->
-            <div class="sidebar-widget toc-widget">
-                <h4>Contenido</h4>
-                <div id="table-of-contents-mobile">
-                    <!-- Se genera dinámicamente con JavaScript -->
-                </div>
-            </div>
-            
             <!-- Newsletter -->
             <div class="sidebar-widget newsletter-widget">
                 <h4>Mantente Actualizado</h4>
