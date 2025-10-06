@@ -6,15 +6,22 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Manejo de códigos de referido - soporte para URLs limpias y parámetros tradicionales
 if (isset($_GET['ref'])) {
-    $_SESSION['referido'] = preg_replace('/[^a-z0-9]/', '', strtolower($_GET['ref']));
-    // Debug: verificar que la variable se está guardando
-    $logFile = __DIR__ . '/landing_debug.log';
-    $timestamp = date('Y-m-d H:i:s');
-    if (is_writable(dirname($logFile))) {
-        file_put_contents($logFile, "[$timestamp] LANDING DEBUG: Referido guardado en sesión: " . $_SESSION['referido'] . "\n", FILE_APPEND);
-        file_put_contents($logFile, "[$timestamp] LANDING DEBUG: Session ID: " . session_id() . "\n", FILE_APPEND);
-        file_put_contents($logFile, "[$timestamp] LANDING DEBUG: Cookie domain: " . ini_get('session.cookie_domain') . "\n", FILE_APPEND);
+    $referido = preg_replace('/[^a-z0-9]/', '', strtolower($_GET['ref']));
+    
+    // Validar que el código tenga exactamente 6 caracteres alfanuméricos
+    if (strlen($referido) === 6 && ctype_alnum($referido)) {
+        $_SESSION['referido'] = $referido;
+        
+        // Debug: verificar que la variable se está guardando
+        $logFile = __DIR__ . '/landing_debug.log';
+        $timestamp = date('Y-m-d H:i:s');
+        if (is_writable(dirname($logFile))) {
+            file_put_contents($logFile, "[$timestamp] LANDING DEBUG: Referido válido guardado: " . $_SESSION['referido'] . "\n", FILE_APPEND);
+            file_put_contents($logFile, "[$timestamp] LANDING DEBUG: Session ID: " . session_id() . "\n", FILE_APPEND);
+            file_put_contents($logFile, "[$timestamp] LANDING DEBUG: URL original: " . $_SERVER['REQUEST_URI'] . "\n", FILE_APPEND);
+        }
     }
 }
 
@@ -72,7 +79,7 @@ include 'config.php';
                 <a href="#como-funciona">¿Cómo Funciona?</a>
                 <a href="#beneficios">Beneficios</a>
                 <a href="#faq">FAQ</a>
-                <a href="blog/" target="_blank">Blog</a>
+                <a href="news/" target="_blank">News</a>
                 <a href="#unirse" class="cta-nav">Únete Ahora</a>
             </div>
             <div class="mobile-menu-toggle">

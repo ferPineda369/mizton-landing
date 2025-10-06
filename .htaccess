@@ -1,0 +1,29 @@
+RewriteEngine On
+
+# Reglas para URLs limpias de códigos de referido
+# Los códigos de referido son exactamente 6 caracteres alfanuméricos
+
+# Excluir directorios y archivos existentes
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Excluir rutas específicas conocidas (news, api, assets, etc.)
+RewriteCond %{REQUEST_URI} !^/(news|blog|api|assets|config|includes|docs|admin)(/.*)?$
+
+# Excluir archivos con extensiones comunes
+RewriteCond %{REQUEST_URI} !^/.*\.(php|html|css|js|jpg|jpeg|png|gif|svg|ico|pdf|zip|txt|xml|json)$
+
+# Reglas para URLs de news con referidos opcionales
+# Formato: /news/slug-del-post/codigo-referido (opcional)
+RewriteRule ^news/([a-zA-Z0-9-]+)/([a-zA-Z0-9]{6})/?$ news/post.php?slug=$1&ref=$2 [L,QSA]
+
+# Capturar códigos de referido de exactamente 6 caracteres alfanuméricos (landing)
+RewriteRule ^([a-zA-Z0-9]{6})/?$ index.php?ref=$1 [L,QSA]
+
+# Redireccionar URLs con parámetro ref a formato limpio (opcional, para SEO)
+RewriteCond %{QUERY_STRING} ^ref=([a-zA-Z0-9]{6})$
+RewriteRule ^index\.php$ /%1? [R=301,L]
+
+# Redireccionar URLs con parámetro ref a formato limpio desde raíz
+RewriteCond %{QUERY_STRING} ^ref=([a-zA-Z0-9]{6})$
+RewriteRule ^$ /%1? [R=301,L]
