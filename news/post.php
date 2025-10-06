@@ -131,7 +131,7 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                     <a href="/news/#blockchain">Blockchain</a>
                     <a href="/news/#fintech">Fintech</a>
                     <?php if (!empty($currentRef)): ?>
-                    <a href="https://panel.mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-link" target="_blank">Únete con <?php echo strtoupper($currentRef); ?></a>
+                    <a href="https://panel.mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-link" target="_blank">Únete</a>
                     <?php else: ?>
                     <a href="/" class="cta-link">Volver a Mizton</a>
                     <?php endif; ?>
@@ -164,12 +164,6 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                 
                 <h1 class="post-title"><?php echo htmlspecialchars($post['title']); ?></h1>
                 
-                <?php if (!empty($currentRef)): ?>
-                <div class="referral-info">
-                    <i class="fas fa-user-friends"></i>
-                    <span>Compartido por: <strong><?php echo strtoupper($currentRef); ?></strong></span>
-                </div>
-                <?php endif; ?>
                 
                 <div class="post-author-info">
                     <div class="author-avatar">
@@ -238,7 +232,7 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                     </div>
                 </div>
                 
-                <!-- Sidebar -->
+                <!-- Sidebar Desktop -->
                 <aside class="post-sidebar">
                     <!-- Table of Contents -->
                     <div class="sidebar-widget toc-widget">
@@ -271,7 +265,7 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                         <?php if (!empty($currentRef)): ?>
                         <a href="https://panel.mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-button" target="_blank">
                             <i class="fas fa-rocket"></i>
-                            Únete con <?php echo strtoupper($currentRef); ?>
+                            Únete
                         </a>
                         <?php else: ?>
                         <a href="/#unirse" class="cta-button">
@@ -284,6 +278,52 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
             </div>
         </div>
     </article>
+
+    <!-- Sidebar Mobile (después de compartir) -->
+    <section class="post-sidebar-mobile">
+        <div class="container">
+            <!-- Table of Contents -->
+            <div class="sidebar-widget toc-widget">
+                <h4>Contenido</h4>
+                <div id="table-of-contents-mobile">
+                    <!-- Se genera dinámicamente con JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Newsletter -->
+            <div class="sidebar-widget newsletter-widget">
+                <h4>Mantente Actualizado</h4>
+                <p>Recibe las últimas noticias sobre tecnología blockchain y fintech.</p>
+                <form id="sidebar-newsletter-form-mobile">
+                    <input type="email" placeholder="Tu email" required>
+                    <?php if (!empty($currentRef)): ?>
+                    <input type="hidden" name="ref" value="<?php echo htmlspecialchars($currentRef); ?>">
+                    <?php endif; ?>
+                    <button type="submit">
+                        <i class="fas fa-paper-plane"></i>
+                        Suscribirse
+                    </button>
+                </form>
+            </div>
+            
+            <!-- CTA Mizton -->
+            <div class="sidebar-widget cta-widget">
+                <h4>¿Interesado en Mizton?</h4>
+                <p>Descubre cómo puedes formar parte de la revolución financiera.</p>
+                <?php if (!empty($currentRef)): ?>
+                <a href="https://panel.mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-button" target="_blank">
+                    <i class="fas fa-rocket"></i>
+                    Únete
+                </a>
+                <?php else: ?>
+                <a href="/#unirse" class="cta-button">
+                    <i class="fas fa-rocket"></i>
+                    Únete Ahora
+                </a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
 
     <!-- Related Posts -->
     <?php if (!empty($relatedPosts)): ?>

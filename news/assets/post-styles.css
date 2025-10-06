@@ -569,3 +569,34 @@
         padding: var(--spacing-md);
     }
 }
+
+/* Sidebar Responsive Control */
+.post-sidebar-mobile {
+    display: none;
+    padding: var(--spacing-xl) 0;
+    background: var(--light-gray);
+}
+
+.post-sidebar-mobile .sidebar-widget {
+    margin-bottom: var(--spacing-lg);
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-light);
+}
+
+.post-sidebar-mobile .sidebar-widget:last-child {
+    margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    /* Ocultar sidebar desktop en móvil */
+    .post-sidebar {
+        display: none;
+    }
+    
+    /* Mostrar sidebar mobile en móvil */
+    .post-sidebar-mobile {
+        display: block;
+    }
+}
