@@ -17,6 +17,10 @@ RewriteCond %{REQUEST_URI} !^/.*\.(php|html|css|js|jpg|jpeg|png|gif|svg|ico|pdf|
 # Formato: /news/slug-del-post/codigo-referido (opcional)
 RewriteRule ^news/([a-zA-Z0-9-]+)/([a-zA-Z0-9]{6})/?$ news/post.php?slug=$1&ref=$2 [L,QSA]
 
+# Reglas para URLs de news sin referidos
+# Formato: /news/slug-del-post
+RewriteRule ^news/([a-zA-Z0-9-]+)/?$ news/post.php?slug=$1 [L,QSA]
+
 # Capturar códigos de referido de exactamente 6 caracteres alfanuméricos (landing)
 RewriteRule ^([a-zA-Z0-9]{6})/?$ index.php?ref=$1 [L,QSA]
 

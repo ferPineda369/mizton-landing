@@ -1,15 +1,8 @@
 # News Mizton - Configuración Apache
 RewriteEngine On
 
-# Redireccionar URLs amigables para posts
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-
-# Manejar URLs limpias con referido: /slug-del-post/codigo-referido
-RewriteRule ^([a-zA-Z0-9-]+)/([a-zA-Z0-9]{6})/?$ post.php?slug=$1&ref=$2 [L,QSA]
-
-# Manejar URLs limpias sin referido: /slug-del-post
-RewriteRule ^([a-zA-Z0-9-]+)/?$ post.php?slug=$1 [L,QSA]
+# Las reglas de reescritura principales están en el .htaccess raíz
+# Este archivo solo maneja configuraciones específicas del directorio
 
 # Configuración de seguridad
 <Files "*.php">
