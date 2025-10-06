@@ -79,8 +79,8 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
     <!-- Estilos -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="assets/blog-styles.css">
-    <link rel="stylesheet" href="assets/post-styles.css">
+    <link rel="stylesheet" href="/news/assets/blog-styles.css">
+    <link rel="stylesheet" href="/news/assets/post-styles.css">
     
     <!-- Facebook Pixel -->
     <script src="../fb-proxy.js"></script>
@@ -173,7 +173,7 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                 
                 <div class="post-author-info">
                     <div class="author-avatar">
-                        <img src="assets/images/mizton-team.jpg" alt="<?php echo $post['author'] ?? 'Mizton Team'; ?>">
+                        <img src="/news/assets/images/mizton-team.jpg" alt="<?php echo $post['author'] ?? 'Mizton Team'; ?>">
                     </div>
                     <div class="author-details">
                         <span class="author-name"><?php echo $post['author'] ?? 'Mizton Team'; ?></span>
@@ -368,8 +368,8 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
     </footer>
 
     <!-- Scripts -->
-    <script src="assets/blog-scripts.js"></script>
-    <script src="assets/post-scripts.js"></script>
+    <script src="/news/assets/blog-scripts.js"></script>
+    <script src="/news/assets/post-scripts.js"></script>
     
     <script>
         // Tracking específico del post
