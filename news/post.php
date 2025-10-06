@@ -135,7 +135,7 @@ if (!empty($currentRef)) {
                 <div class="post-meta">
                     <span class="category"><?php echo htmlspecialchars($post['category']); ?></span>
                     <span class="date"><?php echo date('d M Y', strtotime($post['published_at'])); ?></span>
-                    <span class="reading-time"><?php echo $post['reading_time']; ?> min lectura</span>
+                    <span class="reading-time"><?php echo $post['reading_time'] ?? $post['read_time'] ?? '5'; ?> min lectura</span>
                 </div>
                 <h1 class="post-title"><?php echo htmlspecialchars($post['title']); ?></h1>
                 <p class="post-excerpt"><?php echo htmlspecialchars($post['excerpt']); ?></p>
