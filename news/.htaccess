@@ -15,10 +15,7 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([a-zA-Z0-9-]+)/?$ post.php?slug=$1 [L,QSA]
 
-# REGLA DE PRUEBA: Capturar cualquier cosa y redirigir a debug
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ debug-advanced.php?captured=$1 [L,QSA]
+# Reglas de rewrite funcionando correctamente
 
 # Configuración de seguridad
 <Files "*.php">
