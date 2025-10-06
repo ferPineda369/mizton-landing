@@ -307,7 +307,7 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                             <span class="read-time"><?php echo $relatedPost['read_time'] ?? '5'; ?> min</span>
                         </div>
                         <h3 class="related-post-title">
-                            <a href="<?php echo !empty($currentRef) ? htmlspecialchars($relatedPost['slug']) . '/' . $currentRef : htmlspecialchars($relatedPost['slug']); ?>">
+                            <a href="<?php echo !empty($currentRef) ? '/news/' . htmlspecialchars($relatedPost['slug']) . '/' . $currentRef : '/news/' . htmlspecialchars($relatedPost['slug']); ?>">
                                 <?php echo htmlspecialchars($relatedPost['title']); ?>
                             </a>
                         </h3>
