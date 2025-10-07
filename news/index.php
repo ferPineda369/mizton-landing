@@ -228,9 +228,9 @@ $featuredPost = getFeaturedPost();
                 </div>
                 <div class="newsletter-form">
                     <?php if (!empty($currentRef)): ?>
-                    <a href="https://panel.mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">Únete</a>
+                    <a href="https://mizton.cat/<?php echo $currentRef; ?>" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">Únete</a>
                     <?php else: ?>
-                    <a href="https://panel.mizton.cat/register.php" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">Únete</a>
+                    <a href="https://mizton.cat/" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">Únete</a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -247,7 +247,7 @@ $featuredPost = getFeaturedPost();
                 </div>
                 <div class="footer-links">
                     <a href="https://mizton.cat/news/">Inicio</a>
-                    <a href="https://panel.mizton.cat/register.php">Únete</a>
+                    <a href="https://mizton.cat/">Únete</a>
                     <a href="#contacto">Contacto</a>
                     <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1): ?>
                     <a href="admin/index.php">Admin</a>
