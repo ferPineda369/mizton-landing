@@ -92,12 +92,6 @@ $featuredPost = getFeaturedPost();
                     Explora las últimas tendencias en blockchain, fintech y tokenización RWA. 
                     Mantente al día con la revolución tecnológica que está cambiando las finanzas globales.
                 </p>
-                <?php if (!empty($currentRef)): ?>
-                <div class="referral-info">
-                    <i class="fas fa-user-friends"></i>
-                    <span>Navegando con referido: <strong><?php echo strtoupper($currentRef); ?></strong></span>
-                </div>
-                <?php endif; ?>
                 <div class="hero-stats">
                     <div class="stat">
                         <span class="stat-number"><?php echo getTotalPosts(); ?></span>

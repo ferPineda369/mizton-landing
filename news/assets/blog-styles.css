@@ -663,9 +663,18 @@ body {
     }
     
     .nav-links.active a {
-        padding: var(--spacing-sm) 0;
+        padding: var(--spacing-md) var(--spacing-lg);
         border-bottom: 1px solid var(--border-color);
         text-align: center;
+        margin: var(--spacing-xs) 0;
+    }
+    
+    .nav-links.active .cta-link {
+        background: var(--accent-green);
+        color: white;
+        border-radius: var(--border-radius);
+        border-bottom: none;
+        margin-top: var(--spacing-md);
     }
     
     .nav-links.active a:last-child {

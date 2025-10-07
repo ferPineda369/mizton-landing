@@ -586,6 +586,17 @@
     box-shadow: var(--shadow-light);
 }
 
+/* Mantener el fondo verde del CTA en móvil */
+.post-sidebar-mobile .cta-widget {
+    background: linear-gradient(135deg, var(--accent-green), var(--bright-green)) !important;
+    color: var(--white);
+}
+
+.post-sidebar-mobile .cta-widget h4,
+.post-sidebar-mobile .cta-widget p {
+    color: var(--white);
+}
+
 .post-sidebar-mobile .sidebar-widget:last-child {
     margin-bottom: 0;
 }
