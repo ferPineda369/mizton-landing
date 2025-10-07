@@ -350,21 +350,13 @@ function trackPostRead(postTitle, category) {
 
 // Compartir artículo - copia al portapapeles
 function sharePost(url, title) {
-    // Si hay código de referido del usuario logueado, agregarlo a la URL
-    let shareUrl = url;
+    // Usar URL base si está disponible, sino usar la URL pasada
+    let baseUrl = window.basePostUrl || url;
+    let shareUrl = baseUrl;
+    
+    // Si hay código de referido, agregarlo al path
     if (window.userReferralCode && window.userReferralCode.length === 6) {
-        // Verificar si la URL ya tiene un código de referido
-        const urlParts = url.split('/');
-        const lastPart = urlParts[urlParts.length - 1];
-        
-        // Si el último segmento no es un código de 6 caracteres, agregar el del usuario
-        if (lastPart.length !== 6 || !/^[a-zA-Z0-9]{6}$/.test(lastPart)) {
-            shareUrl = url + '/' + window.userReferralCode;
-        } else {
-            // Si ya hay un código, reemplazarlo con el del usuario logueado
-            urlParts[urlParts.length - 1] = window.userReferralCode;
-            shareUrl = urlParts.join('/');
-        }
+        shareUrl = baseUrl + '/' + window.userReferralCode;
     }
     
     // Construir mensaje para compartir

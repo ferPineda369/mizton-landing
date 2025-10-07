@@ -47,10 +47,11 @@ $pageTitle = $post['title'] . ' - Mizton News';
 $pageDescription = $post['excerpt'];
 $pageImage = !empty($post['image']) ? "https://mizton.cat/news/" . $post['image'] : "https://mizton.cat/logo.gif";
 
-// Construir URL completa del post
-$pageUrl = "https://mizton.cat/news/" . $post['slug'];
+// Construir URL canónica del post (sin código de referido para Open Graph)
+$canonicalUrl = "https://mizton.cat/news/" . $post['slug'];
+$pageUrl = $canonicalUrl; // Para Open Graph siempre usar URL limpia
 
-// Determinar qué código de referido usar para compartir
+// Determinar qué código de referido usar para compartir (solo para JavaScript)
 $shareRef = '';
 if (isset($_SESSION['userUser']) && !empty($_SESSION['userUser'])) {
     // Si hay usuario logueado, usar su código
@@ -58,11 +59,6 @@ if (isset($_SESSION['userUser']) && !empty($_SESSION['userUser'])) {
 } elseif (!empty($currentRef)) {
     // Si no hay usuario logueado pero hay referido en la URL, usar ese
     $shareRef = $currentRef;
-}
-
-// Agregar código de referido a la URL de compartir si existe
-if (!empty($shareRef)) {
-    $pageUrl .= "/" . $shareRef;
 }
 ?>
 <!DOCTYPE html>
@@ -400,8 +396,9 @@ if (!empty($shareRef)) {
     <!-- Scripts -->
     <script src="/news/assets/blog-scripts.js"></script>
     <script>
-        // Configurar código de referido para compartir
-        window.userReferralCode = '<?php echo isset($_SESSION['userUser']) ? $_SESSION['userUser'] : ''; ?>';
+        // Configurar código de referido para compartir y URL base
+        window.userReferralCode = '<?php echo $shareRef; ?>';
+        window.basePostUrl = '<?php echo $canonicalUrl; ?>';
         
         // Tracking específico del post
         document.addEventListener('DOMContentLoaded', function() {

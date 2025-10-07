@@ -220,17 +220,17 @@
 
 /* Share Buttons */
 .post-share {
-    margin: var(--spacing-xl) 0;
-    padding: var(--spacing-xl);
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-lg);
     background: var(--light-gray);
-    border-radius: var(--border-radius-md);
+    border-radius: var(--border-radius-lg);
     text-align: center;
 }
 
 .post-share h4 {
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: var(--font-weight-semibold);
-    margin-bottom: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
     color: var(--text-dark);
 }
 
