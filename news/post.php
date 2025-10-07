@@ -255,14 +255,14 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                         <h4>¿Interesado en Mizton?</h4>
                         <p>Descubre cómo puedes formar parte de la revolución financiera.</p>
                         <?php if (!empty($currentRef)): ?>
-                        <a href="https://panel.mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-button" target="_blank">
+                        <a href="https://mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-button" target="_blank">
                             <i class="fas fa-rocket"></i>
                             Únete
                         </a>
                         <?php else: ?>
-                        <a href="/#unirse" class="cta-button">
+                        <a href="https://mizton.cat/register.php" class="cta-button" target="_blank">
                             <i class="fas fa-rocket"></i>
-                            Únete Ahora
+                            Únete
                         </a>
                         <?php endif; ?>
                     </div>
@@ -295,14 +295,14 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                 <h4>¿Interesado en Mizton?</h4>
                 <p>Descubre cómo puedes formar parte de la revolución financiera.</p>
                 <?php if (!empty($currentRef)): ?>
-                <a href="https://panel.mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-button" target="_blank">
+                <a href="https://mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-button" target="_blank">
                     <i class="fas fa-rocket"></i>
                     Únete
                 </a>
                 <?php else: ?>
-                <a href="/#unirse" class="cta-button">
+                <a href="https://mizton.cat/register.php" class="cta-button" target="_blank">
                     <i class="fas fa-rocket"></i>
-                    Únete Ahora
+                    Únete
                 </a>
                 <?php endif; ?>
             </div>
