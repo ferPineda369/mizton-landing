@@ -16,12 +16,12 @@ if (isset($_GET['ref'])) {
     
     // Validar que el código tenga exactamente 6 caracteres alfanuméricos
     if (strlen($referido) === 6 && ctype_alnum($referido)) {
-        $_SESSION['referido'] = $referido;
+        $_SESSION['userUser'] = $referido;
     }
 }
 
 // Obtener referido actual para URLs
-$currentRef = $_SESSION['referido'] ?? '';
+$currentRef = $_SESSION['userUser'] ?? '';
 
 // Obtener posts recientes
 $posts = getBlogPosts(6); // Últimos 6 posts
