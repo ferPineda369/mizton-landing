@@ -131,9 +131,9 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                     <a href="/news/#blockchain">Blockchain</a>
                     <a href="/news/#fintech">Fintech</a>
                     <?php if (!empty($currentRef)): ?>
-                    <a href="https://panel.mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-link" target="_blank">Únete</a>
+                    <a href="https://mizton.cat/<?php echo $currentRef; ?>" class="cta-link" target="_blank">Únete</a>
                     <?php else: ?>
-                    <a href="/" class="cta-link">Volver a Mizton</a>
+                    <a href="https://mizton.cat/" class="cta-link" target="_blank">Únete</a>
                     <?php endif; ?>
                 </div>
                 <div class="mobile-menu-toggle">

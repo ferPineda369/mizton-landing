@@ -66,9 +66,9 @@ $featuredPost = getFeaturedPost();
                     <a href="#fintech">Fintech</a>
                     <a href="#rwa">Tokenización</a>
                     <?php if (!empty($currentRef)): ?>
-                    <a href="https://mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-link" target="_blank">Únete</a>
+                    <a href="https://mizton.cat/<?php echo $currentRef; ?>" class="cta-link" target="_blank">Únete</a>
                     <?php else: ?>
-                    <a href="/" class="cta-link">Volver a Mizton</a>
+                    <a href="https://mizton.cat/" class="cta-link" target="_blank">Únete</a>
                     <?php endif; ?>
                 </div>
                 <div class="mobile-menu-toggle">
