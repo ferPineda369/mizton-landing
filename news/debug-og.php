@@ -40,7 +40,18 @@ if (!$post) {
 // Configurar SEO
 $pageTitle = $post['title'] . ' - Mizton News';
 $pageDescription = $post['excerpt'];
-$pageImage = !empty($post['image']) ? "https://mizton.cat/news/" . $post['image'] : "https://mizton.cat/logo.gif";
+// Construir URL de imagen correctamente
+if (!empty($post['image'])) {
+    // Si la imagen ya tiene el dominio completo, usarla tal como está
+    if (strpos($post['image'], 'http') === 0) {
+        $pageImage = $post['image'];
+    } else {
+        // Si es una ruta relativa, agregar el dominio
+        $pageImage = "https://mizton.cat/news/" . ltrim($post['image'], '/');
+    }
+} else {
+    $pageImage = "https://mizton.cat/logo.gif";
+}
 
 // Construir URL canónica del post (sin código de referido para Open Graph)
 $canonicalUrl = "https://mizton.cat/news/" . $post['slug'];
