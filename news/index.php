@@ -66,9 +66,9 @@ $featuredPost = getFeaturedPost();
                     <a href="#fintech">Fintech</a>
                     <a href="#rwa">Tokenización</a>
                     <?php if (!empty($currentRef)): ?>
-                    <a href="../?ref=<?php echo $currentRef; ?>" class="cta-link">Únete con <?php echo strtoupper($currentRef); ?></a>
+                    <a href="https://mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-link" target="_blank">Únete</a>
                     <?php else: ?>
-                    <a href="../" class="cta-link">Volver a Mizton</a>
+                    <a href="/" class="cta-link">Volver a Mizton</a>
                     <?php endif; ?>
                 </div>
                 <div class="mobile-menu-toggle">
@@ -219,21 +219,23 @@ $featuredPost = getFeaturedPost();
                     </form>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- CTA Section -->
-    <?php if (!empty($currentRef)): ?>
-    <section class="blog-cta">
-        <div class="container">
-            <div class="cta-content">
-                <h3>¿Te gustó nuestro contenido?</h3>
-                <p>Únete a Mizton y forma parte del futuro financiero</p>
-                <a href="../?ref=<?php echo $currentRef; ?>" class="cta-button">Únete con <?php echo strtoupper($currentRef); ?></a>
+            
+            <!-- CTA Content -->
+            <div class="newsletter-content">
+                <div class="newsletter-text">
+                    <h3>¿Te gustó nuestro contenido?</h3>
+                    <p>Únete a Mizton y forma parte del futuro financiero</p>
+                </div>
+                <div class="newsletter-form">
+                    <?php if (!empty($currentRef)): ?>
+                    <a href="https://mizton.cat/register.php?ref=<?php echo $currentRef; ?>" class="cta-button" target="_blank">Únete</a>
+                    <?php else: ?>
+                    <a href="https://mizton.cat/register.php" class="cta-button" target="_blank">Únete</a>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </section>
-    <?php endif; ?>
 
     <!-- Footer -->
     <footer class="blog-footer">
@@ -244,16 +246,17 @@ $featuredPost = getFeaturedPost();
                     <span class="footer-brand-text">Mizton News</span>
                 </div>
                 <div class="footer-links">
-                    <a href="../">Inicio</a>
-                    <a href="../#unirse">Únete</a>
-                    <a href="../#contacto">Contacto</a>
+                    <a href="https://mizton.cat/news/">Inicio</a>
+                    <a href="https://mizton.cat/register.php">Únete</a>
+                    <a href="#contacto">Contacto</a>
+                    <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1): ?>
                     <a href="admin/">Admin</a>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2025 Mizton News. Tecnología e Innovación.</p>
             </div>
-        </div>
     </footer>
 
     <!-- Scripts -->

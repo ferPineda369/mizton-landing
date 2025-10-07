@@ -663,10 +663,10 @@ body {
     }
     
     .nav-links.active a {
-        padding: var(--spacing-md) var(--spacing-lg);
+        padding: var(--spacing-sm) var(--spacing-lg);
         border-bottom: 1px solid var(--border-color);
         text-align: center;
-        margin: var(--spacing-xs) 0;
+        margin: 2px 0;
     }
     
     .nav-links.active .cta-link {
