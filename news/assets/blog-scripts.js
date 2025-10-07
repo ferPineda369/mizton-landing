@@ -350,11 +350,28 @@ function trackPostRead(postTitle, category) {
 
 // Compartir en redes sociales
 function sharePost(platform, url, title) {
+    // Si hay código de referido del usuario logueado, agregarlo a la URL
+    let shareUrl = url;
+    if (window.userReferralCode && window.userReferralCode.length === 6) {
+        // Verificar si la URL ya tiene un código de referido
+        const urlParts = url.split('/');
+        const lastPart = urlParts[urlParts.length - 1];
+        
+        // Si el último segmento no es un código de 6 caracteres, agregar el del usuario
+        if (lastPart.length !== 6 || !/^[a-zA-Z0-9]{6}$/.test(lastPart)) {
+            shareUrl = url + '/' + window.userReferralCode;
+        } else {
+            // Si ya hay un código, reemplazarlo con el del usuario logueado
+            urlParts[urlParts.length - 1] = window.userReferralCode;
+            shareUrl = urlParts.join('/');
+        }
+    }
+    
     const shareUrls = {
-        twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`,
-        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-        whatsapp: `https://wa.me/?text=${encodeURIComponent(title + ' ' + url)}`
+        twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(title)}`,
+        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+        whatsapp: `https://wa.me/?text=${encodeURIComponent(title + ' ' + shareUrl)}`
     };
     
     if (shareUrls[platform]) {
@@ -364,7 +381,8 @@ function sharePost(platform, url, title) {
         if (typeof fbq !== 'undefined') {
             fbq('track', 'Share', {
                 content_name: title,
-                method: platform
+                method: platform,
+                referral_code: window.userReferralCode || 'none'
             });
         }
     }

@@ -40,14 +40,30 @@ if (!$post) {
     exit;
 }
 
-// Obtener posts relacionados
 $relatedPosts = getRelatedPosts($post['id'], $post['category'], 3);
 
 // Configurar SEO
 $pageTitle = $post['title'] . ' - Mizton News';
 $pageDescription = $post['excerpt'];
-$pageImage = $post['image'];
-$pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '/' . $currentRef : '');
+$pageImage = !empty($post['image']) ? "https://mizton.cat/news/" . $post['image'] : "https://mizton.cat/logo.gif";
+
+// Construir URL completa del post
+$pageUrl = "https://mizton.cat/news/" . $post['slug'];
+
+// Determinar qué código de referido usar para compartir
+$shareRef = '';
+if (isset($_SESSION['userUser']) && !empty($_SESSION['userUser'])) {
+    // Si hay usuario logueado, usar su código
+    $shareRef = $_SESSION['userUser'];
+} elseif (!empty($currentRef)) {
+    // Si no hay usuario logueado pero hay referido en la URL, usar ese
+    $shareRef = $currentRef;
+}
+
+// Agregar código de referido a la URL de compartir si existe
+if (!empty($shareRef)) {
+    $pageUrl .= "/" . $shareRef;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -394,15 +410,17 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
     </footer>
 
     <!-- Scripts -->
-    <script src="/news/assets/blog-scripts.js"></script>
-    <script src="/news/assets/post-scripts.js"></script>
-    
+    <script src="assets/blog-scripts.js"></script>
     <script>
-        // Tracking específico del post
+        // Configurar código de referido para compartir
+        window.userReferralCode = '<?php echo isset($_SESSION['userUser']) ? $_SESSION['userUser'] : ''; ?>';
+        
+        // Inicializar funcionalidades
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof trackPostRead === 'function') {
-                trackPostRead('<?php echo htmlspecialchars($post['title']); ?>', '<?php echo $post['category']; ?>');
-            }
+            initMobileMenu();
+            initSearch();
+            initNewsletter();
+            trackPostRead('<?php echo htmlspecialchars($post['title']); ?>', '<?php echo $post['category']; ?>');
         });
     </script>
 </body>

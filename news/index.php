@@ -261,5 +261,17 @@ $featuredPost = getFeaturedPost();
 
     <!-- Scripts -->
     <script src="assets/blog-scripts.js"></script>
+    <script>
+        // Configurar código de referido para compartir
+        window.userReferralCode = '<?php echo isset($_SESSION['userUser']) ? $_SESSION['userUser'] : ''; ?>';
+        
+        // Inicializar funcionalidades
+        document.addEventListener('DOMContentLoaded', function() {
+            initMobileMenu();
+            initSearch();
+            initNewsletter();
+            loadMorePosts();
+        });
+    </script>
 </body>
 </html>
