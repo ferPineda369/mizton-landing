@@ -396,18 +396,21 @@
     align-items: center;
     justify-content: center;
     gap: var(--spacing-xs);
-    background: var(--white);
-    color: var(--accent-green);
+    background: var(--accent-green);
+    color: var(--white);
     text-decoration: none;
     padding: var(--spacing-sm) var(--spacing-md);
     border-radius: var(--border-radius-sm);
     font-weight: var(--font-weight-semibold);
     transition: var(--transition-fast);
+    border: none;
 }
 
 .cta-button:hover {
+    background: var(--primary-green);
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
+    color: var(--white);
 }
 
 /* Related Posts */

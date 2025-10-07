@@ -1,10 +1,8 @@
 RewriteEngine On
 
 # Reglas para URLs de news (ORDEN ESPECÍFICO IMPORTANTE)
-# 0. Excluir directorios especiales de rewrite
-RewriteCond %{REQUEST_FILENAME} -f [OR]
-RewriteCond %{REQUEST_FILENAME} -d
-RewriteRule ^news/ - [L]
+# 0. Excluir admin y assets de rewrite
+RewriteRule ^news/(admin|assets|api|includes|config)(/.*)?$ - [L]
 
 # 1. Códigos de referido en news index: /news/referido (6 caracteres exactos)
 RewriteRule ^news/([a-zA-Z0-9]{6})/?$ news/index.php?ref=$1 [L,QSA]
