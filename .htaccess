@@ -2,18 +2,18 @@ RewriteEngine On
 
 # Reglas para URLs de news (ORDEN ESPECÍFICO IMPORTANTE)
 # 1. Códigos de referido en news index: /news/referido (6 caracteres exactos)
-# PERO NO si es "admin" u otros directorios especiales
-RewriteCond %{REQUEST_URI} !^/news/(admin|assets|api|includes|config)(/.*)?$
+# PERO NO si es "admin" (exactamente)
+RewriteCond %{REQUEST_URI} !^/news/admin/?$
 RewriteRule ^news/([a-zA-Z0-9]{6})/?$ news/index.php?ref=$1 [L,QSA]
 
 # 2. Posts con referido: /news/slug-del-post/codigo-referido
-# PERO NO si el slug es "admin" u otros directorios especiales
-RewriteCond %{REQUEST_URI} !^/news/(admin|assets|api|includes|config)(/.*)?$
+# PERO NO si el slug es "admin"
+RewriteCond %{REQUEST_URI} !^/news/admin/
 RewriteRule ^news/([a-zA-Z0-9-]+)/([a-zA-Z0-9]{6})/?$ news/post.php?slug=$1&ref=$2 [L,QSA]
 
 # 3. Posts sin referido: /news/slug-del-post (debe ir al final)
-# PERO NO si el slug es "admin" u otros directorios especiales
-RewriteCond %{REQUEST_URI} !^/news/(admin|assets|api|includes|config)(/.*)?$
+# PERO NO si el slug es "admin"
+RewriteCond %{REQUEST_URI} !^/news/admin
 RewriteRule ^news/([a-zA-Z0-9-]+)/?$ news/post.php?slug=$1 [L,QSA]
 
 # Reglas para códigos de referido en landing (DESPUÉS DE NEWS)
