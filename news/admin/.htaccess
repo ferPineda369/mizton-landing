@@ -1,0 +1,12 @@
+# Forzar que este directorio se sirva normalmente
+# Sin rewrite rules
+RewriteEngine Off
+
+# Permitir acceso a todos los archivos PHP
+<Files "*.php">
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+# Index por defecto
+DirectoryIndex index.php
