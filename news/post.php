@@ -75,18 +75,35 @@ if (isset($_SESSION['userUser']) && !empty($_SESSION['userUser'])) {
     <meta property="og:image" content="<?php echo $pageImage; ?>">
     <meta property="og:url" content="<?php echo $pageUrl; ?>">
     <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Mizton News">
+    <meta property="og:locale" content="es_ES">
     <meta property="article:author" content="<?php echo $post['author'] ?? 'Mizton Team'; ?>">
     <meta property="article:published_time" content="<?php echo $post['published_at']; ?>">
     <meta property="article:section" content="<?php echo $post['category']; ?>">
     
+    <!-- Facebook específico -->
+    <!-- <meta property="fb:app_id" content="your_facebook_app_id"> -->
+    
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@mizton">
+    <meta name="twitter:creator" content="@mizton">
     <meta name="twitter:title" content="<?php echo htmlspecialchars($post['title']); ?>">
     <meta name="twitter:description" content="<?php echo htmlspecialchars($pageDescription); ?>">
     <meta name="twitter:image" content="<?php echo $pageImage; ?>">
     
+    <!-- WhatsApp específico -->
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="<?php echo htmlspecialchars($post['title']); ?>">
+    
     <!-- Canonical URL -->
     <link rel="canonical" href="<?php echo $pageUrl; ?>">
+    
+    <!-- Alternate URLs para diferentes códigos de referido -->
+    <?php if (!empty($currentRef)): ?>
+    <link rel="alternate" href="<?php echo $canonicalUrl . '/' . $currentRef; ?>" hreflang="es">
+    <?php endif; ?>
     
     <!-- Estilos -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
