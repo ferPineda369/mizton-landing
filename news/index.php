@@ -247,7 +247,7 @@ $featuredPost = getFeaturedPost();
                 </div>
                 <div class="footer-links">
                     <a href="https://mizton.cat/news/">Inicio</a>
-                    <a href="https://mizton.cat/register.php">Únete</a>
+                    <a href="https://panel.mizton.cat/register.php">Únete</a>
                     <a href="#contacto">Contacto</a>
                     <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1): ?>
                     <a href="admin/index.php">Admin</a>
