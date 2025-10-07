@@ -255,24 +255,11 @@
     font-size: 0.875rem;
 }
 
-.share-btn.twitter {
-    background: #1DA1F2;
+.share-btn.share-single {
+    background: var(--accent-green);
     color: white;
-}
-
-.share-btn.facebook {
-    background: #1877F2;
-    color: white;
-}
-
-.share-btn.linkedin {
-    background: #0A66C2;
-    color: white;
-}
-
-.share-btn.whatsapp {
-    background: #25D366;
-    color: white;
+    width: 200px;
+    justify-content: center;
 }
 
 .share-btn:hover {
@@ -554,8 +541,8 @@
         align-items: center;
     }
     
-    .share-btn {
-        width: 200px;
+    .share-btn.share-single {
+        width: 100%;
         justify-content: center;
     }
     

@@ -348,8 +348,8 @@ function trackPostRead(postTitle, category) {
     }
 }
 
-// Compartir en redes sociales
-function sharePost(platform, url, title) {
+// Compartir artículo - copia al portapapeles
+function sharePost(url, title) {
     // Si hay código de referido del usuario logueado, agregarlo a la URL
     let shareUrl = url;
     if (window.userReferralCode && window.userReferralCode.length === 6) {
@@ -367,24 +367,50 @@ function sharePost(platform, url, title) {
         }
     }
     
-    const shareUrls = {
-        twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(title)}`,
-        facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
-        linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-        whatsapp: `https://wa.me/?text=${encodeURIComponent(title + ' ' + shareUrl)}`
-    };
+    // Construir mensaje para compartir
+    const shareMessage = `${title}\n\n${shareUrl}`;
     
-    if (shareUrls[platform]) {
-        window.open(shareUrls[platform], '_blank', 'width=600,height=400');
-        
-        // Tracking
-        if (typeof fbq !== 'undefined') {
-            fbq('track', 'Share', {
-                content_name: title,
-                method: platform,
-                referral_code: window.userReferralCode || 'none'
-            });
-        }
+    // Copiar al portapapeles
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(shareMessage).then(function() {
+            showNotification('¡Artículo copiado al portapapeles! Ahora puedes pegarlo en la red social que prefieras.', 'success');
+        }).catch(function() {
+            fallbackCopyToClipboard(shareMessage);
+        });
+    } else {
+        fallbackCopyToClipboard(shareMessage);
+    }
+    
+    // Tracking
+    if (typeof fbq !== 'undefined') {
+        fbq('track', 'Share', {
+            content_name: title,
+            method: 'clipboard',
+            referral_code: window.userReferralCode || 'none'
+        });
+    }
+}
+
+// Función fallback para copiar al portapapeles
+function fallbackCopyToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-999999px';
+    textArea.style.top = '-999999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+        document.execCommand('copy');
+        showNotification('¡Artículo copiado al portapapeles! Ahora puedes pegarlo en la red social que prefieras.', 'success');
+    } catch (err) {
+        showNotification('No se pudo copiar automáticamente. Selecciona y copia el texto manualmente.', 'error');
+        // Mostrar el texto en una alerta para copiado manual
+        alert(`Copia este texto:\n\n${text}`);
+    } finally {
+        document.body.removeChild(textArea);
     }
 }
 

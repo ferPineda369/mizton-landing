@@ -228,21 +228,9 @@ if (!empty($shareRef)) {
                     <div class="post-share">
                         <h4>Compartir este artículo:</h4>
                         <div class="share-buttons">
-                            <button onclick="sharePost('twitter', '<?php echo $pageUrl; ?>', '<?php echo htmlspecialchars($post['title']); ?>')" class="share-btn twitter">
-                                <i class="fab fa-twitter"></i>
-                                Twitter
-                            </button>
-                            <button onclick="sharePost('facebook', '<?php echo $pageUrl; ?>', '<?php echo htmlspecialchars($post['title']); ?>')" class="share-btn facebook">
-                                <i class="fab fa-facebook-f"></i>
-                                Facebook
-                            </button>
-                            <button onclick="sharePost('linkedin', '<?php echo $pageUrl; ?>', '<?php echo htmlspecialchars($post['title']); ?>')" class="share-btn linkedin">
-                                <i class="fab fa-linkedin-in"></i>
-                                LinkedIn
-                            </button>
-                            <button onclick="sharePost('whatsapp', '<?php echo $pageUrl; ?>', '<?php echo htmlspecialchars($post['title']); ?>')" class="share-btn whatsapp">
-                                <i class="fab fa-whatsapp"></i>
-                                WhatsApp
+                            <button onclick="sharePost('<?php echo $pageUrl; ?>', '<?php echo htmlspecialchars($post['title']); ?>')" class="share-btn share-single">
+                                <i class="fas fa-share-alt"></i>
+                                Compartir
                             </button>
                         </div>
                     </div>
