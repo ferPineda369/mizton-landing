@@ -106,6 +106,9 @@ header('Content-Type: text/html; charset=utf-8');
     <meta property="article:published_time" content="<?php echo $post['published_at']; ?>">
     <meta property="article:section" content="<?php echo $post['category']; ?>">
     
+    <!-- Facebook específico -->
+    <meta property="fb:app_id" content="1234567890123456">
+    
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@mizton">
@@ -121,7 +124,6 @@ header('Content-Type: text/html; charset=utf-8');
     
     <!-- Canonical URL -->
     <link rel="canonical" href="<?php echo $pageUrl; ?>">
-    
     <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         .debug-info { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 20px 0; }
