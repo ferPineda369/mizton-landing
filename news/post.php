@@ -99,7 +99,7 @@ if (!empty($shareRef)) {
     <link rel="stylesheet" href="/news/assets/post-styles.css">
     
     <!-- Facebook Pixel -->
-    <script src="../fb-proxy.js"></script>
+    <script src="/fb-proxy.js"></script>
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -398,16 +398,14 @@ if (!empty($shareRef)) {
     </footer>
 
     <!-- Scripts -->
-    <script src="assets/blog-scripts.js"></script>
+    <script src="/news/assets/blog-scripts.js"></script>
     <script>
         // Configurar código de referido para compartir
         window.userReferralCode = '<?php echo isset($_SESSION['userUser']) ? $_SESSION['userUser'] : ''; ?>';
         
-        // Inicializar funcionalidades
+        // Tracking específico del post
         document.addEventListener('DOMContentLoaded', function() {
-            initMobileMenu();
-            initSearch();
-            initNewsletter();
+            // El blog-scripts.js ya inicializa las funciones básicas
             trackPostRead('<?php echo htmlspecialchars($post['title']); ?>', '<?php echo $post['category']; ?>');
         });
     </script>

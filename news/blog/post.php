@@ -310,8 +310,8 @@ $pageUrl = BLOG_URL . 'post.php?slug=' . $post['slug'];
     </footer>
 
     <!-- Scripts -->
-    <script src="assets/blog-scripts.js"></script>
-    <script src="assets/post-scripts.js"></script>
+    <script src="/news/assets/blog-scripts.js"></script>
+    <script src="/news/assets/post-scripts.js"></script>
     
     <script>
         // Tracking específico del post
