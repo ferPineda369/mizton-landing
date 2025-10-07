@@ -392,12 +392,12 @@
 }
 
 .cta-button {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     gap: var(--spacing-xs);
-    background: var(--accent-green);
-    color: var(--white);
+    background: var(--accent-green) !important;
+    color: var(--white) !important;
     text-decoration: none;
     padding: var(--spacing-sm) var(--spacing-md);
     border-radius: var(--border-radius-sm);
@@ -407,10 +407,10 @@
 }
 
 .cta-button:hover {
-    background: var(--primary-green);
+    background: var(--primary-green) !important;
     transform: translateY(-2px);
     box-shadow: var(--shadow-md);
-    color: var(--white);
+    color: var(--white) !important;
 }
 
 /* Related Posts */
