@@ -1,7 +1,7 @@
 RewriteEngine On
 
 # PRIMERA REGLA: Excluir completamente /news/admin de cualquier rewrite
-RewriteRule ^news/admin - [L]
+RewriteRule ^news/admin/ - [L]
 
 # Reglas para URLs de news (DESPUÉS DE LA EXCLUSIÓN)
 # 1. Códigos de referido en news index: /news/referido (6 caracteres exactos)
