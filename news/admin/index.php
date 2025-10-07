@@ -6,10 +6,9 @@
 
 session_start();
 
-// Autenticación básica (mejorar en producción)
-$admin_password = 'mizton2024blog'; // Cambiar en producción
-
-if (!isset($_SESSION['blog_admin']) && (!isset($_POST['password']) || $_POST['password'] !== $admin_password)) {
+// Verificar si el usuario tiene permisos de admin desde el panel principal
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] != 1) {
+    // Si no tiene permisos, mostrar mensaje de acceso denegado
     ?>
     <!DOCTYPE html>
     <html lang="es">
@@ -31,14 +30,18 @@ if (!isset($_SESSION['blog_admin']) && (!isset($_POST['password']) || $_POST['pa
     </head>
     <body>
         <div class="login-container">
-            <h2 class="login-title">Admin - Mizton Blog</h2>
-            <form method="POST">
-                <div class="form-group">
-                    <label for="password">Contraseña:</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit">Acceder</button>
-            </form>
+            <h2 class="login-title">Acceso Denegado</h2>
+            <p style="text-align: center; color: #6c757d; margin-bottom: 2rem;">
+                No tienes permisos para acceder al panel de administración del blog.
+            </p>
+            <p style="text-align: center; color: #6c757d; margin-bottom: 2rem;">
+                Debes iniciar sesión como administrador en el panel principal de Mizton.
+            </p>
+            <div style="text-align: center;">
+                <a href="https://panel.mizton.cat/" style="background: #40916C; color: white; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 500; display: inline-block;">
+                    Ir al Panel Principal
+                </a>
+            </div>
         </div>
     </body>
     </html>
@@ -46,9 +49,7 @@ if (!isset($_SESSION['blog_admin']) && (!isset($_POST['password']) || $_POST['pa
     exit;
 }
 
-if (isset($_POST['password']) && $_POST['password'] === $admin_password) {
-    $_SESSION['blog_admin'] = true;
-}
+// Si llegamos aquí, el usuario tiene permisos de admin
 
 require_once '../config/blog-config.php';
 require_once '../includes/blog-functions.php';
