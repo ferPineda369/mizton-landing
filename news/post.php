@@ -167,7 +167,7 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                 
                 <div class="post-author-info">
                     <div class="author-avatar">
-                        <img src="/news/assets/images/mizton-team.jpg" alt="<?php echo $post['author'] ?? 'Mizton Team'; ?>">
+                        <img src="/news/assets/images/mizton-team.png" alt="<?php echo $post['author'] ?? 'Mizton Team'; ?>">
                     </div>
                     <div class="author-details">
                         <span class="author-name"><?php echo $post['author'] ?? 'Mizton Team'; ?></span>
