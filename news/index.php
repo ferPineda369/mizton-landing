@@ -250,7 +250,7 @@ $featuredPost = getFeaturedPost();
                     <a href="https://mizton.cat/register.php">Únete</a>
                     <a href="#contacto">Contacto</a>
                     <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1): ?>
-                    <a href="admin/">Admin</a>
+                    <a href="admin/index.php">Admin</a>
                     <?php endif; ?>
                 </div>
             </div>

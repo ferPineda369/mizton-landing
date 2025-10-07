@@ -1,9 +1,6 @@
 RewriteEngine On
 
-# PRIMERA REGLA: Redirigir /news/admin a archivo especial
-RewriteRule ^news/admin(/.*)?$ news/admin.php [L,QSA]
-
-# Reglas para URLs de news (DESPUÉS DE LA REDIRECCIÓN ADMIN)
+# Reglas para URLs de news
 # 1. Códigos de referido en news index: /news/referido (6 caracteres exactos)
 RewriteRule ^news/([a-zA-Z0-9]{6})/?$ news/index.php?ref=$1 [L,QSA]
 

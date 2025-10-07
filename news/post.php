@@ -383,7 +383,7 @@ $pageUrl = 'https://mizton.cat/news/' . $post['slug'] . (!empty($currentRef) ? '
                     <a href="https://mizton.cat/register.php">Únete</a>
                     <a href="#contacto">Contacto</a>
                     <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1): ?>
-                    <a href="/news/admin/">Admin</a>
+                    <a href="/news/admin/index.php">Admin</a>
                     <?php endif; ?>
                 </div>
             </div>
