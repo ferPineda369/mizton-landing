@@ -658,7 +658,7 @@ body {
         right: 0;
         background: white;
         flex-direction: column;
-        padding: var(--spacing-lg);
+        padding: var(--spacing-md);
         box-shadow: var(--shadow-medium);
         border-top: 1px solid var(--border-color);
         z-index: 1000;
@@ -677,10 +677,10 @@ body {
     }
     
     .nav-links.active a {
-        padding: var(--spacing-sm) var(--spacing-lg);
+        padding: 8px var(--spacing-md);
         border-bottom: 1px solid var(--border-color);
         text-align: center;
-        margin: 2px 0;
+        margin: 0;
     }
     
     .nav-links.active .cta-link {
@@ -688,7 +688,7 @@ body {
         color: white;
         border-radius: var(--border-radius);
         border-bottom: none;
-        margin-top: var(--spacing-md);
+        margin-top: var(--spacing-sm);
     }
     
     .nav-links.active a:last-child {
