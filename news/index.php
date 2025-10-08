@@ -265,13 +265,8 @@ $featuredPost = getFeaturedPost();
         // Configurar código de referido para compartir
         window.userReferralCode = '<?php echo isset($_SESSION['userUser']) ? $_SESSION['userUser'] : ''; ?>';
         
-        // Inicializar funcionalidades
-        document.addEventListener('DOMContentLoaded', function() {
-            initMobileMenu();
-            initSearch();
-            initNewsletter();
-            loadMorePosts();
-        });
+        // El JavaScript ya se inicializa automáticamente en blog-scripts.js
+        // No necesitamos inicializar manualmente aquí
     </script>
 </body>
 </html>
