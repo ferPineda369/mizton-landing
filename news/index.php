@@ -66,9 +66,9 @@ $featuredPost = getFeaturedPost();
                     <a href="#fintech">Fintech</a>
                     <a href="#rwa">Tokenización</a>
                     <?php if (!empty($currentRef)): ?>
-                    <a href="https://mizton.cat/<?php echo $currentRef; ?>" class="cta-link" target="_blank">Únete</a>
+                    <a href="https://mizton.cat/<?php echo $currentRef; ?>" class="cta-link" target="_blank">Conoce más</a>
                     <?php else: ?>
-                    <a href="https://mizton.cat/" class="cta-link" target="_blank">Únete</a>
+                    <a href="https://mizton.cat/" class="cta-link" target="_blank">Conoce más</a>
                     <?php endif; ?>
                 </div>
                 <div class="mobile-menu-toggle">
@@ -224,13 +224,13 @@ $featuredPost = getFeaturedPost();
             <div class="newsletter-content">
                 <div class="newsletter-text">
                     <h3>¿Te gustó nuestro contenido?</h3>
-                    <p>Únete a Mizton y forma parte del futuro financiero</p>
+                    <p>Conoce más sobre Mizton y forma parte del futuro financiero</p>
                 </div>
                 <div class="newsletter-form">
                     <?php if (!empty($currentRef)): ?>
-                    <a href="https://mizton.cat/<?php echo $currentRef; ?>" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">Únete</a>
+                    <a href="https://mizton.cat/<?php echo $currentRef; ?>" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">Conoce más</a>
                     <?php else: ?>
-                    <a href="https://mizton.cat/" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">Únete</a>
+                    <a href="https://mizton.cat/" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">Conoce más</a>
                     <?php endif; ?>
                 </div>
             </div>
@@ -247,7 +247,7 @@ $featuredPost = getFeaturedPost();
                 </div>
                 <div class="footer-links">
                     <a href="https://mizton.cat/news/">Inicio</a>
-                    <a href="https://mizton.cat/">Únete</a>
+                    <a href="https://mizton.cat/">Conoce más</a>
                     <a href="#contacto">Contacto</a>
                     <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1): ?>
                     <a href="admin/index.php">Admin</a>

@@ -171,9 +171,9 @@ if (isset($_SESSION['userUser']) && !empty($_SESSION['userUser'])) {
                     <a href="/news/#blockchain">Blockchain</a>
                     <a href="/news/#fintech">Fintech</a>
                     <?php if (!empty($currentRef)): ?>
-                    <a href="https://mizton.cat/<?php echo $currentRef; ?>" class="cta-link" target="_blank">Únete</a>
+                    <a href="https://mizton.cat/<?php echo $currentRef; ?>" class="cta-link" target="_blank">Conoce más</a>
                     <?php else: ?>
-                    <a href="https://mizton.cat/" class="cta-link" target="_blank">Únete</a>
+                    <a href="https://mizton.cat/" class="cta-link" target="_blank">Conoce más</a>
                     <?php endif; ?>
                 </div>
                 <div class="mobile-menu-toggle">
@@ -285,12 +285,12 @@ if (isset($_SESSION['userUser']) && !empty($_SESSION['userUser'])) {
                         <?php if (!empty($currentRef)): ?>
                         <a href="https://mizton.cat/<?php echo $currentRef; ?>" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">
                             <i class="fas fa-rocket"></i>
-                            Únete
+                            Conoce más
                         </a>
                         <?php else: ?>
                         <a href="https://mizton.cat/" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">
                             <i class="fas fa-rocket"></i>
-                            Únete
+                            Conoce más
                         </a>
                         <?php endif; ?>
                     </div>
@@ -325,12 +325,12 @@ if (isset($_SESSION['userUser']) && !empty($_SESSION['userUser'])) {
                 <?php if (!empty($currentRef)): ?>
                 <a href="https://mizton.cat/<?php echo $currentRef; ?>" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">
                     <i class="fas fa-rocket"></i>
-                    Únete
+                    Conoce más
                 </a>
                 <?php else: ?>
                 <a href="https://mizton.cat/" class="cta-button" target="_blank" style="display: flex !important; align-items: center !important; justify-content: center !important; gap: 8px !important; background: #40916C !important; color: #ffffff !important; text-decoration: none !important; padding: 12px 16px !important; border-radius: 6px !important; font-weight: 600 !important; border: none !important; min-height: 44px !important;">
                     <i class="fas fa-rocket"></i>
-                    Únete
+                    Conoce más
                 </a>
                 <?php endif; ?>
             </div>
@@ -408,7 +408,7 @@ if (isset($_SESSION['userUser']) && !empty($_SESSION['userUser'])) {
                 </div>
                 <div class="footer-links">
                     <a href="/news/">Inicio</a>
-                    <a href="https://mizton.cat/">Únete</a>
+                    <a href="https://mizton.cat/">Conoce más</a>
                     <a href="#contacto">Contacto</a>
                     <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == 1): ?>
                     <a href="/news/admin/index.php">Admin</a>
