@@ -93,7 +93,7 @@ if (isset($_SESSION['userUser']) && !empty($_SESSION['userUser'])) {
     <meta property="article:section" content="<?php echo $post['category']; ?>">
     
     <!-- Facebook específico -->
-    <meta property="fb:app_id" content="1234567890123456">
+    <meta property="fb:app_id" content="821771627485005">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
