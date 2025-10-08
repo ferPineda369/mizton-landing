@@ -335,7 +335,7 @@ function getDashboardStats() {
  * Validar permisos de administrador (básico)
  */
 function validateAdminAccess() {
-    if (!isset($_SESSION['blog_admin']) || $_SESSION['blog_admin'] !== true) {
+    if (!isset($_SESSION['admin']) || $_SESSION['admin'] != 1) {
         return false;
     }
     return true;

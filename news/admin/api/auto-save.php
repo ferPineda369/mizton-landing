@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Verificar autenticación
-if (!isset($_SESSION['blog_admin'])) {
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] != 1) {
     http_response_code(401);
     echo json_encode(['success' => false, 'error' => 'No autorizado']);
     exit;
