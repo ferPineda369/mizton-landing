@@ -4,36 +4,15 @@
  * Panel simple para editar knowledge-base.md y system-prompt.txt
  */
 
-// Verificación de seguridad básica
+// Verificación de acceso de administrador
 session_start();
-$adminPassword = 'mizton2024admin'; // Cambiar por algo más seguro
 
-if (!isset($_SESSION['ai_admin']) && (!isset($_POST['password']) || $_POST['password'] !== $adminPassword)) {
-    ?>
-    <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <title>Admin IA - Mizton</title>
-        <style>
-            body { font-family: Arial, sans-serif; max-width: 400px; margin: 100px auto; padding: 20px; }
-            input, button { width: 100%; padding: 10px; margin: 10px 0; }
-            button { background: #40916C; color: white; border: none; cursor: pointer; }
-        </style>
-    </head>
-    <body>
-        <h2>🔐 Acceso Admin IA</h2>
-        <form method="post">
-            <input type="password" name="password" placeholder="Contraseña de administrador" required>
-            <button type="submit">Acceder</button>
-        </form>
-    </body>
-    </html>
-    <?php
+// Verificar si el usuario tiene sesión de admin activa
+if (!isset($_SESSION['admin']) || $_SESSION['admin'] != 1) {
+    // Redirigir a news si no tiene acceso de admin
+    header('Location: https://mizton.cat/news/');
     exit;
 }
-
-$_SESSION['ai_admin'] = true;
 
 // Rutas de archivos
 $knowledgeFile = __DIR__ . '/../config/knowledge-base.md';
@@ -267,7 +246,7 @@ $promptContent = file_exists($promptFile) ? file_get_contents($promptFile) : '';
 // Logout
 if (isset($_GET['logout'])) {
     session_destroy();
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header('Location: https://mizton.cat/news/');
     exit;
 }
 ?>
