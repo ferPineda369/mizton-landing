@@ -348,8 +348,8 @@ function trackPostRead(postTitle, category) {
     }
 }
 
-// Compartir artículo - copia al portapapeles
-function sharePost(url, title) {
+// Compartir artículo - copia al portapapeles con texto aleatorio
+async function sharePost(url, title) {
     // Usar URL base si está disponible, sino usar la URL pasada
     let baseUrl = window.basePostUrl || url;
     let shareUrl = baseUrl;
@@ -359,27 +359,68 @@ function sharePost(url, title) {
         shareUrl = baseUrl + '/' + window.userReferralCode;
     }
     
-    // Construir mensaje para compartir
-    const shareMessage = `${title}\n\n${shareUrl}`;
-    
-    // Copiar al portapapeles
-    if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(shareMessage).then(function() {
-            showNotification('¡Artículo copiado al portapapeles! Ahora puedes pegarlo en la red social que prefieras.', 'success');
-        }).catch(function() {
+    try {
+        // Obtener texto aleatorio de la API
+        const response = await fetch('/news/api/get-random-share-text.php');
+        const data = await response.json();
+        
+        let shareText;
+        if (data.success && data.text) {
+            shareText = data.text;
+        } else {
+            // Usar fallback si no hay textos disponibles
+            shareText = data.fallback_text || title;
+        }
+        
+        // Construir mensaje para compartir con texto aleatorio
+        const shareMessage = `${shareText}\n\n${shareUrl}`;
+        
+        // Copiar al portapapeles
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(shareMessage).then(function() {
+                showNotification('¡Artículo copiado al portapapeles! Ahora puedes pegarlo en la red social que prefieras.', 'success');
+            }).catch(function() {
+                fallbackCopyToClipboard(shareMessage);
+            });
+        } else {
             fallbackCopyToClipboard(shareMessage);
-        });
-    } else {
-        fallbackCopyToClipboard(shareMessage);
-    }
-    
-    // Tracking
-    if (typeof fbq !== 'undefined') {
-        fbq('track', 'Share', {
-            content_name: title,
-            method: 'clipboard',
-            referral_code: window.userReferralCode || 'none'
-        });
+        }
+        
+        // Tracking
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'Share', {
+                content_name: title,
+                method: 'clipboard',
+                referral_code: window.userReferralCode || 'none',
+                share_text_used: shareText
+            });
+        }
+        
+    } catch (error) {
+        console.error('Error obteniendo texto de compartir:', error);
+        
+        // Fallback: usar título original si hay error
+        const shareMessage = `${title}\n\n${shareUrl}`;
+        
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(shareMessage).then(function() {
+                showNotification('¡Artículo copiado al portapapeles! Ahora puedes pegarlo en la red social que prefieras.', 'success');
+            }).catch(function() {
+                fallbackCopyToClipboard(shareMessage);
+            });
+        } else {
+            fallbackCopyToClipboard(shareMessage);
+        }
+        
+        // Tracking de error
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'Share', {
+                content_name: title,
+                method: 'clipboard',
+                referral_code: window.userReferralCode || 'none',
+                error: 'api_fallback'
+            });
+        }
     }
 }
 
