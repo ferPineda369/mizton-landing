@@ -132,8 +132,24 @@ class MiztonAIHandler {
             'necesito conocimientos' => ['PREGUNTAS FRECUENTES ADICIONALES'],
             
             // REGISTRO Y PROCESO
-            'registro' => ['PROCESO DE REGISTRO'],
-            'como me registro' => ['PROCESO DE REGISTRO'],
+            'registro' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)', 'PROCESO DE REGISTRO'],
+            'como me registro' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)', 'PROCESO DE REGISTRO'],
+            'registrarse' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'unirse' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'unete ahora' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'quiero unirme' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'codigo invitacion' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'codigo de invitacion' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'invitacion' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'correo electronico' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'email' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'video tutoriales' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'tutoriales' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'pertenecer comunidad' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'comunidad' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)', 'CONCEPTO GENERAL'],
+            'como pertenecer' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'pasos registro' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
+            'proceso registro' => ['PROCESO PARA REGISTRARSE (Pertecener a la comunidad)'],
             
             // CAMBIO FINANCIERO GLOBAL
             '2025' => ['EL CAMBIO FINANCIERO GLOBAL'],

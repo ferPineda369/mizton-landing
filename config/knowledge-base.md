@@ -165,6 +165,13 @@ A través de la tecnología blockchain, contratos inteligentes y registros inmut
 ### ¿Necesito conocimientos técnicos?
 No, Mizton proporciona toda la capacitación necesaria de forma gratuita.
 
+## PROCESO PARA REGISTRARSE (Pertecener a la comunidad)
+1. Dar clic en cualquier botón para "Unirse" ("Unete Ahora", "Quiero Unirme Ahora")
+2. Te mandará a la página de registro
+3. Necesitas el código de invitación que te proporciona la persona que te invita
+4. Sólo proporciona tu correo electrónico y Listo!
+5. En el momento de ingresar, podrás revisar todos nuestros video-tutoriales para que puedas aprender a usar la plataforma
+
 ## CONCEPTOS DE TOKENIZACIÓN
 ### ALCANCE Y PROYECCIÓN
 La tokenización de activos del mundo real es el futuro de los mercados financieros globales.
