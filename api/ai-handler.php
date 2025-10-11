@@ -54,83 +54,94 @@ class MiztonAIHandler {
         $fullKnowledge = AIConfig::getKnowledgeBase(50000); // Sin límite para buscar
         $message = strtolower($message);
         
-        // Palabras clave y sus secciones relacionadas
+        // Palabras clave y sus secciones relacionadas - Actualizado 2025
         $keywordMap = [
-            'precio' => ['PRECIOS Y ACCESIBILIDAD', 'MODELO DE NEGOCIO'],
-            'costo' => ['PRECIOS Y ACCESIBILIDAD', 'MODELO DE NEGOCIO'],
-            'paquete' => ['MODELO DE NEGOCIO', 'QUÉ RECIBES'],
-            'token' => ['MODELO DE NEGOCIO', 'QUÉ RECIBES'],
-            'ganancia' => ['GARANTÍAS Y SEGURIDAD', 'MODELO DE NEGOCIO'],
-            'dividendo' => ['MODELO DE NEGOCIO', 'QUÉ RECIBES'],
-            'registro' => ['PROCESO DE REGISTRO'],
-            'referido' => ['SISTEMA DE REFERIDOS'],
+            // CONCEPTOS BÁSICOS
+            'que es mizton' => ['EXPLICACION SIMPLE', 'CONCEPTO GENERAL'],
+            'como gano' => ['EXPLICACION SIMPLE'],
+            'como se sustenta' => ['EXPLICACION SIMPLE'],
+            'precio' => ['PRECIOS Y ACCESIBILIDAD', 'MODELO DE NEGOCIO DETALLADO'],
+            'costo' => ['PRECIOS Y ACCESIBILIDAD', 'MODELO DE NEGOCIO DETALLADO'],
+            'paquete' => ['MODELO DE NEGOCIO DETALLADO', 'QUÉ RECIBES CON LA MEMBRESÍA'],
+            'token' => ['MECÁNICA DEL TOKEN CORPORATIVO', 'QUÉ RECIBES CON LA MEMBRESÍA'],
+            'ganancia' => ['GARANTÍAS Y SEGURIDAD', 'EXPLICACION SIMPLE'],
+            'dividendo' => ['MODELO DE NEGOCIO DETALLADO', 'QUÉ RECIBES CON LA MEMBRESÍA'],
+            'funciona' => ['CÓMO FUNCIONA', 'EXPLICACION SIMPLE'],
+            'membresía' => ['CONCEPTO GENERAL', 'QUÉ RECIBES CON LA MEMBRESÍA'],
+            
+            // SISTEMA DE REFERIDOS
+            'referido' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
+            'patrocinio' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
+            'bono patrocinio' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
+            'red' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
+            'directo' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
+            'segundo nivel' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
+            
+            // TOKENIZACIÓN Y RWA
+            'tokenización' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            'tokenizar' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            'rwa' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            'real world assets' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            'activos reales' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            'blockchain' => ['CONCEPTOS DE TOKENIZACIÓN', 'EDUCACIÓN Y ACOMPAÑAMIENTO'],
+            'blackrock' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            'larry fink' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            'citi' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            
+            // PROYECCIONES Y MERCADO
+            '2030' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            '16 billones' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            '24 billones' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            'proyeccion' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            'proyecciones' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            'mercado' => ['CONCEPTOS DE TOKENIZACIÓN'],
+            
+            // EDUCACIÓN Y SOPORTE
+            'educacion' => ['EDUCACIÓN Y ACOMPAÑAMIENTO'],
+            'capacitacion' => ['EDUCACIÓN Y ACOMPAÑAMIENTO'],
+            'wallet' => ['EDUCACIÓN Y ACOMPAÑAMIENTO', 'RIESGOS Y CONSIDERACIONES'],
             'contacto' => ['CONTACTO Y SOPORTE'],
             'whatsapp' => ['CONTACTO Y SOPORTE'],
-            'tokenización' => ['TOKENIZACIÓN RWA'],
-            'blockchain' => ['TOKENIZACIÓN RWA'],
-            'blackrock' => ['TOKENIZACIÓN RWA'],
+            'zoom' => ['PRESENTACIONES'],
+            'presentacion' => ['PRESENTACIONES'],
+            'presentaciones' => ['PRESENTACIONES'],
+            'lunes a viernes' => ['PRESENTACIONES'],
+            '7:00 pm' => ['PRESENTACIONES'],
+            
+            // SEGURIDAD Y GARANTÍAS
             'garantía' => ['GARANTÍAS Y SEGURIDAD'],
-            'seguridad' => ['GARANTÍAS Y SEGURIDAD'],
-            'recuperar' => ['GARANTÍAS Y SEGURIDAD'],
-            'funciona' => ['CÓMO FUNCIONA'],
-            'membresía' => ['CONCEPTO GENERAL', 'QUÉ RECIBES'],
-            // NUEVAS PALABRAS CLAVE 2025
-            'fast active' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA', 'BONO DE BIENVENIDA'],
-            'fast' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA', 'BONO DE BIENVENIDA'],
-            'active' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA', 'BONO DE BIENVENIDA'],
-            'bono' => ['PROMOCIONES VIGENTES 2025', 'QUÉ RECIBES CON LA MEMBRESÍA', 'BONO DE BIENVENIDA'],
-            'liquidación atómica' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            'liquidacion atomica' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            'liquidacion' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            'liquidación' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            'atomica' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            'atómica' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            'tiempo toma' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            'cuanto tiempo' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            'tiempo toma la liquidacion' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            'instantaneo' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            'segundos' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            '7 segundos' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            '5000 tokens' => ['PROMOCIONES VIGENTES 2025'],
-            '500 tokens' => ['PROMOCIONES VIGENTES 2025'],
-            'promocion' => ['PROMOCIONES VIGENTES 2025'],
-            'patrocinio' => ['PROMOCIONES VIGENTES 2025'],
-            '2030' => ['TOKENIZACIÓN RWA'],
-            '24 billones' => ['TOKENIZACIÓN RWA'],
-            'proyeccion' => ['TOKENIZACIÓN RWA'],
-            'proyecciones' => ['TOKENIZACIÓN RWA'],
-            'proyecciones para' => ['TOKENIZACIÓN RWA'],
-            'cuales son las proyecciones' => ['TOKENIZACIÓN RWA'],
-            'sectores' => ['TOKENIZACIÓN RWA'],
-            'que sectores' => ['TOKENIZACIÓN RWA'],
-            'sectores se pueden' => ['TOKENIZACIÓN RWA'],
-            'inmobiliario' => ['TOKENIZACIÓN RWA'],
-            'energetico' => ['TOKENIZACIÓN RWA'],
-            'recursos naturales' => ['TOKENIZACIÓN RWA'],
-            'arte' => ['TOKENIZACIÓN RWA'],
-            'agricultura' => ['TOKENIZACIÓN RWA'],
-            'gubernamental' => ['TOKENIZACIÓN RWA'],
+            'seguridad' => ['GARANTÍAS Y SEGURIDAD', 'PREGUNTAS FRECUENTES ADICIONALES'],
+            'recuperar' => ['GARANTÍAS Y SEGURIDAD', 'PREGUNTAS FRECUENTES ADICIONALES'],
+            'riesgo' => ['RIESGOS Y CONSIDERACIONES'],
+            'salir del sistema' => ['PREGUNTAS FRECUENTES ADICIONALES'],
+            
+            // MODELO DE NEGOCIO
+            'dca' => ['MODELO DE NEGOCIO DETALLADO'],
+            'dollar cost' => ['MODELO DE NEGOCIO DETALLADO'],
+            'equilibrio' => ['MODELO DE NEGOCIO DETALLADO'],
+            'paquetes equilibrio' => ['MODELO DE NEGOCIO DETALLADO'],
+            'holding' => ['MECÁNICA DEL TOKEN CORPORATIVO'],
+            'holdear' => ['MECÁNICA DEL TOKEN CORPORATIVO'],
+            'vender' => ['MECÁNICA DEL TOKEN CORPORATIVO'],
+            'capitalizacion' => ['MECÁNICA DEL TOKEN CORPORATIVO'],
+            'union fuerzas' => ['MECÁNICA DEL TOKEN CORPORATIVO'],
+            
+            // PREGUNTAS FRECUENTES
+            'criptomoneda' => ['PREGUNTAS FRECUENTES ADICIONALES', 'CONCEPTO GENERAL'],
+            'conocimientos tecnicos' => ['PREGUNTAS FRECUENTES ADICIONALES'],
+            'necesito conocimientos' => ['PREGUNTAS FRECUENTES ADICIONALES'],
+            
+            // REGISTRO Y PROCESO
+            'registro' => ['PROCESO DE REGISTRO'],
+            'como me registro' => ['PROCESO DE REGISTRO'],
+            
+            // CAMBIO FINANCIERO GLOBAL
             '2025' => ['EL CAMBIO FINANCIERO GLOBAL'],
             'cambio financiero' => ['EL CAMBIO FINANCIERO GLOBAL'],
             'banca tradicional' => ['EL CAMBIO FINANCIERO GLOBAL'],
             'bancos centrales' => ['EL CAMBIO FINANCIERO GLOBAL'],
             'dinero efectivo' => ['EL CAMBIO FINANCIERO GLOBAL'],
-            'holding' => ['MECÁNICA DEL TOKEN CORPORATIVO'],
-            'holdear' => ['MECÁNICA DEL TOKEN CORPORATIVO'],
-            'capitalizacion' => ['MECÁNICA DEL TOKEN CORPORATIVO'],
-            'educacion' => ['EDUCACIÓN Y ACOMPAÑAMIENTO'],
-            'capacitacion' => ['EDUCACIÓN Y ACOMPAÑAMIENTO'],
-            'wallet' => ['EDUCACIÓN Y ACOMPAÑAMIENTO'],
-            'riesgo' => ['RIESGOS Y CONSIDERACIONES'],
-            'dca' => ['MODELO DE NEGOCIO DETALLADO'],
-            'dollar cost' => ['MODELO DE NEGOCIO DETALLADO'],
-            'como funciona el dca' => ['MODELO DE NEGOCIO DETALLADO'],
-            'que es dca' => ['MODELO DE NEGOCIO DETALLADO'],
-            'funciona el dca' => ['MODELO DE NEGOCIO DETALLADO'],
-            'incentivo participacion' => ['MODELO DE NEGOCIO DETALLADO'],
-            '180 dias' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            '300 dias' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES'],
-            '240 dias' => ['SISTEMA DE REFERIDOS Y BONIFICACIONES']
+            'gobierno' => ['EL CAMBIO FINANCIERO GLOBAL']
         ];
         
         // Encontrar secciones relevantes
