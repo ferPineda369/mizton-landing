@@ -27,6 +27,9 @@ if (isset($_GET['ref'])) {
 
 include 'config.php';
 
+// Enlace permanente de Zoom para transmisiones en vivo
+define('ZOOM_LIVE_URL', 'https://us06web.zoom.us/j/84641377935?pwd=QFdxvac6RKZOm2GCtOiocxtrpjkpic.1');
+
 // Configuración de base de datos usando la configuración del blog
 $pdo = null;
 $zoomVideo = null;
@@ -285,6 +288,49 @@ if (!$zoomVideo) {
             margin-bottom: 1rem;
             position: relative;
             z-index: 2;
+            animation: pulse 2s infinite;
+        }
+        
+        .live-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #dc3545;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            animation: livePulse 1.5s infinite;
+            box-shadow: 0 2px 10px rgba(220, 53, 69, 0.3);
+            z-index: 3;
+        }
+        
+        @keyframes livePulse {
+            0%, 100% { 
+                opacity: 1; 
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.05);
+            }
+        }
+        
+        .replay-indicator {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #007bff;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.3);
+            z-index: 3;
         }
         
         .zoom-title {
@@ -302,24 +348,6 @@ if (!$zoomVideo) {
             z-index: 2;
         }
         
-        .live-badge {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: #FF4444;
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            animation: blink 2s infinite;
-            z-index: 3;
-        }
-        
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.7; }
-        }
         
         .meeting-actions {
             display: grid;
@@ -465,9 +493,18 @@ if (!$zoomVideo) {
                 
                 <div class="meeting-card">
                     <div class="zoom-preview">
-                        <div class="live-badge">
-                            <i class="fas fa-circle"></i> EN VIVO
-                        </div>
+                        <?php if ($zoomVideo['is_live'] ?? 0): ?>
+                            <!-- Indicador EN VIVO palpitante -->
+                            <div class="live-indicator">
+                                <i class="fas fa-circle"></i> EN VIVO
+                            </div>
+                        <?php else: ?>
+                            <!-- Indicador de REPETICIÓN -->
+                            <div class="replay-indicator">
+                                <i class="fas fa-play-circle"></i> REPETICIÓN
+                            </div>
+                        <?php endif; ?>
+                        
                         <div class="zoom-icon">
                             <i class="fas fa-video"></i>
                         </div>
@@ -476,14 +513,27 @@ if (!$zoomVideo) {
                     </div>
                     
                     <div class="meeting-actions">
-                        <a href="#" class="btn-zoom" id="joinZoomBtn" data-zoom-url="<?php echo htmlspecialchars($zoomVideo['zoom_url']); ?>">
-                            <i class="fas fa-play"></i>
-                            Unirse Ahora
-                        </a>
-                        <button class="btn-share" id="shareBtn">
-                            <i class="fas fa-share-alt"></i>
-                            Compartir
-                        </button>
+                        <?php if ($zoomVideo['is_live'] ?? 0): ?>
+                            <!-- Modo EN VIVO: Botón "Unirse Ahora" con enlace permanente -->
+                            <a href="#" class="btn-zoom" id="joinZoomBtn" data-zoom-url="<?php echo ZOOM_LIVE_URL; ?>" data-is-live="1">
+                                <i class="fas fa-play"></i>
+                                Unirse Ahora
+                            </a>
+                            <button class="btn-share" id="shareBtn" data-share-url="<?php echo ZOOM_LIVE_URL; ?>">
+                                <i class="fas fa-share-alt"></i>
+                                Compartir
+                            </button>
+                        <?php else: ?>
+                            <!-- Modo REPETICIÓN: Botón "Ver Repetición" con enlace de BD -->
+                            <a href="#" class="btn-zoom" id="joinZoomBtn" data-zoom-url="<?php echo htmlspecialchars($zoomVideo['zoom_url']); ?>" data-is-live="0">
+                                <i class="fas fa-play-circle"></i>
+                                Ver Repetición
+                            </a>
+                            <button class="btn-share" id="shareBtn" data-share-url="<?php echo htmlspecialchars($zoomVideo['zoom_url']); ?>">
+                                <i class="fas fa-share-alt"></i>
+                                Compartir
+                            </button>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -512,36 +562,48 @@ if (!$zoomVideo) {
             
             // Manejar clic en botón "Compartir"
             document.getElementById('shareBtn').addEventListener('click', function() {
-                const currentUrl = window.location.href;
+                const shareUrl = this.getAttribute('data-share-url');
+                const isLive = document.getElementById('joinZoomBtn').getAttribute('data-is-live') === '1';
                 const referido = '<?php echo isset($_SESSION["referido"]) ? $_SESSION["referido"] : ""; ?>';
                 
-                let shareUrl = 'https://mizton.cat/meeting.php';
-                if (referido) {
-                    shareUrl += '?ref=' + referido;
+                let finalShareUrl;
+                let shareMessage;
+                
+                if (isLive) {
+                    // Modo EN VIVO: Compartir enlace permanente de Zoom
+                    finalShareUrl = shareUrl;
+                    shareMessage = `El enlace de la reunión EN VIVO ha sido copiado al portapapeles.<br><br><strong>¡Compártelo para que se unan a la transmisión en vivo!</strong>`;
+                } else {
+                    // Modo REPETICIÓN: Compartir enlace de meeting.php con referido
+                    finalShareUrl = 'https://mizton.cat/meeting.php';
+                    if (referido) {
+                        finalShareUrl += '?ref=' + referido;
+                    }
+                    shareMessage = `El enlace de la presentación ha sido copiado al portapapeles.<br><br><strong>Compártelo con quien quieras invitar a conocer esta oportunidad.</strong>`;
                 }
                 
                 // Copiar al portapapeles
                 if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(shareUrl).then(function() {
+                    navigator.clipboard.writeText(finalShareUrl).then(function() {
                         Swal.fire({
                             icon: 'success',
                             title: '¡Enlace Copiado!',
-                            html: `El enlace de la presentación ha sido copiado al portapapeles.<br><br><strong>Compártelo con quien quieras invitar a conocer esta oportunidad.</strong>`,
+                            html: shareMessage,
                             confirmButtonText: 'Perfecto',
-                            confirmButtonColor: '#28a745',
+                            confirmButtonColor: isLive ? '#dc3545' : '#28a745',
                             timer: 5000,
                             timerProgressBar: true
                         });
                     }).catch(function() {
-                        fallbackCopy(shareUrl);
+                        fallbackCopy(finalShareUrl, shareMessage, isLive);
                     });
                 } else {
-                    fallbackCopy(shareUrl);
+                    fallbackCopy(finalShareUrl, shareMessage, isLive);
                 }
             });
             
             // Función de fallback para copiar
-            function fallbackCopy(text) {
+            function fallbackCopy(text, message, isLive) {
                 const textArea = document.createElement('textarea');
                 textArea.value = text;
                 textArea.style.position = 'fixed';
@@ -556,9 +618,9 @@ if (!$zoomVideo) {
                     Swal.fire({
                         icon: 'success',
                         title: '¡Enlace Copiado!',
-                        html: `El enlace de la presentación ha sido copiado al portapapeles.<br><br><strong>Compártelo con quien quieras invitar a conocer esta oportunidad.</strong>`,
+                        html: message || `El enlace ha sido copiado al portapapeles.<br><br><strong>Compártelo con quien quieras invitar.</strong>`,
                         confirmButtonText: 'Perfecto',
-                        confirmButtonColor: '#28a745',
+                        confirmButtonColor: isLive ? '#dc3545' : '#28a745',
                         timer: 5000,
                         timerProgressBar: true
                     });
@@ -568,7 +630,7 @@ if (!$zoomVideo) {
                         title: 'Enlace para Compartir',
                         html: `<p>Copia este enlace para compartir:</p><br><input type="text" value="${text}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" readonly onclick="this.select()">`,
                         confirmButtonText: 'Cerrar',
-                        confirmButtonColor: '#667eea'
+                        confirmButtonColor: isLive ? '#dc3545' : '#667eea'
                     });
                 }
                 
