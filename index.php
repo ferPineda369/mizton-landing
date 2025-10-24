@@ -80,6 +80,9 @@ include 'config.php';
                 <a href="#beneficios">Beneficios</a>
                 <a href="#faq">FAQ</a>
                 <a href="news/" target="_blank">News</a>
+                <a href="meeting.php<?php echo isset($_SESSION['referido']) ? '?ref=' . $_SESSION['referido'] : ''; ?>" class="meeting-nav">
+                    <i class="fas fa-video"></i> Presentación
+                </a>
                 <a href="#unirse" class="cta-nav">Únete Ahora</a>
             </div>
             <div class="mobile-menu-toggle">
@@ -209,6 +212,57 @@ include 'config.php';
                     </p>
                     <div class="story-question">
                         <strong>¿Estás listo para ser pionero?</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Presentación de Oportunidad -->
+    <section class="presentation-invitation">
+        <div class="container">
+            <div class="invitation-content">
+                <div class="invitation-visual">
+                    <div class="video-preview">
+                        <div class="video-icon">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            EN VIVO
+                        </div>
+                    </div>
+                </div>
+                <div class="invitation-text">
+                    <h2>Descubre la Narrativa que está Cambiando la Economía Mundial</h2>
+                    <p class="invitation-description">
+                        Únete a nuestra <strong>presentación exclusiva</strong> donde revelamos cómo la 
+                        <strong>tokenización de activos del mundo real</strong> está revolucionando las finanzas 
+                        globales y cómo puedes ser parte de esta transformación.
+                    </p>
+                    <div class="invitation-highlights">
+                        <div class="highlight-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Presentaciones diarias en vivo</span>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-users"></i>
+                            <span>Acceso completamente gratuito</span>
+                        </div>
+                        <div class="highlight-item">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Conoce la tecnología del futuro</span>
+                        </div>
+                    </div>
+                    <div class="invitation-cta">
+                        <a href="meeting.php<?php echo isset($_SESSION['referido']) ? '?ref=' . $_SESSION['referido'] : ''; ?>" class="btn btn-presentation">
+                            <i class="fas fa-video"></i>
+                            Ver Presentación Ahora
+                        </a>
+                        <p class="cta-note">
+                            <i class="fas fa-info-circle"></i>
+                            Descubre por qué miles ya están participando en esta revolución
+                        </p>
                     </div>
                 </div>
             </div>
