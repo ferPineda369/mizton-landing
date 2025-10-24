@@ -1189,13 +1189,13 @@ html {
 .video-preview {
     width: 300px;
     height: 200px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-green) 0%, var(--primary-green) 100%);
     border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 20px 40px rgba(64, 145, 108, 0.3);
     overflow: hidden;
 }
 

@@ -106,12 +106,25 @@ if (!$zoomVideo) {
     
     <style>
         .meeting-hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--darker-bg) 0%, var(--dark-bg) 50%, var(--primary-green) 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             position: relative;
             overflow: hidden;
+        }
+        
+        /* Variables CSS del landing */
+        :root {
+            --primary-green: #1B4332;
+            --secondary-green: #2D5A3D;
+            --accent-green: #40916C;
+            --light-green: #52B788;
+            --bright-green: #74C69D;
+            --pale-green: #95D5B2;
+            --dark-bg: #0A1A0F;
+            --darker-bg: #051008;
+            --white: #FFFFFF;
         }
         
         .meeting-hero::before {
@@ -149,7 +162,7 @@ if (!$zoomVideo) {
         }
         
         .meeting-info .highlight {
-            background: linear-gradient(45deg, #FFD700, #FFA500);
+            background: linear-gradient(45deg, var(--bright-green), var(--light-green));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -172,7 +185,7 @@ if (!$zoomVideo) {
         }
         
         .tokenization-intro h3 {
-            color: #FFD700;
+            color: var(--bright-green);
             font-size: 1.5rem;
             margin-bottom: 1rem;
             font-weight: 700;
@@ -202,7 +215,7 @@ if (!$zoomVideo) {
         
         .detail-item i {
             font-size: 2rem;
-            color: #FFD700;
+            color: var(--bright-green);
             margin-bottom: 0.5rem;
         }
         
@@ -224,7 +237,7 @@ if (!$zoomVideo) {
             backdrop-filter: blur(20px);
             border-radius: 30px;
             padding: 3rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 40px rgba(64, 145, 108, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.3);
             position: relative;
             overflow: hidden;
@@ -237,11 +250,11 @@ if (!$zoomVideo) {
             left: 0;
             right: 0;
             height: 5px;
-            background: linear-gradient(90deg, #667eea, #764ba2, #FFD700);
+            background: linear-gradient(90deg, var(--primary-green), var(--accent-green), var(--bright-green));
         }
         
         .zoom-preview {
-            background: linear-gradient(135deg, #2D8CFF 0%, #1E6FBA 100%);
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--primary-green) 100%);
             border-radius: 20px;
             padding: 3rem;
             text-align: center;
@@ -315,7 +328,7 @@ if (!$zoomVideo) {
         }
         
         .btn-zoom {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            background: linear-gradient(135deg, var(--light-green) 0%, var(--accent-green) 100%);
             color: white;
             border: none;
             padding: 1rem 2rem;
@@ -333,13 +346,13 @@ if (!$zoomVideo) {
         
         .btn-zoom:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(40, 167, 69, 0.4);
+            box-shadow: 0 10px 30px rgba(82, 183, 136, 0.4);
             color: white;
             text-decoration: none;
         }
         
         .btn-share {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--secondary-green) 0%, var(--primary-green) 100%);
             color: white;
             border: none;
             padding: 1rem 2rem;
@@ -356,7 +369,7 @@ if (!$zoomVideo) {
         
         .btn-share:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 30px rgba(45, 90, 61, 0.4);
         }
         
         .back-link {
