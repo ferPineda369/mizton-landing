@@ -424,26 +424,37 @@ if (!$zoomVideo) {
             
             .meeting-content {
                 grid-template-columns: 1fr;
-                /* Reorganizar orden: video primero, luego detalles */
+                /* Reorganizar orden: descripción → video → fichas de detalles */
                 display: flex;
                 flex-direction: column;
             }
             
-            /* El video aparece primero en móvil */
-            .meeting-card {
-                order: 1;
-                margin-bottom: 2rem;
-            }
-            
-            /* La información aparece después */
+            /* La información aparece primero en móvil */
             .meeting-info {
-                order: 2;
+                order: 1;
+                display: flex;
+                flex-direction: column;
             }
             
-            /* Fichas de detalles: 2 por fila (50% cada una) */
+            /* Dentro de meeting-info: título y descripción primero */
+            .meeting-info h1,
+            .meeting-info .meeting-description,
+            .meeting-info .tokenization-intro {
+                order: 1;
+            }
+            
+            /* Fichas de detalles van al final */
             .meeting-details {
+                order: 3;
                 grid-template-columns: 1fr 1fr;
                 gap: 1rem;
+                margin-top: 2rem;
+            }
+            
+            /* El video aparece después de la descripción pero antes de las fichas */
+            .meeting-card {
+                order: 2;
+                margin: 2rem 0;
             }
             
             .detail-item {
