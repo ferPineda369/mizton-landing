@@ -161,6 +161,7 @@ if (!$zoomVideo) {
             font-weight: 800;
             color: white;
             margin-bottom: 1.5rem;
+            margin-top: 2rem;
             line-height: 1.1;
         }
         
@@ -417,25 +418,59 @@ if (!$zoomVideo) {
         }
         
         @media (max-width: 768px) {
+            .meeting-hero {
+                padding: 2rem 1rem;
+            }
+            
             .meeting-content {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+                /* Reorganizar orden: video primero, luego detalles */
+                display: flex;
+                flex-direction: column;
             }
             
+            /* El video aparece primero en móvil */
+            .meeting-card {
+                order: 1;
+                margin-bottom: 2rem;
+            }
+            
+            /* La información aparece después */
+            .meeting-info {
+                order: 2;
+            }
+            
+            /* Fichas de detalles: 2 por fila (50% cada una) */
+            .meeting-details {
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            
+            .detail-item {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .detail-item i {
+                font-size: 1.5rem;
+            }
+            
+            .detail-item h4 {
+                font-size: 0.9rem;
+            }
+            
+            .detail-item p {
+                font-size: 0.8rem;
+            }
+            
+            /* Ajustar título en móvil */
             .meeting-info h1 {
                 font-size: 2.5rem;
+                margin-top: 3rem;
             }
             
-            .meeting-card {
-                padding: 2rem;
-            }
-            
-            .meeting-actions {
-                grid-template-columns: 1fr;
-            }
-            
-            .meeting-details {
-                grid-template-columns: 1fr;
+            .meeting-description {
+                font-size: 1rem;
             }
         }
     </style>
