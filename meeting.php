@@ -27,8 +27,16 @@ if (isset($_GET['ref'])) {
 
 include 'config.php';
 
-// Obtener información del video de Zoom desde la base de datos del panel
+// Configuración de base de datos usando la configuración del blog
+$pdo = null;
+$zoomVideo = null;
+
 try {
+    // Usar la configuración de base de datos del blog
+    require_once __DIR__ . '/news/config/database-blog.php';
+    
+    // La variable $pdo ya está definida en database-blog.php
+    // Obtener información del video de Zoom desde la base de datos
     $stmt = $pdo->prepare("
         SELECT * FROM tbl_zoom_daily_video 
         WHERE is_active = 1 
@@ -37,7 +45,10 @@ try {
     ");
     $stmt->execute();
     $zoomVideo = $stmt->fetch(PDO::FETCH_ASSOC);
+    
 } catch (Exception $e) {
+    // Log del error para debugging
+    error_log("Error de base de datos en meeting.php: " . $e->getMessage());
     $zoomVideo = null;
 }
 
