@@ -418,8 +418,29 @@ if (!$zoomVideo) {
         }
         
         @media (max-width: 768px) {
+            /* Asegurar que no haya overflow horizontal */
+            * {
+                box-sizing: border-box;
+            }
+            
+            html, body {
+                overflow-x: hidden;
+                width: 100%;
+                max-width: 100vw;
+            }
+            
             .meeting-hero {
                 padding: 2rem 1rem;
+                width: 100%;
+                max-width: 100vw;
+                box-sizing: border-box;
+            }
+            
+            .meeting-container {
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+                box-sizing: border-box;
             }
             
             .meeting-content {
@@ -447,19 +468,53 @@ if (!$zoomVideo) {
             .meeting-details {
                 order: 3;
                 grid-template-columns: 1fr 1fr;
-                gap: 1rem;
+                gap: 0.5rem;
                 margin-top: 2rem;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
             }
             
             /* El video aparece después de la descripción pero antes de las fichas */
             .meeting-card {
                 order: 2;
                 margin: 2rem 0;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            
+            /* Asegurar que el zoom-preview no se salga */
+            .zoom-preview {
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                padding: 2rem 1rem;
+            }
+            
+            /* Botones responsivos */
+            .meeting-actions {
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                gap: 0.5rem;
+            }
+            
+            .btn-zoom,
+            .btn-share {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+                min-width: 0;
+                flex: 1;
             }
             
             .detail-item {
-                padding: 1rem;
+                padding: 0.8rem;
                 font-size: 0.9rem;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+                min-height: auto;
             }
             
             .detail-item i {
@@ -482,6 +537,22 @@ if (!$zoomVideo) {
             
             .meeting-description {
                 font-size: 1rem;
+            }
+            
+            /* Asegurar que el texto no se salga */
+            .tokenization-intro,
+            .meeting-description,
+            .detail-item p {
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+                hyphens: auto;
+            }
+            
+            /* Asegurar que los iconos y elementos no se salgan */
+            .live-indicator,
+            .replay-indicator {
+                max-width: calc(100% - 2rem);
+                word-wrap: break-word;
             }
         }
     </style>
