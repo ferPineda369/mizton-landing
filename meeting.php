@@ -61,8 +61,28 @@ if (!$zoomVideo) {
         'title' => 'Presentación de Oportunidad de Negocio Mizton',
         'description' => 'Descubre cómo la tokenización de activos está revolucionando la economía mundial',
         'zoom_url' => '#',
-        'date_created' => date('Y-m-d')
+        'date_created' => date('Y-m-d'),
+        'is_live' => 0
     ];
+}
+
+// Generar título dinámico basado en el estado live
+$displayTitle = $zoomVideo['title'];
+if ($zoomVideo['is_live'] ?? 0) {
+    // Si está en vivo, generar título con el día actual
+    $diasSemana = [
+        'Monday' => 'Lunes',
+        'Tuesday' => 'Martes', 
+        'Wednesday' => 'Miércoles',
+        'Thursday' => 'Jueves',
+        'Friday' => 'Viernes',
+        'Saturday' => 'Sábado',
+        'Sunday' => 'Domingo'
+    ];
+    
+    $diaActual = $diasSemana[date('l')];
+    $numeroDay = date('j');
+    $displayTitle = "Reunión Mizton - $diaActual $numeroDay";
 }
 ?>
 <!DOCTYPE html>
@@ -625,7 +645,7 @@ if (!$zoomVideo) {
                         <div class="zoom-icon">
                             <i class="fas fa-video"></i>
                         </div>
-                        <h3 class="zoom-title"><?php echo htmlspecialchars($zoomVideo['title']); ?></h3>
+                        <h3 class="zoom-title"><?php echo htmlspecialchars($displayTitle); ?></h3>
                         <p class="zoom-subtitle">Presentación Exclusiva de Oportunidad de Negocio</p>
                     </div>
                     
