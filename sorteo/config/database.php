@@ -1,15 +1,34 @@
 <?php
 // Configuración de base de datos para el sorteo
 try {
-    // Usar la misma configuración de la landing principal
-    require_once dirname(__DIR__, 2) . '/bootstrap-landing.php';
+    // Configuración de base de datos
+    $host = 'localhost';
+    $dbname = 'mizton_db'; // Cambiar por el nombre real de la base de datos
+    $username = 'root'; // Cambiar por el usuario real
+    $password = ''; // Cambiar por la contraseña real
+    
+    // Crear conexión PDO
+    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ];
+    
+    $pdo = new PDO($dsn, $username, $password, $options);
     
     // Crear las tablas si no existen
     createSorteoTables($pdo);
     
 } catch (Exception $e) {
     error_log("Error en configuración de base de datos del sorteo: " . $e->getMessage());
-    die("Error de conexión a la base de datos");
+    
+    // Para desarrollo, mostrar el error específico
+    if (isset($_GET['debug'])) {
+        die("Error de conexión a la base de datos: " . $e->getMessage());
+    } else {
+        die("Error de conexión a la base de datos");
+    }
 }
 
 function createSorteoTables($pdo) {

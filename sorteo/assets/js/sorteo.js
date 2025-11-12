@@ -49,7 +49,8 @@ class SorteoApp {
     // Cargar números desde la base de datos
     async loadNumbers() {
         try {
-            const response = await fetch('api/get_numbers.php');
+            // Usar API simplificada temporalmente
+            const response = await fetch('api/get_numbers_simple.php');
             const data = await response.json();
             
             if (data.success) {
@@ -119,10 +120,10 @@ class SorteoApp {
             // Si no hay más números seleccionados, limpiar bloqueo
             if (this.selectedNumbers.length === 0) {
                 this.clearBlockingTimer();
-                this.unblockNumbersOnServer();
+                // this.unblockNumbersOnServer(); // Deshabilitado temporalmente
             } else {
                 // Actualizar bloqueo en servidor
-                this.blockNumbersOnServer();
+                // this.blockNumbersOnServer(); // Deshabilitado temporalmente
             }
         } else {
             // Seleccionar número
@@ -131,11 +132,11 @@ class SorteoApp {
             
             // Iniciar bloqueo temporal si es el primer número
             if (this.selectedNumbers.length === 1) {
-                this.blockNumbersOnServer();
+                // this.blockNumbersOnServer(); // Deshabilitado temporalmente
                 this.startBlockingTimer();
             } else {
                 // Actualizar bloqueo en servidor con nuevos números
-                this.blockNumbersOnServer();
+                // this.blockNumbersOnServer(); // Deshabilitado temporalmente
             }
         }
         
@@ -246,7 +247,7 @@ class SorteoApp {
             
             if (this.blockingTimeLeft < 0) {
                 this.clearBlockingTimer();
-                this.unblockNumbersOnServer();
+                // this.unblockNumbersOnServer(); // Deshabilitado temporalmente
                 this.showAlert('Tiempo de bloqueo agotado. Los números han sido liberados.', 'warning');
                 
                 // Limpiar selección
@@ -379,7 +380,7 @@ class SorteoApp {
                 numberFormData.append('number', number);
                 numberFormData.append('fullName', formData.get('fullName'));
                 
-                return fetch('api/register_number.php', {
+                return fetch('api/register_number_simple.php', {
                     method: 'POST',
                     body: numberFormData
                 });
@@ -405,7 +406,7 @@ class SorteoApp {
                 
                 // Limpiar bloqueo temporal
                 this.clearBlockingTimer();
-                this.unblockNumbersOnServer();
+                // this.unblockNumbersOnServer(); // Deshabilitado temporalmente
                 
                 // Limpiar selección
                 this.selectedNumbers = [];

@@ -4,11 +4,38 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once '../config/database.php';
+// Iniciar sesión si no está iniciada
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+try {
+    require_once '../config/database.php';
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error de configuración de base de datos',
+        'error' => $e->getMessage()
+    ]);
+    exit;
+}
 
 try {
     // Limpiar reservas expiradas antes de obtener los números
     cleanExpiredReservations($pdo);
+    
+    // Crear tabla de bloqueos temporales si no existe
+    $createBlockTableSql = "
+    CREATE TABLE IF NOT EXISTS sorteo_temp_blocks (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        number_value INT NOT NULL,
+        session_id VARCHAR(255) NOT NULL,
+        blocked_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        expires_at TIMESTAMP NOT NULL,
+        INDEX idx_number_session (number_value, session_id),
+        INDEX idx_expires (expires_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+    $pdo->exec($createBlockTableSql);
     
     // Limpiar bloqueos temporales expirados
     $pdo->exec("DELETE FROM sorteo_temp_blocks WHERE expires_at < NOW()");
