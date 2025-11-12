@@ -183,7 +183,7 @@ try {
                                             <th>Número</th>
                                             <th>Estado</th>
                                             <th>Participante</th>
-                                            <th>Email</th>
+                                            <th>Celular</th>
                                             <th>Fecha Reserva</th>
                                             <th>Expira</th>
                                             <th>Acciones</th>
@@ -204,8 +204,8 @@ try {
                                                         <span class="badge bg-success">Confirmado</span>
                                                     <?php endif; ?>
                                                 </td>
-                                                <td><?php echo htmlspecialchars($number['participant_name']); ?></td>
-                                                <td><?php echo htmlspecialchars($number['participant_email']); ?></td>
+                                                <td><?php echo htmlspecialchars($number['participant_name'] ?? ''); ?></td>
+                                                <td><?php echo htmlspecialchars($number['participant_movil'] ?? ''); ?></td>
                                                 <td><?php echo date('d/m/Y H:i', strtotime($number['reserved_at'])); ?></td>
                                                 <td>
                                                     <?php if ($number['reservation_expires_at']): ?>
@@ -262,7 +262,7 @@ try {
                                             <tr>
                                                 <td><?php echo date('d/m/Y H:i', strtotime($transaction['created_at'])); ?></td>
                                                 <td><?php echo $transaction['number_value']; ?></td>
-                                                <td><?php echo htmlspecialchars($transaction['participant_name']); ?></td>
+                                                <td><?php echo htmlspecialchars($transaction['participant_name'] ?? ''); ?></td>
                                                 <td>
                                                     <?php
                                                     $actionColors = [
