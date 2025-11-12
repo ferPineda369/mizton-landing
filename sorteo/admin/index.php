@@ -2,6 +2,9 @@
 session_start();
 require_once '../config/database.php';
 
+// Configuración del sorteo
+define('TICKET_PRICE', 25.00); // Precio por boleto en MXN
+
 // Verificar autenticación simple
 $isAuthenticated = isset($_SESSION['sorteo_admin']) && $_SESSION['sorteo_admin'] === true;
 
@@ -159,8 +162,8 @@ try {
             </div>
             <div class="col-md-3">
                 <div class="stats-card text-center">
-                    <h3><?php echo ($stats['confirmed'] ?? 0) * 50; ?></h3>
-                    <p>Total Recaudado ($)</p>
+                    <h3>$<?php echo number_format(($stats['confirmed'] ?? 0) * TICKET_PRICE, 2); ?></h3>
+                    <p>Total Recaudado (MXN)</p>
                 </div>
             </div>
         </div>
