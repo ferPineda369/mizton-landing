@@ -1141,3 +1141,12 @@ window.SorteoUtils = {
         return name.trim().length >= 3 && /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(name.trim());
     }
 };
+
+// Inicializar el manager del sorteo cuando el DOM esté listo
+let sorteoManager;
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🎄 Inicializando Sorteo Manager...');
+    sorteoManager = new SorteoManager();
+    console.log('✅ Sorteo Manager inicializado correctamente');
+});
