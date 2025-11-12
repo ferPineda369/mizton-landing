@@ -83,6 +83,8 @@ function createSorteoTables($pdo) {
 
 // Función para limpiar reservas expiradas
 function cleanExpiredReservations($pdo) {
+    error_log("=== Ejecutando limpieza de reservas expiradas ===");
+    
     $sql = "UPDATE sorteo_numbers 
             SET status = 'available', 
                 participant_name = NULL, 
@@ -97,7 +99,9 @@ function cleanExpiredReservations($pdo) {
     
     // Log de las reservas expiradas
     if ($stmt->rowCount() > 0) {
-        error_log("Sorteo: Se limpiaron " . $stmt->rowCount() . " reservas expiradas");
+        error_log("Limpiadas " . $stmt->rowCount() . " reservas expiradas");
+    } else {
+        error_log("No hay reservas expiradas para limpiar");
     }
 }
 

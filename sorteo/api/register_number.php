@@ -6,8 +6,14 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 require_once '../config/database.php';
 
+// Log de inicio para debug
+error_log("=== INICIO register_number.php ===");
+error_log("REQUEST_METHOD: " . $_SERVER['REQUEST_METHOD']);
+error_log("POST data: " . print_r($_POST, true));
+
 // Solo permitir POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    error_log("ERROR: Método no permitido - " . $_SERVER['REQUEST_METHOD']);
     http_response_code(405);
     echo json_encode(['success' => false, 'message' => 'Método no permitido']);
     exit;
@@ -21,6 +27,8 @@ try {
     $number = filter_input(INPUT_POST, 'number', FILTER_VALIDATE_INT);
     $fullName = trim(filter_input(INPUT_POST, 'fullName', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
     $phoneNumber = trim(filter_input(INPUT_POST, 'phoneNumber', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+    
+    error_log("Datos procesados - Número: $number, Nombre: $fullName, Celular: $phoneNumber");
     
     // Validaciones
     $errors = [];
@@ -42,12 +50,15 @@ try {
     }
     
     if (!empty($errors)) {
+        error_log("Errores de validación: " . implode(', ', $errors));
         echo json_encode([
             'success' => false,
             'message' => 'Datos inválidos: ' . implode(', ', $errors)
         ]);
         exit;
     }
+    
+    error_log("Validaciones pasadas, procediendo con la reserva...");
     
     // Verificar si el número está disponible
     $checkSql = "SELECT status, participant_movil FROM sorteo_numbers WHERE number_value = ?";
