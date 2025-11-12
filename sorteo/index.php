@@ -195,6 +195,13 @@ require_once 'config/database.php';
                             <div class="form-text">Este nombre aparecerá en todos los números seleccionados</div>
                         </div>
                         
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">Número Celular *</label>
+                            <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required 
+                                   pattern="[0-9]{10}" maxlength="10" placeholder="2222012345">
+                            <div class="form-text">10 dígitos sin espacios - identificación de tus boletos</div>
+                        </div>
+                        
                         <div class="alert alert-success">
                             <i class="fas fa-whatsapp"></i> 
                             <strong>¡Importante!</strong> Al confirmar tu participación se abrirá automáticamente el grupo de WhatsApp. Es <strong>REQUISITO</strong> unirse para participar en el evento en vivo.

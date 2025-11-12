@@ -78,14 +78,14 @@ try {
         
         // Registrar en el log
         $logSql = "INSERT INTO sorteo_transactions 
-                   (number_value, participant_name, participant_email, action, ip_address, user_agent) 
+                   (number_value, participant_name, participant_movil, action, ip_address, user_agent) 
                    VALUES (?, ?, ?, 'confirmed', ?, ?)";
         
         $logStmt = $pdo->prepare($logSql);
         $logStmt->execute([
             $number,
             $currentNumber['participant_name'],
-            $currentNumber['participant_email'],
+            $currentNumber['participant_movil'],
             $_SERVER['REMOTE_ADDR'] ?? 'admin',
             $_SERVER['HTTP_USER_AGENT'] ?? 'admin_panel'
         ]);
@@ -98,7 +98,7 @@ try {
             'data' => [
                 'number' => $number,
                 'participant_name' => $currentNumber['participant_name'],
-                'participant_email' => $currentNumber['participant_email'],
+                'participant_movil' => $currentNumber['participant_movil'],
                 'confirmed_at' => date('Y-m-d H:i:s')
             ]
         ]);

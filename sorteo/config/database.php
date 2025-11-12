@@ -86,7 +86,7 @@ function cleanExpiredReservations($pdo) {
     $sql = "UPDATE sorteo_numbers 
             SET status = 'available', 
                 participant_name = NULL, 
-                participant_email = NULL, 
+                participant_movil = NULL, 
                 reserved_at = NULL, 
                 reservation_expires_at = NULL 
             WHERE status = 'reserved' 

@@ -33,7 +33,7 @@ try {
         number_value INT NOT NULL UNIQUE,
         status ENUM('available', 'reserved', 'confirmed') DEFAULT 'available',
         participant_name VARCHAR(255) NULL,
-        participant_email VARCHAR(255) NULL,
+        participant_movil VARCHAR(15) NULL,
         reserved_at TIMESTAMP NULL,
         confirmed_at TIMESTAMP NULL,
         reservation_expires_at TIMESTAMP NULL,
@@ -58,7 +58,7 @@ try {
     $cleanSql = "UPDATE sorteo_numbers 
                  SET status = 'available', 
                      participant_name = NULL, 
-                     participant_email = NULL, 
+                     participant_movil = NULL, 
                      reserved_at = NULL, 
                      reservation_expires_at = NULL 
                  WHERE status = 'reserved' 
@@ -70,7 +70,7 @@ try {
                 number_value,
                 status,
                 participant_name,
-                participant_email,
+                participant_movil,
                 reserved_at,
                 confirmed_at,
                 reservation_expires_at
@@ -88,7 +88,7 @@ try {
             'number_value' => (int)$number['number_value'],
             'status' => $number['status'],
             'participant_name' => $number['participant_name'],
-            'participant_email' => $number['participant_email'],
+            'participant_movil' => $number['participant_movil'],
             'reserved_at' => $number['reserved_at'],
             'confirmed_at' => $number['confirmed_at'],
             'reservation_expires_at' => $number['reservation_expires_at'],

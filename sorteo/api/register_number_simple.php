@@ -32,7 +32,7 @@ try {
     $cleanSql = "UPDATE sorteo_numbers 
                  SET status = 'available', 
                      participant_name = NULL, 
-                     participant_email = NULL, 
+                     participant_movil = NULL, 
                      reserved_at = NULL, 
                      reservation_expires_at = NULL 
                  WHERE status = 'reserved' 
@@ -56,7 +56,7 @@ try {
     }
     
     if (!$phoneNumber || !preg_match('/^[0-9]{10}$/', $phoneNumber)) {
-        $errors[] = 'El número celular debe tener exactamente 10 dígitos';
+        $errors[] = 'El número celular es obligatorio y debe tener exactamente 10 dígitos';
     }
     
     if (!preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/', $fullName)) {

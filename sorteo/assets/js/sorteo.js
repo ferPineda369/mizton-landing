@@ -276,8 +276,7 @@ class SorteoApp {
             return;
         }
         
-        // Actualizar información del modal
-        document.getElementById('selectedNumber').textContent = this.selectedNumbers.join(', ');
+        // Campo de celular removido por el usuario
         document.getElementById('selectedNumbersList').textContent = this.selectedNumbers.join(', ');
         document.getElementById('selectedNumbers').value = JSON.stringify(this.selectedNumbers);
         
@@ -528,25 +527,7 @@ class SorteoApp {
         return sessionId;
     }
     
-    // Actualizar concepto de pago con número celular
-    updatePaymentConcept(phoneNumber) {
-        const paymentPhoneElement = document.querySelector('.payment-phone');
-        if (paymentPhoneElement) {
-            if (phoneNumber && /^[0-9]{10}$/.test(phoneNumber)) {
-                paymentPhoneElement.textContent = phoneNumber;
-            } else {
-                paymentPhoneElement.textContent = '';
-            }
-        }
-        
-        // También actualizar el concepto en el modal
-        const conceptoInput = document.getElementById('conceptoInput');
-        if (conceptoInput && phoneNumber && /^[0-9]{10}$/.test(phoneNumber)) {
-            conceptoInput.value = `Apoyo a Pahuata ${phoneNumber}`;
-        } else if (conceptoInput) {
-            conceptoInput.value = 'Apoyo a Pahuata';
-        }
-    }
+    // Función updatePaymentConcept removida ya que el campo de celular fue eliminado
     
     // Enviar registro
     async submitRegistration() {
@@ -560,10 +541,10 @@ class SorteoApp {
             return;
         }
         
-        // Validar número celular
+        // Validar número celular (obligatorio para identificación)
         const phoneNumber = formData.get('phoneNumber');
         if (!phoneNumber || !/^[0-9]{10}$/.test(phoneNumber)) {
-            this.showAlert('El número celular debe tener exactamente 10 dígitos sin espacios', 'warning');
+            this.showAlert('El número celular es obligatorio y debe tener exactamente 10 dígitos sin espacios', 'warning');
             return;
         }
         

@@ -34,7 +34,7 @@ try {
     }
     
     if (!$phoneNumber || !preg_match('/^[0-9]{10}$/', $phoneNumber)) {
-        $errors[] = 'El número celular debe tener exactamente 10 dígitos';
+        $errors[] = 'El número celular es obligatorio y debe tener exactamente 10 dígitos';
     }
     
     if (!preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/', $fullName)) {
@@ -50,7 +50,7 @@ try {
     }
     
     // Verificar si el número está disponible
-    $checkSql = "SELECT status, participant_email FROM sorteo_numbers WHERE number_value = ?";
+    $checkSql = "SELECT status, participant_movil FROM sorteo_numbers WHERE number_value = ?";
     $checkStmt = $pdo->prepare($checkSql);
     $checkStmt->execute([$number]);
     $currentNumber = $checkStmt->fetch(PDO::FETCH_ASSOC);
@@ -119,7 +119,7 @@ try {
             'data' => [
                 'number' => $number,
                 'participant_name' => $fullName,
-                'participant_email' => $email,
+                'participant_movil' => $phoneNumber,
                 'expires_at' => $expirationTime,
                 'expires_in_minutes' => 15
             ]
