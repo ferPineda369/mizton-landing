@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Selección Múltiple</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-area { margin: 20px 0; padding: 15px; border: 1px solid #ddd; }
+        .number-card { 
+            display: inline-block; 
+            width: 50px; 
+            height: 50px; 
+            margin: 5px; 
+            text-align: center; 
+            line-height: 50px; 
+            border: 2px solid #ccc; 
+            border-radius: 5px; 
+            cursor: pointer;
+            background: #28a745;
+            color: white;
+        }
+        .selected { background: #FFD700; color: black; }
+        .blocked { background: #FF8C00; color: white; cursor: not-allowed; }
+        .log { background: #f8f9fa; padding: 10px; margin: 10px 0; border-left: 4px solid #007bff; }
+    </style>
+</head>
+<body>
+    <h1>Test - Selección Múltiple de Números</h1>
+    
+    <div class="test-area">
+        <h3>Simulación Usuario A:</h3>
+        <div class="number-card" onclick="selectNumber(20, 'A')" id="num-20-A">20</div>
+        <div class="number-card" onclick="selectNumber(33, 'A')" id="num-33-A">33</div>
+        <div class="number-card" onclick="selectNumber(45, 'A')" id="num-45-A">45</div>
+        
+        <p><strong>Seleccionados A:</strong> <span id="selected-A">[]</span></p>
+        <button onclick="syncBlocks('A')">🔄 Sync Bloqueos A</button>
+        <button onclick="clearSelection('A')">🗑️ Limpiar A</button>
+    </div>
+    
+    <div class="test-area">
+        <h3>Simulación Usuario B (Vista):</h3>
+        <div class="number-card" id="num-20-B">20</div>
+        <div class="number-card" id="num-33-B">33</div>
+        <div class="number-card" id="num-45-B">45</div>
+        
+        <p><strong>Estado B:</strong> <span id="status-B">Todos disponibles</span></p>
+        <button onclick="refreshView('B')">🔄 Refrescar Vista B</button>
+    </div>
+    
+    <div class="test-area">
+        <h3>Log de Acciones:</h3>
+        <div id="log-area"></div>
+        <button onclick="clearLog()">🗑️ Limpiar Log</button>
+    </div>
+    
+    <script>
+        let selectedA = [];
+        let blockedNumbers = new Set();
+        
+        function log(message) {
+            const logArea = document.getElementById('log-area');
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log';
+            logEntry.innerHTML = `<strong>${new Date().toLocaleTimeString()}:</strong> ${message}`;
+            logArea.appendChild(logEntry);
+            logArea.scrollTop = logArea.scrollHeight;
+        }
+        
+        function selectNumber(number, user) {
+            if (user === 'A') {
+                const index = selectedA.indexOf(number);
+                const card = document.getElementById(`num-${number}-A`);
+                
+                if (index > -1) {
+                    // Deseleccionar
+                    selectedA.splice(index, 1);
+                    card.classList.remove('selected');
+                    log(`❌ Usuario A deseleccionó ${number}. Seleccionados: [${selectedA.join(', ')}]`);
+                } else {
+                    // Seleccionar
+                    selectedA.push(number);
+                    card.classList.add('selected');
+                    log(`✅ Usuario A seleccionó ${number}. Seleccionados: [${selectedA.join(', ')}]`);
+                }
+                
+                document.getElementById('selected-A').textContent = `[${selectedA.join(', ')}]`;
+                
+                // Auto-sync después de 100ms (simular debounce)
+                setTimeout(() => syncBlocks('A'), 100);
+            }
+        }
+        
+        function syncBlocks(user) {
+            if (user === 'A') {
+                // Simular API sync
+                log(`🔄 Sincronizando bloqueos para Usuario A: [${selectedA.join(', ')}]`);
+                
+                // Actualizar números bloqueados
+                blockedNumbers.clear();
+                selectedA.forEach(num => blockedNumbers.add(num));
+                
+                log(`🔒 Números bloqueados actualizados: [${Array.from(blockedNumbers).join(', ')}]`);
+                
+                // Actualizar vista de Usuario B
+                setTimeout(() => refreshView('B'), 200);
+            }
+        }
+        
+        function refreshView(user) {
+            if (user === 'B') {
+                [20, 33, 45].forEach(num => {
+                    const card = document.getElementById(`num-${num}-B`);
+                    card.className = 'number-card';
+                    
+                    if (blockedNumbers.has(num)) {
+                        card.classList.add('blocked');
+                        card.onclick = () => {
+                            log(`⚠️ Usuario B intentó seleccionar ${num} pero está bloqueado`);
+                            alert(`Número ${num} está bloqueado por otro usuario`);
+                        };
+                    } else {
+                        card.onclick = () => {
+                            log(`✅ Usuario B puede seleccionar ${num}`);
+                            alert(`Usuario B seleccionó ${num}`);
+                        };
+                    }
+                });
+                
+                const blockedArray = Array.from(blockedNumbers);
+                document.getElementById('status-B').textContent = 
+                    blockedArray.length > 0 ? 
+                    `Bloqueados: [${blockedArray.join(', ')}]` : 
+                    'Todos disponibles';
+                    
+                log(`👁️ Vista Usuario B actualizada. Bloqueados: [${blockedArray.join(', ')}]`);
+            }
+        }
+        
+        function clearSelection(user) {
+            if (user === 'A') {
+                selectedA = [];
+                [20, 33, 45].forEach(num => {
+                    document.getElementById(`num-${num}-A`).classList.remove('selected');
+                });
+                document.getElementById('selected-A').textContent = '[]';
+                log(`🗑️ Usuario A limpió selección`);
+                syncBlocks('A');
+            }
+        }
+        
+        function clearLog() {
+            document.getElementById('log-area').innerHTML = '';
+        }
+        
+        // Inicializar
+        log('🚀 Test iniciado. Simula el comportamiento esperado del sorteo.');
+        refreshView('B');
+    </script>
+</body>
+</html>

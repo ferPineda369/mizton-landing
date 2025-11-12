@@ -62,7 +62,7 @@ require_once 'config/database.php';
                                         <li><i class="fas fa-check-circle"></i> Selecciona un número del 1 al 100</li>
                                         <li><i class="fas fa-check-circle"></i> Completa tus datos personales</li>
                                         <li><i class="fas fa-check-circle"></i> Realiza el pago de participación</li>
-                                        <li><i class="fas fa-check-circle"></i> Confirma tu pago en el tiempo límite</li>
+                                        <li><i class="fas fa-check-circle"></i> Confirma tu pago en el tiempo límite. <a href="#" class="text-decoration-none fw-bold" data-bs-toggle="modal" data-bs-target="#paymentDataModal">→Datos←</a></li>
                                         <li><i class="fas fa-users"></i> <strong>Requisito:</strong> Únete al grupo de WhatsApp</li>
                                     </ul>
                                 </div>
@@ -227,8 +227,135 @@ require_once 'config/database.php';
         </div>
     </div>
 
+    <!-- Modal de Datos de Pago -->
+    <div class="modal fade" id="paymentDataModal" tabindex="-1" aria-labelledby="paymentDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title" id="paymentDataModalLabel">
+                        <i class="fas fa-credit-card"></i> Datos para Depósito Bancario
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <strong>Importante:</strong> Realiza tu depósito con estos datos exactos y conserva tu comprobante.
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border-success mb-3">
+                                <div class="card-header bg-success text-white">
+                                    <i class="fas fa-university"></i> Información Bancaria
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">CLABE:</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" value="638180000187197364" readonly id="clabeInput">
+                                            <button class="btn btn-outline-success" type="button" onclick="copyToClipboard('clabeInput')">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Banco:</label>
+                                        <input type="text" class="form-control" value="NU MEXICO" readonly>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Titular:</label>
+                                        <input type="text" class="form-control" value="Ileana Pineda Calderón" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card border-warning mb-3">
+                                <div class="card-header bg-warning text-dark">
+                                    <i class="fas fa-dollar-sign"></i> Información de Pago
+                                </div>
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Monto por boleto:</label>
+                                        <div class="h4 text-success">$25.00 MXN</div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Concepto sugerido:</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" value="Sorteo Navideño Mizton" readonly id="conceptoInput">
+                                            <button class="btn btn-outline-warning" type="button" onclick="copyToClipboard('conceptoInput')">
+                                                <i class="fas fa-copy"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <strong>Recuerda:</strong> Tienes 15 minutos para realizar el pago después de reservar tus números.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <h6><i class="fas fa-check-circle"></i> Pasos para el pago:</h6>
+                        <ol class="mb-0">
+                            <li>Copia la CLABE y realiza la transferencia desde tu banco</li>
+                            <li>Usa el concepto sugerido para identificar tu pago</li>
+                            <li>Conserva tu comprobante de transferencia</li>
+                            <li>El pago se confirmará automáticamente en unos minutos</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Cerrar
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="window.open('https://chat.whatsapp.com/XXXXXXXXXXXXXXX', '_blank')">
+                        <i class="fab fa-whatsapp"></i> Ir al Grupo WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/js/sorteo.js"></script>
+    
+    <script>
+        // Función para copiar al portapapeles
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            element.select();
+            element.setSelectionRange(0, 99999); // Para móviles
+            
+            try {
+                document.execCommand('copy');
+                
+                // Mostrar feedback visual
+                const button = element.nextElementSibling;
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i>';
+                button.classList.remove('btn-outline-success', 'btn-outline-warning');
+                button.classList.add('btn-success');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.classList.remove('btn-success');
+                    button.classList.add(elementId === 'clabeInput' ? 'btn-outline-success' : 'btn-outline-warning');
+                }, 2000);
+                
+            } catch (err) {
+                console.error('Error al copiar: ', err);
+            }
+        }
+    </script>
 </body>
 </html>

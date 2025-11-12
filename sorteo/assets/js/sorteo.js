@@ -13,6 +13,7 @@ class SorteoApp {
         this.usingFallbackAPI = false; // Para detectar si estamos usando API de respaldo
         this.previouslySelectedNumbers = []; // Para rastrear números previamente seleccionados
         this.numbersRefreshInterval = null; // Para el refresco automático
+        this.updateBlocksTimeout = null; // Para debounce de actualizaciones
         
         this.init();
     }
@@ -376,58 +377,64 @@ class SorteoApp {
         this.blockingTimeLeft = 0;
     }
     
-    // Actualizar bloqueos en el servidor (más inteligente)
-    async updateBlocksOnServer() {
+    // Actualizar bloqueos en el servidor con debounce
+    updateBlocksOnServer() {
         if (this.usingFallbackAPI) return;
         
-        // Determinar qué números bloquear y desbloquear
-        const numbersToBlock = this.selectedNumbers.filter(num => !this.previouslySelectedNumbers.includes(num));
-        const numbersToUnblock = this.previouslySelectedNumbers.filter(num => !this.selectedNumbers.includes(num));
+        // Cancelar timeout anterior si existe
+        if (this.updateBlocksTimeout) {
+            clearTimeout(this.updateBlocksTimeout);
+        }
+        
+        // Programar actualización con debounce de 100ms
+        this.updateBlocksTimeout = setTimeout(() => {
+            this.performBlocksUpdate();
+        }, 100);
+    }
+    
+    // Realizar la actualización real de bloqueos
+    async performBlocksUpdate() {
+        console.log('🔄 Actualizando bloqueos:', {
+            selectedNumbers: this.selectedNumbers,
+            previouslySelectedNumbers: this.previouslySelectedNumbers,
+            sessionId: this.getSessionId()
+        });
         
         try {
-            // Si hay números para desbloquear, hacerlo primero
-            if (numbersToUnblock.length > 0) {
-                await fetch('api/block_numbers.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        numbers: numbersToUnblock,
-                        action: 'unblock',
-                        session_id: this.getSessionId()
-                    })
-                });
-            }
+            // Estrategia simplificada: enviar todos los números seleccionados actuales
+            const payload = {
+                numbers: this.selectedNumbers,
+                action: 'sync', // Nueva acción para sincronizar todos los números
+                session_id: this.getSessionId()
+            };
             
-            // Si hay números para bloquear, hacerlo después
-            if (numbersToBlock.length > 0) {
-                const response = await fetch('api/block_numbers.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        numbers: numbersToBlock,
-                        action: 'block',
-                        session_id: this.getSessionId()
-                    })
-                });
-                
-                const data = await response.json();
-                
-                if (!data.success) {
-                    this.showAlert(data.message, 'warning');
-                    // Si hay conflicto, recargar números
-                    this.loadNumbers();
-                }
+            console.log('📤 Enviando payload:', payload);
+            
+            const response = await fetch('api/block_numbers.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+            
+            const data = await response.json();
+            console.log('📥 Respuesta del servidor:', data);
+            
+            if (!data.success) {
+                console.error('❌ Error en servidor:', data.message);
+                this.showAlert(data.message, 'warning');
+                // Si hay conflicto, recargar números
+                this.loadNumbers();
+            } else {
+                console.log('✅ Bloqueos actualizados correctamente');
             }
             
             // Actualizar el registro de números previamente seleccionados
             this.previouslySelectedNumbers = [...this.selectedNumbers];
             
         } catch (error) {
-            console.error('Error actualizando bloqueos:', error);
+            console.error('❌ Error actualizando bloqueos:', error);
         }
     }
     
@@ -504,6 +511,10 @@ class SorteoApp {
         if (this.countdownTimer) {
             clearInterval(this.countdownTimer);
             this.countdownTimer = null;
+        }
+        if (this.updateBlocksTimeout) {
+            clearTimeout(this.updateBlocksTimeout);
+            this.updateBlocksTimeout = null;
         }
     }
     
