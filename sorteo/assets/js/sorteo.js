@@ -10,6 +10,7 @@ class SorteoApp {
         this.snowflakes = [];
         this.whatsappGroupUrl = 'https://chat.whatsapp.com/XXXXXXXXXXXXXXX'; // Cambiar por URL real
         this.blockingTimeLeft = 0;
+        this.usingFallbackAPI = false; // Para detectar si estamos usando API de respaldo
         
         this.init();
     }
@@ -75,8 +76,9 @@ class SorteoApp {
                     const fallbackData = await fallbackResponse.json();
                     
                     if (fallbackData.success) {
+                        this.usingFallbackAPI = true; // Marcar que estamos usando fallback
                         this.renderNumbers(fallbackData.numbers);
-                        this.showAlert('Cargado con API de respaldo. Algunas funciones pueden estar limitadas.', 'warning');
+                        // No mostrar mensaje de respaldo, funciona transparentemente
                     } else {
                         this.showAlert('Error al cargar los números. Por favor, recarga la página.', 'danger');
                     }
@@ -95,8 +97,9 @@ class SorteoApp {
                 const fallbackData = await fallbackResponse.json();
                 
                 if (fallbackData.success) {
+                    this.usingFallbackAPI = true; // Marcar que estamos usando fallback
                     this.renderNumbers(fallbackData.numbers);
-                    this.showAlert('Cargado con API de respaldo. Funciones de bloqueo deshabilitadas.', 'warning');
+                    // Funciona transparentemente sin mensaje al usuario
                     return;
                 }
             } catch (fallbackError) {
@@ -270,6 +273,9 @@ class SorteoApp {
     
     // Iniciar timer de bloqueo temporal (2 minutos)
     startBlockingTimer() {
+        // No mostrar timer si estamos usando API de respaldo
+        if (this.usingFallbackAPI) return;
+        
         this.clearBlockingTimer();
         this.blockingTimeLeft = 120; // 2 minutos en segundos
         
@@ -333,7 +339,7 @@ class SorteoApp {
     
     // Bloquear números en el servidor
     async blockNumbersOnServer() {
-        if (this.selectedNumbers.length === 0) return;
+        if (this.selectedNumbers.length === 0 || this.usingFallbackAPI) return;
         
         try {
             const response = await fetch('api/block_numbers.php', {
@@ -362,6 +368,8 @@ class SorteoApp {
     
     // Desbloquear números en el servidor
     async unblockNumbersOnServer() {
+        if (this.usingFallbackAPI) return;
+        
         try {
             const response = await fetch('api/block_numbers.php', {
                 method: 'POST',
@@ -432,7 +440,8 @@ class SorteoApp {
                 numberFormData.append('number', number);
                 numberFormData.append('fullName', formData.get('fullName'));
                 
-                return fetch('api/register_number.php', {
+                const apiUrl = this.usingFallbackAPI ? 'api/register_number_simple.php' : 'api/register_number.php';
+                return fetch(apiUrl, {
                     method: 'POST',
                     body: numberFormData
                 });
