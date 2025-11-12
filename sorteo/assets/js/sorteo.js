@@ -800,29 +800,22 @@ class SorteoApp {
                 
                 // Mostrar detalles de errores para debug
                 results.filter(r => !r.success).forEach((result, index) => {
-                    console.error(`Error en número ${this.selectedNumbers[index]}:`, result);
+                    console.error(`Error ${index + 1}:`, result.message);
                     if (result.debug) {
-                        console.error('Debug info:', result.debug);
+                        console.error(`Debug info:`, result.debug);
                     }
                 });
             }
+            
         } catch (error) {
-            console.error('Error:', error);
-            this.showAlert('Error de conexión. Por favor, intenta nuevamente.', 'danger');
+            console.error('❌ Error general en submitRegistration:', error);
+            console.error('Stack trace:', error.stack);
+            this.showAlert('Error inesperado: ' + error.message, 'danger');
         } finally {
             // Rehabilitar botón
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i class="fas fa-check"></i> Confirmar Participación';
         }
-    }
-    
-    // Abrir grupo de WhatsApp
-    openWhatsAppGroup() {
-        // Abrir en nueva pestaña
-        window.open(this.whatsappGroupUrl, '_blank');
-        
-        // Mostrar mensaje informativo
-        this.showAlert('Se ha abierto el grupo de WhatsApp. ¡No olvides unirte para participar en el sorteo en vivo!', 'info');
     }
     
     // Timer de reserva (15 minutos)

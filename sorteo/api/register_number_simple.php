@@ -132,17 +132,21 @@ try {
         
         // Registrar en el log de transacciones
         $logSql = "INSERT INTO sorteo_transactions 
-                   (number_value, participant_name, participant_movil, action, ip_address, user_agent) 
-                   VALUES (?, ?, ?, 'reserved', ?, ?)";
+                   (number_value, participant_name, participant_movil, participant_email, action, ip_address, user_agent) 
+                   VALUES (?, ?, ?, NULL, 'reserved', ?, ?)";
         
         $logStmt = $pdo->prepare($logSql);
-        $logStmt->execute([
+        $logResult = $logStmt->execute([
             $number,
             $fullName,
             $phoneNumber,
             $_SERVER['REMOTE_ADDR'] ?? 'unknown',
             $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
         ]);
+        
+        if (!$logResult) {
+            error_log("ERROR EN LOG DE TRANSACCIONES (SIMPLE): " . print_r($logStmt->errorInfo(), true));
+        }
         
         // Confirmar transacción
         $pdo->commit();
