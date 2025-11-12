@@ -1,11 +1,12 @@
 // JavaScript para el Sistema de Sorteo Mizton - Versión Navideña
 class SorteoApp {
     constructor() {
-        this.selectedNumber = null;
+        this.selectedNumbers = [];
         this.reservationTimer = null;
         this.countdownTimer = null;
         this.targetDate = new Date('2025-11-28T23:59:59').getTime();
         this.snowflakes = [];
+        this.whatsappGroupUrl = 'https://chat.whatsapp.com/XXXXXXXXXXXXXXX'; // Cambiar por URL real
         
         this.init();
     }
@@ -73,12 +74,17 @@ class SorteoApp {
             card.dataset.status = number.status;
             
             if (number.status === 'available') {
-                card.addEventListener('click', () => this.selectNumber(number.number_value));
+                card.addEventListener('click', () => this.toggleNumber(number.number_value, card));
                 
                 // Agregar efecto de brillo navideño al hacer hover
                 card.addEventListener('mouseenter', () => {
                     this.addChristmasSparkle(card);
                 });
+            }
+            
+            // Marcar números ya seleccionados
+            if (this.selectedNumbers.includes(number.number_value)) {
+                card.classList.add('number-selected');
             }
             
             // Tooltip para números ocupados
@@ -92,22 +98,81 @@ class SorteoApp {
         });
     }
     
-    // Seleccionar número
-    selectNumber(number) {
-        this.selectedNumber = number;
-        document.getElementById('selectedNumber').textContent = number;
-        document.getElementById('numberInput').value = number;
+    // Alternar selección de número (selección múltiple)
+    toggleNumber(number, cardElement) {
+        const index = this.selectedNumbers.indexOf(number);
+        
+        if (index > -1) {
+            // Deseleccionar número
+            this.selectedNumbers.splice(index, 1);
+            cardElement.classList.remove('number-selected');
+        } else {
+            // Seleccionar número
+            this.selectedNumbers.push(number);
+            cardElement.classList.add('number-selected');
+        }
+        
+        // Actualizar botón de continuar
+        this.updateContinueButton();
+    }
+    
+    // Actualizar botón de continuar
+    updateContinueButton() {
+        let continueBtn = document.getElementById('continueBtn');
+        
+        if (!continueBtn) {
+            // Crear botón si no existe
+            continueBtn = document.createElement('button');
+            continueBtn.id = 'continueBtn';
+            continueBtn.className = 'btn btn-success btn-lg position-fixed';
+            continueBtn.style.cssText = `
+                bottom: 20px;
+                right: 20px;
+                z-index: 1050;
+                border-radius: 50px;
+                padding: 15px 25px;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            `;
+            continueBtn.innerHTML = '<i class="fas fa-arrow-right"></i> Continuar';
+            continueBtn.addEventListener('click', () => this.showRegistrationModal());
+            document.body.appendChild(continueBtn);
+        }
+        
+        if (this.selectedNumbers.length > 0) {
+            continueBtn.style.display = 'block';
+            continueBtn.innerHTML = `<i class="fas fa-arrow-right"></i> Continuar (${this.selectedNumbers.length} números)`;
+        } else {
+            continueBtn.style.display = 'none';
+        }
+    }
+    
+    // Mostrar modal de registro
+    showRegistrationModal() {
+        if (this.selectedNumbers.length === 0) {
+            this.showAlert('Por favor selecciona al menos un número', 'warning');
+            return;
+        }
+        
+        // Actualizar información del modal
+        document.getElementById('selectedNumber').textContent = this.selectedNumbers.join(', ');
+        document.getElementById('selectedNumbersList').textContent = this.selectedNumbers.join(', ');
+        document.getElementById('selectedNumbers').value = JSON.stringify(this.selectedNumbers);
+        
+        // Actualizar concepto de pago
+        const conceptText = this.selectedNumbers.length === 1 
+            ? `Sorteo Número ${this.selectedNumbers[0]}`
+            : `Sorteo Números ${this.selectedNumbers.join(', ')}`;
+        
         document.querySelectorAll('.payment-number').forEach(el => {
-            el.textContent = number;
+            el.textContent = this.selectedNumbers.join(', ');
         });
         
         // Mostrar modal
         const modal = new bootstrap.Modal(document.getElementById('registrationModal'));
         modal.show();
         
-        // Limpiar formulario
-        document.getElementById('registrationForm').reset();
-        document.getElementById('numberInput').value = number;
+        // Limpiar formulario pero mantener números seleccionados
+        document.getElementById('fullName').value = '';
     }
     
     // Configurar event listeners
@@ -130,22 +195,50 @@ class SorteoApp {
         const formData = new FormData(form);
         const submitBtn = form.querySelector('button[type="submit"]');
         
+        // Validar que hay números seleccionados
+        if (this.selectedNumbers.length === 0) {
+            this.showAlert('No hay números seleccionados', 'warning');
+            return;
+        }
+        
         // Deshabilitar botón y mostrar loading
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="loading-spinner"></span> Procesando...';
         
         try {
-            const response = await fetch('api/register_number.php', {
-                method: 'POST',
-                body: formData
+            // Registrar cada número seleccionado
+            const registrationPromises = this.selectedNumbers.map(number => {
+                const numberFormData = new FormData();
+                numberFormData.append('number', number);
+                numberFormData.append('fullName', formData.get('fullName'));
+                
+                return fetch('api/register_number.php', {
+                    method: 'POST',
+                    body: numberFormData
+                });
             });
             
-            const data = await response.json();
+            const responses = await Promise.all(registrationPromises);
+            const results = await Promise.all(responses.map(r => r.json()));
             
-            if (data.success) {
-                this.showAlert('¡Número reservado exitosamente! Tienes 15 minutos para confirmar el pago.', 'success');
+            const successCount = results.filter(r => r.success).length;
+            const failCount = results.length - successCount;
+            
+            if (successCount > 0) {
+                const message = failCount > 0 
+                    ? `${successCount} números reservados exitosamente. ${failCount} números no pudieron reservarse.`
+                    : `¡${successCount} números reservados exitosamente! Tienes 15 minutos para confirmar el pago.`;
+                
+                this.showAlert(message, successCount === results.length ? 'success' : 'warning');
                 this.startReservationTimer(15 * 60); // 15 minutos
                 this.loadNumbers(); // Recargar números
+                
+                // Abrir WhatsApp
+                this.openWhatsAppGroup();
+                
+                // Limpiar selección
+                this.selectedNumbers = [];
+                this.updateContinueButton();
                 
                 // Cerrar modal después de 2 segundos
                 setTimeout(() => {
@@ -153,7 +246,7 @@ class SorteoApp {
                 }, 2000);
                 
             } else {
-                this.showAlert(data.message || 'Error al reservar el número', 'danger');
+                this.showAlert('No se pudo reservar ningún número. Intenta nuevamente.', 'danger');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -163,6 +256,15 @@ class SorteoApp {
             submitBtn.disabled = false;
             submitBtn.innerHTML = '<i class="fas fa-check"></i> Confirmar Participación';
         }
+    }
+    
+    // Abrir grupo de WhatsApp
+    openWhatsAppGroup() {
+        // Abrir en nueva pestaña
+        window.open(this.whatsappGroupUrl, '_blank');
+        
+        // Mostrar mensaje informativo
+        this.showAlert('Se ha abierto el grupo de WhatsApp. ¡No olvides unirte para participar en el sorteo en vivo!', 'info');
     }
     
     // Timer de reserva (15 minutos)
@@ -302,9 +404,9 @@ class SorteoApp {
         
         // Posición aleatoria
         snowflake.style.left = Math.random() * 100 + '%';
-        snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
-        snowflake.style.opacity = Math.random();
-        snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+        snowflake.style.animationDuration = (Math.random() * 4 + 3) + 's';
+        snowflake.style.opacity = Math.random() * 0.8 + 0.2;
+        snowflake.style.fontSize = (Math.random() * 15 + 15) + 'px';
         
         // Delay aleatorio para que no todos caigan al mismo tiempo
         snowflake.style.animationDelay = Math.random() * 2 + 's';

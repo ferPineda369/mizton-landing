@@ -20,7 +20,7 @@ try {
     // Validar datos de entrada
     $number = filter_input(INPUT_POST, 'number', FILTER_VALIDATE_INT);
     $fullName = trim(filter_input(INPUT_POST, 'fullName', FILTER_SANITIZE_STRING));
-    $email = trim(filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL));
+    $email = null; // Ya no se requiere email
     
     // Validaciones
     $errors = [];
@@ -35,10 +35,6 @@ try {
     
     if (!preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/', $fullName)) {
         $errors[] = 'El nombre solo puede contener letras y espacios';
-    }
-    
-    if (!$email) {
-        $errors[] = 'Email inválido';
     }
     
     if (!empty($errors)) {
@@ -71,21 +67,7 @@ try {
         exit;
     }
     
-    // Verificar si el email ya tiene un número reservado o confirmado
-    $emailCheckSql = "SELECT number_value, status FROM sorteo_numbers 
-                      WHERE participant_email = ? AND status IN ('reserved', 'confirmed')";
-    $emailCheckStmt = $pdo->prepare($emailCheckSql);
-    $emailCheckStmt->execute([$email]);
-    $existingNumber = $emailCheckStmt->fetch(PDO::FETCH_ASSOC);
-    
-    if ($existingNumber) {
-        $statusText = $existingNumber['status'] === 'confirmed' ? 'confirmado' : 'reservado';
-        echo json_encode([
-            'success' => false,
-            'message' => "Ya tienes el número {$existingNumber['number_value']} {$statusText} con este email"
-        ]);
-        exit;
-    }
+    // Ya no verificamos duplicados por email, permitimos múltiples números por persona
     
     // Iniciar transacción
     $pdo->beginTransaction();

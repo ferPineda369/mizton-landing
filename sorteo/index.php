@@ -63,14 +63,15 @@ require_once 'config/database.php';
                                         <li><i class="fas fa-check-circle"></i> Completa tus datos personales</li>
                                         <li><i class="fas fa-check-circle"></i> Realiza el pago de participación</li>
                                         <li><i class="fas fa-check-circle"></i> Confirma tu pago en el tiempo límite</li>
+                                        <li><i class="fas fa-users"></i> <strong>Requisito:</strong> Únete al grupo de WhatsApp</li>
                                     </ul>
                                 </div>
                                 <div class="col-md-6">
                                     <ul class="rules-list">
-                                        <li><i class="fas fa-clock"></i> Tienes 15 minutos para confirmar el pago</li>
-                                        <li><i class="fas fa-trophy"></i> El sorteo se realizará el 28 de noviembre</li>
-                                        <li><i class="fas fa-gift"></i> Premios increíbles te esperan</li>
-                                        <li><i class="fas fa-handshake"></i> Sorteo transparente y justo</li>
+                                        <li><i class="fas fa-clock"></i> 15 minutos reservado para confirmar tu pago</li>
+                                        <li><i class="fas fa-calendar"></i> El sorteo se realizará el 28 de noviembre</li>
+                                        <li><i class="fas fa-trophy"></i> 2 Ganadores posibles → <button class="btn btn-link p-0 text-decoration-none fw-bold" data-bs-toggle="modal" data-bs-target="#prizeModal" style="color: var(--christmas-gold);">Premio</button> ←</li>
+                                        <li><i class="fas fa-handshake"></i> Sorteo en vivo transparente y justo</li>
                                     </ul>
                                 </div>
                             </div>
@@ -95,6 +96,75 @@ require_once 'config/database.php';
         </div>
     </section>
 
+    <!-- Modal del Premio -->
+    <div class="modal fade" id="prizeModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-gift"></i> Premio del Sorteo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <h3 class="text-primary">🏆 Colágeno Duché 🏆</h3>
+                        <h5 class="text-muted">(Colágeno Hidrolizado)</h5>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <h6><i class="fas fa-info-circle"></i> Descripción del Producto</h6>
+                                <p>Bebida proteínica en polvo a base de colágeno puro saborizado que se disuelve fácilmente en agua o jugo. Contiene Aminoácidos Esenciales.</p>
+                            </div>
+                            
+                            <div class="card mb-3">
+                                <div class="card-header bg-success text-white">
+                                    <h6 class="mb-0"><i class="fas fa-star"></i> Beneficios</h6>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled">
+                                        <li><i class="fas fa-check text-success"></i> <strong>PIEL:</strong> La favorece con brillo, tonicidad, suavidad y la humecta.</li>
+                                        <li><i class="fas fa-check text-success"></i> <strong>UÑAS:</strong> Por sus aminoácidos, favorecen el crecimiento y dureza.</li>
+                                        <li><i class="fas fa-check text-success"></i> <strong>PESTAÑAS:</strong> Posee propiedades que nutren y fortalecen, haciéndolas crecer largas y abundantes.</li>
+                                        <li><i class="fas fa-check text-success"></i> <strong>CABELLO:</strong> Gracias al colágeno lucirá abundante y espectacular.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header bg-warning">
+                                            <h6 class="mb-0"><i class="fas fa-utensils"></i> Uso Recomendado</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <p><strong>Sabor:</strong> Natural</p>
+                                            <p><strong>Cantidad:</strong> Toma diariamente 1 cucharada sopera disuelta en un vaso de agua.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header bg-primary text-white">
+                                            <h6 class="mb-0"><i class="fas fa-box"></i> Contenido</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <h4 class="text-center text-primary">300 g</h4>
+                                            <p class="text-center text-muted">Producto completo</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal de Registro -->
     <div class="modal fade" id="registrationModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -106,20 +176,22 @@ require_once 'config/database.php';
                 <div class="modal-body">
                     <form id="registrationForm">
                         <input type="hidden" id="numberInput" name="number">
+                        <input type="hidden" id="selectedNumbers" name="selectedNumbers">
                         
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="fullName" class="form-label">Nombre Completo *</label>
-                                    <input type="text" class="form-control" id="fullName" name="fullName" required>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Correo Electrónico *</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
-                                </div>
-                            </div>
+                        <div class="alert alert-warning">
+                            <i class="fas fa-info-circle"></i> 
+                            <strong>Números seleccionados:</strong> <span id="selectedNumbersList"></span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Nombre Completo *</label>
+                            <input type="text" class="form-control" id="fullName" name="fullName" required>
+                            <div class="form-text">Este nombre aparecerá en todos los números seleccionados</div>
+                        </div>
+                        
+                        <div class="alert alert-success">
+                            <i class="fas fa-whatsapp"></i> 
+                            <strong>¡Importante!</strong> Al confirmar tu participación se abrirá automáticamente el grupo de WhatsApp. Es <strong>REQUISITO</strong> unirse para participar en el evento en vivo.
                         </div>
                         
                         <div class="alert alert-info">
@@ -133,8 +205,8 @@ require_once 'config/database.php';
                         
                         <div class="alert alert-warning">
                             <i class="fas fa-clock"></i> 
-                            <strong>Tiempo límite:</strong> 
-                            <span id="reservationTimer">15:00</span> minutos para confirmar el pago
+                            <strong>Tiempo restante:</strong> 
+                            <span id="reservationTimer">15:00</span> para confirmar el pago
                         </div>
                         
                         <div class="d-grid gap-2">

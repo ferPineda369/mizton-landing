@@ -466,16 +466,17 @@ body {
 
 /* Estilos base para copos de nieve */
 .snowflake {
-    position: absolute;
-    top: -10px;
+    position: fixed;
+    top: -20px;
     color: var(--snow-white);
-    font-size: 1em;
+    font-size: 1.5em;
     animation-name: snowfall;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     user-select: none;
     pointer-events: none;
-    text-shadow: 0 0 5px rgba(255,255,255,0.8);
+    text-shadow: 0 0 8px rgba(255,255,255,0.9);
+    z-index: 1000;
 }
 
 /* Animación de caída de nieve */
@@ -491,16 +492,16 @@ body {
 }
 
 /* Diferentes tamaños y velocidades de copos */
-.snowflake:nth-child(1n) { left: 1%; animation-duration: 6s; font-size: 0.8em; }
-.snowflake:nth-child(2n) { left: 10%; animation-duration: 12s; font-size: 1.2em; }
-.snowflake:nth-child(3n) { left: 20%; animation-duration: 8s; font-size: 0.9em; }
-.snowflake:nth-child(4n) { left: 30%; animation-duration: 10s; font-size: 1.1em; }
-.snowflake:nth-child(5n) { left: 40%; animation-duration: 14s; font-size: 0.7em; }
-.snowflake:nth-child(6n) { left: 50%; animation-duration: 9s; font-size: 1.3em; }
-.snowflake:nth-child(7n) { left: 60%; animation-duration: 11s; font-size: 0.8em; }
-.snowflake:nth-child(8n) { left: 70%; animation-duration: 7s; font-size: 1em; }
-.snowflake:nth-child(9n) { left: 80%; animation-duration: 13s; font-size: 0.9em; }
-.snowflake:nth-child(10n) { left: 90%; animation-duration: 15s; font-size: 1.1em; }
+.snowflake:nth-child(1n) { left: 1%; animation-duration: 6s; font-size: 1.2em; }
+.snowflake:nth-child(2n) { left: 10%; animation-duration: 12s; font-size: 1.8em; }
+.snowflake:nth-child(3n) { left: 20%; animation-duration: 8s; font-size: 1.4em; }
+.snowflake:nth-child(4n) { left: 30%; animation-duration: 10s; font-size: 1.6em; }
+.snowflake:nth-child(5n) { left: 40%; animation-duration: 14s; font-size: 1.1em; }
+.snowflake:nth-child(6n) { left: 50%; animation-duration: 9s; font-size: 2.0em; }
+.snowflake:nth-child(7n) { left: 60%; animation-duration: 11s; font-size: 1.3em; }
+.snowflake:nth-child(8n) { left: 70%; animation-duration: 7s; font-size: 1.5em; }
+.snowflake:nth-child(9n) { left: 80%; animation-duration: 13s; font-size: 1.4em; }
+.snowflake:nth-child(10n) { left: 90%; animation-duration: 15s; font-size: 1.7em; }
 
 /* Efectos navideños adicionales */
 .hero-section {
@@ -553,6 +554,24 @@ body {
     color: white;
     box-shadow: 0 4px 15px rgba(34,139,34,0.4);
     border: 2px solid var(--christmas-gold);
+}
+
+.number-selected {
+    background: linear-gradient(135deg, var(--christmas-gold) 0%, #FFE55C 100%) !important;
+    color: var(--dark-color) !important;
+    border: 3px solid var(--christmas-red) !important;
+    transform: scale(1.1);
+    box-shadow: 0 8px 25px rgba(255,215,0,0.6), 0 0 20px rgba(196,30,58,0.4) !important;
+    animation: selectedPulse 2s infinite;
+}
+
+@keyframes selectedPulse {
+    0%, 100% { 
+        box-shadow: 0 8px 25px rgba(255,215,0,0.6), 0 0 20px rgba(196,30,58,0.4);
+    }
+    50% { 
+        box-shadow: 0 12px 35px rgba(255,215,0,0.8), 0 0 30px rgba(196,30,58,0.6);
+    }
 }
 
 .number-available:hover {
