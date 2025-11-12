@@ -49,19 +49,71 @@ class SorteoApp {
     // Cargar números desde la base de datos
     async loadNumbers() {
         try {
+            console.log('Cargando números desde API...');
+            
             // Usar API principal ahora que la BD está configurada
             const response = await fetch('api/get_numbers.php');
+            
+            console.log('Respuesta recibida:', response.status, response.statusText);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
             const data = await response.json();
+            console.log('Datos recibidos:', data);
             
             if (data.success) {
                 this.renderNumbers(data.numbers);
             } else {
                 console.error('Error al cargar números:', data.message);
-                this.showAlert('Error al cargar los números. Por favor, recarga la página.', 'danger');
+                console.log('Intentando con API simplificada...');
+                
+                // Fallback a API simplificada
+                try {
+                    const fallbackResponse = await fetch('api/get_numbers_simple.php');
+                    const fallbackData = await fallbackResponse.json();
+                    
+                    if (fallbackData.success) {
+                        this.renderNumbers(fallbackData.numbers);
+                        this.showAlert('Cargado con API de respaldo. Algunas funciones pueden estar limitadas.', 'warning');
+                    } else {
+                        this.showAlert('Error al cargar los números. Por favor, recarga la página.', 'danger');
+                    }
+                } catch (fallbackError) {
+                    this.showAlert('Error al cargar los números. Por favor, recarga la página.', 'danger');
+                }
             }
         } catch (error) {
-            console.error('Error de conexión:', error);
-            this.showAlert('Error de conexión. Por favor, verifica tu conexión a internet.', 'danger');
+            console.error('Error al cargar números:', error);
+            
+            console.log('Error principal, intentando con API simplificada...');
+            
+            // Intentar con API simplificada como último recurso
+            try {
+                const fallbackResponse = await fetch('api/get_numbers_simple.php');
+                const fallbackData = await fallbackResponse.json();
+                
+                if (fallbackData.success) {
+                    this.renderNumbers(fallbackData.numbers);
+                    this.showAlert('Cargado con API de respaldo. Funciones de bloqueo deshabilitadas.', 'warning');
+                    return;
+                }
+            } catch (fallbackError) {
+                console.error('También falló la API de respaldo:', fallbackError);
+            }
+            
+            // Mostrar error más específico
+            let errorMessage = 'Error de conexión. ';
+            if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                errorMessage += 'No se puede conectar al servidor. Verifica que el servidor esté ejecutándose.';
+            } else if (error.message) {
+                errorMessage += error.message;
+            } else {
+                errorMessage += 'Por favor, verifica tu conexión a internet.';
+            }
+            
+            this.showAlert(errorMessage, 'danger');
         }
     }
     
