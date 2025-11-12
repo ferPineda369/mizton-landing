@@ -721,6 +721,14 @@ class SorteoApp {
         submitBtn.innerHTML = '<span class="loading-spinner"></span> Procesando...';
         
         try {
+            // Debug: mostrar datos que se van a enviar
+            console.log('🔍 Datos del formulario:', {
+                fullName: formData.get('fullName'),
+                phoneNumber: phoneNumber,
+                selectedNumbers: this.selectedNumbers,
+                usingFallbackAPI: this.usingFallbackAPI
+            });
+            
             // Registrar cada número seleccionado
             const registrationPromises = this.selectedNumbers.map(number => {
                 const numberFormData = new FormData();
@@ -728,7 +736,16 @@ class SorteoApp {
                 numberFormData.append('fullName', formData.get('fullName'));
                 numberFormData.append('phoneNumber', phoneNumber);
                 
+                // Debug: mostrar datos específicos por número
+                console.log(`📤 Enviando número ${number}:`, {
+                    number: number,
+                    fullName: formData.get('fullName'),
+                    phoneNumber: phoneNumber
+                });
+                
                 const apiUrl = this.usingFallbackAPI ? 'api/register_number_simple.php' : 'api/register_number.php';
+                console.log(`🌐 URL de API: ${apiUrl}`);
+                
                 return fetch(apiUrl, {
                     method: 'POST',
                     body: numberFormData
