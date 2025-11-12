@@ -3,9 +3,9 @@
 try {
     // Configuración de base de datos
     $host = 'localhost';
-    $dbname = 'mizton_db'; // Cambiar por el nombre real de la base de datos
-    $username = 'root'; // Cambiar por el usuario real
-    $password = ''; // Cambiar por la contraseña real
+    $dbname = 'miztondb'; // Cambiar por el nombre real de la base de datos
+    $username = 'michiuser'; // Cambiar por el usuario real
+    $password = 'yo96jiaEJKG7pwRmw2gY8K'; // Cambiar por la contraseña real
     
     // Crear conexión PDO
     $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
