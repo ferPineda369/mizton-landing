@@ -12,9 +12,9 @@ if (session_status() === PHP_SESSION_NONE) {
 try {
     // Configuración de base de datos
     $host = 'localhost';
-    $dbname = 'mizton_db'; // Cambiar por el nombre real
-    $username = 'root'; // Cambiar por el usuario real  
-    $password = ''; // Cambiar por la contraseña real
+    $dbname = 'miztondb'; // Usar la misma configuración
+    $username = 'michiuser'; // Usar el mismo usuario
+    $password = 'yo96jiaEJKG7pwRmw2gY8K'; // Usar la misma contraseña
     
     // Crear conexión PDO
     $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
