@@ -1,0 +1,155 @@
+<?php
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
+
+require_once '../config/database.php';
+
+// Solo permitir POST
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+    exit;
+}
+
+try {
+    // Limpiar reservas expiradas
+    cleanExpiredReservations($pdo);
+    
+    // Validar datos de entrada
+    $number = filter_input(INPUT_POST, 'number', FILTER_VALIDATE_INT);
+    $fullName = trim(filter_input(INPUT_POST, 'fullName', FILTER_SANITIZE_STRING));
+    $email = trim(filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL));
+    
+    // Validaciones
+    $errors = [];
+    
+    if (!$number || $number < 1 || $number > 100) {
+        $errors[] = 'Número inválido';
+    }
+    
+    if (!$fullName || strlen($fullName) < 3) {
+        $errors[] = 'El nombre debe tener al menos 3 caracteres';
+    }
+    
+    if (!preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/', $fullName)) {
+        $errors[] = 'El nombre solo puede contener letras y espacios';
+    }
+    
+    if (!$email) {
+        $errors[] = 'Email inválido';
+    }
+    
+    if (!empty($errors)) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Datos inválidos: ' . implode(', ', $errors)
+        ]);
+        exit;
+    }
+    
+    // Verificar si el número está disponible
+    $checkSql = "SELECT status, participant_email FROM sorteo_numbers WHERE number_value = ?";
+    $checkStmt = $pdo->prepare($checkSql);
+    $checkStmt->execute([$number]);
+    $currentNumber = $checkStmt->fetch(PDO::FETCH_ASSOC);
+    
+    if (!$currentNumber) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Número no encontrado'
+        ]);
+        exit;
+    }
+    
+    if ($currentNumber['status'] !== 'available') {
+        echo json_encode([
+            'success' => false,
+            'message' => 'El número ya no está disponible'
+        ]);
+        exit;
+    }
+    
+    // Verificar si el email ya tiene un número reservado o confirmado
+    $emailCheckSql = "SELECT number_value, status FROM sorteo_numbers 
+                      WHERE participant_email = ? AND status IN ('reserved', 'confirmed')";
+    $emailCheckStmt = $pdo->prepare($emailCheckSql);
+    $emailCheckStmt->execute([$email]);
+    $existingNumber = $emailCheckStmt->fetch(PDO::FETCH_ASSOC);
+    
+    if ($existingNumber) {
+        $statusText = $existingNumber['status'] === 'confirmed' ? 'confirmado' : 'reservado';
+        echo json_encode([
+            'success' => false,
+            'message' => "Ya tienes el número {$existingNumber['number_value']} {$statusText} con este email"
+        ]);
+        exit;
+    }
+    
+    // Iniciar transacción
+    $pdo->beginTransaction();
+    
+    try {
+        // Calcular tiempo de expiración (15 minutos)
+        $expirationTime = date('Y-m-d H:i:s', time() + (15 * 60));
+        
+        // Reservar el número
+        $reserveSql = "UPDATE sorteo_numbers 
+                       SET status = 'reserved',
+                           participant_name = ?,
+                           participant_email = ?,
+                           reserved_at = NOW(),
+                           reservation_expires_at = ?
+                       WHERE number_value = ? AND status = 'available'";
+        
+        $reserveStmt = $pdo->prepare($reserveSql);
+        $result = $reserveStmt->execute([$fullName, $email, $expirationTime, $number]);
+        
+        if (!$result || $reserveStmt->rowCount() === 0) {
+            throw new Exception('No se pudo reservar el número. Puede que ya esté ocupado.');
+        }
+        
+        // Registrar en el log de transacciones
+        $logSql = "INSERT INTO sorteo_transactions 
+                   (number_value, participant_name, participant_email, action, ip_address, user_agent) 
+                   VALUES (?, ?, ?, 'reserved', ?, ?)";
+        
+        $logStmt = $pdo->prepare($logSql);
+        $logStmt->execute([
+            $number,
+            $fullName,
+            $email,
+            $_SERVER['REMOTE_ADDR'] ?? 'unknown',
+            $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
+        ]);
+        
+        // Confirmar transacción
+        $pdo->commit();
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Número reservado exitosamente',
+            'data' => [
+                'number' => $number,
+                'participant_name' => $fullName,
+                'participant_email' => $email,
+                'expires_at' => $expirationTime,
+                'expires_in_minutes' => 15
+            ]
+        ]);
+        
+    } catch (Exception $e) {
+        $pdo->rollBack();
+        throw $e;
+    }
+    
+} catch (Exception $e) {
+    error_log("Error en register_number.php: " . $e->getMessage());
+    
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error interno del servidor: ' . $e->getMessage()
+    ]);
+}
+?>
