@@ -91,6 +91,38 @@ require_once 'config/database.php';
                     <div class="numbers-grid" id="numbersGrid">
                         <!-- Los números se cargarán dinámicamente -->
                     </div>
+                    
+                    <!-- Información sobre Pahuata y Mecánica -->
+                    <div class="row mt-5">
+                        <div class="col-12 text-center">
+                            <p class="mb-3">
+                                <a href="#" class="text-decoration-none fw-bold text-primary" data-bs-toggle="modal" data-bs-target="#pahuataModal">
+                                    → Conoce un poco más de Pahuata y de nuestra misión con esta comunidad ←
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Mecánica del Sorteo -->
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <div class="card border-info">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="mb-0"><i class="fas fa-cogs"></i> Mecánica del Sorteo</h5>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-unstyled mb-0">
+                                        <li class="mb-2"><i class="fas fa-users text-success"></i> Se mantendrá informados a los participantes a través del grupo de WhatsApp creado para tal fin</li>
+                                        <li class="mb-2"><i class="fas fa-lock text-warning"></i> Al concluir el evento, dicho grupo se cerrará</li>
+                                        <li class="mb-2"><i class="fas fa-video text-primary"></i> El día y hora señalada para el sorteo, se realizará un "en vivo" a través de Google Meet o Zoom elegido 1 día antes a través de votación</li>
+                                        <li class="mb-2"><i class="fas fa-random text-info"></i> Se transmitirá en vivo donde el algoritmo del sorteo de manera totalmente aleatoria eligirá a los 2 afortunados del evento</li>
+                                        <li class="mb-2"><i class="fas fa-map-marker-alt text-danger"></i> El regalo será entregado de forma presencial en la ciudad de Puebla, Pue.</li>
+                                        <li class="mb-0"><i class="fas fa-handshake text-secondary"></i> Si el ganador(a) se encontrara fuera de la ciudad, se acordará la mejor forma de hacer la entrega</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -203,18 +235,34 @@ require_once 'config/database.php';
                         </div>
                         
                         <div class="alert alert-success">
-                            <i class="fas fa-whatsapp"></i> 
+                            <i class="fab fa-whatsapp"></i> 
                             <strong>¡Importante!</strong> Al confirmar tu participación se abrirá automáticamente el grupo de WhatsApp. Es <strong>REQUISITO</strong> unirse para participar en el evento en vivo.
                         </div>
                         
                         <div class="alert alert-info">
                             <h6><i class="fas fa-info-circle"></i> Información de Pago</h6>
-                            <p><strong>CLABE:</strong> 638180000187197364</p>
+                            <div class="mb-2">
+                                <strong>CLABE:</strong>
+                                <div class="input-group input-group-sm mt-1">
+                                    <input type="text" class="form-control" value="638180000187197364" readonly id="clabeInput">
+                                    <button class="btn btn-outline-primary" type="button" onclick="copyToClipboard('clabeInput')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                             <p><strong>Banco:</strong> NU MEXICO</p>
                             <p><strong>Titular:</strong> Ileana Pineda Calderón</p>
                             <p><strong>Monto por boleto:</strong> $25.00 MXN</p>
                             <p><strong>Total a pagar:</strong> $<span id="totalAmount">25.00</span> MXN</p>
-                            <p><strong>Concepto:</strong> Apoyo a Pahuata <span class="payment-phone"></span></p>
+                            <div class="mb-2">
+                                <strong>Concepto:</strong>
+                                <div class="input-group input-group-sm mt-1">
+                                    <input type="text" class="form-control" value="Apoyo a Pahuata" readonly id="conceptoRegistro">
+                                    <button class="btn btn-outline-primary" type="button" onclick="copyToClipboard('conceptoRegistro')">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="alert alert-warning">
@@ -325,6 +373,48 @@ require_once 'config/database.php';
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times"></i> Cerrar
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Pahuata -->
+    <div class="modal fade" id="pahuataModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title"><i class="fas fa-mountain"></i> Conoce Pahuata</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <h6 class="text-muted">Pahuata: aldea en Municipio de Xochitlán de Vicente Suárez, Estado de Puebla.</h6>
+                    </div>
+                    
+                    <p class="lead">¡Hola! Permítanme presentarles a Pahuata, una comunidad súper importante en la Sierra Norte de Puebla.</p>
+                    
+                    <p>Es un lugar pequeño (es el cuarto pueblo más grande de su municipio), rodeado de montañas y con una rica cultura indígena; muchos de sus habitantes son hablantes de náhuatl.</p>
+                    
+                    <p>La gente aquí es trabajadora, se dedican principalmente a la agricultura, produciendo café, guayaba y frijol.</p>
+                    
+                    <div class="alert alert-warning">
+                        <h6><i class="fas fa-exclamation-triangle"></i> Desafíos que Enfrenta</h6>
+                        <p class="mb-0">Pero Pahuata enfrenta grandes desafíos: la mayoría de las familias viven en un ambiente rural con pobreza y alta marginación. Esto se traduce en carencias serias de acceso a comida nutritiva, afectando la salud y causando rezago educativo (el promedio de escolaridad es muy bajo).</p>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-hands-helping"></i> Por Qué Es Importante Ayudar</h6>
+                        <p class="mb-0">Por eso, llevar víveres y apoyo educativo es vital. No solo es una ayuda, es un acto de empatía y amor para que los niños tengan un futuro más brillante, combatir la desnutrición y asegurar que la lengua y costumbres ancestrales no se pierdan.</p>
+                    </div>
+                    
+                    <p class="fw-bold">Apoyar a Pahuata significa darle a sus productores las herramientas para que salgan adelante.</p>
+                    
+                    <div class="text-center mt-4">
+                        <p class="h5 text-success">Gracias por tu apoyo <i class="fas fa-heart text-danger"></i></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>

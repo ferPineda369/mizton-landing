@@ -340,7 +340,7 @@ class SorteoApp {
             
             const timeElement = document.getElementById('blockingTimeLeft');
             if (timeElement) {
-                timeElement.textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
+                timeElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
                 
                 // Cambiar color según tiempo restante
                 if (this.blockingTimeLeft <= 30) {
@@ -354,16 +354,29 @@ class SorteoApp {
             
             if (this.blockingTimeLeft < 0) {
                 this.clearBlockingTimer();
-                
-                // Limpiar selección y actualizar bloqueos
-                this.selectedNumbers = [];
-                this.updateBlocksOnServer(); // Esto desbloqueará todos los números previamente seleccionados
-                
-                this.showAlert('Tiempo de bloqueo agotado. Los números han sido liberados.', 'warning');
-                this.updateContinueButton();
-                this.loadNumbers(); // Recargar para actualizar estados
+                this.handleBlockingTimeout();
             }
         }, 1000);
+    }
+    
+    // Manejar timeout de bloqueo - limpiar formulario y recargar página
+    handleBlockingTimeout() {
+        // Cerrar modal si está abierto
+        const modal = bootstrap.Modal.getInstance(document.getElementById('registrationModal'));
+        if (modal) {
+            modal.hide();
+        }
+        
+        // Limpiar selecciones
+        this.selectedNumbers = [];
+        this.unblockNumbersOnServer();
+        
+        // Mostrar mensaje y recargar página
+        this.showAlert('Tiempo de bloqueo expirado. La página se recargará para actualizar los números disponibles.', 'warning');
+        
+        setTimeout(() => {
+            window.location.reload();
+        }, 3000);
     }
     
     // Limpiar timer de bloqueo
@@ -380,7 +393,6 @@ class SorteoApp {
         
         const timeElement = document.getElementById('blockingTimeLeft');
         if (timeElement) {
-            timeElement.textContent = '2:00';
             timeElement.className = '';
         }
         
@@ -549,12 +561,20 @@ class SorteoApp {
             }
         }
         
-        // También actualizar el concepto en el modal
+        // Actualizar concepto en el modal de datos de pago
         const conceptoInput = document.getElementById('conceptoInput');
         if (conceptoInput && phoneNumber && /^[0-9]{10}$/.test(phoneNumber)) {
             conceptoInput.value = `Apoyo a Pahuata ${phoneNumber}`;
         } else if (conceptoInput) {
             conceptoInput.value = 'Apoyo a Pahuata';
+        }
+        
+        // Actualizar concepto en el modal de registro
+        const conceptoRegistro = document.getElementById('conceptoRegistro');
+        if (conceptoRegistro && phoneNumber && /^[0-9]{10}$/.test(phoneNumber)) {
+            conceptoRegistro.value = `Apoyo a Pahuata ${phoneNumber}`;
+        } else if (conceptoRegistro) {
+            conceptoRegistro.value = 'Apoyo a Pahuata';
         }
     }
     
