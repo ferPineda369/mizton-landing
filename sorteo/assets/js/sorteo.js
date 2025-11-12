@@ -528,18 +528,24 @@ class SorteoApp {
         return sessionId;
     }
     
-    // Configurar event listeners
-    setupEventListeners() {
-        // Formulario de registro
-        document.getElementById('registrationForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            this.submitRegistration();
-        });
+    // Actualizar concepto de pago con número celular
+    updatePaymentConcept(phoneNumber) {
+        const paymentPhoneElement = document.querySelector('.payment-phone');
+        if (paymentPhoneElement) {
+            if (phoneNumber && /^[0-9]{10}$/.test(phoneNumber)) {
+                paymentPhoneElement.textContent = phoneNumber;
+            } else {
+                paymentPhoneElement.textContent = '';
+            }
+        }
         
-        // Limpiar timer al cerrar modal
-        document.getElementById('registrationModal').addEventListener('hidden.bs.modal', () => {
-            this.clearReservationTimer();
-        });
+        // También actualizar el concepto en el modal
+        const conceptoInput = document.getElementById('conceptoInput');
+        if (conceptoInput && phoneNumber && /^[0-9]{10}$/.test(phoneNumber)) {
+            conceptoInput.value = `Apoyo a Pahuata ${phoneNumber}`;
+        } else if (conceptoInput) {
+            conceptoInput.value = 'Apoyo a Pahuata';
+        }
     }
     
     // Enviar registro
@@ -554,6 +560,13 @@ class SorteoApp {
             return;
         }
         
+        // Validar número celular
+        const phoneNumber = formData.get('phoneNumber');
+        if (!phoneNumber || !/^[0-9]{10}$/.test(phoneNumber)) {
+            this.showAlert('El número celular debe tener exactamente 10 dígitos sin espacios', 'warning');
+            return;
+        }
+        
         // Deshabilitar botón y mostrar loading
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="loading-spinner"></span> Procesando...';
@@ -564,6 +577,7 @@ class SorteoApp {
                 const numberFormData = new FormData();
                 numberFormData.append('number', number);
                 numberFormData.append('fullName', formData.get('fullName'));
+                numberFormData.append('phoneNumber', phoneNumber);
                 
                 const apiUrl = this.usingFallbackAPI ? 'api/register_number_simple.php' : 'api/register_number.php';
                 return fetch(apiUrl, {

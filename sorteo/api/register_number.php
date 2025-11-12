@@ -20,7 +20,7 @@ try {
     // Validar datos de entrada
     $number = filter_input(INPUT_POST, 'number', FILTER_VALIDATE_INT);
     $fullName = trim(filter_input(INPUT_POST, 'fullName', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-    $email = 'no-email@sorteo.mizton.cat'; // Email por defecto ya que la columna no permite NULL
+    $phoneNumber = trim(filter_input(INPUT_POST, 'phoneNumber', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
     
     // Validaciones
     $errors = [];
@@ -31,6 +31,10 @@ try {
     
     if (!$fullName || strlen($fullName) < 3) {
         $errors[] = 'El nombre debe tener al menos 3 caracteres';
+    }
+    
+    if (!$phoneNumber || !preg_match('/^[0-9]{10}$/', $phoneNumber)) {
+        $errors[] = 'El número celular debe tener exactamente 10 dígitos';
     }
     
     if (!preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/', $fullName)) {
@@ -80,13 +84,13 @@ try {
         $reserveSql = "UPDATE sorteo_numbers 
                        SET status = 'reserved',
                            participant_name = ?,
-                           participant_email = ?,
+                           participant_movil = ?,
                            reserved_at = NOW(),
                            reservation_expires_at = ?
                        WHERE number_value = ? AND status = 'available'";
         
         $reserveStmt = $pdo->prepare($reserveSql);
-        $result = $reserveStmt->execute([$fullName, $email, $expirationTime, $number]);
+        $result = $reserveStmt->execute([$fullName, $phoneNumber, $expirationTime, $number]);
         
         if (!$result || $reserveStmt->rowCount() === 0) {
             throw new Exception('No se pudo reservar el número. Puede que ya esté ocupado.');
@@ -94,14 +98,14 @@ try {
         
         // Registrar en el log de transacciones
         $logSql = "INSERT INTO sorteo_transactions 
-                   (number_value, participant_name, participant_email, action, ip_address, user_agent) 
+                   (number_value, participant_name, participant_movil, action, ip_address, user_agent) 
                    VALUES (?, ?, ?, 'reserved', ?, ?)";
         
         $logStmt = $pdo->prepare($logSql);
         $logStmt->execute([
             $number,
             $fullName,
-            $email,
+            $phoneNumber,
             $_SERVER['REMOTE_ADDR'] ?? 'unknown',
             $_SERVER['HTTP_USER_AGENT'] ?? 'unknown'
         ]);

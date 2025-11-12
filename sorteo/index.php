@@ -63,7 +63,7 @@ require_once 'config/database.php';
                                         <li><i class="fas fa-check-circle"></i> Completa tus datos personales</li>
                                         <li><i class="fas fa-check-circle"></i> Realiza el pago de participación</li>
                                         <li><i class="fas fa-check-circle"></i> Confirma tu pago en el tiempo límite. <a href="#" class="text-decoration-none fw-bold" data-bs-toggle="modal" data-bs-target="#paymentDataModal">→Datos←</a></li>
-                                        <li><i class="fas fa-users"></i> <strong>Requisito:</strong> Únete al grupo de WhatsApp</li>
+                                        <li><i class="fas fa-users"></i> <strong>Requisito: </strong> Unirse al grupo de WhatsApp</li>
                                     </ul>
                                 </div>
                                 <div class="col-md-6">
@@ -287,7 +287,7 @@ require_once 'config/database.php';
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">Concepto sugerido:</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" value="Sorteo Navideño Mizton" readonly id="conceptoInput">
+                                            <input type="text" class="form-control" value="Apoyo a Pahuata" readonly id="conceptoInput">
                                             <button class="btn btn-outline-warning" type="button" onclick="copyToClipboard('conceptoInput')">
                                                 <i class="fas fa-copy"></i>
                                             </button>
@@ -316,9 +316,6 @@ require_once 'config/database.php';
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times"></i> Cerrar
-                    </button>
-                    <button type="button" class="btn btn-success" onclick="window.open('https://chat.whatsapp.com/XXXXXXXXXXXXXXX', '_blank')">
-                        <i class="fab fa-whatsapp"></i> Ir al Grupo WhatsApp
                     </button>
                 </div>
             </div>
