@@ -6,7 +6,7 @@ require_once '../config/database.php';
 $isAuthenticated = isset($_SESSION['sorteo_admin']) && $_SESSION['sorteo_admin'] === true;
 
 if (!$isAuthenticated && isset($_POST['admin_password'])) {
-    if ($_POST['admin_password'] === 'mizton_admin_2025') {
+    if ($_POST['admin_password'] === '1284') {
         $_SESSION['sorteo_admin'] = true;
         $isAuthenticated = true;
     } else {
