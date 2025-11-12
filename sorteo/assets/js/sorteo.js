@@ -1142,11 +1142,51 @@ window.SorteoUtils = {
     }
 };
 
-// Inicializar el manager del sorteo cuando el DOM esté listo
+// Inicializar el manager del sorteo
 let sorteoManager;
 
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎄 Inicializando Sorteo Manager...');
-    sorteoManager = new SorteoManager();
-    console.log('✅ Sorteo Manager inicializado correctamente');
-});
+function initializeSorteoManager() {
+    if (!sorteoManager) {
+        console.log('🎄 Inicializando Sorteo Manager...');
+        sorteoManager = new SorteoManager();
+        console.log('✅ Sorteo Manager inicializado correctamente');
+    }
+    return sorteoManager;
+}
+
+// Función global para el botón
+function submitRegistration() {
+    console.log('🚀 submitRegistration() llamada desde botón');
+    console.log('🔍 Estado actual:', {
+        sorteoManager: !!sorteoManager,
+        hasSubmitMethod: !!(sorteoManager && sorteoManager.submitRegistration),
+        readyState: document.readyState
+    });
+    
+    const manager = initializeSorteoManager();
+    if (manager && manager.submitRegistration) {
+        manager.submitRegistration();
+    } else {
+        console.error('❌ Error: sorteoManager o submitRegistration no disponible');
+        console.error('Manager:', manager);
+        console.error('SubmitRegistration method:', manager ? manager.submitRegistration : 'manager is null');
+    }
+}
+
+// Función de debug global
+function debugSorteoManager() {
+    console.log('🔍 Debug Sorteo Manager:', {
+        sorteoManager: sorteoManager,
+        isInstance: sorteoManager instanceof SorteoManager,
+        methods: sorteoManager ? Object.getOwnPropertyNames(Object.getPrototypeOf(sorteoManager)) : 'No manager',
+        readyState: document.readyState
+    });
+}
+
+// Inicializar cuando DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeSorteoManager);
+} else {
+    // DOM ya está listo
+    initializeSorteoManager();
+}
