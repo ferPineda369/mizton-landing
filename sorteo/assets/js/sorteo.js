@@ -1148,7 +1148,7 @@ let sorteoManager;
 function initializeSorteoManager() {
     if (!sorteoManager) {
         console.log('🎄 Inicializando Sorteo Manager...');
-        sorteoManager = new SorteoManager();
+        sorteoManager = new SorteoApp();
         console.log('✅ Sorteo Manager inicializado correctamente');
     }
     return sorteoManager;
@@ -1177,7 +1177,7 @@ function submitRegistration() {
 function debugSorteoManager() {
     console.log('🔍 Debug Sorteo Manager:', {
         sorteoManager: sorteoManager,
-        isInstance: sorteoManager instanceof SorteoManager,
+        isInstance: sorteoManager instanceof SorteoApp,
         methods: sorteoManager ? Object.getOwnPropertyNames(Object.getPrototypeOf(sorteoManager)) : 'No manager',
         readyState: document.readyState
     });
