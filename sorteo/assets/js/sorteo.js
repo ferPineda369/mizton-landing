@@ -52,8 +52,8 @@ class SorteoApp {
         try {
             console.log('Cargando números desde API...');
             
-            // Usar API principal ahora que la BD está configurada
-            const response = await fetch('api/get_numbers.php');
+            // Usar API corregida para debug
+            const response = await fetch('api/get_numbers_fixed.php');
             
             console.log('Respuesta recibida:', response.status, response.statusText);
             
