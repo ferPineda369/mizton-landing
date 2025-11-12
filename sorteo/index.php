@@ -88,6 +88,26 @@ require_once 'config/database.php';
             <div class="row">
                 <div class="col-12">
                     <h2 class="section-title">Selecciona tu número de la suerte</h2>
+                    
+                    <!-- Enlaces de WhatsApp y Consulta -->
+                    <div class="row mb-4">
+                        <div class="col-md-6 text-center mb-3">
+                            <a href="https://chat.whatsapp.com/JFCyYfRXYJVJkiLsVj2yhK?mode=wwt" 
+                               target="_blank" 
+                               class="btn btn-success btn-lg">
+                                <i class="fab fa-whatsapp"></i> Unirse al Grupo de WhatsApp
+                            </a>
+                        </div>
+                        <div class="col-md-6 text-center mb-3">
+                            <button type="button" 
+                                    class="btn btn-info btn-lg" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#consultaModal">
+                                <i class="fas fa-search"></i> Consulta tus boletos comprados aquí
+                            </button>
+                        </div>
+                    </div>
+                    
                     <div class="numbers-grid" id="numbersGrid">
                         <!-- Los números se cargarán dinámicamente -->
                     </div>
@@ -373,6 +393,51 @@ require_once 'config/database.php';
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                         <i class="fas fa-times"></i> Cerrar
                     </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Consulta de Boletos -->
+    <div class="modal fade" id="consultaModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title"><i class="fas fa-search"></i> Consulta tus Boletos</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="consultaForm">
+                        <div class="mb-3">
+                            <label for="consultaPhone" class="form-label">Número Celular *</label>
+                            <input type="tel" class="form-control" id="consultaPhone" name="consultaPhone" 
+                                   pattern="[0-9]{10}" maxlength="10" placeholder="2222012345" required>
+                            <div class="form-text">Ingresa el número celular con el que compraste tus boletos</div>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-info">
+                                <i class="fas fa-search"></i> Buscar Mis Boletos
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Resultados de la consulta -->
+                    <div id="consultaResultados" class="mt-4" style="display: none;">
+                        <hr>
+                        <h6><i class="fas fa-ticket-alt"></i> Tus Boletos:</h6>
+                        <div id="boletosEncontrados"></div>
+                    </div>
+                    
+                    <!-- Loading -->
+                    <div id="consultaLoading" class="text-center mt-4" style="display: none;">
+                        <div class="spinner-border text-info" role="status">
+                            <span class="visually-hidden">Buscando...</span>
+                        </div>
+                        <p class="mt-2">Buscando tus boletos...</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>

@@ -40,6 +40,15 @@ class SorteoApp {
                 this.updatePaymentConcept(e.target.value);
             });
         }
+        
+        // Configurar formulario de consulta de boletos
+        const consultaForm = document.getElementById('consultaForm');
+        if (consultaForm) {
+            consultaForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                this.consultarBoletos();
+            });
+        }
     }
     
     // Contador regresivo al 28 de noviembre 2025
@@ -576,6 +585,103 @@ class SorteoApp {
         } else if (conceptoRegistro) {
             conceptoRegistro.value = 'Apoyo a Pahuata';
         }
+    }
+    
+    // Consultar boletos por número celular
+    async consultarBoletos() {
+        const phoneInput = document.getElementById('consultaPhone');
+        const phoneNumber = phoneInput.value.trim();
+        
+        // Validar número celular
+        if (!phoneNumber || !/^[0-9]{10}$/.test(phoneNumber)) {
+            this.showAlert('El número celular debe tener exactamente 10 dígitos sin espacios', 'warning');
+            return;
+        }
+        
+        // Mostrar loading
+        const loadingDiv = document.getElementById('consultaLoading');
+        const resultadosDiv = document.getElementById('consultaResultados');
+        
+        loadingDiv.style.display = 'block';
+        resultadosDiv.style.display = 'none';
+        
+        try {
+            const formData = new FormData();
+            formData.append('phoneNumber', phoneNumber);
+            
+            const response = await fetch('api/consulta_boletos.php', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const data = await response.json();
+            
+            loadingDiv.style.display = 'none';
+            
+            if (data.success) {
+                this.mostrarResultadosConsulta(data.data);
+            } else {
+                this.showAlert(data.message, 'info');
+            }
+            
+        } catch (error) {
+            loadingDiv.style.display = 'none';
+            console.error('Error consultando boletos:', error);
+            this.showAlert('Error al consultar los boletos. Intenta de nuevo.', 'danger');
+        }
+    }
+    
+    // Mostrar resultados de la consulta
+    mostrarResultadosConsulta(data) {
+        const resultadosDiv = document.getElementById('consultaResultados');
+        const boletosDiv = document.getElementById('boletosEncontrados');
+        
+        let html = `
+            <div class="alert alert-success">
+                <strong>¡Encontrados!</strong> Se encontraron ${data.totalBoletos} boleto(s) para el número ${data.phoneNumber}
+            </div>
+        `;
+        
+        data.boletos.forEach(boleto => {
+            const estadoClass = boleto.estado === 'confirmed' ? 'success' : 'warning';
+            const estadoText = boleto.estado === 'confirmed' ? 'Confirmado' : 'Reservado';
+            const estadoIcon = boleto.estado === 'confirmed' ? 'check-circle' : 'clock';
+            
+            html += `
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                <h5 class="mb-0">
+                                    <span class="badge bg-primary fs-6">Nº ${boleto.numero}</span>
+                                </h5>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>${boleto.participante}</strong>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="badge bg-${estadoClass}">
+                                    <i class="fas fa-${estadoIcon}"></i> ${estadoText}
+                                </span>
+                            </div>
+                            <div class="col-md-4">
+                                <small class="text-muted">
+                                    ${boleto.estado === 'confirmed' 
+                                        ? `Confirmado: ${boleto.fecha_confirmacion}` 
+                                        : `Reservado: ${boleto.fecha_reserva}`}
+                                    ${boleto.estado === 'reserved' && boleto.expira_en 
+                                        ? `<br>Expira: ${boleto.expira_en}` 
+                                        : ''}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        boletosDiv.innerHTML = html;
+        resultadosDiv.style.display = 'block';
     }
     
     // Enviar registro
