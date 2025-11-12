@@ -11,6 +11,7 @@ class SorteoApp {
         this.whatsappGroupUrl = 'https://chat.whatsapp.com/XXXXXXXXXXXXXXX'; // Cambiar por URL real
         this.blockingTimeLeft = 0;
         this.usingFallbackAPI = false; // Para detectar si estamos usando API de respaldo
+        this.previouslySelectedNumbers = []; // Para rastrear números previamente seleccionados
         
         this.init();
     }
@@ -172,26 +173,24 @@ class SorteoApp {
             this.selectedNumbers.splice(index, 1);
             cardElement.classList.remove('number-selected');
             
-            // Si no hay más números seleccionados, limpiar bloqueo
+            // Actualizar bloqueos en servidor de forma inteligente
+            this.updateBlocksOnServer();
+            
+            // Si no hay más números seleccionados, limpiar timer
             if (this.selectedNumbers.length === 0) {
                 this.clearBlockingTimer();
-                this.unblockNumbersOnServer();
-            } else {
-                // Actualizar bloqueo en servidor
-                this.blockNumbersOnServer();
             }
         } else {
             // Seleccionar número
             this.selectedNumbers.push(number);
             cardElement.classList.add('number-selected');
             
-            // Iniciar bloqueo temporal si es el primer número
+            // Actualizar bloqueos en servidor de forma inteligente
+            this.updateBlocksOnServer();
+            
+            // Iniciar timer si es el primer número
             if (this.selectedNumbers.length === 1) {
-                this.blockNumbersOnServer();
                 this.startBlockingTimer();
-            } else {
-                // Actualizar bloqueo en servidor con nuevos números
-                this.blockNumbersOnServer();
             }
         }
         
@@ -305,11 +304,12 @@ class SorteoApp {
             
             if (this.blockingTimeLeft < 0) {
                 this.clearBlockingTimer();
-                this.unblockNumbersOnServer();
-                this.showAlert('Tiempo de bloqueo agotado. Los números han sido liberados.', 'warning');
                 
-                // Limpiar selección
+                // Limpiar selección y actualizar bloqueos
                 this.selectedNumbers = [];
+                this.updateBlocksOnServer(); // Esto desbloqueará todos los números previamente seleccionados
+                
+                this.showAlert('Tiempo de bloqueo agotado. Los números han sido liberados.', 'warning');
                 this.updateContinueButton();
                 this.loadNumbers(); // Recargar para actualizar estados
             }
@@ -337,7 +337,62 @@ class SorteoApp {
         this.blockingTimeLeft = 0;
     }
     
-    // Bloquear números en el servidor
+    // Actualizar bloqueos en el servidor (más inteligente)
+    async updateBlocksOnServer() {
+        if (this.usingFallbackAPI) return;
+        
+        // Determinar qué números bloquear y desbloquear
+        const numbersToBlock = this.selectedNumbers.filter(num => !this.previouslySelectedNumbers.includes(num));
+        const numbersToUnblock = this.previouslySelectedNumbers.filter(num => !this.selectedNumbers.includes(num));
+        
+        try {
+            // Si hay números para desbloquear, hacerlo primero
+            if (numbersToUnblock.length > 0) {
+                await fetch('api/block_numbers.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        numbers: numbersToUnblock,
+                        action: 'unblock',
+                        session_id: this.getSessionId()
+                    })
+                });
+            }
+            
+            // Si hay números para bloquear, hacerlo después
+            if (numbersToBlock.length > 0) {
+                const response = await fetch('api/block_numbers.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        numbers: numbersToBlock,
+                        action: 'block',
+                        session_id: this.getSessionId()
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    this.showAlert(data.message, 'warning');
+                    // Si hay conflicto, recargar números
+                    this.loadNumbers();
+                }
+            }
+            
+            // Actualizar el registro de números previamente seleccionados
+            this.previouslySelectedNumbers = [...this.selectedNumbers];
+            
+        } catch (error) {
+            console.error('Error actualizando bloqueos:', error);
+        }
+    }
+    
+    // Bloquear números en el servidor (función legacy mantenida para compatibilidad)
     async blockNumbersOnServer() {
         if (this.selectedNumbers.length === 0 || this.usingFallbackAPI) return;
         
@@ -467,10 +522,10 @@ class SorteoApp {
                 
                 // Limpiar bloqueo temporal
                 this.clearBlockingTimer();
-                this.unblockNumbersOnServer();
                 
-                // Limpiar selección
+                // Limpiar selección y actualizar bloqueos
                 this.selectedNumbers = [];
+                this.updateBlocksOnServer(); // Esto desbloqueará todos los números
                 this.updateContinueButton();
                 
                 // Cerrar modal después de 2 segundos
