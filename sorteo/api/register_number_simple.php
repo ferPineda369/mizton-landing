@@ -97,8 +97,12 @@ try {
     $pdo->beginTransaction();
     
     try {
+        // Establecer zona horaria para México
+        date_default_timezone_set('America/Mexico_City');
+        
         // Calcular tiempo de expiración (15 minutos)
-        $expirationTime = date('Y-m-d H:i:s', time() + (15 * 60));
+        $currentTime = new DateTime();
+        $expirationTime = $currentTime->add(new DateInterval('PT15M'))->format('Y-m-d H:i:s');
         
         // Reservar el número
         $reserveSql = "UPDATE sorteo_numbers 

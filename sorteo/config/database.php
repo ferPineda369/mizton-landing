@@ -84,7 +84,11 @@ function createSorteoTables($pdo) {
 
 // Función para limpiar reservas expiradas
 function cleanExpiredReservations($pdo) {
+    // Establecer zona horaria para México
+    date_default_timezone_set('America/Mexico_City');
+    
     error_log("=== Ejecutando limpieza de reservas expiradas ===");
+    error_log("Hora actual del servidor: " . date('Y-m-d H:i:s'));
     
     $sql = "UPDATE sorteo_numbers 
             SET status = 'available', 
