@@ -12,6 +12,7 @@ class SorteoApp {
         this.blockingTimeLeft = 0;
         this.usingFallbackAPI = false; // Para detectar si estamos usando API de respaldo
         this.previouslySelectedNumbers = []; // Para rastrear números previamente seleccionados
+        this.numbersRefreshInterval = null; // Para el refresco automático
         
         this.init();
     }
@@ -22,6 +23,11 @@ class SorteoApp {
         this.loadNumbers();
         this.setupEventListeners();
         this.startSnowfall();
+        
+        // Recargar números cada 5 segundos para mantener bloqueos actualizados
+        this.numbersRefreshInterval = setInterval(() => {
+            this.loadNumbers();
+        }, 5000);
     }
     
     // Contador regresivo al 28 de noviembre 2025
@@ -136,9 +142,15 @@ class SorteoApp {
             // Verificar si está bloqueado por otro usuario
             const isBlockedByOther = number.is_blocked_by_other || false;
             
-            if (number.status === 'available' || this.selectedNumbers.includes(number.number_value)) {
-                // Permitir click si está disponible O si ya está seleccionado por este usuario
+            // Solo permitir click si:
+            // 1. Está disponible Y no bloqueado por otro usuario, O
+            // 2. Ya está seleccionado por este usuario (para poder deseleccionar)
+            const canClick = (number.status === 'available' && !isBlockedByOther) || 
+                           this.selectedNumbers.includes(number.number_value);
+            
+            if (canClick) {
                 card.addEventListener('click', () => this.toggleNumber(number.number_value, card));
+                card.style.cursor = 'pointer';
                 
                 // Agregar efecto de brillo navideño al hacer hover (solo si no está bloqueado por otro)
                 if (!isBlockedByOther) {
@@ -146,6 +158,9 @@ class SorteoApp {
                         this.addChristmasSparkle(card);
                     });
                 }
+            } else {
+                // Número no clickeable
+                card.style.cursor = 'not-allowed';
             }
             
             // Marcar números ya seleccionados por este usuario
@@ -180,6 +195,13 @@ class SorteoApp {
         // Verificar si el número está bloqueado por otro usuario
         if (this.blockedNumbers.has(number) && !this.selectedNumbers.includes(number)) {
             this.showAlert('Ese número está siendo reservado por otro usuario. Puedes esperar 2 minutos para confirmar si fue comprado o elegir otro número disponible.', 'warning');
+            return;
+        }
+        
+        // Verificar estado del elemento (doble verificación)
+        const status = cardElement.dataset.status;
+        if (status !== 'available' && !this.selectedNumbers.includes(number)) {
+            this.showAlert('Este número no está disponible para selección.', 'warning');
             return;
         }
         
@@ -462,6 +484,26 @@ class SorteoApp {
             }
         } catch (error) {
             console.error('Error desbloqueando números:', error);
+        }
+    }
+    
+    // Limpiar todos los intervalos
+    cleanup() {
+        if (this.numbersRefreshInterval) {
+            clearInterval(this.numbersRefreshInterval);
+            this.numbersRefreshInterval = null;
+        }
+        if (this.blockingTimer) {
+            clearInterval(this.blockingTimer);
+            this.blockingTimer = null;
+        }
+        if (this.reservationTimer) {
+            clearInterval(this.reservationTimer);
+            this.reservationTimer = null;
+        }
+        if (this.countdownTimer) {
+            clearInterval(this.countdownTimer);
+            this.countdownTimer = null;
         }
     }
     
