@@ -89,15 +89,8 @@ require_once 'config/database.php';
                 <div class="col-12">
                     <h2 class="section-title">Selecciona tu número de la suerte</h2>
                     
-                    <!-- Enlaces de WhatsApp y Consulta -->
+                    <!-- Enlaces de Consulta -->
                     <div class="row mb-4">
-                        <div class="col-md-6 text-center mb-3">
-                            <a href="https://chat.whatsapp.com/JFCyYfRXYJVJkiLsVj2yhK?mode=wwt" 
-                               target="_blank" 
-                               class="btn btn-success btn-lg">
-                                <i class="fab fa-whatsapp"></i> Unirse al Grupo de WhatsApp
-                            </a>
-                        </div>
                         <div class="col-md-6 text-center mb-3">
                             <button type="button" 
                                     class="btn btn-info btn-lg" 

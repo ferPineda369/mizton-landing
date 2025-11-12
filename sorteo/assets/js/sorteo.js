@@ -684,6 +684,19 @@ class SorteoApp {
         resultadosDiv.style.display = 'block';
     }
     
+    // Abrir grupo de WhatsApp
+    openWhatsAppGroup() {
+        const whatsappUrl = 'https://chat.whatsapp.com/JFCyYfRXYJVJkiLsVj2yhK?mode=wwt';
+        
+        // Mostrar mensaje antes de abrir WhatsApp
+        this.showAlert('¡Reserva exitosa! Se abrirá el grupo de WhatsApp. Es REQUISITO unirse para participar.', 'success');
+        
+        // Abrir WhatsApp después de un pequeño delay
+        setTimeout(() => {
+            window.open(whatsappUrl, '_blank');
+        }, 1500);
+    }
+    
     // Enviar registro
     async submitRegistration() {
         const form = document.getElementById('registrationForm');
@@ -755,7 +768,7 @@ class SorteoApp {
             if (successCount > 0) {
                 const message = failCount > 0 
                     ? `${successCount} números reservados exitosamente. ${failCount} números no pudieron reservarse.`
-                    : `¡${successCount} números reservados exitosamente! Tienes 15 minutos para confirmar el pago.`;
+                    : `¡${successCount} números reservados exitosamente! Tienes 15 minutos para confirmar el pago. Se abrirá el grupo de WhatsApp.`;
                 
                 this.showAlert(message, successCount === results.length ? 'success' : 'warning');
                 this.startReservationTimer(15 * 60); // 15 minutos

@@ -113,6 +113,9 @@ try {
         // Confirmar transacción
         $pdo->commit();
         
+        // Log para debug
+        error_log("REGISTRO EXITOSO - Número: $number, Participante: $fullName, Celular: $phoneNumber, Expira: $expirationTime");
+        
         echo json_encode([
             'success' => true,
             'message' => 'Número reservado exitosamente',
