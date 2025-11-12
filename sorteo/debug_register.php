@@ -24,7 +24,7 @@ try {
 // Test 2: Simular registro si es POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $number = filter_input(INPUT_POST, 'number', FILTER_VALIDATE_INT);
-    $fullName = trim(filter_input(INPUT_POST, 'fullName', FILTER_SANITIZE_STRING));
+    $fullName = trim(filter_input(INPUT_POST, 'fullName', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
     
     $debug['tests']['validation'] = [
         'number' => $number,

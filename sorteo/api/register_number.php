@@ -19,8 +19,8 @@ try {
     
     // Validar datos de entrada
     $number = filter_input(INPUT_POST, 'number', FILTER_VALIDATE_INT);
-    $fullName = trim(filter_input(INPUT_POST, 'fullName', FILTER_SANITIZE_STRING));
-    $email = null; // Ya no se requiere email
+    $fullName = trim(filter_input(INPUT_POST, 'fullName', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+    $email = 'no-email@sorteo.mizton.cat'; // Email por defecto ya que la columna no permite NULL
     
     // Validaciones
     $errors = [];
