@@ -18,8 +18,8 @@ require_once 'config/database.php';
         <div class="container">
             <div class="row text-center">
                 <div class="col-12">
-                    <h1 class="main-title">🎉 Gran Sorteo Mizton 2025 🎉</h1>
-                    <p class="subtitle">¡Participa y gana increíbles premios!</p>
+                    <h1 class="main-title">🎉 LLEVA LA NAVIDAD A PAHUATA 🎉</h1>
+                    <p class="subtitle">¡Participa y apoya a esta comunidad!</p>
                     
                     <!-- Contador Regresivo -->
                     <div class="countdown-container">

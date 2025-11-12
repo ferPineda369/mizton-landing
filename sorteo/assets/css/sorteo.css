@@ -1,14 +1,18 @@
-/* Estilos para el Sorteo Mizton */
+/* Estilos para el Sorteo Mizton - Tema Navideño */
 :root {
-    --primary-color: #2E8B57;
-    --secondary-color: #3CB371;
+    --primary-color: #C41E3A;
+    --secondary-color: #228B22;
     --accent-color: #FFD700;
     --danger-color: #DC3545;
     --warning-color: #FFC107;
-    --success-color: #28A745;
+    --success-color: #228B22;
     --dark-color: #2C3E50;
     --light-color: #F8F9FA;
-    --gradient-bg: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    --christmas-red: #C41E3A;
+    --christmas-green: #228B22;
+    --christmas-gold: #FFD700;
+    --snow-white: #FFFFFF;
+    --gradient-bg: linear-gradient(135deg, var(--christmas-red) 0%, var(--christmas-green) 100%);
 }
 
 * {
@@ -438,4 +442,224 @@ body {
     color: var(--danger-color) !important;
     font-weight: 700;
     animation: pulse 1s infinite;
+}
+
+/* ========== EFECTOS NAVIDEÑOS ========== */
+
+/* Fondo navideño con gradiente */
+body {
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #1e3c72 100%);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Contenedor de copos de nieve */
+.snowflakes {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Estilos base para copos de nieve */
+.snowflake {
+    position: absolute;
+    top: -10px;
+    color: var(--snow-white);
+    font-size: 1em;
+    animation-name: snowfall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    user-select: none;
+    pointer-events: none;
+    text-shadow: 0 0 5px rgba(255,255,255,0.8);
+}
+
+/* Animación de caída de nieve */
+@keyframes snowfall {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0.3;
+    }
+}
+
+/* Diferentes tamaños y velocidades de copos */
+.snowflake:nth-child(1n) { left: 1%; animation-duration: 6s; font-size: 0.8em; }
+.snowflake:nth-child(2n) { left: 10%; animation-duration: 12s; font-size: 1.2em; }
+.snowflake:nth-child(3n) { left: 20%; animation-duration: 8s; font-size: 0.9em; }
+.snowflake:nth-child(4n) { left: 30%; animation-duration: 10s; font-size: 1.1em; }
+.snowflake:nth-child(5n) { left: 40%; animation-duration: 14s; font-size: 0.7em; }
+.snowflake:nth-child(6n) { left: 50%; animation-duration: 9s; font-size: 1.3em; }
+.snowflake:nth-child(7n) { left: 60%; animation-duration: 11s; font-size: 0.8em; }
+.snowflake:nth-child(8n) { left: 70%; animation-duration: 7s; font-size: 1em; }
+.snowflake:nth-child(9n) { left: 80%; animation-duration: 13s; font-size: 0.9em; }
+.snowflake:nth-child(10n) { left: 90%; animation-duration: 15s; font-size: 1.1em; }
+
+/* Efectos navideños adicionales */
+.hero-section {
+    background: linear-gradient(135deg, var(--christmas-red) 0%, var(--christmas-green) 100%);
+    position: relative;
+    z-index: 2;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 80%, rgba(255,215,0,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(255,215,0,0.05) 0%, transparent 50%);
+    opacity: 0.8;
+}
+
+/* Brillo navideño en el título */
+.main-title {
+    background: linear-gradient(45deg, var(--christmas-gold), var(--snow-white), var(--christmas-gold));
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: christmasGlow 3s ease-in-out infinite;
+    text-shadow: 0 0 20px rgba(255,215,0,0.5);
+}
+
+@keyframes christmasGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Efectos en las tarjetas */
+.rules-card, .numbers-grid {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1), 0 0 20px rgba(255,215,0,0.1);
+}
+
+/* Números con tema navideño */
+.number-available {
+    background: linear-gradient(135deg, var(--christmas-green) 0%, #32CD32 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(34,139,34,0.4);
+    border: 2px solid var(--christmas-gold);
+}
+
+.number-available:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(34,139,34,0.6), 0 0 15px rgba(255,215,0,0.5);
+    border-color: var(--snow-white);
+}
+
+.number-reserved {
+    background: linear-gradient(135deg, var(--christmas-gold) 0%, #FFE55C 100%);
+    color: var(--dark-color);
+    cursor: not-allowed;
+    opacity: 0.9;
+    border: 2px solid var(--christmas-red);
+}
+
+.number-confirmed {
+    background: linear-gradient(135deg, var(--christmas-red) 0%, #FF6B6B 100%);
+    color: white;
+    cursor: not-allowed;
+    position: relative;
+    border: 2px solid var(--christmas-gold);
+}
+
+/* Contador navideño */
+.countdown-container {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    border: 2px solid rgba(255,215,0,0.3);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2), inset 0 0 20px rgba(255,215,0,0.1);
+}
+
+.time-unit {
+    background: rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,215,0,0.4);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.time-number {
+    color: var(--christmas-gold);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5), 0 0 10px rgba(255,215,0,0.3);
+}
+
+/* Botones navideños */
+.btn-primary {
+    background: linear-gradient(135deg, var(--christmas-red) 0%, var(--christmas-green) 100%);
+    border: 2px solid var(--christmas-gold);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+    left: 100%;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(196,30,58,0.4), 0 0 15px rgba(255,215,0,0.3);
+    border-color: var(--snow-white);
+}
+
+/* Modal navideño */
+.modal-content {
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,215,0,0.2);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--christmas-red) 0%, var(--christmas-green) 100%);
+    border-bottom: 2px solid var(--christmas-gold);
+}
+
+/* Luces navideñas decorativas */
+.christmas-lights {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: repeating-linear-gradient(
+        90deg,
+        var(--christmas-red) 0px,
+        var(--christmas-red) 20px,
+        var(--christmas-green) 20px,
+        var(--christmas-green) 40px,
+        var(--christmas-gold) 40px,
+        var(--christmas-gold) 60px
+    );
+    animation: christmasLights 2s linear infinite;
+    z-index: 1000;
+}
+
+@keyframes christmasLights {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
 }

@@ -1,18 +1,21 @@
-// JavaScript para el Sistema de Sorteo Mizton
+// JavaScript para el Sistema de Sorteo Mizton - Versión Navideña
 class SorteoApp {
     constructor() {
         this.selectedNumber = null;
         this.reservationTimer = null;
         this.countdownTimer = null;
         this.targetDate = new Date('2025-11-28T23:59:59').getTime();
+        this.snowflakes = [];
         
         this.init();
     }
     
     init() {
+        this.createChristmasEffects();
         this.startCountdown();
         this.loadNumbers();
         this.setupEventListeners();
+        this.startSnowfall();
     }
     
     // Contador regresivo al 28 de noviembre 2025
@@ -71,6 +74,11 @@ class SorteoApp {
             
             if (number.status === 'available') {
                 card.addEventListener('click', () => this.selectNumber(number.number_value));
+                
+                // Agregar efecto de brillo navideño al hacer hover
+                card.addEventListener('mouseenter', () => {
+                    this.addChristmasSparkle(card);
+                });
             }
             
             // Tooltip para números ocupados
@@ -247,6 +255,117 @@ class SorteoApp {
             this.loadNumbers();
         }, 30000); // Cada 30 segundos
     }
+    
+    // ========== EFECTOS NAVIDEÑOS ==========
+    
+    // Crear efectos navideños
+    createChristmasEffects() {
+        // Crear contenedor de copos de nieve
+        const snowContainer = document.createElement('div');
+        snowContainer.className = 'snowflakes';
+        document.body.appendChild(snowContainer);
+        
+        // Crear luces navideñas
+        const lights = document.createElement('div');
+        lights.className = 'christmas-lights';
+        document.body.appendChild(lights);
+        
+        this.snowContainer = snowContainer;
+    }
+    
+    // Iniciar caída de nieve
+    startSnowfall() {
+        // Crear copos de nieve iniciales
+        for (let i = 0; i < 50; i++) {
+            this.createSnowflake();
+        }
+        
+        // Crear nuevos copos periódicamente
+        setInterval(() => {
+            this.createSnowflake();
+        }, 300);
+        
+        // Limpiar copos antiguos
+        setInterval(() => {
+            this.cleanupSnowflakes();
+        }, 5000);
+    }
+    
+    // Crear un copo de nieve individual
+    createSnowflake() {
+        const snowflake = document.createElement('div');
+        snowflake.className = 'snowflake';
+        
+        // Diferentes símbolos de copos de nieve
+        const snowSymbols = ['❄', '❅', '❆', '✻', '✼', '❋', '✱', '✲'];
+        snowflake.textContent = snowSymbols[Math.floor(Math.random() * snowSymbols.length)];
+        
+        // Posición aleatoria
+        snowflake.style.left = Math.random() * 100 + '%';
+        snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        snowflake.style.opacity = Math.random();
+        snowflake.style.fontSize = (Math.random() * 10 + 10) + 'px';
+        
+        // Delay aleatorio para que no todos caigan al mismo tiempo
+        snowflake.style.animationDelay = Math.random() * 2 + 's';
+        
+        this.snowContainer.appendChild(snowflake);
+        this.snowflakes.push(snowflake);
+        
+        // Remover el copo después de que termine la animación
+        setTimeout(() => {
+            if (snowflake.parentNode) {
+                snowflake.parentNode.removeChild(snowflake);
+            }
+        }, 8000);
+    }
+    
+    // Limpiar copos de nieve antiguos
+    cleanupSnowflakes() {
+        this.snowflakes = this.snowflakes.filter(snowflake => {
+            if (!snowflake.parentNode) {
+                return false;
+            }
+            return true;
+        });
+        
+        // Mantener un máximo de 100 copos
+        if (this.snowflakes.length > 100) {
+            const excess = this.snowflakes.splice(0, this.snowflakes.length - 100);
+            excess.forEach(snowflake => {
+                if (snowflake.parentNode) {
+                    snowflake.parentNode.removeChild(snowflake);
+                }
+            });
+        }
+    }
+    
+    // Efecto de brillo navideño en números
+    addChristmasSparkle(element) {
+        const sparkle = document.createElement('div');
+        sparkle.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: sparkle 1s ease-out forwards;
+            pointer-events: none;
+            z-index: 10;
+        `;
+        
+        element.style.position = 'relative';
+        element.appendChild(sparkle);
+        
+        setTimeout(() => {
+            if (sparkle.parentNode) {
+                sparkle.parentNode.removeChild(sparkle);
+            }
+        }, 1000);
+    }
 }
 
 // Inicializar aplicación cuando el DOM esté listo
@@ -280,8 +399,38 @@ style.textContent = `
         }
     }
     
+    @keyframes sparkle {
+        0% {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 1;
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 0;
+        }
+    }
+    
     .alert-floating {
         animation: slideInRight 0.3s ease-out;
+    }
+    
+    /* Efectos adicionales de partículas navideñas */
+    @keyframes twinkle {
+        0%, 100% { opacity: 0; }
+        50% { opacity: 1; }
+    }
+    
+    .christmas-particle {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: #FFD700;
+        border-radius: 50%;
+        animation: twinkle 2s infinite;
     }
 `;
 document.head.appendChild(style);
