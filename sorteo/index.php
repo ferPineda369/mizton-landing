@@ -153,6 +153,13 @@ require_once 'config/database.php';
                     <div class="text-center mb-4">
                         <h3 class="text-primary">🏆 Colágeno Duché 🏆</h3>
                         <h5 class="text-muted">(Colágeno Hidrolizado)</h5>
+                        
+                        <!-- Imagen del Premio -->
+                        <div class="mt-3 mb-3">
+                            <img src="premio.jpg" alt="Colágeno Duché - Premio del Sorteo" 
+                                 class="img-fluid rounded shadow" 
+                                 style="max-height: 300px; object-fit: contain;">
+                        </div>
                     </div>
                     
                     <div class="row">
@@ -360,7 +367,7 @@ require_once 'config/database.php';
                                                 <i class="fas fa-copy"></i>
                                             </button>
                                         </div>
-                                        <div class="form-text">Se actualizará automáticamente con tu número celular</div>
+                                        <div class="form-text">Incluye tu número celular al concepto</div>
                                     </div>
                                     
                                     <div class="alert alert-warning">
