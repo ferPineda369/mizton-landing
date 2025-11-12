@@ -2,11 +2,14 @@
 class SorteoApp {
     constructor() {
         this.selectedNumbers = [];
+        this.blockedNumbers = new Set();
+        this.blockingTimer = null;
         this.reservationTimer = null;
         this.countdownTimer = null;
         this.targetDate = new Date('2025-11-28T23:59:59').getTime();
         this.snowflakes = [];
         this.whatsappGroupUrl = 'https://chat.whatsapp.com/XXXXXXXXXXXXXXX'; // Cambiar por URL real
+        this.blockingTimeLeft = 0;
         
         this.init();
     }
@@ -100,20 +103,45 @@ class SorteoApp {
     
     // Alternar selección de número (selección múltiple)
     toggleNumber(number, cardElement) {
+        // Verificar si el número está bloqueado por otro usuario
+        if (this.blockedNumbers.has(number) && !this.selectedNumbers.includes(number)) {
+            this.showAlert('Ese número está siendo reservado por otro usuario. Puedes esperar 2 minutos para confirmar si fue comprado o elegir otro número disponible.', 'warning');
+            return;
+        }
+        
         const index = this.selectedNumbers.indexOf(number);
         
         if (index > -1) {
             // Deseleccionar número
             this.selectedNumbers.splice(index, 1);
             cardElement.classList.remove('number-selected');
+            
+            // Si no hay más números seleccionados, limpiar bloqueo
+            if (this.selectedNumbers.length === 0) {
+                this.clearBlockingTimer();
+                this.unblockNumbersOnServer();
+            } else {
+                // Actualizar bloqueo en servidor
+                this.blockNumbersOnServer();
+            }
         } else {
             // Seleccionar número
             this.selectedNumbers.push(number);
             cardElement.classList.add('number-selected');
+            
+            // Iniciar bloqueo temporal si es el primer número
+            if (this.selectedNumbers.length === 1) {
+                this.blockNumbersOnServer();
+                this.startBlockingTimer();
+            } else {
+                // Actualizar bloqueo en servidor con nuevos números
+                this.blockNumbersOnServer();
+            }
         }
         
-        // Actualizar botón de continuar
+        // Actualizar botón de continuar y total
         this.updateContinueButton();
+        this.updateTotalAmount();
     }
     
     // Actualizar botón de continuar
@@ -173,6 +201,145 @@ class SorteoApp {
         
         // Limpiar formulario pero mantener números seleccionados
         document.getElementById('fullName').value = '';
+        
+        // Actualizar total
+        this.updateTotalAmount();
+    }
+    
+    // Actualizar monto total
+    updateTotalAmount() {
+        const totalElement = document.getElementById('totalAmount');
+        if (totalElement) {
+            const total = this.selectedNumbers.length * 25;
+            totalElement.textContent = total.toFixed(2);
+        }
+    }
+    
+    // Iniciar timer de bloqueo temporal (2 minutos)
+    startBlockingTimer() {
+        this.clearBlockingTimer();
+        this.blockingTimeLeft = 120; // 2 minutos en segundos
+        
+        // Mostrar alerta de bloqueo
+        const blockingAlert = document.getElementById('blockingTimer');
+        if (blockingAlert) {
+            blockingAlert.style.display = 'block';
+        }
+        
+        this.blockingTimer = setInterval(() => {
+            const minutes = Math.floor(this.blockingTimeLeft / 60);
+            const seconds = this.blockingTimeLeft % 60;
+            
+            const timeElement = document.getElementById('blockingTimeLeft');
+            if (timeElement) {
+                timeElement.textContent = `${minutes}:${String(seconds).padStart(2, '0')}`;
+                
+                // Cambiar color según tiempo restante
+                if (this.blockingTimeLeft <= 30) {
+                    timeElement.className = 'timer-danger';
+                } else if (this.blockingTimeLeft <= 60) {
+                    timeElement.className = 'timer-warning';
+                }
+            }
+            
+            this.blockingTimeLeft--;
+            
+            if (this.blockingTimeLeft < 0) {
+                this.clearBlockingTimer();
+                this.unblockNumbersOnServer();
+                this.showAlert('Tiempo de bloqueo agotado. Los números han sido liberados.', 'warning');
+                
+                // Limpiar selección
+                this.selectedNumbers = [];
+                this.updateContinueButton();
+                this.loadNumbers(); // Recargar para actualizar estados
+            }
+        }, 1000);
+    }
+    
+    // Limpiar timer de bloqueo
+    clearBlockingTimer() {
+        if (this.blockingTimer) {
+            clearInterval(this.blockingTimer);
+            this.blockingTimer = null;
+        }
+        
+        const blockingAlert = document.getElementById('blockingTimer');
+        if (blockingAlert) {
+            blockingAlert.style.display = 'none';
+        }
+        
+        const timeElement = document.getElementById('blockingTimeLeft');
+        if (timeElement) {
+            timeElement.textContent = '2:00';
+            timeElement.className = '';
+        }
+        
+        this.blockingTimeLeft = 0;
+    }
+    
+    // Bloquear números en el servidor
+    async blockNumbersOnServer() {
+        if (this.selectedNumbers.length === 0) return;
+        
+        try {
+            const response = await fetch('api/block_numbers.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    numbers: this.selectedNumbers,
+                    action: 'block',
+                    session_id: this.getSessionId()
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (!data.success) {
+                this.showAlert(data.message, 'warning');
+                // Si hay conflicto, recargar números
+                this.loadNumbers();
+            }
+        } catch (error) {
+            console.error('Error bloqueando números:', error);
+        }
+    }
+    
+    // Desbloquear números en el servidor
+    async unblockNumbersOnServer() {
+        try {
+            const response = await fetch('api/block_numbers.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    numbers: [],
+                    action: 'unblock',
+                    session_id: this.getSessionId()
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (!data.success) {
+                console.error('Error desbloqueando números:', data.message);
+            }
+        } catch (error) {
+            console.error('Error desbloqueando números:', error);
+        }
+    }
+    
+    // Obtener ID de sesión (simplificado)
+    getSessionId() {
+        let sessionId = localStorage.getItem('sorteo_session_id');
+        if (!sessionId) {
+            sessionId = 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('sorteo_session_id', sessionId);
+        }
+        return sessionId;
     }
     
     // Configurar event listeners
@@ -235,6 +402,10 @@ class SorteoApp {
                 
                 // Abrir WhatsApp
                 this.openWhatsAppGroup();
+                
+                // Limpiar bloqueo temporal
+                this.clearBlockingTimer();
+                this.unblockNumbersOnServer();
                 
                 // Limpiar selección
                 this.selectedNumbers = [];

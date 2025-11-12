@@ -183,6 +183,12 @@ require_once 'config/database.php';
                             <strong>Números seleccionados:</strong> <span id="selectedNumbersList"></span>
                         </div>
                         
+                        <div class="alert alert-danger" id="blockingTimer" style="display: none;">
+                            <i class="fas fa-lock"></i> 
+                            <strong>Números bloqueados temporalmente:</strong> 
+                            <span id="blockingTimeLeft">2:00</span> restantes para completar el registro
+                        </div>
+                        
                         <div class="mb-3">
                             <label for="fullName" class="form-label">Nombre Completo *</label>
                             <input type="text" class="form-control" id="fullName" name="fullName" required>
@@ -196,11 +202,12 @@ require_once 'config/database.php';
                         
                         <div class="alert alert-info">
                             <h6><i class="fas fa-info-circle"></i> Información de Pago</h6>
-                            <p><strong>Cuenta:</strong> 1234567890</p>
-                            <p><strong>Banco:</strong> Banco Ejemplo</p>
-                            <p><strong>Titular:</strong> Mizton Sorteos</p>
-                            <p><strong>Monto:</strong> $50.00 MXN</p>
-                            <p><strong>Concepto:</strong> Sorteo Número <span class="payment-number"></span></p>
+                            <p><strong>CLABE:</strong> 638180000187197364</p>
+                            <p><strong>Banco:</strong> NU MEXICO</p>
+                            <p><strong>Titular:</strong> Ileana Pineda Calderón</p>
+                            <p><strong>Monto por boleto:</strong> $25.00 MXN</p>
+                            <p><strong>Total a pagar:</strong> $<span id="totalAmount">25.00</span> MXN</p>
+                            <p><strong>Concepto:</strong> Sorteo Número(s) <span class="payment-number"></span></p>
                         </div>
                         
                         <div class="alert alert-warning">

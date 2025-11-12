@@ -459,9 +459,10 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     pointer-events: none;
-    z-index: 1;
+    z-index: 999;
+    overflow: hidden;
 }
 
 /* Estilos base para copos de nieve */
@@ -594,6 +595,26 @@ body {
     cursor: not-allowed;
     position: relative;
     border: 2px solid var(--christmas-gold);
+}
+
+.number-blocked {
+    background: linear-gradient(135deg, #FF8C00 0%, #FFA500 100%);
+    color: white;
+    cursor: not-allowed;
+    opacity: 0.8;
+    border: 2px solid var(--christmas-red);
+    animation: blockingPulse 1s infinite;
+}
+
+@keyframes blockingPulse {
+    0%, 100% { 
+        opacity: 0.8;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 1;
+        transform: scale(1.02);
+    }
 }
 
 /* Contador navideño */

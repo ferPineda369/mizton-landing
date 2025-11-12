@@ -10,17 +10,24 @@ try {
     // Limpiar reservas expiradas antes de obtener los números
     cleanExpiredReservations($pdo);
     
-    // Obtener todos los números con su estado actual
+    // Limpiar bloqueos temporales expirados
+    $pdo->exec("DELETE FROM sorteo_temp_blocks WHERE expires_at < NOW()");
+    
+    // Obtener todos los números con su estado actual y bloqueos temporales
     $sql = "SELECT 
-                number_value,
-                status,
-                participant_name,
-                participant_email,
-                reserved_at,
-                confirmed_at,
-                reservation_expires_at
-            FROM sorteo_numbers 
-            ORDER BY number_value ASC";
+                sn.number_value,
+                sn.status,
+                sn.participant_name,
+                sn.participant_email,
+                sn.reserved_at,
+                sn.confirmed_at,
+                sn.reservation_expires_at,
+                stb.session_id as blocked_by_session,
+                stb.expires_at as block_expires_at
+            FROM sorteo_numbers sn
+            LEFT JOIN sorteo_temp_blocks stb ON sn.number_value = stb.number_value 
+                AND stb.expires_at > NOW()
+            ORDER BY sn.number_value ASC";
     
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
@@ -28,15 +35,30 @@ try {
     
     // Procesar los datos para el frontend
     $processedNumbers = [];
+    $currentSessionId = session_id();
+    
     foreach ($numbers as $number) {
+        // Determinar el estado efectivo del número
+        $effectiveStatus = $number['status'];
+        $isBlockedByOther = false;
+        
+        if ($number['blocked_by_session'] && $number['blocked_by_session'] !== $currentSessionId) {
+            $isBlockedByOther = true;
+            if ($effectiveStatus === 'available') {
+                $effectiveStatus = 'blocked';
+            }
+        }
+        
         $processedNumbers[] = [
             'number_value' => (int)$number['number_value'],
-            'status' => $number['status'],
+            'status' => $effectiveStatus,
             'participant_name' => $number['participant_name'],
             'participant_email' => $number['participant_email'],
             'reserved_at' => $number['reserved_at'],
             'confirmed_at' => $number['confirmed_at'],
-            'reservation_expires_at' => $number['reservation_expires_at']
+            'reservation_expires_at' => $number['reservation_expires_at'],
+            'is_blocked_by_other' => $isBlockedByOther,
+            'block_expires_at' => $number['block_expires_at']
         ];
     }
     
