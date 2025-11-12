@@ -690,6 +690,25 @@ class SorteoApp {
             `;
         });
         
+        // Agregar botón de WhatsApp si hay boletos encontrados
+        if (data.boletos && data.boletos.length > 0) {
+            html += `
+                <div class="alert alert-info mt-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h6><i class="fab fa-whatsapp"></i> ¡Únete al Grupo de WhatsApp!</h6>
+                            <p class="mb-0">Como tienes boletos registrados, es <strong>REQUISITO</strong> unirse al grupo de WhatsApp para participar en el evento en vivo.</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button type="button" class="btn btn-success" onclick="openWhatsAppGroup()">
+                                <i class="fab fa-whatsapp"></i> Unirse al Grupo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
         boletosDiv.innerHTML = html;
         resultadosDiv.style.display = 'block';
     }
@@ -1170,6 +1189,20 @@ function submitRegistration() {
         console.error('❌ Error: sorteoManager o submitRegistration no disponible');
         console.error('Manager:', manager);
         console.error('SubmitRegistration method:', manager ? manager.submitRegistration : 'manager is null');
+    }
+}
+
+// Función global para abrir WhatsApp
+function openWhatsAppGroup() {
+    console.log('🚀 openWhatsAppGroup() llamada desde botón');
+    const manager = initializeSorteoManager();
+    if (manager && manager.openWhatsAppGroup) {
+        manager.openWhatsAppGroup();
+    } else {
+        // Fallback directo si hay problemas con el manager
+        const whatsappUrl = 'https://chat.whatsapp.com/JFCyYfRXYJVJkiLsVj2yhK?mode=wwt';
+        window.open(whatsappUrl, '_blank');
+        console.log('📱 WhatsApp abierto directamente');
     }
 }
 
