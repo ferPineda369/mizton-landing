@@ -285,7 +285,7 @@ require_once 'config/database.php';
                         </div>
                         
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">
+                            <button type="button" class="btn btn-primary btn-lg" onclick="sorteoManager.submitRegistration()">
                                 <i class="fas fa-check"></i> Confirmar Participación
                             </button>
                         </div>

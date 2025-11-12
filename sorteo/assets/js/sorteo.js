@@ -49,6 +49,16 @@ class SorteoApp {
                 this.consultarBoletos();
             });
         }
+        
+        // Configurar formulario de registro para prevenir submit tradicional
+        const registrationForm = document.getElementById('registrationForm');
+        if (registrationForm) {
+            registrationForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                console.log('🚫 Submit del formulario interceptado - llamando submitRegistration()');
+                this.submitRegistration();
+            });
+        }
     }
     
     // Contador regresivo al 28 de noviembre 2025
@@ -699,9 +709,11 @@ class SorteoApp {
     
     // Enviar registro
     async submitRegistration() {
+        console.log('🚀 === INICIO submitRegistration() ===');
+        
         const form = document.getElementById('registrationForm');
         const formData = new FormData(form);
-        const submitBtn = form.querySelector('button[type="submit"]');
+        const submitBtn = form.querySelector('button') || form.querySelector('button[type="button"]');
         
         // Validar que hay números seleccionados
         if (this.selectedNumbers.length === 0) {
