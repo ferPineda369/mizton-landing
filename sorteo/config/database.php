@@ -40,6 +40,7 @@ function createSorteoTables($pdo) {
         status ENUM('available', 'reserved', 'confirmed') DEFAULT 'available',
         participant_name VARCHAR(255) NULL,
         participant_email VARCHAR(255) NULL,
+        participant_movil VARCHAR(15) NULL,
         reserved_at TIMESTAMP NULL,
         confirmed_at TIMESTAMP NULL,
         reservation_expires_at TIMESTAMP NULL,
