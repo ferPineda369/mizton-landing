@@ -133,18 +133,35 @@ class SorteoApp {
             card.dataset.number = number.number_value;
             card.dataset.status = number.status;
             
-            if (number.status === 'available') {
+            // Verificar si está bloqueado por otro usuario
+            const isBlockedByOther = number.is_blocked_by_other || false;
+            
+            if (number.status === 'available' || this.selectedNumbers.includes(number.number_value)) {
+                // Permitir click si está disponible O si ya está seleccionado por este usuario
                 card.addEventListener('click', () => this.toggleNumber(number.number_value, card));
                 
-                // Agregar efecto de brillo navideño al hacer hover
-                card.addEventListener('mouseenter', () => {
-                    this.addChristmasSparkle(card);
-                });
+                // Agregar efecto de brillo navideño al hacer hover (solo si no está bloqueado por otro)
+                if (!isBlockedByOther) {
+                    card.addEventListener('mouseenter', () => {
+                        this.addChristmasSparkle(card);
+                    });
+                }
             }
             
-            // Marcar números ya seleccionados
+            // Marcar números ya seleccionados por este usuario
             if (this.selectedNumbers.includes(number.number_value)) {
                 card.classList.add('number-selected');
+                // Asegurar que puede hacer click para deseleccionar
+                card.style.cursor = 'pointer';
+            }
+            
+            // Marcar números bloqueados por otros usuarios
+            if (isBlockedByOther && !this.selectedNumbers.includes(number.number_value)) {
+                card.classList.add('number-blocked');
+                card.title = 'Número bloqueado temporalmente por otro usuario';
+                this.blockedNumbers.add(number.number_value);
+            } else {
+                this.blockedNumbers.delete(number.number_value);
             }
             
             // Tooltip para números ocupados
@@ -503,7 +520,31 @@ class SorteoApp {
             });
             
             const responses = await Promise.all(registrationPromises);
-            const results = await Promise.all(responses.map(r => r.json()));
+            
+            // Verificar respuestas y manejar errores de JSON
+            const results = await Promise.all(responses.map(async (response) => {
+                try {
+                    if (!response.ok) {
+                        return { success: false, message: `HTTP ${response.status}: ${response.statusText}` };
+                    }
+                    
+                    const text = await response.text();
+                    
+                    // Verificar si la respuesta es JSON válido
+                    try {
+                        return JSON.parse(text);
+                    } catch (jsonError) {
+                        console.error('Respuesta no es JSON válido:', text);
+                        return { 
+                            success: false, 
+                            message: 'Error del servidor - respuesta inválida',
+                            debug: text.substring(0, 200) // Primeros 200 caracteres para debug
+                        };
+                    }
+                } catch (error) {
+                    return { success: false, message: 'Error de conexión: ' + error.message };
+                }
+            }));
             
             const successCount = results.filter(r => r.success).length;
             const failCount = results.length - successCount;
@@ -535,6 +576,19 @@ class SorteoApp {
                 
             } else {
                 this.showAlert('No se pudo reservar ningún número. Intenta nuevamente.', 'danger');
+            }
+            
+            // Debug: mostrar errores detallados
+            if (failCount > 0) {
+                console.error('Errores en registro:', results.filter(r => !r.success));
+                
+                // Mostrar detalles de errores para debug
+                results.filter(r => !r.success).forEach((result, index) => {
+                    console.error(`Error en número ${this.selectedNumbers[index]}:`, result);
+                    if (result.debug) {
+                        console.error('Debug info:', result.debug);
+                    }
+                });
             }
         } catch (error) {
             console.error('Error:', error);
