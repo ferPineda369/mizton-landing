@@ -1,15 +1,28 @@
 <?php
 // Test directo de API sin problemas de headers
 if (isset($_GET['test'])) {
-    // Simular datos POST
-    $_POST['number'] = 88;
-    $_POST['fullName'] = 'Test Usuario';
-    $_POST['phoneNumber'] = '2222012345';
+    // Simular datos POST correctamente
+    $_POST = [
+        'number' => '88',
+        'fullName' => 'Test Usuario',
+        'phoneNumber' => '2222012345'
+    ];
     $_SERVER['REQUEST_METHOD'] = 'POST';
+    $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+    $_SERVER['HTTP_USER_AGENT'] = 'Test Browser';
+    
+    // Limpiar cualquier output previo
+    if (ob_get_level()) {
+        ob_end_clean();
+    }
     
     // Capturar output de la API
     ob_start();
-    include __DIR__ . '/api/register_number.php';
+    try {
+        include __DIR__ . '/api/register_number.php';
+    } catch (Exception $e) {
+        echo json_encode(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+    }
     $apiOutput = ob_get_clean();
     
     // Mostrar resultado

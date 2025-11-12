@@ -25,8 +25,8 @@ try {
     
     // Validar datos de entrada
     $number = filter_input(INPUT_POST, 'number', FILTER_VALIDATE_INT);
-    $fullName = trim(filter_input(INPUT_POST, 'fullName', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
-    $phoneNumber = trim(filter_input(INPUT_POST, 'phoneNumber', FILTER_SANITIZE_FULL_SPECIAL_CHARS));
+    $fullName = trim(filter_input(INPUT_POST, 'fullName', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '');
+    $phoneNumber = trim(filter_input(INPUT_POST, 'phoneNumber', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '');
     
     error_log("Datos procesados - Número: $number, Nombre: $fullName, Celular: $phoneNumber");
     
