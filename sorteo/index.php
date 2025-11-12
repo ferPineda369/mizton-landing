@@ -214,7 +214,7 @@ require_once 'config/database.php';
                             <p><strong>Titular:</strong> Ileana Pineda Calderón</p>
                             <p><strong>Monto por boleto:</strong> $25.00 MXN</p>
                             <p><strong>Total a pagar:</strong> $<span id="totalAmount">25.00</span> MXN</p>
-                            <p><strong>Concepto:</strong> Sorteo Número(s) <span class="payment-number"></span></p>
+                            <p><strong>Concepto:</strong> Apoyo a Pahuata <span class="payment-phone"></span></p>
                         </div>
                         
                         <div class="alert alert-warning">
@@ -299,6 +299,7 @@ require_once 'config/database.php';
                                                 <i class="fas fa-copy"></i>
                                             </button>
                                         </div>
+                                        <div class="form-text">Se actualizará automáticamente con tu número celular</div>
                                     </div>
                                     
                                     <div class="alert alert-warning">

@@ -31,6 +31,17 @@ class SorteoApp {
         }, 5000);
     }
     
+    // Configurar event listeners
+    setupEventListeners() {
+        // Actualizar concepto de pago cuando cambie el número celular
+        const phoneInput = document.getElementById('phoneNumber');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', (e) => {
+                this.updatePaymentConcept(e.target.value);
+            });
+        }
+    }
+    
     // Contador regresivo al 28 de noviembre 2025
     startCountdown() {
         this.countdownTimer = setInterval(() => {
@@ -276,7 +287,7 @@ class SorteoApp {
             return;
         }
         
-        // Campo de celular removido por el usuario
+        // Listener movido a setupEventListeners
         document.getElementById('selectedNumbersList').textContent = this.selectedNumbers.join(', ');
         document.getElementById('selectedNumbers').value = JSON.stringify(this.selectedNumbers);
         
@@ -527,7 +538,25 @@ class SorteoApp {
         return sessionId;
     }
     
-    // Función updatePaymentConcept removida ya que el campo de celular fue eliminado
+    // Actualizar concepto de pago con número celular
+    updatePaymentConcept(phoneNumber) {
+        const paymentPhoneElement = document.querySelector('.payment-phone');
+        if (paymentPhoneElement) {
+            if (phoneNumber && /^[0-9]{10}$/.test(phoneNumber)) {
+                paymentPhoneElement.textContent = phoneNumber;
+            } else {
+                paymentPhoneElement.textContent = '';
+            }
+        }
+        
+        // También actualizar el concepto en el modal
+        const conceptoInput = document.getElementById('conceptoInput');
+        if (conceptoInput && phoneNumber && /^[0-9]{10}$/.test(phoneNumber)) {
+            conceptoInput.value = `Apoyo a Pahuata ${phoneNumber}`;
+        } else if (conceptoInput) {
+            conceptoInput.value = 'Apoyo a Pahuata';
+        }
+    }
     
     // Enviar registro
     async submitRegistration() {
