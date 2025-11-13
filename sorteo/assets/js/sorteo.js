@@ -976,15 +976,15 @@ class SorteoApp {
     
     // Iniciar caída de nieve
     startSnowfall() {
-        // Crear copos de nieve iniciales
-        for (let i = 0; i < 50; i++) {
+        // Crear copos de nieve iniciales (reducido a la mitad)
+        for (let i = 0; i < 25; i++) {
             this.createSnowflake();
         }
         
-        // Crear nuevos copos periódicamente
+        // Crear nuevos copos periódicamente (menos frecuente)
         setInterval(() => {
             this.createSnowflake();
-        }, 300);
+        }, 600);
         
         // Limpiar copos antiguos
         setInterval(() => {
@@ -1003,7 +1003,7 @@ class SorteoApp {
         
         // Posición aleatoria
         snowflake.style.left = Math.random() * 100 + '%';
-        snowflake.style.animationDuration = (Math.random() * 4 + 3) + 's';
+        snowflake.style.animationDuration = (Math.random() * 6 + 5) + 's'; // Más lento: 5-11s en lugar de 3-7s
         snowflake.style.opacity = Math.random() * 0.8 + 0.2;
         snowflake.style.fontSize = (Math.random() * 15 + 15) + 'px';
         
@@ -1013,12 +1013,12 @@ class SorteoApp {
         this.snowContainer.appendChild(snowflake);
         this.snowflakes.push(snowflake);
         
-        // Remover el copo después de que termine la animación
+        // Remover el copo después de que termine la animación (ajustado para velocidad más lenta)
         setTimeout(() => {
             if (snowflake.parentNode) {
                 snowflake.parentNode.removeChild(snowflake);
             }
-        }, 8000);
+        }, 12000); // Aumentado de 8s a 12s para coincidir con la velocidad más lenta
     }
     
     // Limpiar copos de nieve antiguos
@@ -1030,9 +1030,9 @@ class SorteoApp {
             return true;
         });
         
-        // Mantener un máximo de 100 copos
-        if (this.snowflakes.length > 100) {
-            const excess = this.snowflakes.splice(0, this.snowflakes.length - 100);
+        // Mantener un máximo de 50 copos (reducido a la mitad)
+        if (this.snowflakes.length > 50) {
+            const excess = this.snowflakes.splice(0, this.snowflakes.length - 50);
             excess.forEach(snowflake => {
                 if (snowflake.parentNode) {
                     snowflake.parentNode.removeChild(snowflake);
