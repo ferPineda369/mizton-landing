@@ -976,15 +976,15 @@ class SorteoApp {
     
     // Iniciar caída de nieve
     startSnowfall() {
-        // Crear copos de nieve iniciales (reducido a la mitad)
-        for (let i = 0; i < 25; i++) {
+        // Crear copos de nieve iniciales (reducido 75% del original)
+        for (let i = 0; i < 12; i++) {
             this.createSnowflake();
         }
         
-        // Crear nuevos copos periódicamente (menos frecuente)
+        // Crear nuevos copos periódicamente (aún menos frecuente)
         setInterval(() => {
             this.createSnowflake();
-        }, 600);
+        }, 1200);
         
         // Limpiar copos antiguos
         setInterval(() => {
@@ -1030,9 +1030,9 @@ class SorteoApp {
             return true;
         });
         
-        // Mantener un máximo de 50 copos (reducido a la mitad)
-        if (this.snowflakes.length > 50) {
-            const excess = this.snowflakes.splice(0, this.snowflakes.length - 50);
+        // Mantener un máximo de 25 copos (reducido 75% del original)
+        if (this.snowflakes.length > 25) {
+            const excess = this.snowflakes.splice(0, this.snowflakes.length - 25);
             excess.forEach(snowflake => {
                 if (snowflake.parentNode) {
                     snowflake.parentNode.removeChild(snowflake);
