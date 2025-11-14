@@ -1,11 +1,43 @@
 <?php
 // Configuración de base de datos para el sorteo
+
+// Función para cargar variables de entorno desde archivo .env
+function loadEnvFile($filePath) {
+    if (!file_exists($filePath)) {
+        return false;
+    }
+    
+    $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0) {
+            continue; // Saltar comentarios
+        }
+        
+        list($name, $value) = explode('=', $line, 2);
+        $name = trim($name);
+        $value = trim($value);
+        
+        if (!array_key_exists($name, $_ENV)) {
+            $_ENV[$name] = $value;
+        }
+    }
+    return true;
+}
+
+// Cargar variables de entorno
+$envPath = __DIR__ . '/../../.env';
+if (!loadEnvFile($envPath)) {
+    // Si no existe .env, intentar cargar .env.example como fallback
+    $envPath = __DIR__ . '/../../.env.example';
+    loadEnvFile($envPath);
+}
+
 try {
-    // Configuración de base de datos
-    $host = 'localhost';
-    $dbname = 'miztondb'; // Cambiar por el nombre real de la base de datos
-    $username = 'michiuser'; // Cambiar por el usuario real
-    $password = 'yo96jiaEJKG7pwRmw2gY8K'; // Cambiar por la contraseña real
+    // Configuración de base de datos desde variables de entorno
+    $host = $_ENV['DB_HOST'] ?? '';
+    $dbname = $_ENV['DB_NAME'] ?? '';
+    $username = $_ENV['DB_USER'] ?? '';
+    $password = $_ENV['DB_PASS'] ?? '';
     
     // Crear conexión PDO
     $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
