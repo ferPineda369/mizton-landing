@@ -490,30 +490,61 @@ require_once 'config/database.php';
     <script src="assets/js/sorteo.js"></script>
     
     <script>
-        // Función para copiar al portapapeles
-        function copyToClipboard(elementId) {
+        // Función para copiar al portapapeles (API moderna)
+        async function copyToClipboard(elementId) {
             const element = document.getElementById(elementId);
-            element.select();
-            element.setSelectionRange(0, 99999); // Para móviles
+            const textToCopy = element.value;
             
             try {
-                document.execCommand('copy');
+                // Intentar usar la API moderna del portapapeles
+                if (navigator.clipboard && window.isSecureContext) {
+                    await navigator.clipboard.writeText(textToCopy);
+                    console.log('✅ Copiado con navigator.clipboard');
+                } else {
+                    // Fallback para navegadores más antiguos
+                    element.select();
+                    element.setSelectionRange(0, 99999);
+                    document.execCommand('copy');
+                    console.log('✅ Copiado con execCommand (fallback)');
+                }
                 
                 // Mostrar feedback visual
-                const button = element.nextElementSibling;
-                const originalHTML = button.innerHTML;
-                button.innerHTML = '<i class="fas fa-check"></i>';
-                button.classList.remove('btn-outline-success', 'btn-outline-warning');
-                button.classList.add('btn-success');
-                
-                setTimeout(() => {
-                    button.innerHTML = originalHTML;
-                    button.classList.remove('btn-success');
-                    button.classList.add(elementId === 'clabeInput' ? 'btn-outline-success' : 'btn-outline-warning');
-                }, 2000);
+                const button = element.nextElementSibling || element.parentElement.querySelector('button');
+                if (button) {
+                    const originalHTML = button.innerHTML;
+                    const originalClasses = button.className;
+                    
+                    button.innerHTML = '<i class="fas fa-check"></i> Copiado';
+                    button.className = 'btn btn-success';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.className = originalClasses;
+                    }, 2000);
+                }
                 
             } catch (err) {
-                console.error('Error al copiar: ', err);
+                console.error('❌ Error al copiar:', err);
+                
+                // Mostrar error visual
+                const button = element.nextElementSibling || element.parentElement.querySelector('button');
+                if (button) {
+                    const originalHTML = button.innerHTML;
+                    const originalClasses = button.className;
+                    
+                    button.innerHTML = '<i class="fas fa-times"></i> Error';
+                    button.className = 'btn btn-danger';
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.className = originalClasses;
+                    }, 2000);
+                }
+                
+                // Fallback manual: seleccionar texto para que el usuario pueda copiarlo
+                element.select();
+                element.setSelectionRange(0, 99999);
+                alert('No se pudo copiar automáticamente. El texto está seleccionado, usa Ctrl+C para copiarlo.');
             }
         }
     </script>
