@@ -264,13 +264,13 @@ require_once 'config/database.php';
                             <div class="mb-2">
                                 <strong>CLABE:</strong>
                                 <div class="input-group input-group-sm mt-1">
-                                    <input type="text" class="form-control" value="638180000187197364" readonly id="clabeInput">
+                                    <input type="text" class="form-control" value="012180015545193401" readonly id="clabeInput">
                                     <button class="btn btn-outline-primary" type="button" onclick="copyToClipboard('clabeInput')">
                                         <i class="fas fa-copy"></i>
                                     </button>
                                 </div>
                             </div>
-                            <p><strong>Banco:</strong> NU MEXICO</p>
+                            <p><strong>Banco:</strong> BBVA</p>
                             <p><strong>Titular:</strong> Ileana Pineda Calderón</p>
                             <p><strong>Monto por boleto:</strong> $25.00 MXN</p>
                             <p><strong>Total a pagar:</strong> $<span id="totalAmount">25.00</span> MXN</p>
@@ -328,7 +328,7 @@ require_once 'config/database.php';
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">CLABE:</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" value="638180000187197364" readonly id="clabeInput">
+                                            <input type="text" class="form-control" value="012180015545193401" readonly id="clabeInput">
                                             <button class="btn btn-outline-success" type="button" onclick="copyToClipboard('clabeInput')">
                                                 <i class="fas fa-copy"></i>
                                             </button>
@@ -337,7 +337,7 @@ require_once 'config/database.php';
                                     
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">Banco:</label>
-                                        <input type="text" class="form-control" value="NU MEXICO" readonly>
+                                        <input type="text" class="form-control" value="BBVA" readonly>
                                     </div>
                                     
                                     <div class="mb-3">
