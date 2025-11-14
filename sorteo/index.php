@@ -328,8 +328,8 @@ require_once 'config/database.php';
                                     <div class="mb-3">
                                         <label class="form-label fw-bold">CLABE:</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" value="012180015545193401" readonly id="clabeInput">
-                                            <button class="btn btn-outline-success" type="button" onclick="copyToClipboard('clabeInput')">
+                                            <input type="text" class="form-control" value="012180015545193401" readonly id="clabeInputModal">
+                                            <button class="btn btn-outline-success" type="button" onclick="copyToClipboard('clabeInputModal')">
                                                 <i class="fas fa-copy"></i>
                                             </button>
                                         </div>
