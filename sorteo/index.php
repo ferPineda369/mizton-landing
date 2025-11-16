@@ -128,7 +128,7 @@ require_once 'config/database.php';
                                         <li class="mb-2"><i class="fas fa-users text-success"></i> Se mantendrá informados a los participantes a través del grupo de WhatsApp creado para tal fin</li>
                                         <li class="mb-2"><i class="fas fa-lock text-warning"></i> Al concluir el evento, dicho grupo se cerrará</li>
                                         <li class="mb-2"><i class="fas fa-video text-primary"></i> El día y hora señalada para el sorteo, se realizará un "en vivo" a través de Google Meet o Zoom elegido 1 día antes a través de votación</li>
-                                        <li class="mb-2"><i class="fas fa-random text-info"></i> Se transmitirá en vivo donde el algoritmo del sorteo de manera totalmente aleatoria eligirá a los 2 afortunados del evento</li>
+                                        <li class="mb-2"><i class="fas fa-random text-info"></i> Se transmitirá en vivo donde se mostrarán todos los números participantes y se eligirán a los 2 afortunados del evento</li>
                                         <li class="mb-2"><i class="fas fa-map-marker-alt text-danger"></i> El regalo será entregado de forma presencial en la ciudad de Puebla, Pue.</li>
                                         <li class="mb-0"><i class="fas fa-handshake text-secondary"></i> Si el ganador(a) se encontrara fuera de la ciudad, se acordará la mejor forma de hacer la entrega</li>
                                     </ul>
