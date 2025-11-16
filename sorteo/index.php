@@ -250,7 +250,7 @@ require_once 'config/database.php';
                         <div class="mb-3">
                             <label for="phoneNumber" class="form-label">Número Celular *</label>
                             <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required 
-                                   pattern="[0-9]{10}" maxlength="10" placeholder="2222012345">
+                                   pattern="[0-9]{10}" maxlength="10" placeholder="##########">
                             <div class="form-text">10 dígitos sin espacios - identificación de tus boletos</div>
                         </div>
                         
@@ -411,7 +411,7 @@ require_once 'config/database.php';
                         <div class="mb-3">
                             <label for="consultaPhone" class="form-label">Número Celular *</label>
                             <input type="tel" class="form-control" id="consultaPhone" name="consultaPhone" 
-                                   pattern="[0-9]{10}" maxlength="10" placeholder="2222012345" required>
+                                   pattern="[0-9]{10}" maxlength="10" placeholder="##########" required>
                             <div class="form-text">Ingresa el número celular con el que compraste tus boletos</div>
                         </div>
                         <div class="d-grid">
