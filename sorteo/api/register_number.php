@@ -45,7 +45,7 @@ try {
         $errors[] = 'El número celular es obligatorio y debe tener exactamente 10 dígitos';
     }
     
-    if (!preg_match('/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/', $fullName)) {
+    if (!preg_match('/^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+$/', $fullName)) {
         $errors[] = 'El nombre solo puede contener letras y espacios';
     }
     

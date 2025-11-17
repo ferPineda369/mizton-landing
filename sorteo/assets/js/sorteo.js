@@ -1425,7 +1425,7 @@ window.SorteoUtils = {
     
     // Validar nombre
     validateName: (name) => {
-        return name.trim().length >= 3 && /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(name.trim());
+        return name.trim().length >= 3 && /^[a-zA-ZáéíóúüÁÉÍÓÚÜñÑ\s]+$/.test(name.trim());
     }
 };
 

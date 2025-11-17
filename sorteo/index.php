@@ -374,7 +374,7 @@ require_once 'config/database.php';
                         <h6><i class="fas fa-check-circle"></i> Pasos para el pago:</h6>
                         <ol class="mb-0">
                             <li>Copia la CLABE y realiza la transferencia desde tu banco</li>
-                            <li>Usa el concepto sugerido para identificar tu pago</li>
+                            <li>Usa el concepto requerido para identificar tu pago</li>
                             <li>Envía tu comprobante de pago al administrador del grupo de WhatsApp</li>
                         </ol>
                     </div>
