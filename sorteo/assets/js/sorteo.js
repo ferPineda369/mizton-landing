@@ -816,10 +816,17 @@ class SorteoApp {
             if (successCount > 0) {
                 const message = failCount > 0 
                     ? `${successCount} números reservados exitosamente. ${failCount} números no pudieron reservarse.`
-                    : `¡${successCount} números reservados exitosamente! Tienes 15 minutos para confirmar el pago. Se abrirá el grupo de WhatsApp.`;
+                    : `¡${successCount} números reservados exitosamente! Tienes 30 minutos para confirmar el pago. Se abrirá el grupo de WhatsApp.`;
                 
                 this.showAlert(message, successCount === results.length ? 'success' : 'warning');
-                this.startReservationTimer(15 * 60); // 15 minutos
+                
+                // Cerrar modal de registro
+                const modal = bootstrap.Modal.getInstance(document.getElementById('registrationModal'));
+                if (modal) {
+                    modal.hide();
+                }
+                
+                this.startReservationTimer(30 * 60); // 30 minutos
                 this.loadNumbers(); // Recargar números
                 
                 // Abrir WhatsApp
@@ -866,9 +873,15 @@ class SorteoApp {
         }
     }
     
-    // Timer de reserva (15 minutos)
+    // Timer de reserva (30 minutos)
     startReservationTimer(seconds) {
         this.clearReservationTimer();
+        
+        // Mostrar la alerta de reserva
+        const reservationAlert = document.getElementById('reservationAlert');
+        if (reservationAlert) {
+            reservationAlert.style.display = 'block';
+        }
         
         const timerElement = document.getElementById('reservationTimer');
         let timeLeft = seconds;
@@ -892,6 +905,13 @@ class SorteoApp {
             if (timeLeft < 0) {
                 clearInterval(this.reservationTimer);
                 timerElement.textContent = '¡Tiempo agotado!';
+                
+                // Ocultar alerta de reserva
+                const reservationAlert = document.getElementById('reservationAlert');
+                if (reservationAlert) {
+                    reservationAlert.style.display = 'none';
+                }
+                
                 this.showAlert('El tiempo de reserva ha expirado. El número está disponible nuevamente.', 'warning');
                 this.loadNumbers(); // Recargar números
             }
@@ -903,6 +923,12 @@ class SorteoApp {
         if (this.reservationTimer) {
             clearInterval(this.reservationTimer);
             this.reservationTimer = null;
+        }
+        
+        // Ocultar alerta de reserva
+        const reservationAlert = document.getElementById('reservationAlert');
+        if (reservationAlert) {
+            reservationAlert.style.display = 'none';
         }
         
         const timerElement = document.getElementById('reservationTimer');

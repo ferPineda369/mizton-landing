@@ -68,7 +68,7 @@ require_once 'config/database.php';
                                 </div>
                                 <div class="col-md-6">
                                     <ul class="rules-list">
-                                        <li><i class="fas fa-clock"></i> 15 minutos reservado para confirmar tu pago</li>
+                                        <li><i class="fas fa-clock"></i> 30 minutos reservado para confirmar tu pago</li>
                                         <li><i class="fas fa-calendar"></i> El sorteo se realizará el 28 de noviembre</li>
                                         <li><i class="fas fa-trophy"></i> 2 Ganadores posibles → <button class="btn btn-link p-0 text-decoration-none fw-bold" data-bs-toggle="modal" data-bs-target="#prizeModal" style="color: var(--christmas-gold);">Premio</button> ←</li>
                                         <li><i class="fas fa-handshake"></i> Sorteo en vivo transparente y justo</li>
@@ -103,6 +103,21 @@ require_once 'config/database.php';
                     
                     <div class="numbers-grid" id="numbersGrid">
                         <!-- Los números se cargarán dinámicamente -->
+                    </div>
+                    
+                    <!-- Temporizador de Reserva -->
+                    <div class="alert alert-success mt-4" id="reservationAlert" style="display: none;">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5 class="mb-1"><i class="fas fa-clock"></i> ¡Números Reservados!</h5>
+                                <p class="mb-0">Tienes <strong><span id="reservationTimer">30:00</span></strong> para confirmar tu pago</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#paymentDataModal">
+                                    <i class="fas fa-credit-card"></i> Ver Datos de Pago
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     
                     <!-- Información sobre Pahuata y Mecánica -->
@@ -285,11 +300,6 @@ require_once 'config/database.php';
                             </div>
                         </div>
                         
-                        <div class="alert alert-warning">
-                            <i class="fas fa-clock"></i> 
-                            <strong>Tiempo restante:</strong> 
-                            <span id="reservationTimer">30:00</span> para confirmar el pago
-                        </div>
                         
                         <div class="d-grid gap-2">
                             <button type="button" class="btn btn-primary btn-lg" onclick="submitRegistration()">
