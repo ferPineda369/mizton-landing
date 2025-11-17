@@ -45,6 +45,22 @@ class SorteoApp {
             });
         }
         
+        // Actualizar concepto cuando se abra el modal de datos de pago
+        const paymentModal = document.getElementById('paymentDataModal');
+        if (paymentModal) {
+            paymentModal.addEventListener('show.bs.modal', () => {
+                // Obtener número de teléfono de la sesión o del formulario
+                const session = this.getUserSession();
+                const currentPhone = phoneInput ? phoneInput.value : '';
+                const sessionPhone = session ? session.phoneNumber : '';
+                const phoneToUse = currentPhone || sessionPhone;
+                
+                if (phoneToUse) {
+                    this.updatePaymentConcept(phoneToUse);
+                }
+            });
+        }
+        
         // Configurar formulario de consulta de boletos
         const consultaForm = document.getElementById('consultaForm');
         if (consultaForm) {
@@ -713,8 +729,17 @@ class SorteoApp {
         if (reservedTickets.length > 0) {
             html += `
                 <div class="alert alert-warning mt-3">
-                    <h6><i class="fas fa-clock"></i> ¡Te falta muy poco para conseguir tus boletos!</h6>
-                    <p class="mb-0">Realiza tu pago y envíalo al administrador del grupo de WhatsApp para que te sea aprobado.</p>
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h6><i class="fas fa-clock"></i> ¡Te falta muy poco para conseguir tus boletos!</h6>
+                            <p class="mb-0">Realiza tu pago y envíalo al administrador del grupo de WhatsApp para que te sea aprobado.</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#paymentDataModal">
+                                <i class="fas fa-credit-card"></i> Datos para Pagar
+                            </button>
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -1178,6 +1203,8 @@ class SorteoApp {
             
             if (phoneInput && session.phoneNumber) {
                 phoneInput.value = session.phoneNumber;
+                // Actualizar concepto de pago con el número de la sesión
+                this.updatePaymentConcept(session.phoneNumber);
             }
             if (nameInput && session.fullName) {
                 nameInput.value = session.fullName;
