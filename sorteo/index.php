@@ -237,7 +237,7 @@ require_once 'config/database.php';
                         
                         <div class="alert alert-danger" id="blockingTimer" style="display: none;">
                             <i class="fas fa-lock"></i> 
-                            <strong>Números bloqueados temporalmente:</strong> 
+                            <strong>Números apartados temporalmente:</strong> 
                             <span id="blockingTimeLeft">2:00</span> restantes para completar el registro
                         </div>
                         
@@ -288,7 +288,7 @@ require_once 'config/database.php';
                         <div class="alert alert-warning">
                             <i class="fas fa-clock"></i> 
                             <strong>Tiempo restante:</strong> 
-                            <span id="reservationTimer">15:00</span> para confirmar el pago
+                            <span id="reservationTimer">30:00</span> para confirmar el pago
                         </div>
                         
                         <div class="d-grid gap-2">

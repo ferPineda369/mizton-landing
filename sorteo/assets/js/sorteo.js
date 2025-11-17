@@ -8,7 +8,7 @@ class SorteoApp {
         this.countdownTimer = null;
         this.targetDate = new Date('2025-11-28T23:59:59').getTime();
         this.snowflakes = [];
-        this.whatsappGroupUrl = 'https://chat.whatsapp.com/XXXXXXXXXXXXXXX'; // Cambiar por URL real
+        this.whatsappGroupUrl = 'https://chat.whatsapp.com/JFCyYfRXYJVJkiLsVj2yhK?mode=wwt'; // Cambiar por URL real
         this.blockingTimeLeft = 0;
         this.usingFallbackAPI = false; // Para detectar si estamos usando API de respaldo
         this.previouslySelectedNumbers = []; // Para rastrear números previamente seleccionados
@@ -25,7 +25,7 @@ class SorteoApp {
         this.setupEventListeners();
         this.startSnowfall();
         
-        // Recargar números cada 5 segundos para mantener bloqueos actualizados
+        // Recargar números cada 5 segundos para mantener apartados actualizados
         this.numbersRefreshInterval = setInterval(() => {
             this.loadNumbers();
         }, 5000);
@@ -339,7 +339,7 @@ class SorteoApp {
         }
     }
     
-    // Iniciar timer de bloqueo temporal (2 minutos)
+    // Iniciar timer de apartado temporal (2 minutos)
     startBlockingTimer() {
         // No mostrar timer si estamos usando API de respaldo
         if (this.usingFallbackAPI) return;
@@ -347,7 +347,7 @@ class SorteoApp {
         this.clearBlockingTimer();
         this.blockingTimeLeft = 120; // 2 minutos en segundos
         
-        // Mostrar alerta de bloqueo
+        // Mostrar alerta de apartado
         const blockingAlert = document.getElementById('blockingTimer');
         if (blockingAlert) {
             blockingAlert.style.display = 'block';
@@ -391,14 +391,14 @@ class SorteoApp {
         this.unblockNumbersOnServer();
         
         // Mostrar mensaje y recargar página
-        this.showAlert('Tiempo de bloqueo expirado. La página se recargará para actualizar los números disponibles.', 'warning');
+        this.showAlert('Tiempo de apartado expirado. La página se recargará para actualizar los números disponibles.', 'warning');
         
         setTimeout(() => {
             window.location.reload();
         }, 3000);
     }
     
-    // Limpiar timer de bloqueo
+    // Limpiar timer de apartado
     clearBlockingTimer() {
         if (this.blockingTimer) {
             clearInterval(this.blockingTimer);
@@ -907,7 +907,7 @@ class SorteoApp {
         
         const timerElement = document.getElementById('reservationTimer');
         if (timerElement) {
-            timerElement.textContent = '15:00';
+            timerElement.textContent = '30:00';
             timerElement.className = '';
         }
     }

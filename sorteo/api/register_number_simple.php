@@ -100,9 +100,9 @@ try {
         // Establecer zona horaria para México
         date_default_timezone_set('America/Mexico_City');
         
-        // Calcular tiempo de expiración (15 minutos)
+        // Calcular tiempo de expiración (30 minutos)
         $currentTime = new DateTime();
-        $expirationTime = $currentTime->add(new DateInterval('PT15M'))->format('Y-m-d H:i:s');
+        $expirationTime = $currentTime->add(new DateInterval('PT30M'))->format('Y-m-d H:i:s');
         
         // Reservar el número
         $reserveSql = "UPDATE sorteo_numbers 
@@ -162,7 +162,7 @@ try {
                 'number' => $number,
                 'participant_name' => $fullName,
                 'expires_at' => $expirationTime,
-                'expires_in_minutes' => 15
+                'expires_in_minutes' => 30
             ]
         ]);
         
