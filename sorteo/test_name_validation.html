@@ -180,6 +180,14 @@
                 formData.append('fullName', name);
                 formData.append('phoneNumber', '2226536090');
                 
+                // Mostrar qué se está enviando
+                console.log('Enviando a API:', {
+                    number: '17',
+                    fullName: name,
+                    phoneNumber: '2226536090',
+                    fullNameBytes: Array.from(new TextEncoder().encode(name))
+                });
+                
                 const response = await fetch('api/register_number.php', {
                     method: 'POST',
                     body: formData

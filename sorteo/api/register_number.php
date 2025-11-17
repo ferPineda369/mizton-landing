@@ -23,10 +23,18 @@ try {
     // Limpiar reservas expiradas
     cleanExpiredReservations($pdo);
     
+    // Función para sanitizar preservando acentos
+    function sanitizePreservingAccents($input) {
+        // Eliminar caracteres peligrosos pero preservar acentos
+        $input = trim($input);
+        $input = preg_replace('/[<>"\']/', '', $input); // Eliminar caracteres HTML peligrosos
+        return $input;
+    }
+    
     // Validar datos de entrada
     $number = filter_input(INPUT_POST, 'number', FILTER_VALIDATE_INT);
-    $fullName = trim(filter_input(INPUT_POST, 'fullName', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '');
-    $phoneNumber = trim(filter_input(INPUT_POST, 'phoneNumber', FILTER_SANITIZE_FULL_SPECIAL_CHARS) ?? '');
+    $fullName = sanitizePreservingAccents($_POST['fullName'] ?? '');
+    $phoneNumber = sanitizePreservingAccents($_POST['phoneNumber'] ?? '');
     
     error_log("Datos procesados - Número: $number, Nombre: $fullName, Celular: $phoneNumber");
     
