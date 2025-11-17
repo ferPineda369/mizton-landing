@@ -849,10 +849,11 @@ class SorteoApp {
                 
                 this.showAlert(message, successCount === results.length ? 'success' : 'warning');
                 
-                // Guardar sesión del usuario
+                // Guardar sesión del usuario con tiempo de expiración
                 const phoneNumber = document.getElementById('phoneNumber').value;
                 const fullName = document.getElementById('fullName').value;
-                this.saveUserSession(phoneNumber, fullName, this.selectedNumbers);
+                const reservationExpires = Date.now() + (30 * 60 * 1000); // 30 minutos desde ahora
+                this.saveUserSession(phoneNumber, fullName, this.selectedNumbers, reservationExpires);
                 
                 // Cerrar modal de registro
                 const modal = bootstrap.Modal.getInstance(document.getElementById('registrationModal'));
@@ -945,6 +946,9 @@ class SorteoApp {
                 if (reservationAlert) {
                     reservationAlert.style.display = 'none';
                 }
+                
+                // Limpiar sesión ya que la reserva expiró
+                this.clearUserSession();
                 
                 this.showAlert('El tiempo de reserva ha expirado. El número está disponible nuevamente.', 'warning');
                 this.loadNumbers(); // Recargar números
@@ -1129,12 +1133,13 @@ class SorteoApp {
     }
     
     // Funciones para manejar sesión del usuario
-    saveUserSession(phoneNumber, fullName, selectedNumbers = []) {
+    saveUserSession(phoneNumber, fullName, selectedNumbers = [], reservationExpires = null) {
         const sessionData = {
             phoneNumber: phoneNumber,
             fullName: fullName,
             selectedNumbers: selectedNumbers,
-            timestamp: Date.now()
+            timestamp: Date.now(),
+            reservationExpires: reservationExpires // Timestamp de cuando expira la reserva
         };
         localStorage.setItem('sorteo_user_session', JSON.stringify(sessionData));
         console.log('💾 Sesión guardada:', sessionData);
@@ -1169,6 +1174,7 @@ class SorteoApp {
         if (session) {
             const phoneInput = document.getElementById('phoneNumber');
             const nameInput = document.getElementById('fullName');
+            const consultaPhoneInput = document.getElementById('consultaPhone');
             
             if (phoneInput && session.phoneNumber) {
                 phoneInput.value = session.phoneNumber;
@@ -1176,10 +1182,25 @@ class SorteoApp {
             if (nameInput && session.fullName) {
                 nameInput.value = session.fullName;
             }
+            if (consultaPhoneInput && session.phoneNumber) {
+                consultaPhoneInput.value = session.phoneNumber;
+            }
             
             // Auto-consultar boletos si hay número guardado
             if (session.phoneNumber) {
                 this.autoConsultTickets(session.phoneNumber);
+            }
+            
+            // Verificar si hay reserva activa y mostrar temporizador
+            this.checkActiveReservation(session);
+            
+            // Como fallback, verificar si hay tiempo de reserva guardado en sesión
+            if (session.reservationExpires) {
+                const timeLeft = Math.max(0, Math.floor((session.reservationExpires - Date.now()) / 1000));
+                if (timeLeft > 0) {
+                    console.log(`⏰ Iniciando temporizador desde sesión: ${timeLeft} segundos`);
+                    this.startReservationTimer(timeLeft);
+                }
             }
         }
     }
@@ -1214,11 +1235,77 @@ class SorteoApp {
         if (reservedTickets.length > 0) {
             const numbers = reservedTickets.map(b => b.number_value).join(', ');
             this.showAlert(`Tienes ${reservedTickets.length} boleto(s) reservado(s): ${numbers}. ¡Completa tu pago para confirmarlos!`, 'warning');
+            
+            // Iniciar temporizador si hay boletos reservados
+            this.startReservationTimerFromTickets(reservedTickets);
         }
         
         if (confirmedTickets.length > 0) {
             const numbers = confirmedTickets.map(b => b.number_value).join(', ');
             this.showAlert(`¡Perfecto! Tienes ${confirmedTickets.length} boleto(s) confirmado(s): ${numbers}`, 'success');
+        }
+    }
+    
+    // Verificar reserva activa desde sesión
+    async checkActiveReservation(session) {
+        if (!session || !session.phoneNumber) return;
+        
+        try {
+            const response = await fetch('api/consulta_boletos.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `phoneNumber=${encodeURIComponent(session.phoneNumber)}`
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && data.boletos && data.boletos.length > 0) {
+                const reservedTickets = data.boletos.filter(b => b.estado === 'reserved');
+                
+                if (reservedTickets.length > 0) {
+                    console.log('🔍 Reservas activas encontradas:', reservedTickets);
+                    this.startReservationTimerFromTickets(reservedTickets);
+                }
+            }
+        } catch (error) {
+            console.error('❌ Error verificando reservas activas:', error);
+        }
+    }
+    
+    // Iniciar temporizador basado en boletos reservados
+    startReservationTimerFromTickets(reservedTickets) {
+        if (!reservedTickets || reservedTickets.length === 0) return;
+        
+        // Buscar el boleto con mayor tiempo restante
+        let maxTimeLeft = 0;
+        let latestTicket = null;
+        
+        reservedTickets.forEach(ticket => {
+            if (ticket.expira_en) {
+                // Parsear tiempo restante (formato: "29:45" o "1:23:45")
+                const timeParts = ticket.expira_en.split(':');
+                let seconds = 0;
+                
+                if (timeParts.length === 2) {
+                    // Formato MM:SS
+                    seconds = parseInt(timeParts[0]) * 60 + parseInt(timeParts[1]);
+                } else if (timeParts.length === 3) {
+                    // Formato HH:MM:SS
+                    seconds = parseInt(timeParts[0]) * 3600 + parseInt(timeParts[1]) * 60 + parseInt(timeParts[2]);
+                }
+                
+                if (seconds > maxTimeLeft) {
+                    maxTimeLeft = seconds;
+                    latestTicket = ticket;
+                }
+            }
+        });
+        
+        if (maxTimeLeft > 0) {
+            console.log(`⏰ Iniciando temporizador con ${maxTimeLeft} segundos restantes`);
+            this.startReservationTimer(maxTimeLeft);
         }
     }
 }
