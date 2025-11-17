@@ -12,6 +12,7 @@ class SorteoApp {
         this.blockingTimeLeft = 0;
         this.usingFallbackAPI = false; // Para detectar si estamos usando API de respaldo
         this.previouslySelectedNumbers = []; // Para rastrear números previamente seleccionados
+        this.snowContainer = null;
         this.numbersRefreshInterval = null; // Para el refresco automático
         this.updateBlocksTimeout = null; // Para debounce de actualizaciones
         
@@ -24,6 +25,9 @@ class SorteoApp {
         this.loadNumbers();
         this.setupEventListeners();
         this.startSnowfall();
+        
+        // Cargar datos de sesión del usuario
+        this.loadUserSessionData();
         
         // Recargar números cada 5 segundos para mantener apartados actualizados
         this.numbersRefreshInterval = setInterval(() => {
@@ -597,14 +601,26 @@ class SorteoApp {
         }
     }
     
-    // Consultar boletos por número celular
+    // Consultar boletos
     async consultarBoletos() {
-        const phoneInput = document.getElementById('consultaPhone');
-        const phoneNumber = phoneInput.value.trim();
+        let phoneNumber = document.getElementById('consultaPhone').value.trim();
         
-        // Validar número celular
-        if (!phoneNumber || !/^[0-9]{10}$/.test(phoneNumber)) {
-            this.showAlert('El número celular debe tener exactamente 10 dígitos sin espacios', 'warning');
+        // Si no hay número ingresado, usar el de la sesión
+        if (!phoneNumber) {
+            const session = this.getUserSession();
+            if (session && session.phoneNumber) {
+                phoneNumber = session.phoneNumber;
+                document.getElementById('consultaPhone').value = phoneNumber;
+            }
+        }
+        
+        if (!phoneNumber) {
+            this.showAlert('Por favor ingresa tu número celular', 'warning');
+            return;
+        }
+        
+        if (!/^\d{10}$/.test(phoneNumber)) {
+            this.showAlert('El número celular debe tener exactamente 10 dígitos', 'warning');
             return;
         }
         
@@ -689,6 +705,19 @@ class SorteoApp {
                 </div>
             `;
         });
+        
+        // Verificar si hay boletos reservados
+        const reservedTickets = data.boletos ? data.boletos.filter(b => b.estado === 'reserved') : [];
+        
+        // Agregar leyenda para boletos reservados
+        if (reservedTickets.length > 0) {
+            html += `
+                <div class="alert alert-warning mt-3">
+                    <h6><i class="fas fa-clock"></i> ¡Te falta muy poco para conseguir tus boletos!</h6>
+                    <p class="mb-0">Realiza tu pago y envíalo al administrador del grupo de WhatsApp para que te sea aprobado.</p>
+                </div>
+            `;
+        }
         
         // Agregar botón de WhatsApp si hay boletos encontrados
         if (data.boletos && data.boletos.length > 0) {
@@ -819,6 +848,11 @@ class SorteoApp {
                     : `¡${successCount} números reservados exitosamente! Tienes 30 minutos para confirmar el pago. Se abrirá el grupo de WhatsApp.`;
                 
                 this.showAlert(message, successCount === results.length ? 'success' : 'warning');
+                
+                // Guardar sesión del usuario
+                const phoneNumber = document.getElementById('phoneNumber').value;
+                const fullName = document.getElementById('fullName').value;
+                this.saveUserSession(phoneNumber, fullName, this.selectedNumbers);
                 
                 // Cerrar modal de registro
                 const modal = bootstrap.Modal.getInstance(document.getElementById('registrationModal'));
@@ -1092,6 +1126,100 @@ class SorteoApp {
                 sparkle.parentNode.removeChild(sparkle);
             }
         }, 1000);
+    }
+    
+    // Funciones para manejar sesión del usuario
+    saveUserSession(phoneNumber, fullName, selectedNumbers = []) {
+        const sessionData = {
+            phoneNumber: phoneNumber,
+            fullName: fullName,
+            selectedNumbers: selectedNumbers,
+            timestamp: Date.now()
+        };
+        localStorage.setItem('sorteo_user_session', JSON.stringify(sessionData));
+        console.log('💾 Sesión guardada:', sessionData);
+    }
+    
+    getUserSession() {
+        try {
+            const sessionData = localStorage.getItem('sorteo_user_session');
+            if (sessionData) {
+                const parsed = JSON.parse(sessionData);
+                // Verificar que la sesión no sea muy antigua (24 horas)
+                const maxAge = 24 * 60 * 60 * 1000; // 24 horas en ms
+                if (Date.now() - parsed.timestamp < maxAge) {
+                    console.log('📱 Sesión recuperada:', parsed);
+                    return parsed;
+                }
+            }
+        } catch (error) {
+            console.error('❌ Error recuperando sesión:', error);
+        }
+        return null;
+    }
+    
+    clearUserSession() {
+        localStorage.removeItem('sorteo_user_session');
+        console.log('🗑️ Sesión limpiada');
+    }
+    
+    // Auto-completar formulario con datos de sesión
+    loadUserSessionData() {
+        const session = this.getUserSession();
+        if (session) {
+            const phoneInput = document.getElementById('phoneNumber');
+            const nameInput = document.getElementById('fullName');
+            
+            if (phoneInput && session.phoneNumber) {
+                phoneInput.value = session.phoneNumber;
+            }
+            if (nameInput && session.fullName) {
+                nameInput.value = session.fullName;
+            }
+            
+            // Auto-consultar boletos si hay número guardado
+            if (session.phoneNumber) {
+                this.autoConsultTickets(session.phoneNumber);
+            }
+        }
+    }
+    
+    // Auto-consultar boletos del usuario
+    async autoConsultTickets(phoneNumber) {
+        try {
+            const response = await fetch('api/consulta_boletos.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `phoneNumber=${encodeURIComponent(phoneNumber)}`
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && data.boletos && data.boletos.length > 0) {
+                // Mostrar información de boletos existentes
+                this.showExistingTicketsInfo(data.boletos);
+            }
+        } catch (error) {
+            console.error('❌ Error consultando boletos automáticamente:', error);
+        }
+    }
+    
+    // Mostrar información de boletos existentes
+    showExistingTicketsInfo(boletos) {
+        const reservedTickets = boletos.filter(b => b.status === 'reserved');
+        const confirmedTickets = boletos.filter(b => b.status === 'confirmed');
+        
+        if (reservedTickets.length > 0) {
+            const numbers = reservedTickets.map(b => b.number_value).join(', ');
+            this.showAlert(`Tienes ${reservedTickets.length} boleto(s) reservado(s): ${numbers}. ¡Completa tu pago para confirmarlos!`, 'warning');
+        }
+        
+        if (confirmedTickets.length > 0) {
+            const numbers = confirmedTickets.map(b => b.number_value).join(', ');
+            this.showAlert(`¡Perfecto! Tienes ${confirmedTickets.length} boleto(s) confirmado(s): ${numbers}`, 'success');
+        }
     }
 }
 

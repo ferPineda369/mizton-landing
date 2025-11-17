@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Sistema de Sesión</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-user-check"></i> Test Sistema de Sesión</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Guardar Sesión</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Número Celular:</label>
+                                    <input type="text" class="form-control" id="testPhone" placeholder="2226536090">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Nombre Completo:</label>
+                                    <input type="text" class="form-control" id="testName" placeholder="Juan Pérez">
+                                </div>
+                                <button class="btn btn-primary" onclick="saveTestSession()">
+                                    <i class="fas fa-save"></i> Guardar Sesión
+                                </button>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6>Acciones de Sesión</h6>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success" onclick="loadTestSession()">
+                                        <i class="fas fa-download"></i> Cargar Sesión
+                                    </button>
+                                    <button class="btn btn-warning" onclick="showSessionInfo()">
+                                        <i class="fas fa-info"></i> Ver Información
+                                    </button>
+                                    <button class="btn btn-danger" onclick="clearTestSession()">
+                                        <i class="fas fa-trash"></i> Limpiar Sesión
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        
+                        <div id="sessionResults" class="mt-3"></div>
+                        
+                        <div class="alert alert-info mt-4">
+                            <h6><i class="fas fa-info-circle"></i> Funcionalidades Implementadas:</h6>
+                            <ul class="mb-0">
+                                <li><strong>Auto-completar:</strong> Los campos se llenan automáticamente al abrir el modal</li>
+                                <li><strong>Auto-consulta:</strong> Se consultan automáticamente los boletos al cargar la página</li>
+                                <li><strong>Persistencia:</strong> Los datos se mantienen por 24 horas</li>
+                                <li><strong>Consulta inteligente:</strong> Si no ingresas número, usa el guardado</li>
+                                <li><strong>Leyenda especial:</strong> Mensaje para boletos reservados</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simular las funciones de sesión
+        function saveUserSession(phoneNumber, fullName, selectedNumbers = []) {
+            const sessionData = {
+                phoneNumber: phoneNumber,
+                fullName: fullName,
+                selectedNumbers: selectedNumbers,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('sorteo_user_session', JSON.stringify(sessionData));
+            console.log('💾 Sesión guardada:', sessionData);
+            return sessionData;
+        }
+        
+        function getUserSession() {
+            try {
+                const sessionData = localStorage.getItem('sorteo_user_session');
+                if (sessionData) {
+                    const parsed = JSON.parse(sessionData);
+                    // Verificar que la sesión no sea muy antigua (24 horas)
+                    const maxAge = 24 * 60 * 60 * 1000; // 24 horas en ms
+                    if (Date.now() - parsed.timestamp < maxAge) {
+                        console.log('📱 Sesión recuperada:', parsed);
+                        return parsed;
+                    }
+                }
+            } catch (error) {
+                console.error('❌ Error recuperando sesión:', error);
+            }
+            return null;
+        }
+        
+        function clearUserSession() {
+            localStorage.removeItem('sorteo_user_session');
+            console.log('🗑️ Sesión limpiada');
+        }
+        
+        // Funciones de test
+        function saveTestSession() {
+            const phone = document.getElementById('testPhone').value;
+            const name = document.getElementById('testName').value;
+            
+            if (!phone || !name) {
+                showResult('Por favor completa ambos campos', 'warning');
+                return;
+            }
+            
+            const session = saveUserSession(phone, name, [17, 22, 45]);
+            showResult(`Sesión guardada exitosamente:<br>
+                       Teléfono: ${session.phoneNumber}<br>
+                       Nombre: ${session.fullName}<br>
+                       Números: ${session.selectedNumbers.join(', ')}<br>
+                       Timestamp: ${new Date(session.timestamp).toLocaleString()}`, 'success');
+        }
+        
+        function loadTestSession() {
+            const session = getUserSession();
+            if (session) {
+                document.getElementById('testPhone').value = session.phoneNumber;
+                document.getElementById('testName').value = session.fullName;
+                showResult(`Sesión cargada exitosamente:<br>
+                           Teléfono: ${session.phoneNumber}<br>
+                           Nombre: ${session.fullName}<br>
+                           Números: ${session.selectedNumbers.join(', ')}<br>
+                           Edad: ${Math.round((Date.now() - session.timestamp) / 1000 / 60)} minutos`, 'success');
+            } else {
+                showResult('No hay sesión guardada o ha expirado', 'warning');
+            }
+        }
+        
+        function showSessionInfo() {
+            const session = getUserSession();
+            if (session) {
+                const age = Math.round((Date.now() - session.timestamp) / 1000 / 60);
+                const remaining = Math.round((24 * 60) - age);
+                showResult(`Información de sesión:<br>
+                           <strong>Teléfono:</strong> ${session.phoneNumber}<br>
+                           <strong>Nombre:</strong> ${session.fullName}<br>
+                           <strong>Números:</strong> ${session.selectedNumbers.join(', ')}<br>
+                           <strong>Creada hace:</strong> ${age} minutos<br>
+                           <strong>Expira en:</strong> ${remaining} minutos<br>
+                           <strong>Tamaño:</strong> ${JSON.stringify(session).length} bytes`, 'info');
+            } else {
+                showResult('No hay sesión activa', 'secondary');
+            }
+        }
+        
+        function clearTestSession() {
+            clearUserSession();
+            document.getElementById('testPhone').value = '';
+            document.getElementById('testName').value = '';
+            showResult('Sesión limpiada exitosamente', 'success');
+        }
+        
+        function showResult(message, type) {
+            const resultsDiv = document.getElementById('sessionResults');
+            resultsDiv.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+        }
+        
+        // Cargar sesión al iniciar
+        window.onload = function() {
+            const session = getUserSession();
+            if (session) {
+                showResult(`Sesión existente detectada: ${session.phoneNumber} - ${session.fullName}`, 'info');
+            } else {
+                showResult('No hay sesión guardada', 'secondary');
+            }
+        };
+    </script>
+</body>
+</html>

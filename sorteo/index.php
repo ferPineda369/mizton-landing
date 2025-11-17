@@ -101,10 +101,6 @@ require_once 'config/database.php';
                         </div>
                     </div>
                     
-                    <div class="numbers-grid" id="numbersGrid">
-                        <!-- Los números se cargarán dinámicamente -->
-                    </div>
-                    
                     <!-- Temporizador de Reserva -->
                     <div class="alert alert-success mt-4" id="reservationAlert" style="display: none;">
                         <div class="row align-items-center">
@@ -118,6 +114,10 @@ require_once 'config/database.php';
                                 </button>
                             </div>
                         </div>
+                    </div>
+                    
+                    <div class="numbers-grid" id="numbersGrid">
+                        <!-- Los números se cargarán dinámicamente -->
                     </div>
                     
                     <!-- Información sobre Pahuata y Mecánica -->
@@ -275,29 +275,10 @@ require_once 'config/database.php';
                         </div>
                         
                         <div class="alert alert-info">
-                            <h6><i class="fas fa-info-circle"></i> Información de Pago</h6>
-                            <div class="mb-2">
-                                <strong>CLABE:</strong>
-                                <div class="input-group input-group-sm mt-1">
-                                    <input type="text" class="form-control" value="012180015545193401" readonly id="clabeInput">
-                                    <button class="btn btn-outline-primary" type="button" onclick="copyToClipboard('clabeInput')">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <p><strong>Banco:</strong> BBVA</p>
-                            <p><strong>Titular:</strong> Ileana Pineda Calderón</p>
-                            <p><strong>Monto por boleto:</strong> $25.00 MXN</p>
-                            <p><strong>Total a pagar:</strong> $<span id="totalAmount">25.00</span> MXN</p>
-                            <div class="mb-2">
-                                <strong>Concepto:</strong>
-                                <div class="input-group input-group-sm mt-1">
-                                    <input type="text" class="form-control" value="Apoyo a Pahuata" readonly id="conceptoRegistro">
-                                    <button class="btn btn-outline-primary" type="button" onclick="copyToClipboard('conceptoRegistro')">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
-                                </div>
-                            </div>
+                            <h6><i class="fas fa-dollar-sign"></i> Resumen de Pago</h6>
+                            <p class="mb-1"><strong>Monto por boleto:</strong> $25.00 MXN</p>
+                            <p class="mb-0"><strong>Total a pagar:</strong> $<span id="totalAmount">25.00</span> MXN</p>
+                            <small class="text-muted">Los datos bancarios aparecerán después de confirmar tu participación</small>
                         </div>
                         
                         
@@ -370,7 +351,7 @@ require_once 'config/database.php';
                                     </div>
                                     
                                     <div class="mb-3">
-                                        <label class="form-label fw-bold">Concepto sugerido:</label>
+                                        <label class="form-label fw-bold">Concepto requerido:</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" value="Apoyo a Pahuata" readonly id="conceptoInput">
                                             <button class="btn btn-outline-warning" type="button" onclick="copyToClipboard('conceptoInput')">
@@ -382,7 +363,7 @@ require_once 'config/database.php';
                                     
                                     <div class="alert alert-warning">
                                         <i class="fas fa-exclamation-triangle"></i>
-                                        <strong>Recuerda:</strong> Tienes 15 minutos para realizar el pago después de reservar tus números.
+                                        <strong>Recuerda:</strong> Tienes 30 minutos para realizar el pago después de reservar tus números.
                                     </div>
                                 </div>
                             </div>
@@ -394,8 +375,7 @@ require_once 'config/database.php';
                         <ol class="mb-0">
                             <li>Copia la CLABE y realiza la transferencia desde tu banco</li>
                             <li>Usa el concepto sugerido para identificar tu pago</li>
-                            <li>Conserva tu comprobante de transferencia</li>
-                            <li>El pago se confirmará automáticamente en unos minutos</li>
+                            <li>Envía tu comprobante de pago al administrador del grupo de WhatsApp</li>
                         </ol>
                     </div>
                 </div>
