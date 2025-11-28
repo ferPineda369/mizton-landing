@@ -7,7 +7,7 @@ Sistema completo de rifa/sorteo con 100 números de participación, reserva temp
 
 ### 🎯 Funcionalidades del Usuario
 - **Grid de 100 números** con estados visuales (disponible, reservado, confirmado)
-- **Contador regresivo** hasta el 28 de noviembre de 2025
+- **Contador regresivo** hasta el 13 de diciembre de 2025
 - **Formulario de registro** con validación completa
 - **Sistema de reserva temporal** de 15 minutos
 - **Información de pago** automática con datos bancarios
@@ -86,9 +86,9 @@ Editar en `index.php` la sección de información de pago:
 ```
 
 ### 3. Fecha del Sorteo
-La fecha está configurada para el 28 de noviembre de 2025. Para cambiarla, editar en `assets/js/sorteo.js`:
+La fecha está configurada para el 13 de diciembre de 2025. Para cambiarla, editar en `assets/js/sorteo.js`:
 ```javascript
-this.targetDate = new Date('2025-11-28T23:59:59').getTime();
+this.targetDate = new Date('2025-12-13T23:59:59').getTime();
 ```
 
 ### 4. Contraseñas de Administración
@@ -133,7 +133,7 @@ this.targetDate = new Date('2025-11-28T23:59:59').getTime();
 - **Rojo (confirmed):** Confirmado y pagado
 
 ### Temporizadores
-- **Contador principal:** Hasta 28 nov 2025, 23:59:59
+- **Contador principal:** Hasta 13 dic 2025, 23:59:59
 - **Reserva temporal:** 15 minutos por número
 - **Auto-refresh:** Panel admin cada 30 segundos
 - **Limpieza automática:** Reservas expiradas

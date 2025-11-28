@@ -6,7 +6,7 @@ class SorteoApp {
         this.blockingTimer = null;
         this.reservationTimer = null;
         this.countdownTimer = null;
-        this.targetDate = new Date('2025-11-28T23:59:59').getTime();
+        this.targetDate = new Date('2025-12-13T23:59:59').getTime();
         this.snowflakes = [];
         this.whatsappGroupUrl = 'https://chat.whatsapp.com/JFCyYfRXYJVJkiLsVj2yhK?mode=wwt'; // Cambiar por URL real
         this.blockingTimeLeft = 0;
@@ -81,7 +81,7 @@ class SorteoApp {
         }
     }
     
-    // Contador regresivo al 28 de noviembre 2025
+    // Contador regresivo al 13 de diciembre 2025
     startCountdown() {
         this.countdownTimer = setInterval(() => {
             const now = new Date().getTime();

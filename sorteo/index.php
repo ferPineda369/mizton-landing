@@ -69,7 +69,7 @@ require_once 'config/database.php';
                                 <div class="col-md-6">
                                     <ul class="rules-list">
                                         <li><i class="fas fa-clock"></i> 30 minutos reservado para confirmar tu pago</li>
-                                        <li><i class="fas fa-calendar"></i> El sorteo se realizará el 28 de noviembre</li>
+                                        <li><i class="fas fa-calendar"></i> El sorteo se realizará el 13 de diciembre</li>
                                         <li><i class="fas fa-trophy"></i> 2 Ganadores posibles → <button class="btn btn-link p-0 text-decoration-none fw-bold" data-bs-toggle="modal" data-bs-target="#prizeModal" style="color: var(--christmas-gold);">Premio</button> ←</li>
                                         <li><i class="fas fa-handshake"></i> Sorteo en vivo transparente y justo</li>
                                     </ul>
