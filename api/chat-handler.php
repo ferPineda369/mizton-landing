@@ -398,10 +398,10 @@ function handleFAQResponse($input) {
         'que es mizton' => 'Mizton es una plataforma innovadora que ofrece membresías garantizadas con recuperación del 100% más ganancias adicionales. ¡Es como tener lo mejor de ambos mundos! 🚀',
 
         // Funcionamiento
-        'como funciona' => 'Nuestro sistema funciona así: 1) Te registras, 2) Adquieres un paquete de participación (Membresía) desde $20 USD, 3) Accedes a los dividendos globales de Mizton, 4) Al final del período si decides no continuar, recuperas el 100% de tu inversión inicial. ¡Es así de simple! 🎯',
+        'como funciona' => 'Nuestro sistema funciona así: 1) Te registras, 2) Adquieres un paquete de participación (Membresía) desde $20 USD, 3) Accedes a las ganancias globales de Mizton, 4) Al final del período si decides no continuar, recuperas el 100% de tu inversión inicial. ¡Es así de simple! 🎯',
         
         // Membresías y tokens
-        'membresia' => 'Las membresías son tu entrada a los dividendos globales de Mizton. Cada membresía incluye tokens corporativos que generan ganancias. ¿Qué te interesa saber?',
+        'membresia' => 'Las membresías son tu entrada a las ganancias globales de Mizton. Cada membresía incluye tokens corporativos que generan ganancias. ¿Qué te interesa saber?',
         
         // Ganancias
         'cuanto puedo ganar' => 'Las ganancias varían según la cantidad de Tokens que poseas. Recuerda que hablamos de ganancias globales, más bonos adicionales por referidos. ¿Te interesa conocer los detalles específicos? 💰',
@@ -413,7 +413,7 @@ function handleFAQResponse($input) {
         'como empezar' => 'Para empezar es muy fácil: 1) Regístrate en nuestra plataforma, 2) Obtén tu primera membresía, 3) ¡Comienza a generar ganancias! ¿Te ayudo con el proceso de registro? 🚀',
         
         // Precios
-        'precio' => 'Desde un paquete de $20 USD ya estás participando de los dividendos globales de Mizton. ¿Te guío para obtener tu registro y poder adquirir tu primera membresía? 💵'
+        'precio' => 'Desde un paquete de $20 USD ya estás participando de las ganancias globales de Mizton. ¿Te guío para obtener tu registro y poder adquirir tu primera membresía? 💵'
     ];
     
     // Buscar respuesta

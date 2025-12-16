@@ -599,7 +599,7 @@ include 'config.php';
                 <div class="footer-links">
                     <a href="privacidad.php">Política de Privacidad</a>
                     <a href="terminos.php">Términos y Condiciones</a>
-                    <a href="#contacto">Contacto</a>
+                    <a href="mailto:atencion@mizton.cat">Contacto</a>
                 </div>
             </div>
             <div class="footer-disclaimer">

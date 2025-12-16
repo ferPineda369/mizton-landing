@@ -308,7 +308,7 @@ if (session_status() === PHP_SESSION_NONE) {
                 </ul>
 
                 <h2 id="ganancias">7. Sistema de Ganancias</h2>
-                <h3>7.1 Dividendos Globales</h3>
+                <h3>7.1 Ganancias Globales</h3>
                 <ul>
                     <li>Las ganancias se distribuyen según la cantidad de tokens poseídos.</li>
                     <li>La distribución es proporcional al desempeño de los proyectos tokenizados.</li>
@@ -451,9 +451,9 @@ if (session_status() === PHP_SESSION_NONE) {
                     <h3><i class="fas fa-headset"></i> ¿Necesitas ayuda?</h3>
                     <p>Para consultas sobre estos Términos y Condiciones o cualquier aspecto de nuestros servicios:</p>
                     <ul>
-                        <li><strong>Correo electrónico:</strong> <a href="mailto:soporte@mizton.cat">soporte@mizton.cat</a></li>
+                        <li><strong>Correo electrónico:</strong> <a href="mailto:atencion@mizton.cat">atencion@mizton.cat</a></li>
                         <li><strong>Chat de soporte:</strong> Disponible 24/7 en nuestra página principal</li>
-                        <li><strong>Presentaciones en vivo:</strong> Lunes a viernes, 7:00 PM (hora Ciudad de México)</li>
+                        <li><strong>Presentaciones en vivo:</strong> Lunes a viernes, 10:00 AM (hora Ciudad de México)</li>
                     </ul>
                 </div>
 

@@ -25,25 +25,25 @@ Somos una empresa que tokeniza activos del mundo real (RWA) y participa todas su
 1. **Registro**: Te registras en la plataforma y adquieres un paquete de participación (Membresía)
 2. **Préstamo estructurado**: La adquisición del paquete de $20 se maneja como un préstamo a Mizton para ejecutar diversos proyectos de tokenización
 3. **Garantía tokenizada**: El miembro recibe el paquete de tokens corporativos como garantía de ese préstamo
-4. **Dividendos globales**: Accedes a los dividendos globales de Mizton, cuya participación aumenta cuantos más tokens poseas
+4. **Ganancias globales**: Accedes a las ganancias globales de Mizton, cuya participación aumenta cuantos más tokens poseas
 5. **Recuperación garantizada**: Al final del período, si decides no continuar, recuperas el 100% de tu compra inicial ($20 USD)
 
 ## QUÉ RECIBES CON LA MEMBRESÍA
 ### TOKENS CORPORATIVOS
 - **Equivalencia**: Equivalen a acciones de la compañía
-- **Derechos**: Por poseer estos tokens, tienes derecho a recibir ganancias de los dividendos globales de Mizton
+- **Derechos**: Por poseer estos tokens, tienes derecho a participar en las ganancias globales de Mizton
 - **Tipo**: Son utility tokens (token de utilidad) y revenue sharing tokens (reparto de ganancias)
 
-### GANANCIAS Y DIVIDENDOS
+### GANANCIAS GLOBALES
 - **Revenue Sharing**: Las ganancias se dividen entre la comunidad (token revenue sharing)
-- **Escalabilidad**: Entre más proyectos tokenice la compañía, mayores serán tus dividendos
+- **Escalabilidad**: Entre más proyectos tokenice la compañía, mayores serán tus ganancias
 - **Distribución global**: Se distribuyen las ganancias y bonificaciones de cualquier proyecto tokenizado a nivel global
 
 ### BONOS ADICIONALES POR REFERIDOS
 - Se reciben por compartir la oportunidad
 
 ## PRECIOS Y ACCESIBILIDAD
-- **Inversión mínima**: Desde $20 USD ya estás participando de los dividendos globales
+- **Inversión mínima**: Desde $20 USD ya estás participando de las ganancias globales
 - **Accesibilidad**: No se necesita ser un experto para participar
 - **Sistema democrático**: Permite a cualquier persona involucrarse en la tokenización
 - **Activación acumulativa**: Adquirir más de un paquete te activa para cobrar bonos de tu red por más tiempo (ej., 3 paquetes te activan 90 días)
@@ -107,7 +107,7 @@ Compartir la oportunidad puede reducir el tiempo de vesting:
 
 ## MECÁNICA DEL TOKEN CORPORATIVO
 ### PROPÓSITO DEL TOKEN
-- **Más allá de dividendos**: El propósito de incrementar la posesión de tokens es asegurar una mayor participación en las ganancias globales
+- **Más allá de ganancias**: El propósito de incrementar la posesión de tokens es asegurar una mayor participación en las ganancias globales
 - **Holding recomendado**: La compañía recomienda encarecidamente no vender o deshacerse del paquete de participación ($20 USD)
 - **Impacto de la venta**: Vender el paquete reduciría las reservas de Mizton, limitando el capital disponible para invertir en nuevos proyectos
 

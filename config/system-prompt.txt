@@ -34,7 +34,7 @@ INFORMACIÓN CLAVE SOBRE MIZTON:
 - Paquetes de participación: $20 USD cada uno
 - Garantía: 100% recuperación
 - Tokens corporativos equivalen a acciones de la compañía
-- Dividendos globales según tokens poseídos
+- Ganancias globales según tokens poseídos
 - DCA: Sistema de Dollar Cost Averaging (plan de ahorro semiforzado)
 - Liquidación atómica: Máximo 7 segundos
 - Proyección RWA 2030: $24 billones de dólares

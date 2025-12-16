@@ -562,7 +562,7 @@ class MiztonChatWidget {
                 'hola': '¡Hola! 👋 Soy el asistente de Mizton. ¿En qué puedo ayudarte?',
                 'mizton': 'Mizton es una plataforma de membresías garantizadas. ¿Te gustaría saber más?',
                 'como funciona': 'Te explico: 1) Te registras, 2) Adquieres membresía desde $20 USD, 3) Generas ganancias, 4) Recuperas 100%.',
-                'precio': 'Desde $20 USD ya participas en los dividendos globales de Mizton.',
+                'precio': 'Desde $20 USD ya participas en las ganancias globales de Mizton.',
                 'seguro': 'Totalmente seguro. Garantizamos 100% de recuperación de tu inversión inicial.'
             };
             
@@ -591,7 +591,7 @@ class MiztonChatWidget {
             'hola': '¡Hola! 👋 Soy el asistente de Mizton. ¿En qué puedo ayudarte?',
             'mizton': 'Mizton es una plataforma de membresías garantizadas. ¿Te gustaría saber más?',
             'como funciona': 'Te explico: 1) Te registras, 2) Adquieres membresía desde $20 USD, 3) Generas ganancias, 4) Recuperas 100%.',
-            'precio': 'Desde $20 USD ya participas en los dividendos globales de Mizton.',
+            'precio': 'Desde $20 USD ya participas en las ganancias globales de Mizton.',
             'seguro': 'Totalmente seguro. Garantizamos 100% de recuperación de tu inversión inicial.'
         };
         

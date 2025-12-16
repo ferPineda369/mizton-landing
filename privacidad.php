@@ -258,7 +258,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <h3><i class="fas fa-envelope"></i> ¿Preguntas sobre privacidad?</h3>
                     <p>Si tiene preguntas, inquietudes o desea ejercer sus derechos relacionados con sus datos personales, puede contactarnos:</p>
                     <ul>
-                        <li><strong>Correo electrónico:</strong> <a href="mailto:privacidad@mizton.cat">privacidad@mizton.cat</a></li>
+                        <li><strong>Correo electrónico:</strong> <a href="mailto:atencion@mizton.cat">atencion@mizton.cat</a></li>
                         <li><strong>Formulario de contacto:</strong> Disponible en nuestra plataforma</li>
                         <li><strong>Chat de soporte:</strong> Disponible 24/7 en nuestra página principal</li>
                     </ul>
