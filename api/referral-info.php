@@ -87,9 +87,9 @@ try {
             ],
             'benefits' => [
                 'guaranteed_recovery' => '100%',
-                'additional_bonus' => '15%',
                 'monthly_dividends' => true,
-                'vesting_period' => '360 días'
+                'vesting_period' => '360 días',
+                'binary_network' => '10 niveles sin candados'
             ],
             'contact' => [
                 'whatsapp_number' => $whatsappNumber,

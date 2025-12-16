@@ -77,7 +77,7 @@ class AIConfig {
         
         // Fallback si no se puede leer el archivo
         error_log("AI: No se pudo leer knowledge-base.md, usando fallback");
-        return "Mizton es una plataforma de membresías corporativas con garantía del 100% + 15% mínimo. Desde $50 USD puedes participar.";
+        return "Mizton es una plataforma de membresías corporativas con garantía del 100%. Desde $20 USD puedes participar.";
     }
     
     /**

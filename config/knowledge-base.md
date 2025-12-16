@@ -5,7 +5,7 @@ Mizton es una compañía de tokenización de activos del mundo real (RWA) con el
 
 ### DIFERENCIACIÓN CLAVE
 - **No es un negocio tradicional de criptomonedas**: Aunque utiliza criptomonedas como medio de intercambio, ya que el dinero en la blockchain es el futuro
-- **No requiere grandes capitales**: Se enfoca en accesibilidad desde $50 USD, no como otros sistemas que piden $1,000, $5,000, $10,000 o $20,000 USD
+- **No requiere grandes capitales**: Se enfoca en accesibilidad desde $20 USD, no como otros sistemas que piden $1,000, $5,000, $10,000 o $20,000 USD
 - **Negocio sostenible**: Construido para durar décadas, a diferencia de sistemas que caen rápidamente por falta de sustento
 - **Valor real**: El valor del token de Mizton no crece por especulación como las meme coins o Bitcoin, sino en función directa de la cantidad de proyectos tokenizados que la compañía realiza
 
@@ -23,10 +23,10 @@ Somos una empresa que tokeniza activos del mundo real (RWA) y participa todas su
 
 ## CÓMO FUNCIONA
 1. **Registro**: Te registras en la plataforma y adquieres un paquete de participación (Membresía)
-2. **Préstamo estructurado**: La adquisición del paquete de $50 se maneja como un préstamo a Mizton para ejecutar diversos proyectos de tokenización
+2. **Préstamo estructurado**: La adquisición del paquete de $20 se maneja como un préstamo a Mizton para ejecutar diversos proyectos de tokenización
 3. **Garantía tokenizada**: El miembro recibe el paquete de tokens corporativos como garantía de ese préstamo
 4. **Dividendos globales**: Accedes a los dividendos globales de Mizton, cuya participación aumenta cuantos más tokens poseas
-5. **Recuperación garantizada**: Al final del período, si decides no continuar, recuperas el 100% de tu compra inicial ($50 USD) más un incentivo de acuerdo al desempeño de la comunidad
+5. **Recuperación garantizada**: Al final del período, si decides no continuar, recuperas el 100% de tu compra inicial ($20 USD)
 
 ## QUÉ RECIBES CON LA MEMBRESÍA
 ### TOKENS CORPORATIVOS
@@ -43,7 +43,7 @@ Somos una empresa que tokeniza activos del mundo real (RWA) y participa todas su
 - Se reciben por compartir la oportunidad
 
 ## PRECIOS Y ACCESIBILIDAD
-- **Inversión mínima**: Desde $50 USD ya estás participando de los dividendos globales
+- **Inversión mínima**: Desde $20 USD ya estás participando de los dividendos globales
 - **Accesibilidad**: No se necesita ser un experto para participar
 - **Sistema democrático**: Permite a cualquier persona involucrarse en la tokenización
 - **Activación acumulativa**: Adquirir más de un paquete te activa para cobrar bonos de tu red por más tiempo (ej., 3 paquetes te activan 90 días)
@@ -51,8 +51,6 @@ Somos una empresa que tokeniza activos del mundo real (RWA) y participa todas su
 ## GARANTÍAS Y SEGURIDAD
 ### RECUPERACIÓN E INCENTIVOS
 - **Recuperación garantizada**: 100% de la compra inicial
-- **Incentivo de participación**: Hasta un 15% anual ($7.5 USD por cada $50 USD)
-- **Interés compuesto**: Si las ganancias no se retiran al finalizar el ciclo, el sistema automáticamente reinvierte la ganancia
 
 ### SEGURIDAD BLOCKCHAIN
 - **Base tecnológica**: La tokenización se basa en la tecnología blockchain
@@ -69,13 +67,11 @@ Somos una empresa que tokeniza activos del mundo real (RWA) y participa todas su
 5. **Generación de ganancias**: Inicio inmediato del proceso
 
 ## SISTEMA DE REFERIDOS Y BONIFICACIONES
-### ESTRUCTURA MULTINIVEL
-- **Nivel 1 (Directos)**: 10% ($5 USD por paquete de $50)
-- **Nivel 2**: 6%
-- **Nivel 3**: 4%
+### ESTRUCTURA MULTINIVEL BINARIA
+- **10 Niveles**: $1 USD por cada paquete adquirido en toda la estructura
 
-### REDUCCIÓN DEL PERÍODO DCA
-Compartir la oportunidad puede reducir el tiempo para obtener hasta un 15% de incentivo de participación:
+### REDUCCIÓN DEL PERÍODO DE VESTING
+Compartir la oportunidad puede reducir el tiempo de vesting:
 - **Con 1 invitado**: 300 días
 - **Con 2 invitados**: 240 días
 - **Con 3 o más invitados**: 180 días
@@ -87,34 +83,32 @@ Compartir la oportunidad puede reducir el tiempo para obtener hasta un 15% de in
 
 ## MODELO DE NEGOCIO DETALLADO
 ### PAQUETES DE PARTICIPACIÓN
-- **Valor fijo**: $50 USD por paquete
-- **Variabilidad**: La cantidad de tokens dentro del paquete puede variar debido a promociones, pero el valor del paquete siempre se mantiene en $50 USD
-- **Equilibrio**: El sistema busca equilibrar todos los paquetes de participación de un mismo miembro, ejemplo: Si un miembro adquiere 3 paquetes de $50 USD (donde cada paquete tiene 500 tokens) y por otro lago el miembro obtiene 3000 tokens de bono de Patrocinio, tiene un total de 4,500 tokens, el sistema buscará equilibrar los paquetes para que todos tengan la misma cantidad de tokens (cada paquete tendrá 1,500 tokens)
+- **Valor fijo**: $20 USD por paquete
+- **Variabilidad**: La cantidad de tokens dentro del paquete puede variar debido a promociones, pero el valor del paquete siempre se mantiene en $20 USD
+- **Equilibrio**: El sistema busca equilibrar todos los paquetes de participación de un mismo miembro, ejemplo: Si un miembro adquiere 3 paquetes de $20 USD (donde cada paquete tiene 200 tokens) y por otro lado el miembro obtiene 3000 tokens de bono de Patrocinio, tiene un total de 3,600 tokens, el sistema buscará equilibrar los paquetes para que todos tengan la misma cantidad de tokens (cada paquete tendrá 1,200 tokens)
 
 ### SISTEMA DCA (DOLLAR COST AVERAGING)
-- **Frecuencia recomendada**: Al menos un paquete de $50 USD cada 30 días
-- **Propósito**: Mantener la activación y poder cobrar el 10%, 6% y 4% de la red
-- **Beneficio**: Funciona como un plan de ahorro semiforzado para aumentar la posesión de tokens y el potencial de dividendos
+- **Frecuencia recomendada**: Al menos un paquete de $20 USD cada 30 días
+- **Propósito**: Mantener la activación y poder cobrar toda la red binaria SIN BALANCEO
+- **Beneficio**: Funciona como un plan de ahorro semiforzado para aumentar la posesión de tokens y el potencial de ganancias
 
-### INCENTIVO DE PARTICIPACIÓN
-- **Porcentaje**: Hasta un 15% anual
-- **Base de cálculo**: Se aplica sobre el capital prestado ($50 USD)
-- **Aceleración**: Si el miembro tiene 3 directos, este incentivo se obtiene en 180 días
+### REDUCCIÓN DE VESTING
+- **Aceleración**: Si el miembro tiene 3 directos, el vesting se reduce a 180 días
 
 ## PROMOCIONES VIGENTES 2025
 ### BONO FAST ACTIVE (ACTIVACIÓN RÁPIDA)
 - **Período**: Primeros 30 días
-- **Beneficio**: Cada paquete de $50 USD otorga 5,000 tokens en lugar de los 500 regulares
+- **Beneficio**: Cada paquete de $20 USD otorga 2,000 tokens en lugar de los 200 regulares
 
 ### BONO DE PATROCINIO (TOKENS ADICIONALES)
 - **Duración**: Por un año
 - **Beneficio**: El patrocinador recibe un 50% respecto a los tokens corporativos adquiridos por sus directos y su segundo nivel totalmente gratis
-- **Ejemplo**: Si tu directo adquiere 5,000 tokens (por Fast Active), tú recibes 2,500 tokens gratis
+- **Ejemplo**: Si tu directo adquiere 2,000 tokens (por Fast Active), tú recibes 1,000 tokens gratis
 
 ## MECÁNICA DEL TOKEN CORPORATIVO
 ### PROPÓSITO DEL TOKEN
 - **Más allá de dividendos**: El propósito de incrementar la posesión de tokens es asegurar una mayor participación en las ganancias globales
-- **Holding recomendado**: La compañía recomienda encarecidamente no vender o deshacerse del paquete de participación ($50 USD)
+- **Holding recomendado**: La compañía recomienda encarecidamente no vender o deshacerse del paquete de participación ($20 USD)
 - **Impacto de la venta**: Vender el paquete reduciría las reservas de Mizton, limitando el capital disponible para invertir en nuevos proyectos
 
 ### VISIÓN DE CAPITALIZACIÓN
@@ -148,16 +142,16 @@ Compartir la oportunidad puede reducir el tiempo para obtener hasta un 15% de in
 - Acompañamiento en el proceso de aprendizaje
 
 ## PRESENTACIONES
-- Tenemos presentacones por zoom de lunes a viernes a las 7:00 pm tiempo central de la ciudad de México
-- El link de la presentacion es: https://us06web.zoom.us/j/84641377935?pwd=QFdxvac6RKZOm2GCtOiocxtrpjkpic.1
-- Puedes preguntar cualquier duda que tengas al finalizar la presentacion
+- Tenemos presentaciones por zoom de lunes a viernes a las 7:00 pm tiempo central de la ciudad de México
+- El link de la presentación es: https://mizton.cat/meeting.php
+- Puedes preguntar cualquier duda que tengas al finalizar la presentación
 
 ## PREGUNTAS FRECUENTES ADICIONALES
 ### ¿Mizton es una criptomoneda?
 No, Mizton es una compañía de tokenización de activos reales que utiliza criptomonedas como medio de intercambio.
 
 ### ¿Qué pasa si quiero salir del sistema?
-Puedes recuperar el 100% de tu inversión inicial más el incentivo de participación correspondiente.
+Puedes recuperar el 100% de tu inversión inicial.
 
 ### ¿Cómo se garantiza la seguridad?
 A través de la tecnología blockchain, contratos inteligentes y registros inmutables que no pueden ser manipulados.
@@ -236,7 +230,7 @@ RWA significa Real World Assets, es decir, activos del mundo real
 
 ## NOTAS INTERNAS
 <!-- Información para el equipo, no visible para usuarios -->
-- Última actualización: 2025-10-11
-- Próxima revisión: 2025-11-11
-- Versión: 2.0 - Integración completa con complemento knowledge-base
+- Última actualización: 2025-12-16
+- Próxima revisión: 2026-01-01
+- Versión: 2.1 - Integración completa con complemento knowledge-base
 - Estado: Actualizado con toda la información del complemento

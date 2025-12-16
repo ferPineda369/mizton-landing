@@ -34,13 +34,13 @@ include 'config.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mizton - La ÚNICA Membresía Financiera Colectiva</title>
-    <meta name="description" content="Invierte $50 USD en un futuro financiero seguro, innovador y comunitario. Recuperación 100% garantizada + dividendos y bonos.">
+    <meta name="description" content="Invierte $20 USD en un futuro financiero seguro, innovador y comunitario. Bonos únicos en la industria. Conócelos.">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mizton.cat/">
     <meta property="og:title" content="Mizton - La ÚNICA Membresía Financiera Colectiva">
-    <meta property="og:description" content="Invierte $50 USD en un futuro financiero seguro, innovador y comunitario. Recuperación 100% garantizada + dividendos y bonos.">
+    <meta property="og:description" content="Invierte $20 USD en un futuro financiero seguro, innovador y comunitario. Bonos únicos en la industria. Conócelos.">
     <meta property="og:image" content="https://mizton.cat/social-preview.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -50,7 +50,7 @@ include 'config.php';
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://mizton.cat/">
     <meta property="twitter:title" content="Mizton - La ÚNICA Membresía Financiera Colectiva">
-    <meta property="twitter:description" content="Invierte $50 USD en un futuro financiero seguro, innovador y comunitario. Recuperación 100% garantizada + dividendos y bonos.">
+    <meta property="twitter:description" content="Invierte $20 USD en un futuro financiero seguro, innovador y comunitario. Bonos únicos en la industria. Conócelos.">
     <meta property="twitter:image" content="https://mizton.cat/social-preview.jpg">
     
     <!-- WhatsApp -->
@@ -105,7 +105,7 @@ include 'config.php';
                     <span class="highlight">Una Membresía que podrías recuperar?</span>
                 </h1>
                 <p class="hero-subtitle">
-                Participa desde $50 USD en una propuesta innovadora y comunitaria. Construye junto a nosotros nuevas formas de gestionar tu economía familiar.
+                Participa desde $20 USD en una propuesta innovadora y comunitaria. Construye junto a nosotros nuevas formas de gestionar tu economía familiar.
                 </p>
                 
                 <!-- Información del referido (se muestra si hay código válido) -->
@@ -141,7 +141,7 @@ include 'config.php';
                         <span class="stat-label">Comunidad creciente</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-number">$50</span>
+                        <span class="stat-number">$20</span>
                         <span class="stat-label">Participación accesible desde</span>
                     </div>
                 </div>
@@ -159,7 +159,7 @@ include 'config.php';
                 <div class="value-text">
                     <p class="value-main">
                     Participa hoy al menos durante <strong>360 días</strong> para probar la comunidad.
-                    Mientras tanto, disfruta <strong>dividendos mensuales automáticos</strong> gracias a contratos inteligentes.
+                    Mientras tanto, disfruta <strong>ganancias mensuales automáticas</strong> gracias a contratos inteligentes.
                     </p>
                     <p class="value-secondary">
                         En Mizton tú decides: <strong>esperar y ganar con la comunidad</strong> o 
@@ -172,7 +172,7 @@ include 'config.php';
                             <div class="step-icon">
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
-                            <span>Participa con $50+</span>
+                            <span>Participa con $20+</span>
                         </div>
                         <div class="flow-arrow">→</div>
                         <div class="flow-step">
@@ -325,14 +325,14 @@ include 'config.php';
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h3>Paquete de Participación</h3>
-                        <p>Participa desde un paquete de <strong>$50 USD</strong> y recibe tokens Mizton.</p>
+                        <p>Participa desde un paquete de <strong>$20 USD</strong> y recibe tokens Mizton.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
                     <div class="step-content">
                         <h3>Período de Vesting</h3>
-                        <p>Tus tokens quedan en vesting durante <strong>360 días</strong>, período en el que recibirás <strong>dividendos mensuales</strong> distribuidos automáticamente.</p>
+                        <p>Tus tokens quedan en vesting durante <strong>360 días</strong>, período en el que recibirás <strong>ganancias mensuales</strong> distribuidas automáticamente.</p>
                     </div>
                 </div>
                 <div class="step">
@@ -372,8 +372,8 @@ include 'config.php';
                     <div class="benefit-icon">
                         <i class="fas fa-coins"></i>
                     </div>
-                    <h3>Dividendos Automáticos</h3>
-                    <p>Si continúas con nosotros, obtén dividendos mensuales automáticos mediante contratos inteligentes.</p>
+                    <h3>Ganancias Automáticas</h3>
+                    <p>Si continúas con nosotros, obtén ganancias mensuales automáticas mediante contratos inteligentes.</p>
                 </div>
                 <div class="benefit-card">
                     <div class="benefit-icon">
@@ -387,7 +387,7 @@ include 'config.php';
                         <i class="fas fa-home"></i>
                     </div>
                     <h3>Transforma tu Economía</h3>
-                    <p>Oportunidad accesible y real para transformar tu economía familiar desde $50 USD.</p>
+                    <p>Oportunidad accesible y real para transformar tu economía familiar desde $20 USD.</p>
                 </div>
                 <div class="benefit-card">
                     <div class="benefit-icon">
@@ -440,7 +440,7 @@ include 'config.php';
             <!--div class="testimonials-grid">
                 <div class="testimonial-card">
                     <div class="testimonial-content">
-                        <p>"Mizton cambió mi perspectiva sobre las inversiones. Los dividendos mensuales son reales y la comunidad es increíble."</p>
+                        <p>"Mizton cambió mi perspectiva sobre las inversiones. Las ganancias mensuales son reales y la comunidad es increíble."</p>
                     </div>
                     <div class="testimonial-author">
                         <div class="author-avatar">M</div>
@@ -464,7 +464,7 @@ include 'config.php';
                 </div>
                 <div class="testimonial-card">
                     <div class="testimonial-content">
-                        <p>"Con solo $50 pude empezar a construir mi futuro financiero. La recuperación garantizada me da tranquilidad."</p>
+                        <p>"Con solo $20 pude empezar a construir mi futuro financiero. La recuperación garantizada me da tranquilidad."</p>
                     </div>
                     <div class="testimonial-author">
                         <div class="author-avatar">A</div>
@@ -497,7 +497,7 @@ include 'config.php';
                 </div>
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>¿Cómo se pagan los dividendos?</h3>
+                        <h3>¿Cómo se pagan las ganancias?</h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
