@@ -597,8 +597,8 @@ include 'config.php';
                     <p>La revolución financiera comienza contigo. Únete a la comunidad preparada para la economía mundial.</p>
                 </div>
                 <div class="footer-links">
-                    <a href="#privacidad">Política de Privacidad</a>
-                    <a href="#terminos">Términos y Condiciones</a>
+                    <a href="privacidad.php">Política de Privacidad</a>
+                    <a href="terminos.php">Términos y Condiciones</a>
                     <a href="#contacto">Contacto</a>
                 </div>
             </div>
