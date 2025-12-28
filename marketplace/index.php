@@ -187,7 +187,7 @@ $pageTitle = 'Marketplace - Proyectos Tokenizados';
                     <img src="<?php echo htmlspecialchars($imageUrl); ?>" 
                          alt="<?php echo htmlspecialchars($project['name']); ?>" 
                          class="project-image"
-                         onerror="this.src='/marketplace/assets/images/placeholder-project.jpg'">
+                         onerror="this.style.display='none'">
                     
                     <div class="project-content">
                         <div class="project-header">
