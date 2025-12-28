@@ -1,0 +1,807 @@
+/**
+ * Estilos del Marketplace Mizton
+ * Sistema de Showcase de Proyectos Tokenizados
+ */
+
+:root {
+    --mizton-green: #00b894;
+    --mizton-dark: #0c2340;
+    --mizton-light: #f5f5f5;
+    --mizton-orange: #ff6b35;
+    --mizton-blue: #3498db;
+    --mizton-purple: #9b59b6;
+    --mizton-red: #e74c3c;
+    --mizton-yellow: #f39c12;
+    --border-radius: 12px;
+    --transition: all 0.3s ease;
+}
+
+/* ============================================================================
+   LAYOUT GENERAL
+   ============================================================================ */
+
+.marketplace-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.marketplace-header {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, var(--mizton-dark) 0%, var(--mizton-green) 100%);
+    color: white;
+    border-radius: var(--border-radius);
+    margin-bottom: 40px;
+}
+
+.marketplace-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.marketplace-header p {
+    font-size: 1.3rem;
+    opacity: 0.9;
+}
+
+/* ============================================================================
+   FILTROS Y BÚSQUEDA
+   ============================================================================ */
+
+.marketplace-filters {
+    background: white;
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+}
+
+.filter-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--mizton-dark);
+    font-size: 0.9rem;
+}
+
+.filter-group select,
+.filter-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+    outline: none;
+    border-color: var(--mizton-green);
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    padding-left: 45px;
+}
+
+.search-box i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 1.2rem;
+}
+
+.btn-filter {
+    padding: 12px 30px;
+    background: var(--mizton-green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-filter:hover {
+    background: #00a383;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 184, 148, 0.3);
+}
+
+/* ============================================================================
+   CATEGORÍAS
+   ============================================================================ */
+
+.categories-section {
+    margin-bottom: 40px;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.category-card {
+    background: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-color: var(--mizton-green);
+}
+
+.category-card.active {
+    border-color: var(--mizton-green);
+    background: #f0fdf8;
+}
+
+.category-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.category-name {
+    font-weight: 600;
+    color: var(--mizton-dark);
+    margin-bottom: 5px;
+}
+
+.category-count {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* ============================================================================
+   GRID DE PROYECTOS
+   ============================================================================ */
+
+.projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.project-card {
+    background: white;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: var(--transition);
+    position: relative;
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+}
+
+.project-card.featured {
+    border: 3px solid var(--mizton-orange);
+}
+
+.project-card.featured::before {
+    content: "DESTACADO";
+    position: absolute;
+    top: 15px;
+    right: -35px;
+    background: var(--mizton-orange);
+    color: white;
+    padding: 5px 40px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    transform: rotate(45deg);
+    z-index: 10;
+}
+
+.project-image {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.project-content {
+    padding: 25px;
+}
+
+.project-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 15px;
+}
+
+.project-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--mizton-dark);
+    margin: 0;
+    flex: 1;
+}
+
+.project-code {
+    background: var(--mizton-light);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--mizton-dark);
+}
+
+.project-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.project-description {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 12px;
+    background: var(--mizton-light);
+    border-radius: 8px;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #666;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--mizton-dark);
+}
+
+.stat-value.highlight {
+    color: var(--mizton-green);
+}
+
+.project-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 2px solid var(--mizton-light);
+}
+
+.project-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-desarrollo { background: #e0e0e0; color: #666; }
+.status-preventa { background: #fff3cd; color: #856404; }
+.status-activo { background: #d4edda; color: #155724; }
+.status-financiado { background: #d1ecf1; color: #0c5460; }
+.status-completado { background: #cce5ff; color: #004085; }
+.status-pausado { background: #fff3cd; color: #856404; }
+.status-cerrado { background: #d6d8db; color: #383d41; }
+
+.btn-view-project {
+    padding: 10px 25px;
+    background: var(--mizton-green);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-view-project:hover {
+    background: #00a383;
+    transform: translateX(5px);
+}
+
+/* ============================================================================
+   PROGRESS BAR (Financiamiento)
+   ============================================================================ */
+
+.funding-progress {
+    margin: 20px 0;
+}
+
+.progress-bar-container {
+    width: 100%;
+    height: 12px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--mizton-green) 0%, var(--mizton-blue) 100%);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+}
+
+.progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.progress-percentage {
+    font-weight: 700;
+    color: var(--mizton-green);
+}
+
+/* ============================================================================
+   VISTA DETALLE DE PROYECTO
+   ============================================================================ */
+
+.project-detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.project-detail-header {
+    background: white;
+    padding: 40px;
+    border-radius: var(--border-radius);
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.project-detail-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--mizton-dark);
+    margin-bottom: 20px;
+}
+
+.project-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 30px;
+}
+
+.project-detail-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.main-content {
+    background: white;
+    padding: 40px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.info-card {
+    background: white;
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.info-card h3 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--mizton-dark);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--mizton-light);
+}
+
+.metric-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.metric-row:last-child {
+    border-bottom: none;
+}
+
+.metric-label {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.metric-value {
+    font-weight: 700;
+    color: var(--mizton-dark);
+    font-size: 1.1rem;
+}
+
+.btn-primary-action {
+    width: 100%;
+    padding: 18px;
+    background: var(--mizton-green);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-primary-action:hover {
+    background: #00a383;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4);
+}
+
+/* ============================================================================
+   TABS
+   ============================================================================ */
+
+.tabs-container {
+    margin-top: 30px;
+}
+
+.tabs-nav {
+    display: flex;
+    gap: 10px;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 25px;
+}
+
+.tab-button {
+    padding: 12px 25px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tab-button:hover {
+    color: var(--mizton-green);
+}
+
+.tab-button.active {
+    color: var(--mizton-green);
+    border-bottom-color: var(--mizton-green);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================================
+   MILESTONES
+   ============================================================================ */
+
+.milestones-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.milestone-item {
+    display: flex;
+    gap: 15px;
+    padding: 15px;
+    background: var(--mizton-light);
+    border-radius: 8px;
+    border-left: 4px solid #e0e0e0;
+}
+
+.milestone-item.completed {
+    border-left-color: var(--mizton-green);
+}
+
+.milestone-item.in-progress {
+    border-left-color: var(--mizton-blue);
+}
+
+.milestone-icon {
+    font-size: 1.5rem;
+    margin-top: 5px;
+}
+
+.milestone-content {
+    flex: 1;
+}
+
+.milestone-name {
+    font-weight: 700;
+    color: var(--mizton-dark);
+    margin-bottom: 5px;
+}
+
+.milestone-description {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* ============================================================================
+   DOCUMENTOS
+   ============================================================================ */
+
+.documents-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.document-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--mizton-light);
+    border-radius: 8px;
+    transition: var(--transition);
+}
+
+.document-item:hover {
+    background: #e8e8e8;
+}
+
+.document-icon {
+    font-size: 2rem;
+    color: var(--mizton-green);
+}
+
+.document-info {
+    flex: 1;
+}
+
+.document-name {
+    font-weight: 600;
+    color: var(--mizton-dark);
+    margin-bottom: 3px;
+}
+
+.document-meta {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.btn-download {
+    padding: 8px 20px;
+    background: var(--mizton-green);
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.btn-download:hover {
+    background: #00a383;
+}
+
+/* ============================================================================
+   BLOCKCHAIN INFO
+   ============================================================================ */
+
+.blockchain-info {
+    background: linear-gradient(135deg, var(--mizton-dark) 0%, var(--mizton-blue) 100%);
+    color: white;
+    padding: 25px;
+    border-radius: var(--border-radius);
+}
+
+.blockchain-info .metric-row {
+    border-bottom-color: rgba(255,255,255,0.2);
+}
+
+.blockchain-info .metric-label {
+    color: rgba(255,255,255,0.8);
+}
+
+.blockchain-info .metric-value {
+    color: white;
+}
+
+.contract-address {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    word-break: break-all;
+    background: rgba(255,255,255,0.1);
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 1024px) {
+    .project-detail-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .projects-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .marketplace-header h1 {
+        font-size: 2rem;
+    }
+    
+    .marketplace-header p {
+        font-size: 1rem;
+    }
+    
+    .filter-row {
+        flex-direction: column;
+    }
+    
+    .filter-group {
+        width: 100%;
+    }
+    
+    .categories-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    
+    .projects-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .project-footer {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .tabs-nav {
+        overflow-x: auto;
+    }
+}
+
+/* ============================================================================
+   UTILIDADES
+   ============================================================================ */
+
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.mb-20 { margin-bottom: 20px; }
+.mb-30 { margin-bottom: 30px; }
+.mt-20 { margin-top: 20px; }
+.mt-30 { margin-top: 30px; }
+
+.badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-success { background: #d4edda; color: #155724; }
+.badge-warning { background: #fff3cd; color: #856404; }
+.badge-info { background: #d1ecf1; color: #0c5460; }
+.badge-danger { background: #f8d7da; color: #721c24; }
+.badge-secondary { background: #e0e0e0; color: #666; }
+
+.loading-spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--mizton-green);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    font-size: 1rem;
+}
