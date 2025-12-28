@@ -1,10 +1,12 @@
 <?php
 /**
  * Cron Job: Sincronización automática de proyectos
- * Ejecutar cada 5 minutos (o según configuración)
+ * Ejecutar cada 5-10 minutos (o según configuración)
  * 
- * Configurar en crontab:
- * */5 * * * * /usr/bin/php /path/to/marketplace/cron/sync-projects.php >> /var/log/marketplace-sync.log 2>&1
+ * Configurar en crontab (ejemplo cada 10 minutos):
+ * Asterisco-barra-10 * * * * /usr/bin/php /path/to/marketplace/cron/sync-projects.php >> /var/log/marketplace-sync.log 2>&1
+ * 
+ * Nota: Reemplazar "Asterisco-barra-10" con el símbolo real de cron
  */
 
 // Solo permitir ejecución desde CLI
