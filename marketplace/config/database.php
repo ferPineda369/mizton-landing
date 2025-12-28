@@ -1,59 +1,73 @@
 <?php
 /**
  * Configuración de Base de Datos - Marketplace Mizton
- * Usa la misma conexión que el panel principal
+ * Conexión independiente usando credenciales del landing
  */
 
-// Paso 1: Cargar config.php del panel SOLO si no está cargado
-// Verificar si APP_ENV ya está definido (indica que config.php ya se cargó)
-if (!defined('APP_ENV')) {
-    $panelConfigPaths = [
-        __DIR__ . '/../../../panel/config/config.php', // Desarrollo
-        '/usr/local/lsws/VH_mizton/html/config/config.php', // Producción
-    ];
+// Evitar redefinición si ya existe la conexión
+if (isset($GLOBALS['marketplace_pdo'])) {
+    function getMarketplaceDB() {
+        return $GLOBALS['marketplace_pdo'];
+    }
+    return;
+}
 
-    $configLoaded = false;
-    foreach ($panelConfigPaths as $path) {
-        if (file_exists($path)) {
-            require_once $path;
-            $configLoaded = true;
-            break;
+// Cargar variables de entorno del landing
+$envPaths = [
+    __DIR__ . '/../../.env', // Desarrollo: landing/.env
+    '/usr/local/lsws/Example/html/.env', // Producción
+];
+
+$envLoaded = false;
+foreach ($envPaths as $envPath) {
+    if (file_exists($envPath)) {
+        $envContent = file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($envContent as $line) {
+            if (strpos($line, '#') === 0 || strpos($line, '=') === false) continue;
+            list($key, $value) = explode('=', $line, 2);
+            $key = trim($key);
+            $value = trim($value, " \t\n\r\0\x0B\"'");
+            if (!isset($_ENV[$key])) {
+                $_ENV[$key] = $value;
+                putenv("$key=$value");
+            }
         }
-    }
-
-    if (!$configLoaded) {
-        die('Error: No se pudo encontrar config.php del panel.');
+        $envLoaded = true;
+        break;
     }
 }
 
-// Paso 2: Cargar database.php del panel SOLO si $pdo no existe
-if (!isset($pdo)) {
-    $panelDatabasePaths = [
-        __DIR__ . '/../../../panel/config/database.php', // Desarrollo
-        '/usr/local/lsws/VH_mizton/html/config/database.php', // Producción
+// Configuración de credenciales
+$db_config = [
+    'host' => $_ENV['DB_HOST'] ?? 'localhost',
+    'dbname' => $_ENV['DB_NAME'] ?? '',
+    'username' => $_ENV['DB_USER'] ?? '',
+    'password' => $_ENV['DB_PASS'] ?? '',
+    'charset' => 'utf8mb4'
+];
+
+// Validar credenciales
+if (empty($db_config['dbname']) || empty($db_config['username'])) {
+    die('Error: Credenciales de base de datos no configuradas. Verifica el archivo .env del landing.');
+}
+
+// Crear conexión PDO
+try {
+    $dsn = "mysql:host={$db_config['host']};dbname={$db_config['dbname']};charset={$db_config['charset']}";
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
     ];
-
-    $databaseLoaded = false;
-    foreach ($panelDatabasePaths as $path) {
-        if (file_exists($path)) {
-            require_once $path;
-            $databaseLoaded = true;
-            break;
-        }
-    }
-
-    if (!$databaseLoaded) {
-        die('Error: No se pudo encontrar database.php del panel.');
-    }
+    
+    $GLOBALS['marketplace_pdo'] = new PDO($dsn, $db_config['username'], $db_config['password'], $options);
+    
+} catch (PDOException $e) {
+    error_log("Marketplace DB Error: " . $e->getMessage());
+    die('Error de conexión a la base de datos del Marketplace.');
 }
 
-// Verificar que $pdo esté disponible
-if (!isset($pdo)) {
-    die('Error: La conexión PDO no está disponible. Verifica la configuración del panel.');
-}
-
-// Función helper para obtener la conexión (retorna PDO)
+// Función helper para obtener la conexión
 function getMarketplaceDB() {
-    global $pdo;
-    return $pdo;
+    return $GLOBALS['marketplace_pdo'];
 }
