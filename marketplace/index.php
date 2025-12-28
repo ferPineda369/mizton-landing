@@ -181,7 +181,7 @@ $pageTitle = 'Marketplace - Proyectos Tokenizados';
                 <?php foreach ($featuredProjects as $project): 
                     $categoryInfo = $MARKETPLACE_CATEGORIES[$project['category']] ?? $MARKETPLACE_CATEGORIES['otro'];
                     $statusInfo = $PROJECT_STATUSES[$project['status']] ?? $PROJECT_STATUSES['desarrollo'];
-                    $imageUrl = $project['main_image_url'] ?: '/marketplace/assets/images/placeholder-project.jpg';
+                    $imageUrl = $project['main_image_url'] ?: '/marketplace/assets/images/placeholder-project.svg';
                 ?>
                 <div class="project-card featured">
                     <img src="<?php echo htmlspecialchars($imageUrl); ?>" 
