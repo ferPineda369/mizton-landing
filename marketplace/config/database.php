@@ -5,14 +5,23 @@
  */
 
 // Detectar entorno y usar ruta correcta al panel
-if (file_exists(__DIR__ . '/../../../panel/app/config/database.php')) {
-    // Desarrollo: d:\xampp\htdocs\landing\marketplace\config\
-    require_once __DIR__ . '/../../../panel/app/config/database.php';
-} elseif (file_exists('/usr/local/lsws/VH_mizton/html/app/config/database.php')) {
-    // Producción: /usr/local/lsws/Example/html/marketplace/config/
-    require_once '/usr/local/lsws/VH_mizton/html/app/config/database.php';
-} else {
-    die('Error: No se pudo encontrar el archivo de configuración de la base de datos del panel.');
+$panelConfigPaths = [
+    __DIR__ . '/../../../panel/app/config/database.php', // Desarrollo (estructura antigua)
+    __DIR__ . '/../../../panel/config/database.php', // Desarrollo (estructura nueva)
+    '/usr/local/lsws/VH_mizton/html/config/database.php', // Producción (ruta correcta)
+];
+
+$configLoaded = false;
+foreach ($panelConfigPaths as $path) {
+    if (file_exists($path)) {
+        require_once $path;
+        $configLoaded = true;
+        break;
+    }
+}
+
+if (!$configLoaded) {
+    die('Error: No se pudo encontrar database.php del panel. Rutas intentadas: ' . implode(', ', $panelConfigPaths));
 }
 
 // La conexión ya está disponible en $conn desde el panel
