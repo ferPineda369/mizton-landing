@@ -53,44 +53,42 @@ $pageTitle = 'Marketplace - Proyectos Tokenizados';
 <body>
 
     <!-- Navegación -->
-    <nav style="background: var(--mizton-dark); padding: 15px 0; margin-bottom: 30px;">
+    <header class="marketplace-nav">
         <div class="marketplace-container">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="display: flex; align-items: center; gap: 30px;">
-                    <a href="/" style="color: white; text-decoration: none; font-size: 1.5rem; font-weight: 700;">
-                        <i class="bi bi-grid-3x3-gap"></i> Mizton Marketplace
+            <div class="nav-wrapper">
+                <div class="nav-brand">
+                    <a href="/marketplace">
+                        <img src="/assets/img/logo.png" alt="Mizton" class="nav-logo" onerror="this.style.display='none'">
+                        <span class="brand-text">Mizton</span>
+                        <span class="nav-label">Marketplace</span>
                     </a>
-                    <a href="/" style="color: rgba(255,255,255,0.8); text-decoration: none;">
-                        <i class="bi bi-house"></i> Inicio
-                    </a>
-                    <?php if ($isLoggedIn): ?>
-                    <a href="/panel/" style="color: rgba(255,255,255,0.8); text-decoration: none;">
-                        <i class="bi bi-speedometer2"></i> Mi Panel
-                    </a>
-                    <?php endif; ?>
                 </div>
-                <div>
+                <nav class="nav-links">
+                    <a href="/">Inicio</a>
+                    <a href="/news">Blog</a>
                     <?php if ($isLoggedIn): ?>
-                    <a href="/panel/profile.php" style="color: white; text-decoration: none;">
+                    <a href="https://panel.mizton.cat/">Mi Panel</a>
+                    <a href="https://panel.mizton.cat/profile.php" class="nav-user">
                         <i class="bi bi-person-circle"></i> Mi Cuenta
                     </a>
                     <?php else: ?>
-                    <a href="/panel/login.php" style="color: white; text-decoration: none; margin-right: 20px;">
-                        <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
-                    </a>
-                    <a href="/panel/register.php" style="background: var(--mizton-green); color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;">
-                        <i class="bi bi-person-plus"></i> Registrarse
-                    </a>
+                    <a href="https://panel.mizton.cat/login.php">Iniciar Sesión</a>
+                    <a href="https://panel.mizton.cat/register.php" class="cta-link">Registrarse</a>
                     <?php endif; ?>
+                </nav>
+                <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
             </div>
         </div>
-    </nav>
+    </header>
 
     <!-- Header del Marketplace -->
     <div class="marketplace-header">
-        <h1>Proyectos Tokenizados</h1>
-        <p>Invierte en activos reales a través de blockchain</p>
+        <h1>Proyectos <span>Tokenizados</span></h1>
+        <p>Explora oportunidades de inversión en activos reales a través de blockchain</p>
     </div>
 
     <div class="marketplace-container">
@@ -262,40 +260,32 @@ $pageTitle = 'Marketplace - Proyectos Tokenizados';
     </div>
 
     <!-- Footer -->
-    <footer style="background: var(--mizton-dark); color: white; padding: 40px 0; margin-top: 80px;">
+    <footer class="marketplace-footer">
         <div class="marketplace-container">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;">
-                <div>
-                    <h3 style="margin-bottom: 15px;">Mizton Marketplace</h3>
-                    <p style="opacity: 0.8; line-height: 1.6;">
-                        Plataforma de proyectos tokenizados de activos reales.
-                        Invierte en el futuro de la economía digital.
-                    </p>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="/assets/img/logo.png" alt="Mizton" class="footer-logo" onerror="this.style.display='none'">
+                    <span class="footer-brand-text">Mizton Marketplace</span>
                 </div>
-                <div>
-                    <h4 style="margin-bottom: 15px;">Enlaces Rápidos</h4>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 10px;"><a href="/" style="color: rgba(255,255,255,0.8); text-decoration: none;">Inicio</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/marketplace" style="color: rgba(255,255,255,0.8); text-decoration: none;">Marketplace</a></li>
-                        <li style="margin-bottom: 10px;"><a href="/panel" style="color: rgba(255,255,255,0.8); text-decoration: none;">Panel de Usuario</a></li>
-                        <?php if (isMarketplaceAdmin()): ?>
-                        <li style="margin-bottom: 10px;"><a href="/marketplace/admin" style="color: var(--mizton-orange); text-decoration: none;">Admin Marketplace</a></li>
-                        <?php endif; ?>
-                    </ul>
-                </div>
-                <div>
-                    <h4 style="margin-bottom: 15px;">Contacto</h4>
-                    <p style="opacity: 0.8;">
-                        <i class="bi bi-envelope"></i> 
-                        <?php echo getMarketplaceConfig('contact_email', 'marketplace@mizton.cat'); ?>
-                    </p>
+                <div class="footer-links">
+                    <a href="/">Inicio</a>
+                    <a href="/marketplace">Marketplace</a>
+                    <a href="/news">Blog</a>
+                    <a href="https://panel.mizton.cat/">Panel</a>
                 </div>
             </div>
-            <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.2);">
-                <p style="opacity: 0.6;">&copy; <?php echo date('Y'); ?> Mizton. Todos los derechos reservados.</p>
+            <div class="footer-bottom">
+                <p>&copy; <?php echo date('Y'); ?> Mizton. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
+
+    <script>
+    function toggleMobileMenu() {
+        document.querySelector('.nav-links').classList.toggle('active');
+        document.querySelector('.mobile-menu-toggle').classList.toggle('active');
+    }
+    </script>
 
     <!-- JavaScript -->
     <script src="/marketplace/assets/js/marketplace.js"></script>

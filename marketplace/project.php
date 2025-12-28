@@ -55,34 +55,37 @@ $pageTitle = $project['name'] . ' - Marketplace';
 <body>
 
     <!-- Navegación -->
-    <nav style="background: var(--mizton-dark); padding: 15px 0; margin-bottom: 30px;">
+    <header class="marketplace-nav">
         <div class="marketplace-container">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="display: flex; align-items: center; gap: 30px;">
-                    <a href="/marketplace" style="color: white; text-decoration: none; font-size: 1.5rem; font-weight: 700;">
-                        <i class="bi bi-grid-3x3-gap"></i> Mizton Marketplace
-                    </a>
-                    <a href="/marketplace" style="color: rgba(255,255,255,0.8); text-decoration: none;">
-                        <i class="bi bi-arrow-left"></i> Volver al Marketplace
+            <div class="nav-wrapper">
+                <div class="nav-brand">
+                    <a href="/marketplace">
+                        <img src="/assets/img/logo.png" alt="Mizton" class="nav-logo" onerror="this.style.display='none'">
+                        <span class="brand-text">Mizton</span>
+                        <span class="nav-label">Marketplace</span>
                     </a>
                 </div>
-                <div>
+                <nav class="nav-links">
+                    <a href="/marketplace"><i class="bi bi-arrow-left"></i> Marketplace</a>
+                    <a href="/">Inicio</a>
                     <?php if ($isLoggedIn): ?>
-                    <a href="/panel/profile.php" style="color: white; text-decoration: none;">
+                    <a href="https://panel.mizton.cat/">Mi Panel</a>
+                    <a href="https://panel.mizton.cat/profile.php" class="nav-user">
                         <i class="bi bi-person-circle"></i> Mi Cuenta
                     </a>
                     <?php else: ?>
-                    <a href="/panel/login.php" style="color: white; text-decoration: none; margin-right: 20px;">
-                        <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
-                    </a>
-                    <a href="/panel/register.php" style="background: var(--mizton-green); color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none;">
-                        <i class="bi bi-person-plus"></i> Registrarse
-                    </a>
+                    <a href="https://panel.mizton.cat/login.php">Iniciar Sesión</a>
+                    <a href="https://panel.mizton.cat/register.php" class="cta-link">Registrarse</a>
                     <?php endif; ?>
+                </nav>
+                <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
             </div>
         </div>
-    </nav>
+    </header>
 
     <div class="project-detail-container">
 
@@ -396,14 +399,32 @@ $pageTitle = $project['name'] . ' - Marketplace';
     </div>
 
     <!-- Footer -->
-    <footer style="background: var(--mizton-dark); color: white; padding: 40px 0; margin-top: 80px;">
+    <footer class="marketplace-footer">
         <div class="marketplace-container">
-            <div style="text-align: center;">
-                <p style="opacity: 0.6;">&copy; <?php echo date('Y'); ?> Mizton. Todos los derechos reservados.</p>
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="/assets/img/logo.png" alt="Mizton" class="footer-logo" onerror="this.style.display='none'">
+                    <span class="footer-brand-text">Mizton Marketplace</span>
+                </div>
+                <div class="footer-links">
+                    <a href="/">Inicio</a>
+                    <a href="/marketplace">Marketplace</a>
+                    <a href="/news">Blog</a>
+                    <a href="https://panel.mizton.cat/">Panel</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <?php echo date('Y'); ?> Mizton. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
 
+    <script>
+    function toggleMobileMenu() {
+        document.querySelector('.nav-links').classList.toggle('active');
+        document.querySelector('.mobile-menu-toggle').classList.toggle('active');
+    }
+    </script>
     <script src="/marketplace/assets/js/marketplace.js"></script>
     <script>
     function recordClickThrough(projectId) {
