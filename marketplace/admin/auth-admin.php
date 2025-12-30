@@ -9,6 +9,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Debug temporal - ELIMINAR DESPUÉS
+error_log('Marketplace Admin Auth - user_id: ' . ($_SESSION['user_id'] ?? 'NO SET'));
+error_log('Marketplace Admin Auth - admin: ' . ($_SESSION['admin'] ?? 'NO SET') . ' (type: ' . gettype($_SESSION['admin'] ?? null) . ')');
+
 // Verificar que el usuario esté logueado
 if (!isset($_SESSION['user_id'])) {
     header('Location: https://panel.mizton.cat/login.php?redirect=' . urlencode($_SERVER['REQUEST_URI']));
