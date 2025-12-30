@@ -4,14 +4,15 @@
  * Verifica que el usuario tenga permisos de administrador
  */
 
-// Iniciar sesión si no está iniciada
+// Configurar sesión para compartir con el panel principal
 if (session_status() === PHP_SESSION_NONE) {
+    // Configurar el path de la cookie de sesión para que sea compartida
+    // entre /panel/ y /marketplace/
+    ini_set('session.cookie_path', '/');
+    ini_set('session.cookie_domain', '');
+    
     session_start();
 }
-
-// Debug temporal - ELIMINAR DESPUÉS
-error_log('Marketplace Admin Auth - user_id: ' . ($_SESSION['user_id'] ?? 'NO SET'));
-error_log('Marketplace Admin Auth - admin: ' . ($_SESSION['admin'] ?? 'NO SET') . ' (type: ' . gettype($_SESSION['admin'] ?? null) . ')');
 
 // Verificar que el usuario esté logueado
 if (!isset($_SESSION['user_id'])) {
