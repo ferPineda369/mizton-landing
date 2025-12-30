@@ -4,31 +4,30 @@
  * Este archivo se asegura de que el marketplace use la misma sesión que el panel
  */
 
-// Obtener el session ID de la cookie PHPSESSID
-$sessionId = $_COOKIE['PHPSESSID'] ?? null;
-
-if ($sessionId) {
-    // Forzar el uso del session ID existente
-    session_id($sessionId);
-}
-
-// Configurar parámetros de sesión antes de iniciar
-session_name('PHPSESSID');
-session_set_cookie_params([
-    'lifetime' => 0,
-    'path' => '/',
-    'domain' => '',
-    'secure' => false,
-    'httponly' => true,
-    'samesite' => 'Lax'
-]);
-
-// Iniciar sesión con el ID existente
+// Configurar sesión ANTES de iniciarla
 if (session_status() === PHP_SESSION_NONE) {
+    // Detectar dominio para compartir cookies entre subdominios
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+    $domain = '';
+    
+    // En producción, usar dominio base para compartir sesión entre subdominios
+    if (strpos($host, 'mizton.cat') !== false) {
+        $domain = '.mizton.cat'; // El punto inicial permite compartir entre subdominios
+    } elseif (strpos($host, 'publiaxion.com') !== false) {
+        $domain = '.publiaxion.com';
+    }
+    
+    // Configurar parámetros de cookie ANTES de session_start()
+    session_name('PHPSESSID');
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'domain' => $domain,
+        'secure' => !empty($_SERVER['HTTPS']),
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+    
+    // Iniciar sesión (usará automáticamente la cookie PHPSESSID si existe)
     session_start();
 }
-
-// Debug: Verificar que tenemos los datos de sesión
-error_log('Marketplace Session Bridge - Session ID: ' . session_id());
-error_log('Marketplace Session Bridge - User ID: ' . ($_SESSION['user_id'] ?? 'NO SET'));
-error_log('Marketplace Session Bridge - Admin: ' . ($_SESSION['admin'] ?? 'NO SET'));
