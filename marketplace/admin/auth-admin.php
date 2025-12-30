@@ -4,24 +4,8 @@
  * Verifica que el usuario tenga permisos de administrador
  */
 
-// Configurar sesión para compartir con el panel principal
-if (session_status() === PHP_SESSION_NONE) {
-    // Usar el mismo nombre de sesión que el panel (por defecto es PHPSESSID)
-    // y configurar el path de la cookie para que sea compartida
-    session_name('PHPSESSID');
-    
-    // Configurar parámetros de la cookie de sesión
-    session_set_cookie_params([
-        'lifetime' => 0,
-        'path' => '/',
-        'domain' => '',
-        'secure' => false,
-        'httponly' => true,
-        'samesite' => 'Lax'
-    ]);
-    
-    session_start();
-}
+// Usar el session bridge para forzar el uso de la sesión del panel
+require_once __DIR__ . '/session-bridge.php';
 
 // Verificar que el usuario esté logueado
 if (!isset($_SESSION['user_id'])) {
