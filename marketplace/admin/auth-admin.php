@@ -6,10 +6,19 @@
 
 // Configurar sesión para compartir con el panel principal
 if (session_status() === PHP_SESSION_NONE) {
-    // Configurar el path de la cookie de sesión para que sea compartida
-    // entre /panel/ y /marketplace/
-    ini_set('session.cookie_path', '/');
-    ini_set('session.cookie_domain', '');
+    // Usar el mismo nombre de sesión que el panel (por defecto es PHPSESSID)
+    // y configurar el path de la cookie para que sea compartida
+    session_name('PHPSESSID');
+    
+    // Configurar parámetros de la cookie de sesión
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'domain' => '',
+        'secure' => false,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
     
     session_start();
 }
