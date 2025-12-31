@@ -9,7 +9,7 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
 <nav class="marketplace-nav">
     <div class="nav-container">
         <a href="/" class="nav-logo">
-            <img src="/assets/img/logo.png" alt="Mizton" style="height: 40px;">
+            <img src="/logoB.gif" alt="Mizton" style="height: 40px;">
         </a>
         
         <div class="nav-links">
