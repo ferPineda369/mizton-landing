@@ -347,7 +347,14 @@ $pageTitle = $project['name'] . ' - Marketplace';
 
                 <!-- Botón de Acción Principal -->
                 <div class="info-card">
-                    <?php if ($project['website_url']): ?>
+                    <?php if ($project['has_internal_landing']): ?>
+                    <a href="/marketplace/project-landing.php?code=<?php echo urlencode($project['project_code']); ?>" 
+                       class="btn-primary-action"
+                       onclick="recordClickThrough(<?php echo $project['id']; ?>)">
+                        <i class="bi bi-file-richtext"></i>
+                        Ver Landing del Proyecto
+                    </a>
+                    <?php elseif ($project['website_url']): ?>
                     <a href="<?php echo htmlspecialchars($project['website_url']); ?>" 
                        target="_blank"
                        class="btn-primary-action"

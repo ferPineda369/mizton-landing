@@ -179,6 +179,11 @@ INSERT INTO tbl_marketplace_project_faq (project_id, question, answer, display_o
 -- Verificación de la migración
 -- =====================================================
 
+-- NOTA: Las siguientes consultas están comentadas porque requieren permisos
+-- especiales sobre information_schema. Puedes ejecutarlas manualmente si tienes
+-- los permisos necesarios, o verificar las tablas con SHOW TABLES y DESCRIBE.
+
+/*
 -- Verificar que las tablas se crearon correctamente
 SELECT 
     TABLE_NAME,
@@ -207,3 +212,11 @@ WHERE TABLE_SCHEMA = DATABASE()
 AND TABLE_NAME = 'tbl_marketplace_projects'
 AND COLUMN_NAME IN ('has_internal_landing', 'project_type', 'long_description')
 ORDER BY ORDINAL_POSITION;
+*/
+
+-- Alternativa simple para verificar (no requiere permisos especiales):
+SHOW TABLES LIKE 'tbl_marketplace_project%';
+
+-- Para ver la estructura de una tabla específica:
+-- DESCRIBE tbl_marketplace_projects;
+-- DESCRIBE tbl_marketplace_project_metadata;
