@@ -46,11 +46,16 @@ try {
     // Preparar datos
     $projectCode = strtoupper(trim($_POST['project_code']));
     $name = trim($_POST['name']);
-    $slug = strtolower(trim($_POST['slug']));
+    $slug = !empty($_POST['slug']) ? strtolower(trim($_POST['slug'])) : strtolower(str_replace(' ', '-', $name));
     $category = $_POST['category'];
     $status = $_POST['status'];
     $shortDescription = trim($_POST['short_description']);
     $description = trim($_POST['description'] ?? '');
+    
+    // Nuevos campos para landing interna
+    $hasInternalLanding = isset($_POST['has_internal_landing']) ? 1 : 0;
+    $projectType = trim($_POST['project_type'] ?? 'general');
+    $longDescription = trim($_POST['long_description'] ?? '');
     
     // URLs e imágenes
     $mainImageUrl = trim($_POST['main_image_url'] ?? '');
@@ -114,6 +119,7 @@ try {
         $sql = "INSERT INTO tbl_marketplace_projects (
             project_code, name, slug, category, status,
             short_description, description,
+            has_internal_landing, project_type, long_description,
             main_image_url, logo_url, website_url,
             token_symbol, token_price_usd,
             funding_goal, funding_raised, funding_percentage,
@@ -125,6 +131,7 @@ try {
         ) VALUES (
             ?, ?, ?, ?, ?,
             ?, ?,
+            ?, ?, ?,
             ?, ?, ?,
             ?, ?,
             ?, ?, ?,
@@ -139,6 +146,7 @@ try {
         $stmt->execute([
             $projectCode, $name, $slug, $category, $status,
             $shortDescription, $description,
+            $hasInternalLanding, $projectType, $longDescription,
             $mainImageUrl, $logoUrl, $websiteUrl,
             $tokenSymbol, $tokenPriceUsd,
             $fundingGoal, $fundingRaised, $fundingPercentage,
@@ -151,7 +159,8 @@ try {
         echo json_encode([
             'success' => true,
             'message' => 'Proyecto creado exitosamente',
-            'redirect' => '/marketplace/admin/projects.php?success=created'
+            'project_code' => $projectCode,
+            'redirect' => '/marketplace/admin/project-editor.php?code=' . $projectCode
         ]);
         
     } else {
@@ -176,6 +185,7 @@ try {
         $sql = "UPDATE tbl_marketplace_projects SET
             name = ?, slug = ?, category = ?, status = ?,
             short_description = ?, description = ?,
+            has_internal_landing = ?, project_type = ?, long_description = ?,
             main_image_url = ?, logo_url = ?, website_url = ?,
             token_symbol = ?, token_price_usd = ?,
             funding_goal = ?, funding_raised = ?, funding_percentage = ?,
@@ -190,6 +200,7 @@ try {
         $stmt->execute([
             $name, $slug, $category, $status,
             $shortDescription, $description,
+            $hasInternalLanding, $projectType, $longDescription,
             $mainImageUrl, $logoUrl, $websiteUrl,
             $tokenSymbol, $tokenPriceUsd,
             $fundingGoal, $fundingRaised, $fundingPercentage,
