@@ -83,7 +83,7 @@ function getActiveProjects($filters = []) {
  */
 function getProjectBySlug($slug) {
     $db = getMarketplaceDB();
-    $stmt = $db->prepare("SELECT * FROM vw_marketplace_active_projects WHERE slug = ? AND is_active = TRUE");
+    $stmt = $db->prepare("SELECT * FROM tbl_marketplace_projects WHERE slug = ? AND is_active = TRUE");
     $stmt->execute([$slug]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
