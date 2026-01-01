@@ -32,7 +32,8 @@ $milestones = getProjectMilestones($project['id']);
 $cachedData = getProjectCachedData($project['id']);
 
 // Obtener documentos con control de acceso
-$userId = $_SESSION['idUser'] ?? null;
+// Soportar ambas variables de sesión (idUser y user_id)
+$userId = $_SESSION['idUser'] ?? $_SESSION['user_id'] ?? null;
 $walletAddress = null;
 
 // Si es usuario Mizton, obtener su wallet
@@ -51,7 +52,7 @@ $categoryInfo = $MARKETPLACE_CATEGORIES[$project['category']] ?? $MARKETPLACE_CA
 $statusInfo = $PROJECT_STATUSES[$project['status']] ?? $PROJECT_STATUSES['desarrollo'];
 $networkInfo = $BLOCKCHAIN_NETWORKS[$project['blockchain_network']] ?? null;
 
-$isLoggedIn = isset($_SESSION['idUser']);
+$isLoggedIn = isset($_SESSION['idUser']) || isset($_SESSION['user_id']);
 $pageTitle = $project['name'] . ' - Marketplace';
 ?>
 <!DOCTYPE html>
