@@ -17,6 +17,8 @@ require_once __DIR__ . '/../config/marketplace-config.php';
 function isProjectInvestor($projectId, $userId = null, $walletAddress = null) {
     $db = getMarketplaceDB();
     
+    error_log("DEBUG isProjectInvestor - ProjectID: $projectId, UserID: $userId, Wallet: $walletAddress");
+    
     // Si hay userId, buscar por user_id o por wallet asociada
     if ($userId) {
         // Primero intentar por user_id directo
@@ -28,8 +30,11 @@ function isProjectInvestor($projectId, $userId = null, $walletAddress = null) {
         $investor = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if ($investor) {
+            error_log("DEBUG: Inversionista encontrado por user_id - Nivel: {$investor['access_level']}");
             return $investor;
         }
+        
+        error_log("DEBUG: No encontrado por user_id, buscando por wallet");
         
         // Si no encontró, buscar por wallet del usuario usando tabla wallet
         $stmt = $db->prepare("
@@ -39,7 +44,15 @@ function isProjectInvestor($projectId, $userId = null, $walletAddress = null) {
             WHERE i.project_id = ? AND w.userId = ? AND i.is_active = TRUE
         ");
         $stmt->execute([$projectId, $userId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $investor = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($investor) {
+            error_log("DEBUG: Inversionista encontrado por wallet - Nivel: {$investor['access_level']}");
+        } else {
+            error_log("DEBUG: No encontrado por wallet tampoco");
+        }
+        
+        return $investor;
     }
     
     // Si hay wallet address, buscar por wallet
@@ -49,9 +62,16 @@ function isProjectInvestor($projectId, $userId = null, $walletAddress = null) {
             WHERE project_id = ? AND wallet_address = ? AND is_active = TRUE
         ");
         $stmt->execute([$projectId, strtolower($walletAddress)]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $investor = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($investor) {
+            error_log("DEBUG: Inversionista encontrado por wallet externa - Nivel: {$investor['access_level']}");
+        }
+        
+        return $investor;
     }
     
+    error_log("DEBUG: No se proporcionó userId ni walletAddress");
     return false;
 }
 
@@ -109,11 +129,24 @@ function checkDocumentAccess($documentId, $userId = null, $walletAddress = null)
     
     // Verificar nivel de acceso
     $accessLevels = ['public', 'basic', 'standard', 'premium', 'vip', 'founder'];
-    $requiredLevel = $document['required_access_level'];
+    $requiredLevel = $document['required_access_level'] ?? 'public';
     $investorLevel = $investor['access_level'];
     
     $requiredIndex = array_search($requiredLevel, $accessLevels);
     $investorIndex = array_search($investorLevel, $accessLevels);
+    
+    // Debug: registrar en error_log para diagnóstico
+    error_log("DEBUG checkDocumentAccess - Document: {$document['document_name']}, Required: $requiredLevel ($requiredIndex), Investor: $investorLevel ($investorIndex)");
+    
+    if ($requiredIndex === false || $investorIndex === false) {
+        error_log("ERROR: Nivel de acceso inválido - Required: $requiredLevel, Investor: $investorLevel");
+        return [
+            'access' => false,
+            'reason' => 'Error en configuración de niveles de acceso',
+            'investor' => $investor,
+            'document' => $document
+        ];
+    }
     
     if ($investorIndex < $requiredIndex) {
         return [
@@ -126,8 +159,8 @@ function checkDocumentAccess($documentId, $userId = null, $walletAddress = null)
         ];
     }
     
-    // Verificar si requiere KYC
-    if ($document['requires_kyc'] && $investor['kyc_status'] !== 'approved') {
+    // Verificar si requiere KYC (solo si está configurado)
+    if (!empty($document['requires_kyc']) && $investor['kyc_status'] !== 'approved') {
         return [
             'access' => false,
             'reason' => 'Este documento requiere verificación KYC aprobada',
@@ -137,8 +170,8 @@ function checkDocumentAccess($documentId, $userId = null, $walletAddress = null)
         ];
     }
     
-    // Verificar inversión mínima
-    if ($document['min_investment_usd'] && $investor['investment_usd'] < $document['min_investment_usd']) {
+    // Verificar inversión mínima (solo si está configurado en el DOCUMENTO, no en el nivel)
+    if (!empty($document['min_investment_usd']) && $investor['investment_usd'] < $document['min_investment_usd']) {
         return [
             'access' => false,
             'reason' => sprintf(
