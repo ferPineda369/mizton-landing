@@ -5,6 +5,7 @@
 
 require_once __DIR__ . '/config/marketplace-config.php';
 require_once __DIR__ . '/includes/marketplace-functions.php';
+require_once __DIR__ . '/includes/investor-access-functions.php';
 
 // Obtener slug del proyecto
 $slug = $_GET['slug'] ?? '';
@@ -27,9 +28,23 @@ if (!$project) {
 recordProjectView($project['id']);
 
 // Obtener datos adicionales
-$documents = getProjectDocuments($project['id']);
 $milestones = getProjectMilestones($project['id']);
 $cachedData = getProjectCachedData($project['id']);
+
+// Obtener documentos con control de acceso
+$userId = $_SESSION['idUser'] ?? null;
+$walletAddress = null;
+
+// Si es usuario Mizton, obtener su wallet
+if ($userId) {
+    $walletAddress = getUserWalletAddress($userId);
+}
+
+// Verificar si es inversionista
+$isInvestor = isProjectInvestor($project['id'], $userId, $walletAddress);
+
+// Obtener documentos con información de acceso
+$documents = getAccessibleDocuments($project['id'], $userId, $walletAddress);
 
 // Información de categoría y estado
 $categoryInfo = $MARKETPLACE_CATEGORIES[$project['category']] ?? $MARKETPLACE_CATEGORIES['otro'];
@@ -243,29 +258,90 @@ $pageTitle = $project['name'] . ' - Marketplace';
                     <!-- Tab: Documentos -->
                     <?php if (!empty($documents)): ?>
                     <div id="documents" class="tab-content">
+                        <?php if ($isInvestor): ?>
+                        <div class="investor-badge" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                            <i class="bi bi-shield-check" style="font-size: 1.5rem;"></i>
+                            <div>
+                                <strong>Inversionista Verificado</strong>
+                                <div style="font-size: 0.9rem; opacity: 0.9;">Nivel de acceso: <strong><?php echo strtoupper($isInvestor['access_level']); ?></strong></div>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+                        
                         <div class="documents-list">
                             <?php foreach ($documents as $doc): ?>
-                            <div class="document-item">
+                            <div class="document-item <?php echo $doc['has_access'] ? '' : 'document-locked'; ?>">
                                 <div class="document-icon">
+                                    <?php if ($doc['has_access']): ?>
                                     <i class="bi bi-file-earmark-pdf"></i>
+                                    <?php else: ?>
+                                    <i class="bi bi-lock-fill" style="color: #e74c3c;"></i>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="document-info">
-                                    <div class="document-name"><?php echo htmlspecialchars($doc['document_name']); ?></div>
+                                    <div class="document-name">
+                                        <?php echo htmlspecialchars($doc['document_name']); ?>
+                                        <?php if ($doc['required_access_level'] !== 'public'): ?>
+                                        <span class="access-badge" style="background: <?php 
+                                            $colors = ['basic' => '#3498db', 'standard' => '#2ecc71', 'premium' => '#f39c12', 'vip' => '#e74c3c', 'founder' => '#9b59b6'];
+                                            echo $colors[$doc['required_access_level']] ?? '#95a5a6';
+                                        ?>; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 8px;">
+                                            <?php echo strtoupper($doc['required_access_level']); ?>
+                                        </span>
+                                        <?php endif; ?>
+                                    </div>
                                     <div class="document-meta">
                                         <?php echo ucfirst($doc['document_type']); ?>
                                         <?php if ($doc['file_size']): ?>
                                         • <?php echo formatLargeNumber($doc['file_size']); ?> bytes
                                         <?php endif; ?>
+                                        <?php if ($doc['requires_kyc']): ?>
+                                        • <i class="bi bi-shield-check"></i> Requiere KYC
+                                        <?php endif; ?>
                                     </div>
+                                    <?php if (!$doc['has_access']): ?>
+                                    <div class="access-reason" style="color: #e74c3c; font-size: 0.85rem; margin-top: 5px;">
+                                        <i class="bi bi-info-circle"></i> <?php echo htmlspecialchars($doc['access_reason']); ?>
+                                    </div>
+                                    <?php endif; ?>
                                 </div>
+                                <?php if ($doc['has_access']): ?>
                                 <a href="<?php echo htmlspecialchars($doc['document_url']); ?>" 
                                    target="_blank" 
-                                   class="btn-download">
+                                   class="btn-download"
+                                   onclick="logDocumentDownload(<?php echo $doc['id']; ?>)">
                                     <i class="bi bi-download"></i> Descargar
                                 </a>
+                                <?php else: ?>
+                                <button class="btn-download" 
+                                        style="background: #95a5a6; cursor: not-allowed;" 
+                                        disabled
+                                        title="<?php echo htmlspecialchars($doc['access_reason']); ?>">
+                                    <i class="bi bi-lock"></i> Bloqueado
+                                </button>
+                                <?php endif; ?>
                             </div>
                             <?php endforeach; ?>
                         </div>
+                        
+                        <?php if (!$isInvestor): ?>
+                        <div class="investor-cta" style="background: #f8f9fa; border: 2px dashed #ddd; padding: 30px; border-radius: 12px; text-align: center; margin-top: 20px;">
+                            <i class="bi bi-lock" style="font-size: 3rem; color: #95a5a6; margin-bottom: 15px;"></i>
+                            <h3 style="margin-bottom: 10px;">Documentos Exclusivos para Inversionistas</h3>
+                            <p style="color: #666; margin-bottom: 20px;">
+                                Algunos documentos están disponibles únicamente para inversionistas verificados del proyecto.
+                            </p>
+                            <?php if (!$isLoggedIn): ?>
+                            <a href="https://panel.mizton.cat/login.php" class="btn-primary-action" style="display: inline-block;">
+                                <i class="bi bi-box-arrow-in-right"></i> Iniciar Sesión
+                            </a>
+                            <?php else: ?>
+                            <p style="color: #666; font-size: 0.9rem;">
+                                <i class="bi bi-info-circle"></i> Para obtener acceso, debe ser inversionista verificado de este proyecto.
+                            </p>
+                            <?php endif; ?>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <?php endif; ?>
                 </div>
@@ -439,6 +515,17 @@ $pageTitle = $project['name'] . ' - Marketplace';
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ action: 'click_through', project_id: projectId })
+        }).catch(err => console.error('Error:', err));
+    }
+    
+    function logDocumentDownload(documentId) {
+        fetch('/marketplace/api/log-document-access.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                document_id: documentId, 
+                access_type: 'download' 
+            })
         }).catch(err => console.error('Error:', err));
     }
     </script>
