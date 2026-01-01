@@ -271,9 +271,11 @@ $pageTitle = $project['name'] . ' - Marketplace';
                         
                         <div class="documents-list">
                             <?php foreach ($documents as $doc): ?>
-                            <div class="document-item <?php echo $doc['has_access'] ? '' : 'document-locked'; ?>">
+                            <div class="document-item <?php echo $doc['has_access'] ? '' : 'document-locked'; ?> <?php echo !empty($doc['coming_soon']) ? 'document-coming-soon' : ''; ?>">
                                 <div class="document-icon">
-                                    <?php if ($doc['has_access']): ?>
+                                    <?php if (!empty($doc['coming_soon'])): ?>
+                                    <i class="bi bi-clock-history" style="color: #f39c12;"></i>
+                                    <?php elseif ($doc['has_access']): ?>
                                     <i class="bi bi-file-earmark-pdf"></i>
                                     <?php else: ?>
                                     <i class="bi bi-lock-fill" style="color: #e74c3c;"></i>
@@ -282,7 +284,12 @@ $pageTitle = $project['name'] . ' - Marketplace';
                                 <div class="document-info">
                                     <div class="document-name">
                                         <?php echo htmlspecialchars($doc['document_name']); ?>
-                                        <?php if ($doc['required_access_level'] !== 'public'): ?>
+                                        
+                                        <?php if (!empty($doc['coming_soon'])): ?>
+                                        <span class="access-badge" style="background: #f39c12; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; margin-left: 8px;">
+                                            <i class="bi bi-clock"></i> PRÓXIMAMENTE
+                                        </span>
+                                        <?php elseif ($doc['required_access_level'] !== 'public'): ?>
                                         <span class="access-badge" style="background: <?php 
                                             $colors = ['basic' => '#3498db', 'standard' => '#2ecc71', 'premium' => '#f39c12', 'vip' => '#e74c3c', 'founder' => '#9b59b6'];
                                             echo $colors[$doc['required_access_level']] ?? '#95a5a6';
@@ -306,7 +313,14 @@ $pageTitle = $project['name'] . ' - Marketplace';
                                     </div>
                                     <?php endif; ?>
                                 </div>
-                                <?php if ($doc['has_access']): ?>
+                                <?php if (!empty($doc['coming_soon'])): ?>
+                                <button class="btn-download" 
+                                        style="background: #f39c12; cursor: not-allowed;" 
+                                        disabled
+                                        title="<?php echo htmlspecialchars($doc['access_reason']); ?>">
+                                    <i class="bi bi-clock"></i> Próximamente
+                                </button>
+                                <?php elseif ($doc['has_access']): ?>
                                 <a href="<?php echo htmlspecialchars($doc['document_url']); ?>" 
                                    target="_blank" 
                                    class="btn-download"

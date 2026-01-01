@@ -104,6 +104,26 @@ function checkDocumentAccess($documentId, $userId = null, $walletAddress = null)
         ];
     }
     
+    // Verificar si el documento está marcado como "próximamente"
+    if (!empty($document['coming_soon'])) {
+        $message = $document['coming_soon_message'] ?: 'Este documento estará disponible próximamente';
+        
+        // Agregar fecha si está disponible
+        if (!empty($document['available_date'])) {
+            $date = date('d/m/Y', strtotime($document['available_date']));
+            $message .= " (Fecha estimada: $date)";
+        }
+        
+        return [
+            'access' => false,
+            'reason' => $message,
+            'investor' => null,
+            'document' => $document,
+            'coming_soon' => true,
+            'available_date' => $document['available_date'] ?? null
+        ];
+    }
+    
     // Si el documento es público (is_public = TRUE y required_access_level = 'public')
     if ($document['is_public'] && $document['required_access_level'] === 'public') {
         return [
@@ -267,6 +287,8 @@ function getAccessibleDocuments($projectId, $userId = null, $walletAddress = nul
         $doc['access_reason'] = $accessCheck['reason'];
         $doc['is_investor'] = $investor !== false;
         $doc['investor_level'] = $investor ? $investor['access_level'] : null;
+        $doc['coming_soon'] = $accessCheck['coming_soon'] ?? false;
+        $doc['available_date'] = $accessCheck['available_date'] ?? null;
     }
     
     return $documents;
