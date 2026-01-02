@@ -76,6 +76,7 @@ include 'config.php';
                 <span class="brand-text">Mizton</span>
             </div>
             <div class="nav-links">
+                <a href="marketplace/" target="_blank">Marketplace</a>
                 <a href="#como-funciona">¿Cómo Funciona?</a>
                 <a href="#beneficios">Beneficios</a>
                 <a href="#faq">FAQ</a>
