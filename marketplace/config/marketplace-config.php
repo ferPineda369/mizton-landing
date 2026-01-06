@@ -61,10 +61,10 @@ $PROJECT_STATUSES = [
 
 // Métodos de actualización
 $UPDATE_METHODS = [
-    'manual' => 'Manual',
-    'api_pull' => 'API Pull',
-    'webhook' => 'Webhook',
-    'blockchain' => 'Blockchain'
+    'manual' => ['label' => 'Manual', 'description' => 'Actualización manual desde el panel'],
+    'api_pull' => ['label' => 'API Pull', 'description' => 'Consulta periódica a una API externa'],
+    'webhook' => ['label' => 'Webhook', 'description' => 'Recepción de actualizaciones vía webhook'],
+    'blockchain' => ['label' => 'Blockchain', 'description' => 'Sincronización automática con blockchain']
 ];
 
 // Redes blockchain soportadas

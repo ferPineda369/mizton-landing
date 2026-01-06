@@ -834,15 +834,70 @@ $pageTitle = $action === 'edit' ? 'Editar Proyecto' : ($action === 'new' ? 'Nuev
         </div>
 
         <?php if ($action === 'edit'): ?>
-        <!-- Gestión de Milestones y Documentos -->
+        <!-- Gestión de Milestones (Roadmap) -->
         <div class="section">
             <div class="section-header">
-                <h2><i class="bi bi-flag"></i> Milestones del Proyecto</h2>
-                <button onclick="window.location.href='/marketplace/admin/milestones.php?project=<?php echo urlencode($projectCode); ?>'" class="btn btn-primary">
-                    <i class="bi bi-plus-circle"></i> Gestionar Milestones
+                <h2><i class="bi bi-flag"></i> Roadmap del Proyecto (Milestones)</h2>
+                <button type="button" onclick="addMilestone()" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Agregar Milestone
                 </button>
             </div>
-            <p style="color: #718096;">Gestiona los hitos y objetivos del proyecto desde la sección de milestones.</p>
+            
+            <?php
+            // Obtener milestones existentes
+            $stmt = $db->prepare("
+                SELECT * FROM tbl_marketplace_milestones 
+                WHERE project_id = ? 
+                ORDER BY target_date ASC, display_order ASC
+            ");
+            $stmt->execute([$project['id']]);
+            $milestones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+            
+            <div id="milestonesContainer">
+                <?php if (empty($milestones)): ?>
+                <p style="color: #718096; text-align: center; padding: 20px;">
+                    No hay milestones configurados. Agrega el primer milestone del roadmap.
+                </p>
+                <?php else: ?>
+                <div class="milestones-list">
+                    <?php foreach ($milestones as $milestone): ?>
+                    <div class="milestone-item" data-id="<?php echo $milestone['id']; ?>">
+                        <div class="milestone-header">
+                            <div class="milestone-status">
+                                <span class="status-badge status-<?php echo $milestone['status']; ?>">
+                                    <?php echo strtoupper($milestone['status']); ?>
+                                </span>
+                                <?php if ($milestone['target_date']): ?>
+                                <span class="milestone-date">
+                                    <i class="bi bi-calendar"></i> <?php echo date('d/m/Y', strtotime($milestone['target_date'])); ?>
+                                </span>
+                                <?php endif; ?>
+                            </div>
+                            <div class="milestone-actions">
+                                <button type="button" onclick="editMilestone(<?php echo $milestone['id']; ?>)" class="btn-icon" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button type="button" onclick="deleteMilestone(<?php echo $milestone['id']; ?>)" class="btn-icon" title="Eliminar">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <h4><?php echo htmlspecialchars($milestone['title']); ?></h4>
+                        <?php if ($milestone['description']): ?>
+                        <p><?php echo nl2br(htmlspecialchars($milestone['description'])); ?></p>
+                        <?php endif; ?>
+                        <?php if ($milestone['completion_percentage'] > 0): ?>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: <?php echo $milestone['completion_percentage']; ?>%"></div>
+                            <span class="progress-text"><?php echo $milestone['completion_percentage']; ?>%</span>
+                        </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php endif; ?>
+            </div>
         </div>
 
         <div class="section">
@@ -918,6 +973,242 @@ $pageTitle = $action === 'edit' ? 'Editar Proyecto' : ($action === 'new' ? 'Nuev
 
         fundingGoal?.addEventListener('input', calculatePercentage);
         fundingRaised?.addEventListener('input', calculatePercentage);
+
+        // ========================================
+        // Funciones para Gestión de Milestones
+        // ========================================
+        
+        function addMilestone() {
+            const title = prompt('Título del milestone:');
+            if (!title) return;
+            
+            const description = prompt('Descripción (opcional):');
+            const targetDate = prompt('Fecha objetivo (YYYY-MM-DD):');
+            const status = prompt('Estado (pending/in_progress/completed/cancelled):', 'pending');
+            
+            const formData = new FormData();
+            formData.append('csrf_token', '<?php echo $csrf_token; ?>');
+            formData.append('action', 'add');
+            formData.append('project_id', '<?php echo $project['id']; ?>');
+            formData.append('title', title);
+            formData.append('description', description || '');
+            formData.append('target_date', targetDate || '');
+            formData.append('status', status);
+            formData.append('completion_percentage', 0);
+            
+            fetch('/marketplace/admin/api/manage-milestones.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.message || 'Error desconocido'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al agregar milestone');
+            });
+        }
+        
+        function editMilestone(id) {
+            // Obtener datos actuales del milestone
+            fetch('/marketplace/admin/api/manage-milestones.php?action=get&id=' + id)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert('Error al cargar milestone');
+                    return;
+                }
+                
+                const milestone = data.milestone;
+                const title = prompt('Título:', milestone.title);
+                if (title === null) return;
+                
+                const description = prompt('Descripción:', milestone.description || '');
+                const targetDate = prompt('Fecha objetivo (YYYY-MM-DD):', milestone.target_date || '');
+                const status = prompt('Estado (pending/in_progress/completed/cancelled):', milestone.status);
+                const completion = prompt('Porcentaje de completado (0-100):', milestone.completion_percentage || 0);
+                
+                const formData = new FormData();
+                formData.append('csrf_token', '<?php echo $csrf_token; ?>');
+                formData.append('action', 'update');
+                formData.append('id', id);
+                formData.append('title', title);
+                formData.append('description', description || '');
+                formData.append('target_date', targetDate || '');
+                formData.append('status', status);
+                formData.append('completion_percentage', completion);
+                
+                fetch('/marketplace/admin/api/manage-milestones.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Error: ' + (data.message || 'Error desconocido'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error al actualizar milestone');
+                });
+            });
+        }
+        
+        function deleteMilestone(id) {
+            if (!confirm('¿Eliminar este milestone?')) return;
+            
+            const formData = new FormData();
+            formData.append('csrf_token', '<?php echo $csrf_token; ?>');
+            formData.append('action', 'delete');
+            formData.append('id', id);
+            
+            fetch('/marketplace/admin/api/manage-milestones.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.message || 'Error desconocido'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al eliminar milestone');
+            });
+        }
     </script>
+    
+    <style>
+        .milestones-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .milestone-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            transition: box-shadow 0.2s;
+        }
+        
+        .milestone-item:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .milestone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .milestone-status {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-in_progress {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .milestone-date {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+        
+        .milestone-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .btn-icon {
+            background: none;
+            border: none;
+            color: #64748b;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .btn-icon:hover {
+            background: #f1f5f9;
+            color: #334155;
+        }
+        
+        .milestone-item h4 {
+            margin: 0 0 8px 0;
+            color: #1e293b;
+            font-size: 1.1rem;
+        }
+        
+        .milestone-item p {
+            margin: 0 0 12px 0;
+            color: #64748b;
+            line-height: 1.6;
+        }
+        
+        .progress-bar {
+            position: relative;
+            height: 24px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+            transition: width 0.3s;
+        }
+        
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+    </style>
 </body>
 </html>
