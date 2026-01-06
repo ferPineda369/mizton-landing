@@ -865,10 +865,10 @@ $pageTitle = $action === 'edit' ? 'Editar Proyecto' : ($action === 'new' ? 'Nuev
                     <div class="milestone-item" data-id="<?php echo $milestone['id']; ?>">
                         <div class="milestone-header">
                             <div class="milestone-status">
-                                <span class="status-badge status-<?php echo $milestone['status']; ?>">
-                                    <?php echo strtoupper($milestone['status']); ?>
+                                <span class="status-badge status-<?php echo $milestone['status'] ?? 'pending'; ?>">
+                                    <?php echo strtoupper($milestone['status'] ?? 'PENDING'); ?>
                                 </span>
-                                <?php if ($milestone['target_date']): ?>
+                                <?php if (!empty($milestone['target_date'])): ?>
                                 <span class="milestone-date">
                                     <i class="bi bi-calendar"></i> <?php echo date('d/m/Y', strtotime($milestone['target_date'])); ?>
                                 </span>
@@ -883,14 +883,14 @@ $pageTitle = $action === 'edit' ? 'Editar Proyecto' : ($action === 'new' ? 'Nuev
                                 </button>
                             </div>
                         </div>
-                        <h4><?php echo htmlspecialchars($milestone['title']); ?></h4>
-                        <?php if ($milestone['description']): ?>
+                        <h4><?php echo htmlspecialchars($milestone['milestone_name'] ?? 'Sin título'); ?></h4>
+                        <?php if (!empty($milestone['description'])): ?>
                         <p><?php echo nl2br(htmlspecialchars($milestone['description'])); ?></p>
                         <?php endif; ?>
-                        <?php if ($milestone['completion_percentage'] > 0): ?>
+                        <?php if (($milestone['progress_percentage'] ?? 0) > 0): ?>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: <?php echo $milestone['completion_percentage']; ?>%"></div>
-                            <span class="progress-text"><?php echo $milestone['completion_percentage']; ?>%</span>
+                            <div class="progress-fill" style="width: <?php echo $milestone['progress_percentage']; ?>%"></div>
+                            <span class="progress-text"><?php echo $milestone['progress_percentage']; ?>%</span>
                         </div>
                         <?php endif; ?>
                     </div>
@@ -1025,13 +1025,13 @@ $pageTitle = $action === 'edit' ? 'Editar Proyecto' : ($action === 'new' ? 'Nuev
                 }
                 
                 const milestone = data.milestone;
-                const title = prompt('Título:', milestone.title);
+                const title = prompt('Título:', milestone.milestone_name);
                 if (title === null) return;
                 
                 const description = prompt('Descripción:', milestone.description || '');
                 const targetDate = prompt('Fecha objetivo (YYYY-MM-DD):', milestone.target_date || '');
                 const status = prompt('Estado (pending/in_progress/completed/cancelled):', milestone.status);
-                const completion = prompt('Porcentaje de completado (0-100):', milestone.completion_percentage || 0);
+                const completion = prompt('Porcentaje de completado (0-100):', milestone.progress_percentage || 0);
                 
                 const formData = new FormData();
                 formData.append('csrf_token', '<?php echo $csrf_token; ?>');

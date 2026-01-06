@@ -21,7 +21,7 @@ try {
             
             $stmt = $db->prepare("
                 INSERT INTO tbl_marketplace_milestones 
-                (project_id, title, description, target_date, status, completion_percentage, display_order)
+                (project_id, milestone_name, description, target_date, status, progress_percentage, display_order)
                 VALUES (?, ?, ?, ?, ?, ?, 0)
             ");
             
@@ -49,11 +49,11 @@ try {
             
             $stmt = $db->prepare("
                 UPDATE tbl_marketplace_milestones 
-                SET title = ?,
+                SET milestone_name = ?,
                     description = ?,
                     target_date = ?,
                     status = ?,
-                    completion_percentage = ?,
+                    progress_percentage = ?,
                     updated_at = NOW()
                 WHERE id = ?
             ");
