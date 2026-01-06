@@ -914,6 +914,69 @@ $pageTitle = $action === 'edit' ? 'Editar Proyecto' : ($action === 'new' ? 'Nuev
         <?php endif; ?>
     </div>
 
+    <!-- Modal para Agregar/Editar Milestone -->
+    <div id="milestoneModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="milestoneModalTitle">Agregar Milestone</h3>
+                <button type="button" class="modal-close" onclick="closeMilestoneModal()">&times;</button>
+            </div>
+            <form id="milestoneForm" onsubmit="saveMilestone(event)">
+                <input type="hidden" id="milestone_id" name="milestone_id">
+                <input type="hidden" name="project_id" value="<?php echo $project['id'] ?? ''; ?>">
+                
+                <div class="form-group">
+                    <label for="milestone_title">Título del Milestone *</label>
+                    <input type="text" id="milestone_title" name="title" required 
+                           placeholder="Ej: Lanzamiento de Beta">
+                </div>
+                
+                <div class="form-group">
+                    <label for="milestone_description">Descripción</label>
+                    <textarea id="milestone_description" name="description" rows="3"
+                              placeholder="Describe los objetivos y entregables de este milestone"></textarea>
+                </div>
+                
+                <div class="form-grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="form-group">
+                        <label for="milestone_target_date">Fecha Objetivo</label>
+                        <input type="date" id="milestone_target_date" name="target_date">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="milestone_status">Estado *</label>
+                        <select id="milestone_status" name="status" required>
+                            <option value="pending">Pendiente</option>
+                            <option value="in_progress">En Progreso</option>
+                            <option value="completed">Completado</option>
+                            <option value="cancelled">Cancelado</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="milestone_progress">Porcentaje de Progreso (%)</label>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <input type="range" id="milestone_progress" name="completion_percentage" 
+                               min="0" max="100" value="0" 
+                               oninput="document.getElementById('progress_value').textContent = this.value + '%'"
+                               style="flex: 1;">
+                        <span id="progress_value" style="min-width: 45px; font-weight: 600;">0%</span>
+                    </div>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeMilestoneModal()">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-save"></i> Guardar Milestone
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         function deleteProject(projectCode) {
             if (!confirm('¿Estás seguro de que deseas eliminar este proyecto?\n\nEsta acción eliminará también todos sus milestones, documentos y estadísticas asociadas.')) {
@@ -975,26 +1038,71 @@ $pageTitle = $action === 'edit' ? 'Editar Proyecto' : ($action === 'new' ? 'Nuev
         fundingRaised?.addEventListener('input', calculatePercentage);
 
         // ========================================
-        // Funciones para Gestión de Milestones
+        // Funciones para Gestión de Milestones con Modal
         // ========================================
         
         function addMilestone() {
-            const title = prompt('Título del milestone:');
-            if (!title) return;
+            // Limpiar formulario
+            document.getElementById('milestoneForm').reset();
+            document.getElementById('milestone_id').value = '';
+            document.getElementById('milestoneModalTitle').textContent = 'Agregar Milestone';
+            document.getElementById('progress_value').textContent = '0%';
             
-            const description = prompt('Descripción (opcional):');
-            const targetDate = prompt('Fecha objetivo (YYYY-MM-DD):');
-            const status = prompt('Estado (pending/in_progress/completed/cancelled):', 'pending');
+            // Mostrar modal
+            document.getElementById('milestoneModal').style.display = 'flex';
+        }
+        
+        function editMilestone(id) {
+            // Obtener datos actuales del milestone
+            fetch('/marketplace/admin/api/manage-milestones.php?action=get&id=' + id)
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert('Error al cargar milestone');
+                    return;
+                }
+                
+                const milestone = data.milestone;
+                
+                // Llenar formulario con datos existentes
+                document.getElementById('milestone_id').value = milestone.id;
+                document.getElementById('milestone_title').value = milestone.milestone_name || '';
+                document.getElementById('milestone_description').value = milestone.description || '';
+                document.getElementById('milestone_target_date').value = milestone.target_date || '';
+                document.getElementById('milestone_status').value = milestone.status || 'pending';
+                document.getElementById('milestone_progress').value = milestone.progress_percentage || 0;
+                document.getElementById('progress_value').textContent = (milestone.progress_percentage || 0) + '%';
+                
+                // Cambiar título del modal
+                document.getElementById('milestoneModalTitle').textContent = 'Editar Milestone';
+                
+                // Mostrar modal
+                document.getElementById('milestoneModal').style.display = 'flex';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error al cargar milestone');
+            });
+        }
+        
+        function closeMilestoneModal() {
+            document.getElementById('milestoneModal').style.display = 'none';
+        }
+        
+        function saveMilestone(event) {
+            event.preventDefault();
             
-            const formData = new FormData();
+            const form = event.target;
+            const formData = new FormData(form);
             formData.append('csrf_token', '<?php echo $csrf_token; ?>');
-            formData.append('action', 'add');
-            formData.append('project_id', '<?php echo $project['id']; ?>');
-            formData.append('title', title);
-            formData.append('description', description || '');
-            formData.append('target_date', targetDate || '');
-            formData.append('status', status);
-            formData.append('completion_percentage', 0);
+            
+            const milestoneId = document.getElementById('milestone_id').value;
+            if (milestoneId) {
+                formData.append('action', 'update');
+                formData.append('id', milestoneId);
+            } else {
+                formData.append('action', 'add');
+            }
             
             fetch('/marketplace/admin/api/manage-milestones.php', {
                 method: 'POST',
@@ -1010,56 +1118,16 @@ $pageTitle = $action === 'edit' ? 'Editar Proyecto' : ($action === 'new' ? 'Nuev
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error al agregar milestone');
+                alert('Error al guardar milestone');
             });
         }
         
-        function editMilestone(id) {
-            // Obtener datos actuales del milestone
-            fetch('/marketplace/admin/api/manage-milestones.php?action=get&id=' + id)
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    alert('Error al cargar milestone');
-                    return;
-                }
-                
-                const milestone = data.milestone;
-                const title = prompt('Título:', milestone.milestone_name);
-                if (title === null) return;
-                
-                const description = prompt('Descripción:', milestone.description || '');
-                const targetDate = prompt('Fecha objetivo (YYYY-MM-DD):', milestone.target_date || '');
-                const status = prompt('Estado (pending/in_progress/completed/cancelled):', milestone.status);
-                const completion = prompt('Porcentaje de completado (0-100):', milestone.progress_percentage || 0);
-                
-                const formData = new FormData();
-                formData.append('csrf_token', '<?php echo $csrf_token; ?>');
-                formData.append('action', 'update');
-                formData.append('id', id);
-                formData.append('title', title);
-                formData.append('description', description || '');
-                formData.append('target_date', targetDate || '');
-                formData.append('status', status);
-                formData.append('completion_percentage', completion);
-                
-                fetch('/marketplace/admin/api/manage-milestones.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert('Error: ' + (data.message || 'Error desconocido'));
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error al actualizar milestone');
-                });
-            });
+        // Cerrar modal al hacer clic fuera de él
+        window.onclick = function(event) {
+            const modal = document.getElementById('milestoneModal');
+            if (event.target === modal) {
+                closeMilestoneModal();
+            }
         }
         
         function deleteMilestone(id) {
@@ -1090,6 +1158,91 @@ $pageTitle = $action === 'edit' ? 'Editar Proyecto' : ($action === 'new' ? 'Nuev
     </script>
     
     <style>
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .modal-header h3 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 1.25rem;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #64748b;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+        
+        .modal-close:hover {
+            background: #f1f5f9;
+            color: #334155;
+        }
+        
+        .modal-content form {
+            padding: 24px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        /* Milestones List Styles */
         .milestones-list {
             display: flex;
             flex-direction: column;
