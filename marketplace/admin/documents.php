@@ -46,12 +46,218 @@ $pageTitle = 'Gestión de Documentos';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $pageTitle; ?> | Admin Marketplace</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="/marketplace/admin/assets/css/admin.css">
+    <title><?php echo $pageTitle; ?> | Mizton Marketplace Admin</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/marketplace/assets/css/marketplace.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8f9fa;
+            color: #2d3748;
+        }
+        
+        .admin-header {
+            background: linear-gradient(135deg, #1B4332 0%, #40916C 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .admin-header .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .admin-header h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .admin-nav {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .admin-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .admin-nav a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .admin-nav a.active {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+        
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .section-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a202c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a202c;
+            margin-bottom: 8px;
+        }
+        
+        .page-header p {
+            color: #718096;
+            font-size: 14px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: #40916C;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1B4332;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(64, 145, 108, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+        
+        .btn-secondary:hover {
+            background: #cbd5e0;
+        }
+        
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c53030;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #4a5568;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #40916C;
+            box-shadow: 0 0 0 3px rgba(64, 145, 108, 0.1);
+        }
+        
+        .form-group small {
+            display: block;
+            margin-top: 6px;
+            color: #718096;
+            font-size: 12px;
+        }
+    </style>
 </head>
 <body>
-    <?php include __DIR__ . '/includes/admin-nav.php'; ?>
+    <header class="admin-header">
+        <div class="container">
+            <h1><i class="bi bi-shop"></i> Marketplace Admin</h1>
+            <nav class="admin-nav">
+                <a href="/marketplace/admin/projects.php">Proyectos</a>
+                <a href="/marketplace/admin/documents.php" class="active">Documentos</a>
+                <a href="/marketplace/admin/sync.php">Sincronización</a>
+                <a href="/marketplace">Ver Marketplace</a>
+            </nav>
+        </div>
+    </header>
 
     <div class="container">
         <div class="page-header">
@@ -68,9 +274,9 @@ $pageTitle = 'Gestión de Documentos';
 
         <!-- Selector de Proyecto -->
         <div class="section">
-            <div class="form-group">
+            <div class="form-group" style="margin-bottom: 0;">
                 <label for="projectSelector">Seleccionar Proyecto</label>
-                <select id="projectSelector" onchange="window.location.href='/marketplace/admin/documents.php?project=' + this.value" class="form-control">
+                <select id="projectSelector" onchange="window.location.href='/marketplace/admin/documents.php?project=' + this.value">
                     <option value="">-- Seleccionar proyecto --</option>
                     <?php foreach ($allProjects as $p): ?>
                     <option value="<?php echo htmlspecialchars($p['project_code']); ?>" 
@@ -87,7 +293,9 @@ $pageTitle = 'Gestión de Documentos';
         <div class="section">
             <div class="section-header">
                 <h2>Documentos de <?php echo htmlspecialchars($project['name']); ?></h2>
-                <span class="badge"><?php echo count($documents); ?> documentos</span>
+                <span style="background: #e2e8f0; color: #4a5568; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;">
+                    <?php echo count($documents); ?> documentos
+                </span>
             </div>
 
             <?php if (empty($documents)): ?>
