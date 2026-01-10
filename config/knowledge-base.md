@@ -98,12 +98,12 @@ Compartir la oportunidad puede reducir el tiempo de vesting:
 ## PROMOCIONES VIGENTES 2025
 ### BONO FAST ACTIVE (ACTIVACIÓN RÁPIDA)
 - **Período**: Primeros 30 días
-- **Beneficio**: Cada paquete de $20 USD otorga 2,000 tokens en lugar de los 200 regulares
+- **Beneficio**: Cada paquete de $20 USD otorga 400 tokens en lugar de los 200 regulares
 
 ### BONO DE PATROCINIO (TOKENS ADICIONALES)
 - **Duración**: Por un año
 - **Beneficio**: El patrocinador recibe un 50% respecto a los tokens corporativos adquiridos por sus directos y su segundo nivel totalmente gratis
-- **Ejemplo**: Si tu directo adquiere 2,000 tokens (por Fast Active), tú recibes 1,000 tokens gratis
+- **Ejemplo**: Si tu directo adquiere 400 tokens (por Fast Active), tú recibes 200 tokens gratis
 
 ## MECÁNICA DEL TOKEN CORPORATIVO
 ### PROPÓSITO DEL TOKEN
