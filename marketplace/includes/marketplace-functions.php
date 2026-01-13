@@ -109,6 +109,65 @@ function getProjectByCode($code) {
 }
 
 /**
+ * Obtener proyecto completo con secciones y metadata
+ * Usado por project-landing.php y marketplace-reserve.php
+ */
+function getCompleteProject($projectIdentifier) {
+    $db = getMarketplaceDB();
+    
+    // Determinar si es ID o código
+    if (is_numeric($projectIdentifier)) {
+        $project = getProjectById($projectIdentifier);
+    } else {
+        $project = getProjectByCode($projectIdentifier);
+    }
+    
+    if (!$project) {
+        return null;
+    }
+    
+    // Obtener secciones de la landing page
+    $stmt = $db->prepare("
+        SELECT * FROM tbl_marketplace_landing_sections 
+        WHERE project_id = ? AND is_active = TRUE
+        ORDER BY display_order ASC
+    ");
+    $stmt->execute([$project['id']]);
+    $project['sections'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Parsear section_data JSON
+    foreach ($project['sections'] as &$section) {
+        if (!empty($section['section_data'])) {
+            $section['section_data'] = json_decode($section['section_data'], true);
+        }
+    }
+    
+    // Obtener metadata del proyecto
+    $stmt = $db->prepare("
+        SELECT meta_key, meta_value, meta_type 
+        FROM tbl_marketplace_project_metadata 
+        WHERE project_id = ?
+    ");
+    $stmt->execute([$project['id']]);
+    $metadata = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    $project['metadata'] = [];
+    foreach ($metadata as $meta) {
+        $project['metadata'][$meta['meta_key']] = [
+            'value' => $meta['meta_value'],
+            'type' => $meta['meta_type']
+        ];
+    }
+    
+    // Parsear gallery_images si existe
+    if (!empty($project['gallery_images'])) {
+        $project['gallery_images'] = json_decode($project['gallery_images'], true);
+    }
+    
+    return $project;
+}
+
+/**
  * Obtener datos cacheados del proyecto (JSON parseado)
  */
 function getProjectCachedData($projectId) {
