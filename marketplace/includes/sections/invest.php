@@ -4,8 +4,9 @@
  */
 
 $sectionData = $section['section_data'] ?? [];
-$ctaText = $sectionData['cta_text'] ?? 'Invertir en este Proyecto';
-$ctaLink = $sectionData['cta_link'] ?? 'https://panel.mizton.cat/';
+$ctaText = $sectionData['cta_text'] ?? 'Invertir Ahora';
+// Enlazar a la página de reserva de tokens del marketplace
+$ctaLink = '/marketplace/marketplace-reserve.php?project_id=' . $project['id'];
 ?>
 
 <section class="section section-invest">

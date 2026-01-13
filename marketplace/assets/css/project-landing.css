@@ -585,6 +585,11 @@
     margin-bottom: 20px;
 }
 
+.section-invest .subtitle {
+    color: white;
+    opacity: 0.95;
+}
+
 .invest-stats {
     display: flex;
     justify-content: center;
