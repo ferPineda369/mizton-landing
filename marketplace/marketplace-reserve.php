@@ -32,7 +32,8 @@ if (!$project) {
 }
 
 // Obtener información del usuario
-$stmt = $pdo->prepare("SELECT userUser, nameUser, emailUser FROM tbluser WHERE idUser = ?");
+$db = getMarketplaceDB();
+$stmt = $db->prepare("SELECT userUser, nameUser, emailUser FROM tbluser WHERE idUser = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
