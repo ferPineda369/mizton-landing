@@ -49,8 +49,11 @@ try {
         throw new Exception('Método de pago inválido');
     }
     
+    // Obtener conexión a base de datos
+    $db = getMarketplaceDB();
+    
     // Obtener información del proyecto
-    $stmt = $pdo->prepare("
+    $stmt = $db->prepare("
         SELECT id, project_code, token_price_usd, total_supply, circulating_supply
         FROM tbl_marketplace_projects
         WHERE id = ? AND is_active = 1
@@ -73,7 +76,7 @@ try {
     $totalUsd = $tokenAmount * $tokenPriceUsd;
     
     // Crear reserva
-    $stmt = $pdo->prepare("
+    $stmt = $db->prepare("
         INSERT INTO tbl_marketplace_token_reserves (
             project_id,
             project_code,
@@ -101,7 +104,7 @@ try {
         $userNotes
     ]);
     
-    $reserveId = $pdo->lastInsertId();
+    $reserveId = $db->lastInsertId();
     
     // Log de auditoría
     error_log(sprintf(
