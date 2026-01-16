@@ -126,37 +126,52 @@ function getCompleteProject($projectIdentifier) {
         return null;
     }
     
-    // Obtener secciones de la landing page
-    $stmt = $db->prepare("
-        SELECT * FROM tbl_marketplace_landing_sections 
-        WHERE project_id = ? AND is_active = TRUE
-        ORDER BY display_order ASC
-    ");
-    $stmt->execute([$project['id']]);
-    $project['sections'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Inicializar secciones vacías
+    $project['sections'] = [];
     
-    // Parsear section_data JSON
-    foreach ($project['sections'] as &$section) {
-        if (!empty($section['section_data'])) {
-            $section['section_data'] = json_decode($section['section_data'], true);
+    // Intentar obtener secciones de la landing page (si la tabla existe)
+    try {
+        $stmt = $db->prepare("
+            SELECT * FROM tbl_marketplace_landing_sections 
+            WHERE project_id = ? AND is_active = TRUE
+            ORDER BY display_order ASC
+        ");
+        $stmt->execute([$project['id']]);
+        $project['sections'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Parsear section_data JSON
+        foreach ($project['sections'] as &$section) {
+            if (!empty($section['section_data'])) {
+                $section['section_data'] = json_decode($section['section_data'], true);
+            }
         }
+    } catch (PDOException $e) {
+        // Tabla no existe, continuar sin secciones
+        $project['sections'] = [];
     }
     
-    // Obtener metadata del proyecto
-    $stmt = $db->prepare("
-        SELECT meta_key, meta_value, meta_type 
-        FROM tbl_marketplace_project_metadata 
-        WHERE project_id = ?
-    ");
-    $stmt->execute([$project['id']]);
-    $metadata = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+    // Inicializar metadata vacía
     $project['metadata'] = [];
-    foreach ($metadata as $meta) {
-        $project['metadata'][$meta['meta_key']] = [
-            'value' => $meta['meta_value'],
-            'type' => $meta['meta_type']
-        ];
+    
+    // Intentar obtener metadata del proyecto (si la tabla existe)
+    try {
+        $stmt = $db->prepare("
+            SELECT meta_key, meta_value, meta_type 
+            FROM tbl_marketplace_project_metadata 
+            WHERE project_id = ?
+        ");
+        $stmt->execute([$project['id']]);
+        $metadata = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        foreach ($metadata as $meta) {
+            $project['metadata'][$meta['meta_key']] = [
+                'value' => $meta['meta_value'],
+                'type' => $meta['meta_type']
+            ];
+        }
+    } catch (PDOException $e) {
+        // Tabla no existe, continuar sin metadata
+        $project['metadata'] = [];
     }
 
     // Parsear gallery_images si existe
