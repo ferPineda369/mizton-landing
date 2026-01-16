@@ -158,7 +158,7 @@ function getCompleteProject($projectIdentifier) {
             'type' => $meta['meta_type']
         ];
     }
-    
+
     // Parsear gallery_images si existe
     if (!empty($project['gallery_images'])) {
         $project['gallery_images'] = json_decode($project['gallery_images'], true);
