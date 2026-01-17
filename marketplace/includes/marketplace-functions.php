@@ -128,7 +128,7 @@ function getCompleteProject($projectIdentifier) {
     
     // Inicializar secciones vacías
     $project['sections'] = [];
-    
+
     // Intentar obtener secciones del proyecto (tabla correcta)
     try {
         $stmt = $db->prepare("
