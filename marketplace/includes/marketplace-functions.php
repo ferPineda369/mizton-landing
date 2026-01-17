@@ -133,8 +133,8 @@ function getCompleteProject($projectIdentifier) {
     try {
         $stmt = $db->prepare("
             SELECT * FROM tbl_marketplace_project_sections 
-            WHERE project_id = ? AND is_active = TRUE
-            ORDER BY display_order ASC
+            WHERE project_id = ? AND is_active = 1
+            ORDER BY section_order ASC
         ");
         $stmt->execute([$project['id']]);
         $project['sections'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
