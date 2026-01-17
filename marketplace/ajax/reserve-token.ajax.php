@@ -105,7 +105,7 @@ try {
     ]);
     
     $reserveId = $db->lastInsertId();
-    
+
     // Log de auditoría
     error_log(sprintf(
         "[MARKETPLACE RESERVE] User %d created reserve #%d for project %d: %s tokens at $%s USD each (Total: $%s USD)",

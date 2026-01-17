@@ -198,7 +198,7 @@ function getProjectCachedData($projectId) {
  */
 function updateProjectCache($projectId, $data) {
     $db = getMarketplaceDB();
-    
+
     // Extraer campos principales para búsquedas rápidas
     $updates = [
         'cached_data' => json_encode($data),
