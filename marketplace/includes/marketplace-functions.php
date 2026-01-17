@@ -129,10 +129,10 @@ function getCompleteProject($projectIdentifier) {
     // Inicializar secciones vacías
     $project['sections'] = [];
     
-    // Intentar obtener secciones de la landing page (si la tabla existe)
+    // Intentar obtener secciones del proyecto (tabla correcta)
     try {
         $stmt = $db->prepare("
-            SELECT * FROM tbl_marketplace_landing_sections 
+            SELECT * FROM tbl_marketplace_project_sections 
             WHERE project_id = ? AND is_active = TRUE
             ORDER BY display_order ASC
         ");
