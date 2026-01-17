@@ -447,41 +447,10 @@ function deleteProjectTestimonial($testimonialId) {
 // ==================== UTILIDADES ====================
 
 /**
- * Obtener proyecto completo con toda su información
+ * NOTA: La función getCompleteProject() está definida en marketplace-functions.php
+ * para evitar duplicación y conflictos. Esa versión es más flexible y maneja
+ * tanto IDs como códigos de proyecto, además de manejar tablas opcionales.
  */
-function getCompleteProject($projectCode) {
-    $db = getMarketplaceDB();
-    
-    // Proyecto base
-    $stmt = $db->prepare("SELECT * FROM tbl_marketplace_projects WHERE project_code = ?");
-    $stmt->execute([$projectCode]);
-    $project = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    if (!$project) {
-        return null;
-    }
-    
-    $projectId = $project['id'];
-    
-    // Agregar toda la información adicional
-    $project['metadata'] = getProjectMetadata($projectId);
-    $project['sections'] = getProjectSections($projectId);
-    $project['media'] = getProjectMedia($projectId);
-    $project['team'] = getProjectTeam($projectId);
-    $project['faq'] = getProjectFAQs($projectId);
-    $project['testimonials'] = getProjectTestimonials($projectId);
-    
-    // Milestones y documentos (ya existen en el sistema)
-    $stmt = $db->prepare("SELECT * FROM tbl_marketplace_milestones WHERE project_id = ? ORDER BY target_date");
-    $stmt->execute([$projectId]);
-    $project['milestones'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    $stmt = $db->prepare("SELECT * FROM tbl_marketplace_documents WHERE project_id = ? ORDER BY uploaded_at DESC");
-    $stmt->execute([$projectId]);
-    $project['documents'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    return $project;
-}
 
 /**
  * Crear secciones por defecto para un tipo de proyecto
