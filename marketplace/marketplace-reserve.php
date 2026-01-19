@@ -31,9 +31,14 @@ if (!$project) {
     exit;
 }
 
-// Obtener información del usuario incluyendo wallet
+// Obtener información del usuario incluyendo wallet desde tabla separada
 $db = getMarketplaceDB();
-$stmt = $db->prepare("SELECT userUser, nameUser, emailUser, wallet_address FROM tbluser WHERE idUser = ?");
+$stmt = $db->prepare("
+    SELECT u.userUser, u.nameUser, u.emailUser, w.address as wallet_address 
+    FROM tbluser u
+    LEFT JOIN wallet w ON u.idUser = w.userId AND w.isActive = 1
+    WHERE u.idUser = ?
+");
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
