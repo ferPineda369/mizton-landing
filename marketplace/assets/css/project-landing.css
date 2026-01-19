@@ -604,7 +604,8 @@
 
 .section-invest .subtitle {
     color: white;
-    opacity: 0.95;
+    opacity: 1;
+    font-weight: 400;
 }
 
 .invest-stats {
