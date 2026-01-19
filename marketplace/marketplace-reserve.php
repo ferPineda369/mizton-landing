@@ -31,11 +31,16 @@ if (!$project) {
     exit;
 }
 
-// Obtener información del usuario
+// Obtener información del usuario incluyendo wallet
 $db = getMarketplaceDB();
-$stmt = $db->prepare("SELECT userUser, nameUser, emailUser FROM tbluser WHERE idUser = ?");
+$stmt = $db->prepare("SELECT userUser, nameUser, emailUser, wallet_address FROM tbluser WHERE idUser = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Guardar wallet_address en sesión si existe
+if (!empty($user['wallet_address'])) {
+    $_SESSION['wallet_address'] = $user['wallet_address'];
+}
 
 // Generar CSRF token
 if (!isset($_SESSION['csrf_token'])) {
@@ -298,9 +303,10 @@ $pageTitle = 'Reservar Tokens - ' . $project['name'];
                                id="token_amount" 
                                name="token_amount" 
                                min="1" 
-                               step="0.01"
+                               step="1"
+                               value="1"
                                required>
-                        <small class="text-muted">Mínimo: 1 token</small>
+                        <small class="text-muted">Mínimo: 1 token (solo números enteros)</small>
                     </div>
                     
                     <!-- Cálculo Automático -->
@@ -338,6 +344,7 @@ $pageTitle = 'Reservar Tokens - ' . $project['name'];
                                id="wallet_address" 
                                name="wallet_address" 
                                placeholder="0x..." 
+                               value="<?php echo htmlspecialchars($user['wallet_address'] ?? ''); ?>"
                                required>
                         <small class="text-muted">Red: <?php echo htmlspecialchars($project['blockchain_network']); ?></small>
                     </div>
@@ -410,14 +417,20 @@ $pageTitle = 'Reservar Tokens - ' . $project['name'];
 $(document).ready(function() {
     const tokenPrice = <?php echo $project['token_price_usd']; ?>;
     
-    // Calcular total automáticamente
-    $('#token_amount').on('input', function() {
-        const tokens = parseFloat($(this).val()) || 0;
+    // Calcular total automáticamente al cargar y al cambiar
+    function updateCalculation() {
+        const tokens = parseInt($('#token_amount').val()) || 0;
         const total = tokens * tokenPrice;
         
-        $('#calc_tokens').text(tokens.toFixed(2));
+        $('#calc_tokens').text(tokens);
         $('#calc_total').text('$' + total.toFixed(2) + ' USD');
-    });
+    }
+    
+    // Calcular al cargar la página
+    updateCalculation();
+    
+    // Calcular al cambiar el valor
+    $('#token_amount').on('input', updateCalculation);
     
     // Seleccionar método de pago
     $('.payment-method-card').on('click', function() {
