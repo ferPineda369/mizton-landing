@@ -9,6 +9,11 @@ require_once __DIR__ . '/config/project-types-config.php';
 require_once __DIR__ . '/includes/marketplace-functions.php';
 require_once __DIR__ . '/includes/project-metadata-functions.php';
 
+// Detectar si el usuario está autenticado
+$isUserLoggedIn = isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+$userId = $_SESSION['user_id'] ?? null;
+$userName = $_SESSION['user_name'] ?? null;
+
 // Obtener código del proyecto
 $projectCode = $_GET['code'] ?? '';
 

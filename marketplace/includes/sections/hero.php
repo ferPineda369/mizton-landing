@@ -5,8 +5,17 @@
 
 $sectionData = $section['section_data'] ?? [];
 $backgroundImage = $sectionData['background_image'] ?? $project['main_image_url'] ?? '';
-$ctaText = $sectionData['cta_text'] ?? 'Invertir Ahora';
-$ctaLink = $sectionData['cta_link'] ?? '#section-invest';
+
+// Configurar CTA según estado de autenticación
+if ($isUserLoggedIn) {
+    $ctaText = $sectionData['cta_text'] ?? 'Invertir Ahora';
+    $ctaLink = $sectionData['cta_link'] ?? '#section-invest';
+} else {
+    $ctaText = 'Iniciar Sesión para Invertir';
+    $currentUrl = urlencode($_SERVER['REQUEST_URI']);
+    $ctaLink = 'https://panel.mizton.cat/login.php?redirect=' . $currentUrl;
+}
+
 $secondaryCta = $sectionData['secondary_cta'] ?? null;
 
 // Stats para mostrar

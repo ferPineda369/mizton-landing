@@ -4,9 +4,16 @@
  */
 
 $sectionData = $section['section_data'] ?? [];
-$ctaText = $sectionData['cta_text'] ?? 'Invertir Ahora';
-// Enlazar a la página de reserva de tokens del marketplace
-$ctaLink = '/marketplace/marketplace-reserve.php?project_id=' . $project['id'];
+
+// Configurar CTA según estado de autenticación
+if ($isUserLoggedIn) {
+    $ctaText = $sectionData['cta_text'] ?? 'Invertir Ahora';
+    $ctaLink = '/marketplace/marketplace-reserve.php?project_id=' . $project['id'];
+} else {
+    $ctaText = 'Iniciar Sesión para Invertir';
+    $reserveUrl = '/marketplace/marketplace-reserve.php?project_id=' . $project['id'];
+    $ctaLink = 'https://panel.mizton.cat/login.php?redirect=' . urlencode($reserveUrl);
+}
 ?>
 
 <section id="section-invest" class="section section-invest">
@@ -36,9 +43,25 @@ $ctaLink = '/marketplace/marketplace-reserve.php?project_id=' . $project['id'];
         </div>
         
         <div class="invest-cta">
+            <?php if (!$isUserLoggedIn): ?>
+                <p style="margin-bottom: 20px; color: #666; font-size: 0.95rem;">
+                    <i class="bi bi-info-circle"></i> 
+                    Necesitas tener una cuenta en Mizton para realizar reservas de tokens
+                </p>
+            <?php endif; ?>
+            
             <a href="<?php echo htmlspecialchars($ctaLink); ?>" class="btn-invest">
                 <?php echo htmlspecialchars($ctaText); ?>
             </a>
+            
+            <?php if (!$isUserLoggedIn): ?>
+                <p style="margin-top: 15px; font-size: 0.9rem;">
+                    ¿No tienes cuenta? 
+                    <a href="https://panel.mizton.cat/register.php" style="color: #4CAF50; text-decoration: underline;">
+                        Regístrate gratis aquí
+                    </a>
+                </p>
+            <?php endif; ?>
         </div>
     </div>
 </section>
