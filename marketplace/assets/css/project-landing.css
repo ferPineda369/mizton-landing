@@ -602,8 +602,8 @@
     margin-bottom: 20px;
 }
 
-.section-invest .subtitle {
-    color: white;
+.section-invest .section-title .subtitle {
+    color: white !important;
     opacity: 1;
     font-weight: 400;
 }
