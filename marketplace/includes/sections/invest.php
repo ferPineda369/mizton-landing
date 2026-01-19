@@ -9,7 +9,7 @@ $ctaText = $sectionData['cta_text'] ?? 'Invertir Ahora';
 $ctaLink = '/marketplace/marketplace-reserve.php?project_id=' . $project['id'];
 ?>
 
-<section class="section section-invest">
+<section id="section-invest" class="section section-invest">
     <div class="section-container">
         <div class="section-title">
             <h2><?php echo htmlspecialchars($section['section_title'] ?? '¿Listo para Invertir?'); ?></h2>

@@ -6,7 +6,7 @@
 $sectionData = $section['section_data'] ?? [];
 $backgroundImage = $sectionData['background_image'] ?? $project['main_image_url'] ?? '';
 $ctaText = $sectionData['cta_text'] ?? 'Invertir Ahora';
-$ctaLink = $sectionData['cta_link'] ?? '#invest';
+$ctaLink = $sectionData['cta_link'] ?? '#section-invest';
 $secondaryCta = $sectionData['secondary_cta'] ?? null;
 
 // Stats para mostrar
