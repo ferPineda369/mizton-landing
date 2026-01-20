@@ -333,24 +333,34 @@ $pageTitle = 'Reservar Tokens - ' . $project['name'];
                 
                 <!-- Sección 2: Wallet Address -->
                 <div class="form-section">
-                    <h3><i class="bi bi-wallet2 me-2"></i>Wallet para Recibir Tokens</h3>
+                    <h3><i class="bi bi-wallet2 me-2"></i>Wallet para Recibir Tokens <span class="badge bg-secondary">Opcional</span></h3>
+                    
+                    <div class="alert alert-info alert-custom">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <strong>Información:</strong> Si aún no tienes una wallet vinculada, no te preocupes. 
+                        Puedes configurarla más adelante desde tu panel. Mientras tanto, 
+                        <strong>tus tokens reservados quedarán custodiados de forma segura por Mizton</strong> 
+                        hasta que proporciones tu dirección de wallet.
+                    </div>
                     
                     <div class="alert alert-warning alert-custom">
                         <i class="bi bi-exclamation-triangle me-2"></i>
-                        <strong>Importante:</strong> Asegúrate de proporcionar una wallet válida en la red 
+                        <strong>Si proporcionas una wallet:</strong> Asegúrate de que sea válida en la red 
                         <strong><?php echo htmlspecialchars($project['blockchain_network']); ?></strong>. 
-                        Los tokens se enviarán a esta dirección.
+                        Los tokens se enviarán a esta dirección una vez aprobada tu reserva.
                     </div>
                     
                     <div class="mb-3">
-                        <label for="wallet_address" class="form-label">Dirección de Wallet</label>
+                        <label for="wallet_address" class="form-label">
+                            Dirección de Wallet 
+                            <small class="text-muted">(Opcional - puedes configurarla después)</small>
+                        </label>
                         <input type="text" 
                                class="form-control form-control-lg" 
                                id="wallet_address" 
                                name="wallet_address" 
-                               placeholder="0x..." 
-                               value="<?php echo htmlspecialchars($user['wallet_address'] ?? ''); ?>"
-                               required>
+                               placeholder="0x... (Opcional - déjalo vacío si no tienes wallet)" 
+                               value="<?php echo htmlspecialchars($user['wallet_address'] ?? ''); ?>">
                         <small class="text-muted">Red: <?php echo htmlspecialchars($project['blockchain_network']); ?></small>
                     </div>
                 </div>
