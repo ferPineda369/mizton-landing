@@ -464,9 +464,10 @@ $(document).ready(function() {
             return;
         }
         
+        // Validar wallet solo si se proporciona
         const wallet = $('#wallet_address').val().trim();
-        if (!wallet.match(/^0x[a-fA-F0-9]{40}$/)) {
-            alert('Por favor ingresa una dirección de wallet válida');
+        if (wallet && !wallet.match(/^0x[a-fA-F0-9]{40}$/)) {
+            alert('La dirección de wallet proporcionada no es válida. Debe comenzar con 0x seguido de 40 caracteres hexadecimales.');
             return;
         }
         
