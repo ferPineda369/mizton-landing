@@ -369,6 +369,11 @@ $pageTitle = 'Reservar Tokens - ' . $project['name'];
                 <div class="form-section">
                     <h3><i class="bi bi-credit-card me-2"></i>Método de Pago</h3>
                     
+                    <div id="payment-method-error" class="alert alert-danger" style="display: none;">
+                        <i class="bi bi-exclamation-circle me-2"></i>
+                        <strong>Debes seleccionar un método de pago</strong>
+                    </div>
+                    
                     <div class="payment-method-card" data-method="crypto">
                         <input type="radio" name="payment_method" value="crypto" id="method_crypto" required>
                         <label for="method_crypto" class="mb-0">
@@ -454,6 +459,11 @@ $(document).ready(function() {
         $(this).find('input[type="radio"]').prop('checked', true);
     });
     
+    // Limpiar mensaje de error cuando se selecciona un método de pago
+    $('input[name="payment_method"]').on('change', function() {
+        $('#payment-method-error').hide();
+    });
+    
     // Enviar formulario
     $('#reserveForm').on('submit', function(e) {
         e.preventDefault();
@@ -468,6 +478,16 @@ $(document).ready(function() {
         const wallet = $('#wallet_address').val().trim();
         if (wallet && !wallet.match(/^0x[a-fA-F0-9]{40}$/)) {
             alert('La dirección de wallet proporcionada no es válida. Debe comenzar con 0x seguido de 40 caracteres hexadecimales.');
+            return;
+        }
+        
+        // Validar que se haya seleccionado un método de pago
+        const paymentMethod = $('input[name="payment_method"]:checked').val();
+        if (!paymentMethod) {
+            $('#payment-method-error').show();
+            $('html, body').animate({
+                scrollTop: $('#payment-method-error').offset().top - 100
+            }, 500);
             return;
         }
         
