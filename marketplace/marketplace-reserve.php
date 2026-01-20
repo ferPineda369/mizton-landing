@@ -375,7 +375,7 @@ $pageTitle = 'Reservar Tokens - ' . $project['name'];
                     </div>
                     
                     <div class="payment-method-card" data-method="crypto">
-                        <input type="radio" name="payment_method" value="crypto" id="method_crypto" required>
+                        <input type="radio" name="payment_method" value="crypto" id="method_crypto">
                         <label for="method_crypto" class="mb-0">
                             <i class="bi bi-currency-bitcoin me-2"></i>
                             <strong>Criptomonedas</strong>
