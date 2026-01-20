@@ -36,13 +36,14 @@ try {
         throw new Exception('Cantidad de tokens inválida (mínimo 1)');
     }
     
-    if (empty($walletAddress)) {
-        throw new Exception('Dirección de wallet requerida');
+    // Validar formato de wallet solo si se proporciona
+    if (!empty($walletAddress) && !preg_match('/^0x[a-fA-F0-9]{40}$/', $walletAddress)) {
+        throw new Exception('Formato de wallet inválido');
     }
     
-    // Validar formato de wallet (Ethereum/BSC)
-    if (!preg_match('/^0x[a-fA-F0-9]{40}$/', $walletAddress)) {
-        throw new Exception('Formato de wallet inválido');
+    // Si no se proporciona wallet, usar NULL para indicar custodia por Mizton
+    if (empty($walletAddress)) {
+        $walletAddress = null;
     }
     
     if (!in_array($paymentMethod, ['crypto', 'bank_transfer', 'paypal', 'stripe', 'other'])) {
