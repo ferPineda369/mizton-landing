@@ -369,7 +369,7 @@ $pageTitle = 'Reservar Tokens - ' . $project['name'];
                 <div class="form-section">
                     <h3><i class="bi bi-credit-card me-2"></i>Método de Pago</h3>
                     
-                    <div id="payment-method-error" class="alert alert-danger" style="display: none;">
+                    <div id="payment-method-error" class="alert alert-danger" style="display: none; margin-bottom: 20px;">
                         <i class="bi bi-exclamation-circle me-2"></i>
                         <strong>Debes seleccionar un método de pago</strong>
                     </div>
@@ -461,7 +461,7 @@ $(document).ready(function() {
     
     // Limpiar mensaje de error cuando se selecciona un método de pago
     $('input[name="payment_method"]').on('change', function() {
-        $('#payment-method-error').hide();
+        $('#payment-method-error').fadeOut(300);
     });
     
     // Enviar formulario
@@ -483,10 +483,14 @@ $(document).ready(function() {
         
         // Validar que se haya seleccionado un método de pago
         const paymentMethod = $('input[name="payment_method"]:checked').val();
+        console.log('Payment method selected:', paymentMethod);
         if (!paymentMethod) {
-            $('#payment-method-error').show();
+            console.log('No payment method selected, showing error');
+            const errorElement = $('#payment-method-error');
+            console.log('Error element found:', errorElement.length);
+            errorElement.css('display', 'block');
             $('html, body').animate({
-                scrollTop: $('#payment-method-error').offset().top - 100
+                scrollTop: errorElement.offset().top - 100
             }, 500);
             return;
         }
