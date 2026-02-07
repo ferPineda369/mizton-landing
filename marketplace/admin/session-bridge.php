@@ -11,22 +11,31 @@ if (session_status() === PHP_SESSION_NONE) {
     $domain = '';
     
     // En producción, usar dominio base para compartir sesión entre subdominios
+    // En localhost, NO configurar dominio para evitar problemas de redirección
     if (strpos($host, 'mizton.cat') !== false) {
         $domain = '.mizton.cat'; // El punto inicial permite compartir entre subdominios
     } elseif (strpos($host, 'publiaxion.com') !== false) {
         $domain = '.publiaxion.com';
     }
+    // Si es localhost, $domain queda vacío (comportamiento por defecto de PHP)
     
     // Configurar parámetros de cookie ANTES de session_start()
     session_name('PHPSESSID');
-    session_set_cookie_params([
+    
+    $cookieParams = [
         'lifetime' => 0,
         'path' => '/',
-        'domain' => $domain,
         'secure' => !empty($_SERVER['HTTPS']),
         'httponly' => true,
         'samesite' => 'Lax'
-    ]);
+    ];
+    
+    // Solo agregar dominio si no es localhost
+    if (!empty($domain)) {
+        $cookieParams['domain'] = $domain;
+    }
+    
+    session_set_cookie_params($cookieParams);
     
     // Iniciar sesión (usará automáticamente la cookie PHPSESSID si existe)
     session_start();
