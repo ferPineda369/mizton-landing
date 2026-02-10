@@ -23,7 +23,7 @@ RewriteRule ^news/([a-zA-Z0-9-]+)/([a-zA-Z0-9]{6})/?$ news/post.php?slug=$1&ref=
 # 3. Posts sin referido: /news/slug-del-post (debe ir al final)
 RewriteRule ^news/([a-zA-Z0-9-]+)/?$ news/post.php?slug=$1 [L,QSA]
 
-# Reglas para códigos de referido en landing (DESPUÉS DE NEWS)
+# Reglas para códigos de referido - Redirigir a panel/register.php
 # Excluir directorios y archivos existentes
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
@@ -34,13 +34,14 @@ RewriteCond %{REQUEST_URI} !^/(news|blog|api|assets|config|includes|docs|admin)(
 # Excluir archivos con extensiones comunes
 RewriteCond %{REQUEST_URI} !^/.*\.(php|html|css|js|jpg|jpeg|png|gif|svg|ico|pdf|zip|txt|xml|json)$
 
-# Capturar códigos de referido de exactamente 6 caracteres alfanuméricos (landing)
-RewriteRule ^([a-zA-Z0-9]{6})/?$ index.php?ref=$1 [L,QSA]
+# Capturar códigos de referido de exactamente 6 caracteres alfanuméricos
+# Redirigir a panel.mizton.cat/register.php con el código de referido
+RewriteRule ^([a-zA-Z0-9]{6})/?$ https://panel.mizton.cat/register.php?ref=$1 [R=302,L,QSA]
 
-# Redireccionar URLs con parámetro ref a formato limpio (opcional, para SEO)
+# Redireccionar URLs antiguas con parámetro ref al nuevo formato
 RewriteCond %{QUERY_STRING} ^ref=([a-zA-Z0-9]{6})$
-RewriteRule ^index\.php$ /%1? [R=301,L]
+RewriteRule ^index\.php$ https://panel.mizton.cat/register.php?ref=%1 [R=302,L]
 
-# Redireccionar URLs con parámetro ref a formato limpio desde raíz
+# Redireccionar desde raíz con parámetro ref
 RewriteCond %{QUERY_STRING} ^ref=([a-zA-Z0-9]{6})$
-RewriteRule ^$ /%1? [R=301,L]
+RewriteRule ^$ https://panel.mizton.cat/register.php?ref=%1 [R=302,L]
