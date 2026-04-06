@@ -439,9 +439,6 @@
                 <a href="#buy-now" class="btn btn-primary btn-xlarge">
                     COMPRAR AHORA $25 KIMEN
                 </a>
-                <a href="https://wa.me/522226536090" target="_blank" class="btn btn-outline btn-xlarge">
-                    CONTACTAR WHATSAPP
-                </a>
             </div>
             
             <div class="social-links">

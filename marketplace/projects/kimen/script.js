@@ -14,9 +14,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
 // Countdown Timer
 function updateCountdown() {
-    // Set target date (example: 30 days from now)
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + 30);
+    // Set target date: June 15, 2026
+    const targetDate = new Date('2026-06-15T23:59:59');
     
     const now = new Date().getTime();
     const distance = targetDate - now;
@@ -144,10 +143,10 @@ document.head.appendChild(style);
 // Live stats simulation (replace with real API calls)
 function updateLiveStats() {
     // Simulate token sales progress
-    const tokensSold = 234; // Replace with actual data
+    const tokensSold = 34; // Replace with actual data
     const totalTokens = 800;
     const percentSold = Math.round((tokensSold / totalTokens) * 100);
-    const totalRaised = tokensSold * 25;
+    const totalRaised = 850;
     
     const tokensSoldEl = document.getElementById('tokensSold');
     const percentSoldEl = document.getElementById('percentSold');
@@ -161,16 +160,7 @@ function updateLiveStats() {
 // Update stats on load
 updateLiveStats();
 
-// Parallax effect for hero section
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const hero = document.querySelector('.hero-section');
-    
-    if (hero && scrolled < window.innerHeight) {
-        hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-        hero.style.opacity = 1 - (scrolled / window.innerHeight);
-    }
-});
+// Parallax effect removed - was causing slow/transparent effect
 
 // Add hover effect to book cover
 const bookCover = document.querySelector('.book-cover');

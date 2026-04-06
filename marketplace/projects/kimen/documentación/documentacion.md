@@ -798,3 +798,24 @@ KIMEN: Donde la narrativa encuentra la descentralización.
 
 ***
 
+
+
+Actualmente tenemos un Supply Circulante de 33 tokens.
+Recaudado de $825
+Lanzamiento Agosto 2026
+En lugar del botón "Descargar capítulo 1 gratis", El botón debería decir "Sinopsis" y al dar clic, desplegar una sección con el texto:
+"Una épica batalla entre lo eterno y lo efímero
+
+Un error estructural en la realidad genera una falla en el espacio-tiempo que afecta la onceava dimensión, haciéndola canibalizar las dimensiones inferiores. Los Dueños de la Nada, entidades primordiales que consideran la existencia como una anomalía intolerable, descienden al campo de la carne para borrar el universo.
+
+Ante esta amenaza absoluta, la humanidad responde con lo impensable: guerreros de todas las eras, dioses que pueden sangrar, monstruos que pueden caer y héroes olvidados marchan juntos en la negativa final a desaparecer. Esta es la historia de la última batalla entre lo infinito y lo efímero, donde la voluntad de vivir desafía al vacío eterno."
+
+Donde dice ültmios 800 kimen, debería ser el restante de 800 - Supply circulante
+Este supply debe ser una variable para poder actualizar siempre los datos por lo que el index debe ser .php cosa que ya realicé.
+
+En lugar de "Venta cierra en:" -> "Lanzamiento oficial:"
+No está funcionando el temporizador js y se tiene que ajustar desde el día de hoy al lanzamiento el día 15 de Agosto de 2026.
+Igualmente revisar lo que dice Tokens vendidos, Recaudado.
+
+El botón "Comprar Ahora $25 KIMEN" debe dirigir a https://panel.mizton.cat/marketplace-reserve-token.php?project_id=10
+
