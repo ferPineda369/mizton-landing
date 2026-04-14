@@ -86,10 +86,19 @@ include 'config.php';
                 <a href="meeting.php<?php echo isset($_SESSION['referido']) ? '?ref=' . $_SESSION['referido'] : ''; ?>" class="meeting-nav">
                     <i class="fas fa-video"></i> <?= __('lp.nav_presentation') ?>
                 </a>
-                <div class="lang-switcher">
-                    <a href="<?= getLangUrl('es') ?>" class="lang-btn<?= $currentLang === 'es' ? ' active' : '' ?>" title="<?= __('lp.lang_es') ?>">🇲🇽 ES</a>
-                    <span class="lang-sep">|</span>
-                    <a href="<?= getLangUrl('en') ?>" class="lang-btn<?= $currentLang === 'en' ? ' active' : '' ?>" title="<?= __('lp.lang_en') ?>">🇺🇸 EN</a>
+                <div class="lang-dropdown" id="langDropdown">
+                    <button class="lang-dropdown-btn" onclick="document.getElementById('langDropdown').classList.toggle('open')">
+                        <?= $currentLang === 'es' ? '🇲🇽 ES' : '🇺🇸 EN' ?>
+                        <i class="fas fa-chevron-down lang-chevron"></i>
+                    </button>
+                    <div class="lang-dropdown-menu">
+                        <a href="<?= getLangUrl('es') ?>" class="lang-option<?= $currentLang === 'es' ? ' active' : '' ?>">
+                            🇲🇽 Español
+                        </a>
+                        <a href="<?= getLangUrl('en') ?>" class="lang-option<?= $currentLang === 'en' ? ' active' : '' ?>">
+                            🇺🇸 English
+                        </a>
+                    </div>
                 </div>
                 <a href="#unirse" class="cta-nav"><?= __('lp.nav_join') ?></a>
             </div>
@@ -568,6 +577,12 @@ include 'config.php';
         </div>
     </footer>
 
+    <script>
+    document.addEventListener('click', function(e) {
+        var dd = document.getElementById('langDropdown');
+        if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+    });
+    </script>
     <script src="script.js"></script>
     <script src="chat-widget-fixed.js"></script>
     <script src="facebook-pixel-events.js"></script>

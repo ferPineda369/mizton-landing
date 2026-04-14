@@ -92,9 +92,9 @@ function __($key, $replacements = []) {
  * @return string  URL relativa: /es, /us o /es?ref=XXX, /us?ref=XXX
  */
 function getLangUrl($lang) {
-    $path = ($lang === 'en') ? '/us' : '/es';
-    $ref  = (isset($_SESSION['referido']) && !empty($_SESSION['referido']))
-              ? '?ref=' . $_SESSION['referido']
-              : '';
-    return $path . $ref;
+    $params = ['lang' => $lang];
+    if (isset($_SESSION['referido']) && !empty($_SESSION['referido'])) {
+        $params['ref'] = $_SESSION['referido'];
+    }
+    return '?' . http_build_query($params);
 }
