@@ -377,7 +377,6 @@ if (session_status() === PHP_SESSION_NONE) {
                 <h2 id="prohibiciones">11. Conductas Prohibidas</h2>
                 <p>Está estrictamente prohibido:</p>
                 <ul>
-                    <li>Crear múltiples cuentas para una misma persona.</li>
                     <li>Proporcionar información falsa o engañosa.</li>
                     <li>Manipular el sistema de referidos de forma fraudulenta.</li>
                     <li>Realizar actividades de lavado de dinero o financiamiento ilícito.</li>

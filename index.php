@@ -26,21 +26,23 @@ if (isset($_GET['ref'])) {
 }
 
 include 'config.php';
+require_once 'lang/loader.php';
 
+$currentLang = getCurrentLang();
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= __('lp.html_lang') ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mizton - La ÚNICA Membresía Financiera Colectiva</title>
-    <meta name="description" content="Invierte $20 USD en un futuro financiero seguro, innovador y comunitario. Bonos únicos en la industria. Conócelos.">
+    <title><?= __('lp.meta_title') ?></title>
+    <meta name="description" content="<?= __('lp.meta_desc') ?>">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mizton.cat/">
-    <meta property="og:title" content="Mizton - La ÚNICA Membresía Financiera Colectiva">
-    <meta property="og:description" content="Invierte $20 USD en un futuro financiero seguro, innovador y comunitario. Bonos únicos en la industria. Conócelos.">
+    <meta property="og:title" content="<?= __('lp.meta_title') ?>">
+    <meta property="og:description" content="<?= __('lp.meta_desc') ?>">
     <meta property="og:image" content="https://mizton.cat/social-preview.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -49,12 +51,12 @@ include 'config.php';
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://mizton.cat/">
-    <meta property="twitter:title" content="Mizton - La ÚNICA Membresía Financiera Colectiva">
-    <meta property="twitter:description" content="Invierte $20 USD en un futuro financiero seguro, innovador y comunitario. Bonos únicos en la industria. Conócelos.">
+    <meta property="twitter:title" content="<?= __('lp.meta_title') ?>">
+    <meta property="twitter:description" content="<?= __('lp.meta_desc') ?>">
     <meta property="twitter:image" content="https://mizton.cat/social-preview.jpg">
     
     <!-- WhatsApp -->
-    <meta property="og:locale" content="es_ES">
+    <meta property="og:locale" content="<?= __('lp.og_locale') ?>">
     
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -77,14 +79,19 @@ include 'config.php';
             </div>
             <div class="nav-links">
                 <a href="marketplace/" target="_blank">Marketplace</a>
-                <a href="#como-funciona">¿Cómo Funciona?</a>
-                <a href="#beneficios">Beneficios</a>
-                <a href="#faq">FAQ</a>
-                <a href="news/" target="_blank">News</a>
+                <a href="#como-funciona"><?= __('lp.nav_how') ?></a>
+                <a href="#beneficios"><?= __('lp.nav_benefits') ?></a>
+                <a href="#faq"><?= __('lp.nav_faq') ?></a>
+                <a href="news/" target="_blank"><?= __('lp.nav_news') ?></a>
                 <a href="meeting.php<?php echo isset($_SESSION['referido']) ? '?ref=' . $_SESSION['referido'] : ''; ?>" class="meeting-nav">
-                    <i class="fas fa-video"></i> Presentación
+                    <i class="fas fa-video"></i> <?= __('lp.nav_presentation') ?>
                 </a>
-                <a href="#unirse" class="cta-nav">Únete Ahora</a>
+                <div class="lang-switcher">
+                    <a href="<?= getLangUrl('es') ?>" class="lang-btn<?= $currentLang === 'es' ? ' active' : '' ?>" title="<?= __('lp.lang_es') ?>">🇲🇽 ES</a>
+                    <span class="lang-sep">|</span>
+                    <a href="<?= getLangUrl('en') ?>" class="lang-btn<?= $currentLang === 'en' ? ' active' : '' ?>" title="<?= __('lp.lang_en') ?>">🇺🇸 EN</a>
+                </div>
+                <a href="#unirse" class="cta-nav"><?= __('lp.nav_join') ?></a>
             </div>
             <div class="mobile-menu-toggle">
                 <span></span>
@@ -102,11 +109,11 @@ include 'config.php';
         <div class="container">
             <div class="hero-content">
                 <h1 class="hero-title"><br>
-                    <span class="hero-title-main">Forma parte del Movimiento que Cambiará la Economía:</span>
-                    <span class="highlight">Una Membresía que podrías recuperar?</span>
+                    <span class="hero-title-main"><?= __('lp.hero_title_main') ?></span>
+                    <span class="highlight"><?= __('lp.hero_title_sub') ?></span>
                 </h1>
                 <p class="hero-subtitle">
-                Participa desde $20 USD en una propuesta innovadora y comunitaria. Construye junto a nosotros nuevas formas de gestionar tu economía familiar.
+                <?= __('lp.hero_subtitle') ?>
                 </p>
                 
                 <!-- Información del referido (se muestra si hay código válido) -->
@@ -114,36 +121,36 @@ include 'config.php';
                     <div class="referral-card">
                         <div class="referral-header">
                             <i class="fas fa-user-friends"></i>
-                            <span>Invitado por</span>
+                            <span><?= __('lp.hero_invited_by') ?></span>
                         </div>
                         <div class="referral-content">
-                            <h4 id="referrer-name">Cargando...</h4>
-                            <p id="referrer-type">Tipo de miembro</p>
+                            <h4 id="referrer-name"><?= __('lp.hero_loading') ?></h4>
+                            <p id="referrer-type"><?= __('lp.hero_member_type') ?></p>
                         </div>
                     </div>
                 </div>
                 <div class="hero-ctas">
                     <a href="#unirse" class="btn btn-primary">
                         <i class="fas fa-rocket"></i>
-                        Quiero Unirme Ahora
+                        <?= __('lp.hero_btn_join') ?>
                     </a>
                     <a href="#whatsapp" class="btn btn-secondary">
                         <i class="fab fa-whatsapp"></i>
-                        Quiero saber más
+                        <?= __('lp.hero_btn_more') ?>
                     </a>
                 </div>
                 <div class="hero-stats">
                     <div class="stat">
                         <span class="stat-number">100%</span>
-                        <span class="stat-label">Opcionalmente solicita tu aporte</span>
+                        <span class="stat-label"><?= __('lp.stat1_label') ?></span>
                     </div>
                     <div class="stat">
                         <span class="stat-number">976+</span>
-                        <span class="stat-label">Comunidad creciente</span>
+                        <span class="stat-label"><?= __('lp.stat2_label') ?></span>
                     </div>
                     <div class="stat">
                         <span class="stat-number">$20</span>
-                        <span class="stat-label">Participación accesible desde</span>
+                        <span class="stat-label"><?= __('lp.stat3_label') ?></span>
                     </div>
                 </div>
             </div>
@@ -154,17 +161,15 @@ include 'config.php';
     <section class="value-proposition">
         <div class="container">
             <div class="section-header">
-                <h2>Participación transparente, gestionada por contratos inteligentes públicos.</h2>
+                <h2><?= __('lp.value_title') ?></h2>
             </div>
             <div class="value-content">
                 <div class="value-text">
                     <p class="value-main">
-                    Participa hoy al menos durante <strong>360 días</strong> para probar la comunidad.
-                    Mientras tanto, disfruta <strong>ganancias mensuales automáticas</strong> gracias a contratos inteligentes.
+                    <?= __('lp.value_main') ?>
                     </p>
                     <p class="value-secondary">
-                        En Mizton tú decides: <strong>esperar y ganar con la comunidad</strong> o 
-                        acceder a <strong>recompra con liquidez real</strong>.
+                        <?= __('lp.value_secondary') ?>
                     </p>
                 </div>
                 <div class="value-visual">
@@ -173,21 +178,21 @@ include 'config.php';
                             <div class="step-icon">
                                 <i class="fas fa-dollar-sign"></i>
                             </div>
-                            <span>Participa con $20+</span>
+                            <span><?= __('lp.flow_step1') ?></span>
                         </div>
                         <div class="flow-arrow">→</div>
                         <div class="flow-step">
                             <div class="step-icon">
                                 <i class="fas fa-calendar-alt"></i>
                             </div>
-                            <span>360 días</span>
+                            <span><?= __('lp.flow_step2') ?></span>
                         </div>
                         <div class="flow-arrow">→</div>
                         <div class="flow-step">
                             <div class="step-icon">
                                 <i class="fas fa-chart-line"></i>
                             </div>
-                            <span>Beneficios por Smart Contracts</span>
+                            <span><?= __('lp.flow_step3') ?></span>
                         </div>
                     </div>
                 </div>
@@ -199,20 +204,12 @@ include 'config.php';
     <section class="storytelling">
         <div class="container">
             <div class="story-content">
-                <h2>Únete a la Revolución Financiera</h2>
+                <h2><?= __('lp.story_title') ?></h2>
                 <div class="story-text">
-                    <p>
-                        La humanidad está despertando a una <strong>revolución financiera</strong> que cambiará 
-                        todo lo que conocemos. Mizton es tu puerta al nuevo paradigma: una 
-                        <strong>comunidad global</strong> de personas que apuestan por la tokenización 
-                        para blindar sus economías familiares y construir un legado real.
-                    </p>
-                    <p>
-                        Es hora de dejar atrás los modelos antiguos y sumarte a un movimiento 
-                        <strong>disruptivo, inclusivo y con un futuro prometedor</strong>. 
-                    </p>
+                    <p><?= __('lp.story_p1') ?></p>
+                    <p><?= __('lp.story_p2') ?></p>
                     <div class="story-question">
-                        <strong>¿Estás listo para ser pionero?</strong>
+                        <strong><?= __('lp.story_question') ?></strong>
                     </div>
                 </div>
             </div>
@@ -230,39 +227,35 @@ include 'config.php';
                         </div>
                         <div class="live-indicator">
                             <span class="live-dot"></span>
-                            EN VIVO
+                            <?= __('lp.pres_live') ?>
                         </div>
                     </div>
                 </div>
                 <div class="invitation-text">
-                    <h2>Descubre la Narrativa que está Cambiando la Economía Mundial</h2>
-                    <p class="invitation-description">
-                        Únete a nuestra <strong>presentación exclusiva</strong> donde revelamos cómo la 
-                        <strong>tokenización de activos del mundo real</strong> está revolucionando las finanzas 
-                        globales y cómo puedes ser parte de esta transformación.
-                    </p>
+                    <h2><?= __('lp.pres_title') ?></h2>
+                    <p class="invitation-description"><?= __('lp.pres_desc') ?></p>
                     <div class="invitation-highlights">
                         <div class="highlight-item">
                             <i class="fas fa-calendar-check"></i>
-                            <span>Presentaciones diarias en vivo</span>
+                            <span><?= __('lp.pres_hi1') ?></span>
                         </div>
                         <div class="highlight-item">
                             <i class="fas fa-users"></i>
-                            <span>Acceso completamente gratuito</span>
+                            <span><?= __('lp.pres_hi2') ?></span>
                         </div>
                         <div class="highlight-item">
                             <i class="fas fa-lightbulb"></i>
-                            <span>Conoce la tecnología del futuro</span>
+                            <span><?= __('lp.pres_hi3') ?></span>
                         </div>
                     </div>
                     <div class="invitation-cta">
                         <a href="meeting.php<?php echo isset($_SESSION['referido']) ? '?ref=' . $_SESSION['referido'] : ''; ?>" class="btn btn-presentation">
                             <i class="fas fa-video"></i>
-                            Ver Presentación Ahora
+                            <?= __('lp.pres_btn') ?>
                         </a>
                         <p class="cta-note">
                             <i class="fas fa-info-circle"></i>
-                            Descubre por qué miles ya están participando en esta revolución
+                            <?= __('lp.pres_note') ?>
                         </p>
                     </div>
                 </div>
@@ -274,41 +267,27 @@ include 'config.php';
     <section class="rwa-section">
         <div class="container">
             <div class="section-header">
-                <h2>¿Por qué es crucial involucrarse en la tokenización RWA hoy?</h2>
+                <h2><?= __('lp.rwa_title') ?></h2>
             </div>
             <div class="rwa-content">
                 <div class="rwa-text">
-                    <p>
-                        Vivimos en una era donde la economía global está experimentando un 
-                        <strong>cambio sin precedentes</strong>. La tokenización de activos del mundo real (RWA) 
-                        representa la evolución natural del dinero, la economía y la inversión, 
-                        digitalizando bienes y oportunidades que antes estaban fuera del alcance de la mayoría.
-                    </p>
-                    <p>
-                        Desde propiedades inmobiliarias, metales preciosos, hasta proyectos productivos, 
-                        todo ahora puede convertirse en un token que se compra, vende y posee de manera 
-                        <strong>segura y transparente</strong> en la blockchain.
-                    </p>
+                    <p><?= __('lp.rwa_p1') ?></p>
+                    <p><?= __('lp.rwa_p2') ?></p>
                     <div class="rwa-benefits">
                         <div class="benefit-item">
                             <i class="fas fa-democratize"></i>
-                            <span>Democratiza el acceso</span>
+                            <span><?= __('lp.rwa_b1') ?></span>
                         </div>
                         <div class="benefit-item">
                             <i class="fas fa-cut"></i>
-                            <span>Reduce intermediarios</span>
+                            <span><?= __('lp.rwa_b2') ?></span>
                         </div>
                         <div class="benefit-item">
                             <i class="fas fa-shield-alt"></i>
-                            <span>Mayor flexibilidad y menor riesgo</span>
+                            <span><?= __('lp.rwa_b3') ?></span>
                         </div>
                     </div>
-                    <p>
-                        Al unirte a Mizton, no sólo adquieres tokens; te integras en una 
-                        <strong>comunidad global</strong> que comparte conocimiento, oportunidades y ganancias. 
-                        Es una forma de <strong>protección financiera activa</strong>, participativa y 
-                        alineada con las tendencias más innovadoras del siglo XXI.
-                    </p>
+                    <p><?= __('lp.rwa_p3') ?></p>
                 </div>
             </div>
         </div>
@@ -318,36 +297,36 @@ include 'config.php';
     <section id="como-funciona" class="how-it-works">
         <div class="container">
             <div class="section-header">
-                <h2>¿Cómo Funciona?</h2>
-                <p>Un proceso simple y transparente en 4 pasos</p>
+                <h2><?= __('lp.how_title') ?></h2>
+                <p><?= __('lp.how_subtitle') ?></p>
             </div>
             <div class="steps-container">
                 <div class="step">
                     <div class="step-number">1</div>
                     <div class="step-content">
-                        <h3>Paquete de Participación</h3>
-                        <p>Participa desde un paquete de <strong>$20 USD</strong> y recibe tokens Mizton.</p>
+                        <h3><?= __('lp.how_step1_title') ?></h3>
+                        <p><?= __('lp.how_step1_text') ?></p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h3>Período de Vesting</h3>
-                        <p>Tus tokens quedan en vesting durante <strong>360 días</strong>, período en el que recibirás <strong>ganancias mensuales</strong> distribuidas automáticamente.</p>
+                        <h3><?= __('lp.how_step2_title') ?></h3>
+                        <p><?= __('lp.how_step2_text') ?></p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h3>Tú Decides</h3>
-                        <p>Tras el periodo de vesting, puedes optar por retirar tu aporte inicial y acceder a potenciales bonos adicionales conforme al desempeño comunitario y del contrato inteligente.</p>
+                        <h3><?= __('lp.how_step3_title') ?></h3>
+                        <p><?= __('lp.how_step3_text') ?></p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">4</div>
                     <div class="step-content">
-                        <h3>Liquidez disponible</h3>
-                        <p>Para salir sólo retira tu paquete de tokens y recibe <strong>liquidez disponible</strong> al finalizar el periodo de vesting sujeta a condiciones de la plataforma, del contrato inteligente y la dinámica de la comunidad.</p>
+                        <h3><?= __('lp.how_step4_title') ?></h3>
+                        <p><?= __('lp.how_step4_text') ?></p>
                     </div>
                 </div>
             </div>
@@ -358,51 +337,39 @@ include 'config.php';
     <section id="beneficios" class="benefits">
         <div class="container">
             <div class="section-header">
-                <h2>Beneficios Exclusivos</h2>
-                <p>Ventajas únicas que solo encontrarás en Mizton</p>
+                <h2><?= __('lp.ben_title') ?></h2>
+                <p><?= __('lp.ben_subtitle') ?></p>
             </div>
             <div class="benefits-grid">
                 <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i class="fas fa-shield-alt"></i>
-                    </div>
-                    <h3>Opción de solicitar la devolución del 100% del aporte</h3>
-                    <p>Tras el periodo de participación, más la posibilidad de bono adicional según los términos del contrato inteligente. Consulta términos y condiciones para más detalles.</p>
+                    <div class="benefit-icon"><i class="fas fa-shield-alt"></i></div>
+                    <h3><?= __('lp.ben1_title') ?></h3>
+                    <p><?= __('lp.ben1_text') ?></p>
                 </div>
                 <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i class="fas fa-coins"></i>
-                    </div>
-                    <h3>Ganancias Automáticas</h3>
-                    <p>Si continúas con nosotros, obtén ganancias mensuales automáticas mediante contratos inteligentes.</p>
+                    <div class="benefit-icon"><i class="fas fa-coins"></i></div>
+                    <h3><?= __('lp.ben2_title') ?></h3>
+                    <p><?= __('lp.ben2_text') ?></p>
                 </div>
                 <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3>Comunidad Innovadora</h3>
-                    <p>Forma parte de la comunidad cripto más innovadora y conecta con pioneros como tú.</p>
+                    <div class="benefit-icon"><i class="fas fa-users"></i></div>
+                    <h3><?= __('lp.ben3_title') ?></h3>
+                    <p><?= __('lp.ben3_text') ?></p>
                 </div>
                 <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    <h3>Transforma tu Economía</h3>
-                    <p>Oportunidad accesible y real para transformar tu economía familiar desde $20 USD.</p>
+                    <div class="benefit-icon"><i class="fas fa-home"></i></div>
+                    <h3><?= __('lp.ben4_title') ?></h3>
+                    <p><?= __('lp.ben4_text') ?></p>
                 </div>
                 <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <h3>Bonos Exclusivos</h3>
-                    <p>Accede a bonos exclusivos por ser pionero y por referidos que invites a la comunidad.</p>
+                    <div class="benefit-icon"><i class="fas fa-star"></i></div>
+                    <h3><?= __('lp.ben5_title') ?></h3>
+                    <p><?= __('lp.ben5_text') ?></p>
                 </div>
                 <div class="benefit-card">
-                    <div class="benefit-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <h3>Educación Financiera</h3>
-                    <p>Accede a masterclasses exclusivas y contenido educativo para crecer financieramente.</p>
+                    <div class="benefit-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3><?= __('lp.ben6_title') ?></h3>
+                    <p><?= __('lp.ben6_text') ?></p>
                 </div>
             </div>
         </div>
@@ -412,16 +379,16 @@ include 'config.php';
     <section id="unirse" class="cta-section">
         <div class="container">
             <div class="cta-content">
-                <h2>¡Únete hoy mismo!</h2>
-                <p>Descubre como participar en la nueva economía y cómo beneficiarte de ello.</p>
+                <h2><?= __('lp.cta_title') ?></h2>
+                <p><?= __('lp.cta_text') ?></p>
                 <div class="cta-buttons">
                     <a href="#registro" class="btn btn-primary btn-large">
                         <i class="fas fa-rocket"></i>
-                        Quiero Unirme Ahora
+                        <?= __('lp.cta_btn_join') ?>
                     </a>
                     <a href="#whatsapp" class="btn btn-secondary btn-large">
                         <i class="fab fa-whatsapp"></i>
-                        Quiero saber más
+                        <?= __('lp.cta_btn_more') ?>
                     </a>
                 </div>
             </div>
@@ -432,11 +399,9 @@ include 'config.php';
     <section class="testimonials">
         <div class="container">
             <div class="section-header">
-                <h2>Testimonios y Comunidad</h2>
-                <p class="community-quote">
-                    "Ya somos <strong>cientos de pioneros</strong> formando una comunidad sólida preparada para la nueva economía mundial."
-                </p>
-                <span class="community-signature">- Comunidad Mizton</span>
+                <h2><?= __('lp.testi_title') ?></h2>
+                <p class="community-quote"><?= __('lp.testi_quote') ?></p>
+                <span class="community-signature"><?= __('lp.testi_sign') ?></span>
             </div>
             <!--div class="testimonials-grid">
                 <div class="testimonial-card">
@@ -483,44 +448,44 @@ include 'config.php';
     <section id="faq" class="faq">
         <div class="container">
             <div class="section-header">
-                <h2>Preguntas Frecuentes</h2>
-                <p>Resolvemos tus dudas más comunes</p>
+                <h2><?= __('lp.faq_title') ?></h2>
+                <p><?= __('lp.faq_subtitle') ?></p>
             </div>
             <div class="faq-container">
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>¿Cuándo recupero mi participación?</h3>
+                        <h3><?= __('lp.faq1_q') ?></h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Al final de 360 días si decides no continuar, solicita tu participación más la posibilidad de bono adicional según los términos del contrato inteligente.</p>
+                        <p><?= __('lp.faq1_a') ?></p>
                     </div>
                 </div>
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>¿Cómo se pagan las ganancias?</h3>
+                        <h3><?= __('lp.faq2_q') ?></h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Mensualmente y automáticamente, a través de contratos inteligentes transparentes y verificables.</p>
+                        <p><?= __('lp.faq2_a') ?></p>
                     </div>
                 </div>
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>¿Puedo salir antes?</h3>
+                        <h3><?= __('lp.faq3_q') ?></h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Experimenta nuestra comunidad al menos 360 días y luego podrás solicitar la recompra de tu(s) membresía(s), entregar tus tokens y recibir liquidez.</p>
+                        <p><?= __('lp.faq3_a') ?></p>
                     </div>
                 </div>
                 <div class="faq-item">
                     <div class="faq-question">
-                        <h3>¿Qué pasa si no sé usar cripto?</h3>
+                        <h3><?= __('lp.faq4_q') ?></h3>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Te damos soporte paso a paso para tu primera operación y participación. Nuestro equipo te acompaña en todo el proceso.</p>
+                        <p><?= __('lp.faq4_a') ?></p>
                     </div>
                 </div>
             </div>
@@ -532,32 +497,26 @@ include 'config.php';
         <div class="container">
             <div class="education-content">
                 <div class="education-text">
-                    <h2>Educación y Referidos</h2>
-                    <p>
-                        Además con tu membresía, accede a <strong>masterclasses exclusivas</strong>, 
-                        contenido educativo y una red activa para crecer en lo financiero y digital.
-                    </p>
-                    <p>
-                        <strong>¿Quieres que otros se unan?</strong> Comparte tu experiencia y 
-                        crece junto a tu comunidad.
-                    </p>
+                    <h2><?= __('lp.edu_title') ?></h2>
+                    <p><?= __('lp.edu_p1') ?></p>
+                    <p><?= __('lp.edu_p2') ?></p>
                 </div>
                 <div class="education-features">
                     <div class="feature">
                         <i class="fas fa-chalkboard-teacher"></i>
-                        <span>Masterclasses Exclusivas</span>
+                        <span><?= __('lp.edu_f1') ?></span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-book-open"></i>
-                        <span>Contenido Educativo</span>
+                        <span><?= __('lp.edu_f2') ?></span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-network-wired"></i>
-                        <span>Red Activa</span>
+                        <span><?= __('lp.edu_f3') ?></span>
                     </div>
                     <div class="feature">
                         <i class="fas fa-share-alt"></i>
-                        <span>Programa de Referidos</span>
+                        <span><?= __('lp.edu_f4') ?></span>
                     </div>
                 </div>
             </div>
@@ -568,18 +527,15 @@ include 'config.php';
     <section class="closing">
         <div class="container">
             <div class="closing-content">
-                <h2>Mizton es comunidad, transparencia y futuro</h2>
-                <p>
-                    Tú controlas tus aportes mediante <strong>contratos inteligentes públicos</strong>. 
-                    La oportunidad para formar parte del cambio está aquí.
-                </p>
+                <h2><?= __('lp.closing_title') ?></h2>
+                <p><?= __('lp.closing_text') ?></p>
                 <div class="closing-question">
-                    <strong>¿Te unes?</strong>
+                    <strong><?= __('lp.closing_question') ?></strong>
                 </div>
                 <div class="closing-cta">
                     <a href="#registro" class="btn btn-primary btn-large">
                         <i class="fas fa-rocket"></i>
-                        Sí, Quiero Unirme Ahora
+                        <?= __('lp.closing_btn') ?>
                     </a>
                 </div>
             </div>
@@ -595,21 +551,19 @@ include 'config.php';
                     <span class="footer-brand-text">Mizton</span>
                 </div>
                 <div class="footer-text">
-                    <p>La revolución financiera comienza contigo. Únete a la comunidad preparada para la economía mundial.</p>
+                    <p><?= __('lp.footer_tagline') ?></p>
                 </div>
                 <div class="footer-links">
-                    <a href="privacidad.php">Política de Privacidad</a>
-                    <a href="terminos.php">Términos y Condiciones</a>
-                    <a href="mailto:atencion@mizton.cat">Contacto</a>
+                    <a href="privacidad.php"><?= __('lp.footer_privacy') ?></a>
+                    <a href="terminos.php"><?= __('lp.footer_terms') ?></a>
+                    <a href="mailto:atencion@mizton.cat"><?= __('lp.footer_contact') ?></a>
                 </div>
             </div>
             <div class="footer-disclaimer">
-                <p class="disclaimer-text">
-                    <strong>Disclaimer Legal:</strong> La participación en activos digitales implica riesgos. Consulta los términos y condiciones. Mizton no garantiza rendimientos fijos, los beneficios están sujetos al desempeño de la comunidad y la plataforma.
-                </p>
+                <p class="disclaimer-text"><?= __('lp.footer_disclaimer') ?></p>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Mizton. Todos los derechos reservados.</p>
+                <p><?= __('lp.footer_copy') ?></p>
             </div>
         </div>
     </footer>

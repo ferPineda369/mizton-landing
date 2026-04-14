@@ -1,5 +1,9 @@
 RewriteEngine On
 
+# Rutas de idioma: /es → español, /us → inglés
+RewriteRule ^es/?$ index.php?lang=es [L,QSA]
+RewriteRule ^us/?$ index.php?lang=en [L,QSA]
+
 # Configurar Content-Type para archivos WebP
 <IfModule mod_mime.c>
     AddType image/webp .webp
