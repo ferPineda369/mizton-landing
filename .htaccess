@@ -1,4 +1,5 @@
 RewriteEngine On
+RewriteBase /
 
 # Rutas de idioma: /es → español, /us → inglés
 RewriteRule ^es/?$ index.php?lang=es [L,QSA]
