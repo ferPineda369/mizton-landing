@@ -1,24 +1,22 @@
 <?php
-// Configurar la cookie de sesión para que sea válida en todos los subdominios
 ini_set('session.cookie_domain', '.mizton.cat');
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
+require_once 'lang/loader.php';
+$currentLang = getCurrentLang();
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= $currentLang ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Política de Privacidad - Mizton</title>
-    <meta name="description" content="Política de Privacidad de Mizton. Conoce cómo protegemos y utilizamos tu información personal.">
+    <title><?= __('lp.privacy_meta_title') ?></title>
+    <meta name="description" content="<?= __('lp.privacy_meta_desc') ?>">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mizton.cat/privacidad.php">
-    <meta property="og:title" content="Política de Privacidad - Mizton">
-    <meta property="og:description" content="Política de Privacidad de Mizton. Conoce cómo protegemos y utilizamos tu información personal.">
+    <meta property="og:title" content="<?= __('lp.privacy_meta_title') ?>">
+    <meta property="og:description" content="<?= __('lp.privacy_meta_desc') ?>">
     
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -128,10 +126,20 @@ if (session_status() === PHP_SESSION_NONE) {
                 </a>
             </div>
             <div class="nav-links">
-                <a href="index.php#como-funciona">¿Cómo Funciona?</a>
-                <a href="index.php#beneficios">Beneficios</a>
-                <a href="index.php#faq">FAQ</a>
-                <a href="index.php#unirse" class="cta-nav">Únete Ahora</a>
+                <a href="index.php#como-funciona"><?= __('lp.nav_how') ?></a>
+                <a href="index.php#beneficios"><?= __('lp.nav_benefits') ?></a>
+                <a href="index.php#faq"><?= __('lp.nav_faq') ?></a>
+                <a href="index.php#unirse" class="cta-nav"><?= __('lp.nav_join') ?></a>
+                <div class="lang-dropdown" id="langDropdown">
+                    <button class="lang-dropdown-btn" onclick="document.getElementById('langDropdown').classList.toggle('open')">
+                        <?= $currentLang === 'es' ? '🇲🇽 ES' : '🇺🇸 EN' ?>
+                        <i class="fas fa-chevron-down lang-chevron"></i>
+                    </button>
+                    <div class="lang-dropdown-menu">
+                        <a href="<?= getLangUrl('es') ?>" class="lang-option<?= $currentLang === 'es' ? ' active' : '' ?>">🇲🇽 Español</a>
+                        <a href="<?= getLangUrl('en') ?>" class="lang-option<?= $currentLang === 'en' ? ' active' : '' ?>">🇺🇸 English</a>
+                    </div>
+                </div>
             </div>
             <div class="mobile-menu-toggle">
                 <span></span>
@@ -144,15 +152,125 @@ if (session_status() === PHP_SESSION_NONE) {
     <section class="legal-content">
         <div class="legal-container">
             <a href="index.php" class="back-link">
-                <i class="fas fa-arrow-left"></i> Volver al inicio
+                <i class="fas fa-arrow-left"></i> <?= __('lp.legal_back') ?>
             </a>
             
             <div class="legal-header">
-                <h1><i class="fas fa-shield-alt"></i> Política de Privacidad</h1>
-                <p class="last-update">Última actualización: 16 de diciembre de 2025</p>
+                <h1><i class="fas fa-shield-alt"></i> <?= __('lp.privacy_h1') ?></h1>
+                <p class="last-update"><?= __('lp.terms_last_update') ?></p>
             </div>
             
             <div class="legal-card">
+            <?php if ($currentLang === 'en'): ?>
+                <h2>1. Introduction</h2>
+                <p>At <strong>Mizton</strong> ("we", "our", or "the Platform"), we are committed to protecting the privacy and security of our users' personal data. This Privacy Policy describes how we collect, use, store, and protect your personal information when you use our membership and asset tokenization platform.</p>
+                <p>By registering and using our services, you accept the practices described in this policy.</p>
+
+                <h2>2. Information We Collect</h2>
+                <h3>2.1 Information provided directly</h3>
+                <ul>
+                    <li><strong>Registration data:</strong> Full name, email address, phone number (optional), referral code.</li>
+                    <li><strong>Profile information:</strong> Profile photo (optional), communication preferences.</li>
+                    <li><strong>Financial data:</strong> Cryptocurrency wallet address (for receiving payments and tokens).</li>
+                    <li><strong>Communications:</strong> Messages sent through support chat, emails, and inquiries.</li>
+                </ul>
+                <h3>2.2 Automatically collected information</h3>
+                <ul>
+                    <li><strong>Usage data:</strong> Pages visited, browsing time, actions taken on the platform.</li>
+                    <li><strong>Technical information:</strong> IP address, browser type, operating system, device used.</li>
+                    <li><strong>Cookies and similar technologies:</strong> We use cookies to improve user experience and analyze traffic.</li>
+                </ul>
+                <h3>2.3 Third-party information</h3>
+                <ul>
+                    <li>Blockchain transaction data (public by nature).</li>
+                    <li>Identity verification information when required by applicable regulations.</li>
+                </ul>
+
+                <h2>3. Use of Information</h2>
+                <p>We use your personal information to:</p>
+                <ul>
+                    <li><strong>Provide our services:</strong> Manage your account, process memberships, distribute tokens and earnings.</li>
+                    <li><strong>Communications:</strong> Send notifications about your account, platform updates, and marketing communications (with your consent).</li>
+                    <li><strong>Security:</strong> Prevent fraud, protect platform integrity, and comply with legal obligations.</li>
+                    <li><strong>Service improvement:</strong> Analyze platform usage to improve user experience.</li>
+                    <li><strong>Legal compliance:</strong> Comply with regulatory requirements and respond to legal requests.</li>
+                </ul>
+
+                <h2>4. Information Sharing</h2>
+                <p>We do not sell or rent your personal information. We may share data with:</p>
+                <ul>
+                    <li><strong>Service providers:</strong> Companies that help us operate the platform (payment processors, hosting services, analytics).</li>
+                    <li><strong>Blockchain:</strong> Blockchain transactions are public by design. Wallet addresses and transaction amounts are publicly visible.</li>
+                    <li><strong>Legal authorities:</strong> When required by law or to protect our legal rights.</li>
+                    <li><strong>Corporate transfers:</strong> In the event of a merger, acquisition, or sale of assets.</li>
+                </ul>
+
+                <h2>5. Data Security</h2>
+                <p>We implement technical and organizational security measures to protect your information:</p>
+                <ul>
+                    <li>SSL/TLS encryption for all communications.</li>
+                    <li>Secure password storage using hashing algorithms.</li>
+                    <li>Restricted access to personal data only for authorized personnel.</li>
+                    <li>Continuous security monitoring and intrusion detection.</li>
+                    <li>Use of audited smart contracts for financial transactions.</li>
+                </ul>
+
+                <h2>6. Data Retention</h2>
+                <p>We retain your personal information while:</p>
+                <ul>
+                    <li>Your account is active.</li>
+                    <li>It is necessary to provide our services.</li>
+                    <li>There are legal retention obligations (generally 5-7 years for financial records).</li>
+                    <li>It is necessary to resolve disputes or enforce our agreements.</li>
+                </ul>
+
+                <h2>7. Your Rights</h2>
+                <p>You have the right to:</p>
+                <ul>
+                    <li><strong>Access:</strong> Request a copy of your personal data.</li>
+                    <li><strong>Rectification:</strong> Correct inaccurate or incomplete data.</li>
+                    <li><strong>Erasure:</strong> Request deletion of your data (subject to legal retention obligations).</li>
+                    <li><strong>Portability:</strong> Receive your data in a structured and readable format.</li>
+                    <li><strong>Objection:</strong> Object to the processing of your data for marketing purposes.</li>
+                    <li><strong>Withdrawal of consent:</strong> Withdraw your consent at any time.</li>
+                </ul>
+                <p>To exercise these rights, contact us through the means indicated at the end of this policy.</p>
+
+                <h2>8. Cookies and Tracking Technologies</h2>
+                <p>We use cookies for:</p>
+                <ul>
+                    <li><strong>Essential cookies:</strong> Necessary for platform operation (session, authentication).</li>
+                    <li><strong>Analytics cookies:</strong> To understand how users interact with the platform.</li>
+                    <li><strong>Marketing cookies:</strong> To display relevant content (with your consent).</li>
+                </ul>
+                <p>You can manage your cookie preferences through your browser settings.</p>
+
+                <h2>9. International Transfers</h2>
+                <p>Your data may be transferred to and processed in countries other than your own. We ensure that such transfers comply with applicable data protection laws and that adequate safeguards are in place.</p>
+
+                <h2>10. Minors</h2>
+                <p>Our services are not directed to individuals under 18 years of age. We do not intentionally collect information from minors. If we discover that we have collected data from a minor, we will delete it immediately.</p>
+
+                <h2>11. Changes to this Policy</h2>
+                <p>We may update this Privacy Policy periodically. We will notify you of significant changes through:</p>
+                <ul>
+                    <li>Notice on the platform.</li>
+                    <li>Email to the registered address.</li>
+                    <li>Update of the "last updated" date on this page.</li>
+                </ul>
+
+                <h2>12. Contact</h2>
+                <div class="contact-box">
+                    <h3><i class="fas fa-envelope"></i> Questions about privacy?</h3>
+                    <p>If you have questions, concerns, or wish to exercise your rights related to your personal data, you can contact us:</p>
+                    <ul>
+                        <li><strong>Email:</strong> <a href="mailto:atencion@mizton.cat">atencion@mizton.cat</a></li>
+                        <li><strong>Contact form:</strong> Available on our platform</li>
+                        <li><strong>Support chat:</strong> Available 24/7 on our main page</li>
+                    </ul>
+                    <p>We will respond to your request within a maximum of 30 days.</p>
+                </div>
+            <?php else: ?>
                 <h2>1. Introducción</h2>
                 <p>En <strong>Mizton</strong> ("nosotros", "nuestro" o "la Plataforma"), nos comprometemos a proteger la privacidad y seguridad de los datos personales de nuestros usuarios. Esta Política de Privacidad describe cómo recopilamos, utilizamos, almacenamos y protegemos su información personal cuando utiliza nuestra plataforma de membresías y tokenización de activos.</p>
                 <p>Al registrarse y utilizar nuestros servicios, usted acepta las prácticas descritas en esta política.</p>
@@ -264,6 +382,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     </ul>
                     <p>Responderemos a su solicitud en un plazo máximo de 30 días.</p>
                 </div>
+            <?php endif; ?>
             </div>
         </div>
     </section>
@@ -277,20 +396,26 @@ if (session_status() === PHP_SESSION_NONE) {
                     <span class="footer-brand-text">Mizton</span>
                 </div>
                 <div class="footer-text">
-                    <p>La revolución financiera comienza contigo. Únete a la comunidad preparada para la economía mundial.</p>
+                    <p><?= __('lp.footer_tagline') ?></p>
                 </div>
                 <div class="footer-links">
-                    <a href="privacidad.php">Política de Privacidad</a>
-                    <a href="terminos.php">Términos y Condiciones</a>
-                    <a href="index.php#contacto">Contacto</a>
+                    <a href="privacidad.php"><?= __('lp.footer_privacy') ?></a>
+                    <a href="terminos.php"><?= __('lp.footer_terms') ?></a>
+                    <a href="index.php#contacto"><?= __('lp.footer_contact') ?></a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Mizton. Todos los derechos reservados.</p>
+                <p><?= __('lp.footer_copy') ?></p>
             </div>
         </div>
     </footer>
 
+    <script>
+    document.addEventListener('click', function(e) {
+        var dd = document.getElementById('langDropdown');
+        if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+    });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

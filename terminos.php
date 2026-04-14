@@ -1,24 +1,22 @@
 <?php
-// Configurar la cookie de sesión para que sea válida en todos los subdominios
 ini_set('session.cookie_domain', '.mizton.cat');
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
+require_once 'lang/loader.php';
+$currentLang = getCurrentLang();
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= $currentLang ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Términos y Condiciones - Mizton</title>
-    <meta name="description" content="Términos y Condiciones de uso de la plataforma Mizton. Conoce tus derechos y obligaciones como miembro.">
+    <title><?= __('lp.terms_meta_title') ?></title>
+    <meta name="description" content="<?= __('lp.terms_meta_desc') ?>">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mizton.cat/terminos.php">
-    <meta property="og:title" content="Términos y Condiciones - Mizton">
-    <meta property="og:description" content="Términos y Condiciones de uso de la plataforma Mizton. Conoce tus derechos y obligaciones como miembro.">
+    <meta property="og:title" content="<?= __('lp.terms_meta_title') ?>">
+    <meta property="og:description" content="<?= __('lp.terms_meta_desc') ?>">
     
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -178,10 +176,20 @@ if (session_status() === PHP_SESSION_NONE) {
                 </a>
             </div>
             <div class="nav-links">
-                <a href="index.php#como-funciona">¿Cómo Funciona?</a>
-                <a href="index.php#beneficios">Beneficios</a>
-                <a href="index.php#faq">FAQ</a>
-                <a href="index.php#unirse" class="cta-nav">Únete Ahora</a>
+                <a href="index.php#como-funciona"><?= __('lp.nav_how') ?></a>
+                <a href="index.php#beneficios"><?= __('lp.nav_benefits') ?></a>
+                <a href="index.php#faq"><?= __('lp.nav_faq') ?></a>
+                <a href="index.php#unirse" class="cta-nav"><?= __('lp.nav_join') ?></a>
+                <div class="lang-dropdown" id="langDropdown">
+                    <button class="lang-dropdown-btn" onclick="document.getElementById('langDropdown').classList.toggle('open')">
+                        <?= $currentLang === 'es' ? '🇲🇽 ES' : '🇺🇸 EN' ?>
+                        <i class="fas fa-chevron-down lang-chevron"></i>
+                    </button>
+                    <div class="lang-dropdown-menu">
+                        <a href="<?= getLangUrl('es') ?>" class="lang-option<?= $currentLang === 'es' ? ' active' : '' ?>">🇲🇽 Español</a>
+                        <a href="<?= getLangUrl('en') ?>" class="lang-option<?= $currentLang === 'en' ? ' active' : '' ?>">🇺🇸 English</a>
+                    </div>
+                </div>
             </div>
             <div class="mobile-menu-toggle">
                 <span></span>
@@ -194,15 +202,265 @@ if (session_status() === PHP_SESSION_NONE) {
     <section class="legal-content">
         <div class="legal-container">
             <a href="index.php" class="back-link">
-                <i class="fas fa-arrow-left"></i> Volver al inicio
+                <i class="fas fa-arrow-left"></i> <?= __('lp.legal_back') ?>
             </a>
             
             <div class="legal-header">
-                <h1><i class="fas fa-file-contract"></i> Términos y Condiciones</h1>
-                <p class="last-update">Última actualización: 16 de diciembre de 2025</p>
+                <h1><i class="fas fa-file-contract"></i> <?= __('lp.terms_h1') ?></h1>
+                <p class="last-update"><?= __('lp.terms_last_update') ?></p>
             </div>
             
             <div class="legal-card">
+            <?php if ($currentLang === 'en'): ?>
+                <div class="toc">
+                    <h3><i class="fas fa-list"></i> Table of Contents</h3>
+                    <ol>
+                        <li><a href="#aceptacion">Acceptance of Terms</a></li>
+                        <li><a href="#definiciones">Definitions</a></li>
+                        <li><a href="#servicios">Service Description</a></li>
+                        <li><a href="#registro">Registration and Account</a></li>
+                        <li><a href="#membresias">Memberships and Packages</a></li>
+                        <li><a href="#tokens">Corporate Tokens</a></li>
+                        <li><a href="#ganancias">Earnings System</a></li>
+                        <li><a href="#referidos">Referral Program</a></li>
+                        <li><a href="#recuperacion">Investment Recovery</a></li>
+                        <li><a href="#obligaciones">User Obligations</a></li>
+                        <li><a href="#prohibiciones">Prohibited Conduct</a></li>
+                        <li><a href="#riesgos">Risks and Disclaimer</a></li>
+                        <li><a href="#propiedad">Intellectual Property</a></li>
+                        <li><a href="#modificaciones">Modifications</a></li>
+                        <li><a href="#terminacion">Termination</a></li>
+                        <li><a href="#ley">Applicable Law</a></li>
+                        <li><a href="#contacto">Contact</a></li>
+                    </ol>
+                </div>
+
+                <h2 id="aceptacion">1. Acceptance of Terms</h2>
+                <p>By accessing, registering, or using the <strong>Mizton</strong> platform ("the Platform", "we", "our"), you ("User", "Member", "you") agree to be legally bound by these Terms and Conditions, our <a href="privacidad.php">Privacy Policy</a>, and any additional policies published on the Platform.</p>
+                <p>If you do not agree with any of these terms, you must not use our services.</p>
+
+                <h2 id="definiciones">2. Definitions</h2>
+                <ul>
+                    <li><strong>Platform:</strong> The website mizton.cat and all its subdomains, applications, and related services.</li>
+                    <li><strong>Membership:</strong> A participation package that grants access to the benefits of the Mizton community.</li>
+                    <li><strong>Corporate Tokens:</strong> Digital assets issued by Mizton that represent participation in the company's global earnings.</li>
+                    <li><strong>Wallet:</strong> A cryptocurrency wallet where the user receives tokens and earnings.</li>
+                    <li><strong>Vesting:</strong> A maturation period during which tokens are subject to restrictions.</li>
+                    <li><strong>Binary Network:</strong> A referral structure organized into two main branches.</li>
+                    <li><strong>DCA (Dollar Cost Averaging):</strong> A system of periodic package acquisition.</li>
+                </ul>
+
+                <h2 id="servicios">3. Service Description</h2>
+                <p>Mizton is a real-world asset (RWA) tokenization platform that offers:</p>
+                <ul>
+                    <li>Participation memberships in tokenization projects.</li>
+                    <li>Corporate tokens representing participation in global earnings.</li>
+                    <li>Referral system with a multilevel binary structure.</li>
+                    <li>Financial education and blockchain training.</li>
+                    <li>Technical support and personalized guidance.</li>
+                </ul>
+
+                <h2 id="registro">4. Registration and Account</h2>
+                <h3>4.1 Requirements</h3>
+                <ul>
+                    <li>Be at least 18 years of age.</li>
+                    <li>Provide accurate and up-to-date information.</li>
+                    <li>Have a valid email address.</li>
+                    <li>Be invited by an existing member (referral code).</li>
+                </ul>
+                <h3>4.2 Account Responsibilities</h3>
+                <ul>
+                    <li>Maintain the confidentiality of your access credentials.</li>
+                    <li>Immediately report any unauthorized use.</li>
+                    <li>Be responsible for all activities carried out from your account.</li>
+                    <li>Keep your contact information and wallet address up to date.</li>
+                </ul>
+
+                <h2 id="membresias">5. Memberships and Packages</h2>
+                <h3>5.1 Participation Packages</h3>
+                <ul>
+                    <li><strong>Value:</strong> $20 USD per participation package.</li>
+                    <li><strong>Content:</strong> Each package includes Mizton corporate tokens.</li>
+                    <li><strong>Variability:</strong> The number of tokens may vary according to current promotions.</li>
+                </ul>
+                <h3>5.2 Payment Methods</h3>
+                <ul>
+                    <li>Cryptocurrencies (USDT, BNB, others subject to availability).</li>
+                    <li>Available platform balance.</li>
+                    <li>Bank transfers (subject to regional availability).</li>
+                </ul>
+                <h3>5.3 Vesting Period</h3>
+                <p>Acquired tokens are subject to a vesting period of <strong>360 days</strong>, during which:</p>
+                <ul>
+                    <li>Tokens remain in platform custody.</li>
+                    <li>The user receives monthly earnings as applicable.</li>
+                    <li>The period may be reduced through the referral program.</li>
+                </ul>
+
+                <h2 id="tokens">6. Corporate Tokens</h2>
+                <h3>6.1 Nature of Tokens</h3>
+                <ul>
+                    <li>They are <strong>utility tokens</strong> and <strong>revenue sharing tokens</strong>.</li>
+                    <li>They represent participation in Mizton's global earnings.</li>
+                    <li>They do not constitute securities, stocks, or regulated financial instruments.</li>
+                    <li>Their value is linked to the performance of tokenization projects.</li>
+                </ul>
+                <h3>6.2 Custody and Transfer</h3>
+                <ul>
+                    <li>Tokens are stored securely on the blockchain.</li>
+                    <li>Transfer to a personal wallet is subject to completion of the vesting period.</li>
+                    <li>Mizton is not responsible for losses resulting from improper management of personal wallets.</li>
+                </ul>
+
+                <h2 id="ganancias">7. Earnings System</h2>
+                <h3>7.1 Global Earnings</h3>
+                <ul>
+                    <li>Earnings are distributed based on the number of tokens held.</li>
+                    <li>Distribution is proportional to the performance of tokenized projects.</li>
+                    <li>Payments are made through smart contracts.</li>
+                </ul>
+                <h3>7.2 Atomic Settlement</h3>
+                <ul>
+                    <li>Commission payments are processed in a maximum of 7 seconds.</li>
+                    <li>Funds are deposited directly into the user's wallet.</li>
+                </ul>
+
+                <div class="highlight-box warning">
+                    <h3><i class="fas fa-exclamation-triangle"></i> Important Notice</h3>
+                    <p>Earnings are not guaranteed and depend on community and tokenization project performance. Past returns do not guarantee future results.</p>
+                </div>
+
+                <h2 id="referidos">8. Referral Program</h2>
+                <h3>8.1 Multilevel Binary Structure</h3>
+                <ul>
+                    <li>System of 10 depth levels.</li>
+                    <li>$1 USD per package acquired in the structure.</li>
+                    <li>No locks or balancing requirements.</li>
+                </ul>
+                <h3>8.2 Activation Requirements</h3>
+                <ul>
+                    <li>Maintain at least one active package every 30 days to receive full commissions.</li>
+                    <li>Cumulative activation allows extending the collection period.</li>
+                </ul>
+                <h3>8.3 Vesting Reduction</h3>
+                <ul>
+                    <li>With 1 direct referral: 300 days.</li>
+                    <li>With 2 direct referrals: 240 days.</li>
+                    <li>With 3 or more direct referrals: 180 days.</li>
+                </ul>
+
+                <h2 id="recuperacion">9. Investment Recovery</h2>
+                <h3>9.1 Recovery Guarantee</h3>
+                <p>Upon completion of the vesting period, the user may request recovery of <strong>100% of their initial investment</strong>, subject to:</p>
+                <ul>
+                    <li>Having completed the applicable vesting period.</li>
+                    <li>Returning corporate tokens to Mizton.</li>
+                    <li>Having no outstanding obligations with the platform.</li>
+                </ul>
+                <h3>9.2 Request Process</h3>
+                <ul>
+                    <li>The request is made through the user panel.</li>
+                    <li>Processing may take up to 30 business days.</li>
+                    <li>Payment is made in the agreed cryptocurrency or method.</li>
+                </ul>
+
+                <h2 id="obligaciones">10. User Obligations</h2>
+                <p>The user agrees to:</p>
+                <ul>
+                    <li>Provide accurate information and keep it up to date.</li>
+                    <li>Comply with all applicable laws and regulations.</li>
+                    <li>Not use the platform for illegal activities.</li>
+                    <li>Respect the rights of other users and Mizton.</li>
+                    <li>Keep credentials and wallet secure.</li>
+                    <li>Report any suspicious activity or vulnerability.</li>
+                </ul>
+
+                <h2 id="prohibiciones">11. Prohibited Conduct</h2>
+                <p>The following is strictly prohibited:</p>
+                <ul>
+                    <li>Providing false or misleading information.</li>
+                    <li>Fraudulently manipulating the referral system.</li>
+                    <li>Money laundering or illicit financing activities.</li>
+                    <li>Attempting to hack, breach, or compromise platform security.</li>
+                    <li>Defaming, harassing, or harming other users or Mizton.</li>
+                    <li>Using unauthorized bots, scripts, or automations.</li>
+                    <li>Violating intellectual property rights.</li>
+                </ul>
+
+                <h2 id="riesgos">12. Risks and Disclaimer</h2>
+                <div class="highlight-box warning">
+                    <h3><i class="fas fa-exclamation-circle"></i> Risk Statement</h3>
+                    <p>Participation in digital assets and cryptocurrencies involves significant risks. By using Mizton, you acknowledge and accept:</p>
+                </div>
+                <ul>
+                    <li><strong>Volatility:</strong> The value of digital assets can fluctuate significantly.</li>
+                    <li><strong>Technological risk:</strong> Failures in blockchain, smart contracts, or infrastructure.</li>
+                    <li><strong>Regulatory risk:</strong> Changes in laws that may affect services.</li>
+                    <li><strong>Market risk:</strong> Economic conditions affecting projects.</li>
+                    <li><strong>Access loss:</strong> Loss of credentials or wallet access.</li>
+                </ul>
+                <p>Mizton does not guarantee specific returns and is not responsible for losses resulting from:</p>
+                <ul>
+                    <li>User investment decisions.</li>
+                    <li>Cryptocurrency market fluctuations.</li>
+                    <li>Mismanagement of wallets or credentials by the user.</li>
+                    <li>Force majeure events or circumstances beyond our control.</li>
+                </ul>
+
+                <h2 id="propiedad">13. Intellectual Property</h2>
+                <ul>
+                    <li>All rights to the Mizton brand, logos, designs, and content are the exclusive property of Mizton.</li>
+                    <li>The user does not acquire any intellectual property rights by using the platform.</li>
+                    <li>Reproduction, distribution, or modification without express authorization is prohibited.</li>
+                </ul>
+
+                <h2 id="modificaciones">14. Modifications to Terms</h2>
+                <p>Mizton reserves the right to modify these Terms at any time. Modifications will:</p>
+                <ul>
+                    <li>Be notified at least 15 days in advance.</li>
+                    <li>Be communicated by email and/or notice on the platform.</li>
+                    <li>Continued use after the effective date constitutes acceptance.</li>
+                </ul>
+
+                <h2 id="terminacion">15. Termination</h2>
+                <h3>15.1 By the User</h3>
+                <p>The user may request account termination at any time, subject to:</p>
+                <ul>
+                    <li>Completion of the vesting period for fund recovery.</li>
+                    <li>Settlement of outstanding obligations.</li>
+                </ul>
+                <h3>15.2 By Mizton</h3>
+                <p>Mizton may suspend or terminate accounts for:</p>
+                <ul>
+                    <li>Violation of these Terms.</li>
+                    <li>Fraudulent or illegal activities.</li>
+                    <li>Request from competent authorities.</li>
+                    <li>Prolonged inactivity (more than 24 months).</li>
+                </ul>
+
+                <h2 id="ley">16. Applicable Law and Jurisdiction</h2>
+                <ul>
+                    <li>These Terms are governed by the applicable laws of the jurisdiction where Mizton operates.</li>
+                    <li>Any dispute will be resolved preferably through mediation or arbitration.</li>
+                    <li>In the event of litigation, the parties submit to the competent courts.</li>
+                </ul>
+
+                <h2 id="contacto">17. Contact</h2>
+                <div class="contact-box">
+                    <h3><i class="fas fa-headset"></i> Need help?</h3>
+                    <p>For inquiries about these Terms and Conditions or any aspect of our services:</p>
+                    <ul>
+                        <li><strong>Email:</strong> <a href="mailto:atencion@mizton.cat">atencion@mizton.cat</a></li>
+                        <li><strong>Support chat:</strong> Available 24/7 on our main page</li>
+                        <li><strong>Live presentations:</strong> Monday to Friday, 10:00 AM (Mexico City time)</li>
+                    </ul>
+                </div>
+
+                <div class="highlight-box">
+                    <h3><i class="fas fa-check-circle"></i> Acceptance</h3>
+                    <p>By registering and using the Mizton platform, you confirm that you have read, understood, and accepted these Terms and Conditions in their entirety.</p>
+                </div>
+            <?php else: ?>
                 <div class="toc">
                     <h3><i class="fas fa-list"></i> Índice</h3>
                     <ol>
@@ -460,6 +718,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <h3><i class="fas fa-check-circle"></i> Aceptación</h3>
                     <p>Al registrarse y utilizar la plataforma Mizton, usted confirma que ha leído, entendido y aceptado estos Términos y Condiciones en su totalidad.</p>
                 </div>
+            <?php endif; ?>
             </div>
         </div>
     </section>
@@ -473,20 +732,26 @@ if (session_status() === PHP_SESSION_NONE) {
                     <span class="footer-brand-text">Mizton</span>
                 </div>
                 <div class="footer-text">
-                    <p>La revolución financiera comienza contigo. Únete a la comunidad preparada para la economía mundial.</p>
+                    <p><?= __('lp.footer_tagline') ?></p>
                 </div>
                 <div class="footer-links">
-                    <a href="privacidad.php">Política de Privacidad</a>
-                    <a href="terminos.php">Términos y Condiciones</a>
-                    <a href="index.php#contacto">Contacto</a>
+                    <a href="privacidad.php"><?= __('lp.footer_privacy') ?></a>
+                    <a href="terminos.php"><?= __('lp.footer_terms') ?></a>
+                    <a href="index.php#contacto"><?= __('lp.footer_contact') ?></a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Mizton. Todos los derechos reservados.</p>
+                <p><?= __('lp.footer_copy') ?></p>
             </div>
         </div>
     </footer>
 
+    <script>
+    document.addEventListener('click', function(e) {
+        var dd = document.getElementById('langDropdown');
+        if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+    });
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

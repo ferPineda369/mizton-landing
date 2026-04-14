@@ -178,4 +178,47 @@ return [
     'lp.footer_disclaimer' => '<strong>Legal Disclaimer:</strong> Participation in digital assets involves risks. Please consult the terms and conditions. Mizton does not guarantee fixed returns; benefits are subject to community and platform performance.',
     'lp.footer_copy'       => '&copy; 2025 Mizton. All rights reserved.',
 
+    // =============================================
+    // LEGAL PAGES (common)
+    // =============================================
+    'lp.legal_back'             => 'Back to Home',
+    'lp.terms_meta_title'       => 'Terms and Conditions - Mizton',
+    'lp.terms_meta_desc'        => 'Terms and Conditions for the use of the Mizton platform. Learn about your rights and obligations as a member.',
+    'lp.terms_h1'               => 'Terms and Conditions',
+    'lp.terms_last_update'      => 'Last updated: December 16, 2025',
+    'lp.privacy_meta_title'     => 'Privacy Policy - Mizton',
+    'lp.privacy_meta_desc'      => 'Privacy Policy of Mizton. Learn how we protect and use your personal information.',
+    'lp.privacy_h1'             => 'Privacy Policy',
+
+    // =============================================
+    // MEETING
+    // =============================================
+    'lp.meeting_meta_title'     => 'Opportunity Presentation - Mizton',
+    'lp.meeting_meta_desc'      => 'Join our exclusive presentation on the tokenization of real-world assets. Discover the narrative that is changing the world economy.',
+    'lp.meeting_live'           => 'LIVE',
+    'lp.meeting_replay'         => 'REPLAY',
+    'lp.meeting_date'           => 'Date',
+    'lp.meeting_schedule'       => 'Schedule',
+    'lp.meeting_weekdays'       => 'Mon to Fri',
+    'lp.meeting_modality'       => 'Modality',
+    'lp.meeting_live_pres'      => 'Live Presentation',
+    'lp.meeting_access'         => 'Access',
+    'lp.meeting_free'           => 'Completely Free',
+    'lp.meeting_subtitle'       => 'Exclusive Business Opportunity Presentation',
+    'lp.meeting_btn_join'       => 'Join Now',
+    'lp.meeting_btn_share'      => 'Share',
+    'lp.meeting_btn_replay'     => 'Watch Replay',
+    'lp.meeting_token_title'    => 'Real World Asset Tokenization',
+    'lp.meeting_token_text'     => 'You are about to learn the narrative that is <strong>ALREADY changing the world economy</strong>. We are talking about the narrative of <strong>Real World Asset Tokenization on the Blockchain</strong>. A technology you can participate in in a <strong>VERY simple</strong> way.',
+    'lp.meeting_no_avail_title' => 'Meeting not available',
+    'lp.meeting_no_avail_text'  => 'The meeting is not yet scheduled. Please try again later.',
+    'lp.meeting_ok'             => 'Got it',
+    'lp.meeting_link_copied'    => 'Link Copied!',
+    'lp.meeting_live_shared'    => 'The LIVE meeting link has been copied to your clipboard.<br><br><strong>Share it so others can join the live stream!</strong>',
+    'lp.meeting_replay_shared'  => 'The presentation link has been copied to your clipboard.<br><br><strong>Share it with whoever you want to invite to learn about this opportunity.</strong>',
+    'lp.meeting_perfect'        => 'Perfect',
+    'lp.meeting_share_title'    => 'Link to Share',
+    'lp.meeting_share_text'     => 'Copy this link to share:',
+    'lp.meeting_close'          => 'Close',
+
 ];

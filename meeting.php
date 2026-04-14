@@ -25,6 +25,8 @@ if (isset($_GET['ref'])) {
     }
 }
 
+require_once 'lang/loader.php';
+$currentLang = getCurrentLang();
 include 'config.php';
 
 // Enlace permanente de Zoom para transmisiones en vivo
@@ -66,38 +68,34 @@ if (!$zoomVideo) {
     ];
 }
 
-// Generar título dinámico basado en el estado live
+// Generar título dinámico basado en el estado live e idioma
 $displayTitle = $zoomVideo['title'];
 if ($zoomVideo['is_live'] ?? 0) {
-    // Si está en vivo, generar título con el día actual
-    $diasSemana = [
-        'Monday' => 'Lunes',
-        'Tuesday' => 'Martes', 
-        'Wednesday' => 'Miércoles',
-        'Thursday' => 'Jueves',
-        'Friday' => 'Viernes',
-        'Saturday' => 'Sábado',
-        'Sunday' => 'Domingo'
-    ];
-    
-    $diaActual = $diasSemana[date('l')];
     $numeroDay = date('j');
-    $displayTitle = "Reunión Mizton - $diaActual $numeroDay";
+    if ($currentLang === 'en') {
+        $displayTitle = 'Mizton Meeting - ' . date('l') . ' ' . $numeroDay;
+    } else {
+        $diasSemana = [
+            'Monday' => 'Lunes', 'Tuesday' => 'Martes', 'Wednesday' => 'Miércoles',
+            'Thursday' => 'Jueves', 'Friday' => 'Viernes', 'Saturday' => 'Sábado', 'Sunday' => 'Domingo'
+        ];
+        $displayTitle = 'Reunión Mizton - ' . $diasSemana[date('l')] . ' ' . $numeroDay;
+    }
 }
 ?>
 <!DOCTYPE html>
-<html lang="es">
+<html lang="<?= $currentLang ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presentación de Oportunidad - Mizton</title>
-    <meta name="description" content="Únete a nuestra presentación exclusiva sobre la tokenización de activos del mundo real. Descubre la narrativa que está cambiando la economía mundial.">
+    <title><?= __('lp.meeting_meta_title') ?></title>
+    <meta name="description" content="<?= __('lp.meeting_meta_desc') ?>">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://mizton.cat/meeting.php">
-    <meta property="og:title" content="Presentación de Oportunidad - Mizton">
-    <meta property="og:description" content="Únete a nuestra presentación exclusiva sobre la tokenización de activos del mundo real. Descubre la narrativa que está cambiando la economía mundial.">
+    <meta property="og:title" content="<?= __('lp.meeting_meta_title') ?>">
+    <meta property="og:description" content="<?= __('lp.meeting_meta_desc') ?>">
     <meta property="og:image" content="https://mizton.cat/social-preview.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -106,12 +104,12 @@ if ($zoomVideo['is_live'] ?? 0) {
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://mizton.cat/meeting.php">
-    <meta property="twitter:title" content="Presentación de Oportunidad - Mizton">
-    <meta property="twitter:description" content="Únete a nuestra presentación exclusiva sobre la tokenización de activos del mundo real. Descubre la narrativa que está cambiando la economía mundial.">
+    <meta property="twitter:title" content="<?= __('lp.meeting_meta_title') ?>">
+    <meta property="twitter:description" content="<?= __('lp.meeting_meta_desc') ?>">
     <meta property="twitter:image" content="https://mizton.cat/social-preview.jpg">
     
     <!-- WhatsApp -->
-    <meta property="og:locale" content="es_ES">
+    <meta property="og:locale" content="<?= $currentLang === 'en' ? 'en_US' : 'es_MX' ?>">
     
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -579,16 +577,31 @@ if ($zoomVideo['is_live'] ?? 0) {
 </head>
 <body>
     <div class="meeting-hero">
-        <a href="index.php" class="back-link">
-            <i class="fas fa-arrow-left"></i> Volver al inicio
+        <a href="index.php<?= isset($_SESSION['referido']) ? '?ref='.$_SESSION['referido'] : '' ?>" class="back-link">
+            <i class="fas fa-arrow-left"></i> <?= __('lp.legal_back') ?>
         </a>
+        <div class="lang-dropdown" id="langDropdown" style="position:absolute;top:2rem;right:2rem;z-index:20;">
+            <button class="lang-dropdown-btn" onclick="document.getElementById('langDropdown').classList.toggle('open')" style="background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.3);">
+                <?= $currentLang === 'es' ? '🇲🇽 ES' : '🇺🇸 EN' ?>
+                <i class="fas fa-chevron-down lang-chevron"></i>
+            </button>
+            <div class="lang-dropdown-menu">
+                <a href="<?= getLangUrl('es') ?>" class="lang-option<?= $currentLang === 'es' ? ' active' : '' ?>">🇲🇽 Español</a>
+                <a href="<?= getLangUrl('en') ?>" class="lang-option<?= $currentLang === 'en' ? ' active' : '' ?>">🇺🇸 English</a>
+            </div>
+        </div>
         
         <div class="meeting-container">
             <div class="meeting-content">
                 <div class="meeting-info">
                     <h1>
-                        Descubre la <span class="highlight">Narrativa</span> que está 
-                        <span class="highlight">Cambiando</span> la Economía Mundial
+                        <?php if ($currentLang === 'en'): ?>
+                            Discover the <span class="highlight">Narrative</span> that is
+                            <span class="highlight">Changing</span> the World Economy
+                        <?php else: ?>
+                            Descubre la <span class="highlight">Narrativa</span> que está
+                            <span class="highlight">Cambiando</span> la Economía Mundial
+                        <?php endif; ?>
                     </h1>
                     
                     <p class="meeting-description">
@@ -596,34 +609,30 @@ if ($zoomVideo['is_live'] ?? 0) {
                     </p>
                     
                     <div class="tokenization-intro">
-                        <h3><i class="fas fa-coins"></i> Tokenización de Activos del Mundo Real</h3>
-                        <p>
-                            Estás a punto de conocer la narrativa que <strong>YA está cambiando la economía mundial</strong>. 
-                            Nos referimos a la narrativa de la <strong>Tokenización de Activos del Mundo Real en la Blockchain</strong>. 
-                            Una tecnología en la que puedes participar de manera <strong>MUY simple</strong>.
-                        </p>
+                        <h3><i class="fas fa-coins"></i> <?= __('lp.meeting_token_title') ?></h3>
+                        <p><?= __('lp.meeting_token_text') ?></p>
                     </div>
                     
                     <div class="meeting-details">
                         <div class="detail-item">
                             <i class="fas fa-calendar-alt"></i>
-                            <h4>Fecha</h4>
+                            <h4><?= __('lp.meeting_date') ?></h4>
                             <p><?php echo date('d/m/Y', strtotime($zoomVideo['date_created'])); ?></p>
                         </div>
                         <div class="detail-item">
                             <i class="fas fa-clock"></i>
-                            <h4>Horario</h4>
-                            <p>Lunes a Viernes</p>
+                            <h4><?= __('lp.meeting_schedule') ?></h4>
+                            <p><?= __('lp.meeting_weekdays') ?></p>
                         </div>
                         <div class="detail-item">
                             <i class="fas fa-users"></i>
-                            <h4>Modalidad</h4>
-                            <p>Presentación en Vivo</p>
+                            <h4><?= __('lp.meeting_modality') ?></h4>
+                            <p><?= __('lp.meeting_live_pres') ?></p>
                         </div>
                         <div class="detail-item">
                             <i class="fas fa-globe"></i>
-                            <h4>Acceso</h4>
-                            <p>Completamente Gratuito</p>
+                            <h4><?= __('lp.meeting_access') ?></h4>
+                            <p><?= __('lp.meeting_free') ?></p>
                         </div>
                     </div>
                 </div>
@@ -633,12 +642,12 @@ if ($zoomVideo['is_live'] ?? 0) {
                         <?php if ($zoomVideo['is_live'] ?? 0): ?>
                             <!-- Indicador EN VIVO palpitante -->
                             <div class="live-indicator">
-                                <i class="fas fa-circle"></i> EN VIVO
+                                <i class="fas fa-circle"></i> <?= __('lp.meeting_live') ?>
                             </div>
                         <?php else: ?>
                             <!-- Indicador de REPETICIÓN -->
                             <div class="replay-indicator">
-                                <i class="fas fa-play-circle"></i> REPETICIÓN
+                                <i class="fas fa-play-circle"></i> <?= __('lp.meeting_replay') ?>
                             </div>
                         <?php endif; ?>
                         
@@ -646,7 +655,7 @@ if ($zoomVideo['is_live'] ?? 0) {
                             <i class="fas fa-video"></i>
                         </div>
                         <h3 class="zoom-title"><?php echo htmlspecialchars($displayTitle); ?></h3>
-                        <p class="zoom-subtitle">Presentación Exclusiva de Oportunidad de Negocio</p>
+                        <p class="zoom-subtitle"><?= __('lp.meeting_subtitle') ?></p>
                     </div>
                     
                     <div class="meeting-actions">
@@ -654,21 +663,21 @@ if ($zoomVideo['is_live'] ?? 0) {
                             <!-- Modo EN VIVO: Botón "Unirse Ahora" con enlace permanente -->
                             <a href="#" class="btn-zoom" id="joinZoomBtn" data-zoom-url="<?php echo ZOOM_LIVE_URL; ?>" data-is-live="1">
                                 <i class="fas fa-play"></i>
-                                Unirse Ahora
+                                <?= __('lp.meeting_btn_join') ?>
                             </a>
                             <button class="btn-share" id="shareBtn" data-share-url="<?php echo ZOOM_LIVE_URL; ?>">
                                 <i class="fas fa-share-alt"></i>
-                                Compartir
+                                <?= __('lp.meeting_btn_share') ?>
                             </button>
                         <?php else: ?>
                             <!-- Modo REPETICIÓN: Botón "Ver Repetición" con enlace de BD -->
                             <a href="#" class="btn-zoom" id="joinZoomBtn" data-zoom-url="<?php echo htmlspecialchars($zoomVideo['zoom_url']); ?>" data-is-live="0">
                                 <i class="fas fa-play-circle"></i>
-                                Ver Repetición
+                                <?= __('lp.meeting_btn_replay') ?>
                             </a>
                             <button class="btn-share" id="shareBtn" data-share-url="<?php echo htmlspecialchars($zoomVideo['zoom_url']); ?>">
                                 <i class="fas fa-share-alt"></i>
-                                Compartir
+                                <?= __('lp.meeting_btn_share') ?>
                             </button>
                         <?php endif; ?>
                     </div>
@@ -689,9 +698,9 @@ if ($zoomVideo['is_live'] ?? 0) {
                 } else {
                     Swal.fire({
                         icon: 'info',
-                        title: 'Reunión no disponible',
-                        text: 'La reunión aún no está programada. Por favor, inténtalo más tarde.',
-                        confirmButtonText: 'Entendido',
+                        title: '<?= __('lp.meeting_no_avail_title') ?>',
+                        text: '<?= __('lp.meeting_no_avail_text') ?>',
+                        confirmButtonText: '<?= __('lp.meeting_ok') ?>',
                         confirmButtonColor: '#667eea'
                     });
                 }
@@ -707,16 +716,16 @@ if ($zoomVideo['is_live'] ?? 0) {
                 let shareMessage;
                 
                 if (isLive) {
-                    // Modo EN VIVO: Compartir enlace permanente de Zoom
+                    // Live mode: share permanent Zoom link
                     finalShareUrl = shareUrl;
-                    shareMessage = `El enlace de la reunión EN VIVO ha sido copiado al portapapeles.<br><br><strong>¡Compártelo para que se unan a la transmisión en vivo!</strong>`;
+                    shareMessage = `<?= __('lp.meeting_live_shared') ?>`;
                 } else {
-                    // Modo REPETICIÓN: Compartir enlace de meeting.php con referido
+                    // Replay mode: share meeting.php with referral
                     finalShareUrl = 'https://mizton.cat/meeting.php';
                     if (referido) {
                         finalShareUrl += '?ref=' + referido;
                     }
-                    shareMessage = `El enlace de la presentación ha sido copiado al portapapeles.<br><br><strong>Compártelo con quien quieras invitar a conocer esta oportunidad.</strong>`;
+                    shareMessage = `<?= __('lp.meeting_replay_shared') ?>`;
                 }
                 
                 // Copiar al portapapeles
@@ -724,9 +733,9 @@ if ($zoomVideo['is_live'] ?? 0) {
                     navigator.clipboard.writeText(finalShareUrl).then(function() {
                         Swal.fire({
                             icon: 'success',
-                            title: '¡Enlace Copiado!',
+                            title: '<?= __('lp.meeting_link_copied') ?>',
                             html: shareMessage,
-                            confirmButtonText: 'Perfecto',
+                            confirmButtonText: '<?= __('lp.meeting_perfect') ?>',
                             confirmButtonColor: isLive ? '#dc3545' : '#28a745',
                             timer: 5000,
                             timerProgressBar: true
@@ -754,9 +763,9 @@ if ($zoomVideo['is_live'] ?? 0) {
                     document.execCommand('copy');
                     Swal.fire({
                         icon: 'success',
-                        title: '¡Enlace Copiado!',
-                        html: message || `El enlace ha sido copiado al portapapeles.<br><br><strong>Compártelo con quien quieras invitar.</strong>`,
-                        confirmButtonText: 'Perfecto',
+                        title: '<?= __('lp.meeting_link_copied') ?>',
+                        html: message || `<?= __('lp.meeting_replay_shared') ?>`,
+                        confirmButtonText: '<?= __('lp.meeting_perfect') ?>',
                         confirmButtonColor: isLive ? '#dc3545' : '#28a745',
                         timer: 5000,
                         timerProgressBar: true
@@ -764,9 +773,9 @@ if ($zoomVideo['is_live'] ?? 0) {
                 } catch (err) {
                     Swal.fire({
                         icon: 'info',
-                        title: 'Enlace para Compartir',
-                        html: `<p>Copia este enlace para compartir:</p><br><input type="text" value="${text}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" readonly onclick="this.select()">`,
-                        confirmButtonText: 'Cerrar',
+                        title: '<?= __('lp.meeting_share_title') ?>',
+                        html: `<p><?= __('lp.meeting_share_text') ?></p><br><input type="text" value="${text}" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;" readonly onclick="this.select()">`,
+                        confirmButtonText: '<?= __('lp.meeting_close') ?>',
                         confirmButtonColor: isLive ? '#dc3545' : '#667eea'
                     });
                 }
@@ -774,6 +783,12 @@ if ($zoomVideo['is_live'] ?? 0) {
                 document.body.removeChild(textArea);
             }
         });
+    </script>
+    <script>
+    document.addEventListener('click', function(e) {
+        var dd = document.getElementById('langDropdown');
+        if (dd && !dd.contains(e.target)) dd.classList.remove('open');
+    });
     </script>
 </body>
 </html>

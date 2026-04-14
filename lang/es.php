@@ -178,4 +178,47 @@ return [
     'lp.footer_disclaimer' => '<strong>Disclaimer Legal:</strong> La participación en activos digitales implica riesgos. Consulta los términos y condiciones. Mizton no garantiza rendimientos fijos, los beneficios están sujetos al desempeño de la comunidad y la plataforma.',
     'lp.footer_copy'       => '&copy; 2025 Mizton. Todos los derechos reservados.',
 
+    // =============================================
+    // PÁGINAS LEGALES (comunes)
+    // =============================================
+    'lp.legal_back'             => 'Volver al inicio',
+    'lp.terms_meta_title'       => 'Términos y Condiciones - Mizton',
+    'lp.terms_meta_desc'        => 'Términos y Condiciones de uso de la plataforma Mizton. Conoce tus derechos y obligaciones como miembro.',
+    'lp.terms_h1'               => 'Términos y Condiciones',
+    'lp.terms_last_update'      => 'Última actualización: 16 de diciembre de 2025',
+    'lp.privacy_meta_title'     => 'Política de Privacidad - Mizton',
+    'lp.privacy_meta_desc'      => 'Política de Privacidad de Mizton. Conoce cómo protegemos y utilizamos tu información personal.',
+    'lp.privacy_h1'             => 'Política de Privacidad',
+
+    // =============================================
+    // MEETING
+    // =============================================
+    'lp.meeting_meta_title'     => 'Presentación de Oportunidad - Mizton',
+    'lp.meeting_meta_desc'      => 'Unéte a nuestra presentación exclusiva sobre la tokenización de activos del mundo real. Descubre la narrativa que está cambiando la economía mundial.',
+    'lp.meeting_live'           => 'EN VIVO',
+    'lp.meeting_replay'         => 'REPETICIÓN',
+    'lp.meeting_date'           => 'Fecha',
+    'lp.meeting_schedule'       => 'Horario',
+    'lp.meeting_weekdays'       => 'Lunes a Viernes',
+    'lp.meeting_modality'       => 'Modalidad',
+    'lp.meeting_live_pres'      => 'Presentación en Vivo',
+    'lp.meeting_access'         => 'Acceso',
+    'lp.meeting_free'           => 'Completamente Gratuito',
+    'lp.meeting_subtitle'       => 'Presentación Exclusiva de Oportunidad de Negocio',
+    'lp.meeting_btn_join'       => 'Unirse Ahora',
+    'lp.meeting_btn_share'      => 'Compartir',
+    'lp.meeting_btn_replay'     => 'Ver Repetición',
+    'lp.meeting_token_title'    => 'Tokenización de Activos del Mundo Real',
+    'lp.meeting_token_text'     => 'Estás a punto de conocer la narrativa que <strong>YA está cambiando la economía mundial</strong>. Nos referimos a la narrativa de la <strong>Tokenización de Activos del Mundo Real en la Blockchain</strong>. Una tecnología en la que puedes participar de manera <strong>MUY simple</strong>.',
+    'lp.meeting_no_avail_title' => 'Reunión no disponible',
+    'lp.meeting_no_avail_text'  => 'La reunión aún no está programada. Por favor, inténtalo más tarde.',
+    'lp.meeting_ok'             => 'Entendido',
+    'lp.meeting_link_copied'    => '¡Enlace Copiado!',
+    'lp.meeting_live_shared'    => 'El enlace de la reunión EN VIVO ha sido copiado al portapapeles.<br><br><strong>¡Compártelo para que se unan a la transmisión en vivo!</strong>',
+    'lp.meeting_replay_shared'  => 'El enlace de la presentación ha sido copiado al portapapeles.<br><br><strong>Compártelo con quien quieras invitar a conocer esta oportunidad.</strong>',
+    'lp.meeting_perfect'        => 'Perfecto',
+    'lp.meeting_share_title'    => 'Enlace para Compartir',
+    'lp.meeting_share_text'     => 'Copia este enlace para compartir:',
+    'lp.meeting_close'          => 'Cerrar',
+
 ];
