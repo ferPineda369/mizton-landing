@@ -25,10 +25,10 @@ if (isset($_GET['ref'])) {
     }
 }
 
-include 'config.php';
 require_once 'lang/loader.php';
-
 $currentLang = getCurrentLang();
+
+include 'config.php';
 ?>
 <!DOCTYPE html>
 <html lang="<?= __('lp.html_lang') ?>">
