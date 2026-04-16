@@ -160,25 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Add animation styles dynamically
-const style = document.createElement('style');
-style.textContent = `
-    .stat-card,
-    .step-card,
-    .benefit-card,
-    .timeline-item,
-    .token-item {
-        opacity: 0;
-        transform: translateY(30px);
-        transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    
-    .animate-in {
-        opacity: 1 !important;
-        transform: translateY(0) !important;
-    }
-`;
-document.head.appendChild(style);
 
 // Live stats simulation (replace with real API calls)
 function updateLiveStats() {
@@ -224,12 +205,14 @@ if (bookCover) {
     });
 }
 
-// Prevent default on buy buttons (add your purchase logic here)
-document.querySelectorAll('a[href="#buy-now"], a[href="#comprar"]').forEach(btn => {
+// Buy buttons – #buy-now scrolls to #comprar section
+document.querySelectorAll('a[href="#buy-now"]').forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.preventDefault();
-        // Add your purchase modal or redirect logic here
-        alert('Función de compra en desarrollo. Contacta por WhatsApp para adquirir KIMEN tokens.');
+        const comprar = document.getElementById('comprar');
+        if (comprar) {
+            comprar.scrollIntoView({ behavior: 'smooth' });
+        }
     });
 });
 

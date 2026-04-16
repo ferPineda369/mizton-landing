@@ -200,6 +200,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
+    pointer-events: none;
     background-image: 
         radial-gradient(2px 2px at 20% 30%, white, transparent),
         radial-gradient(2px 2px at 60% 70%, white, transparent),
@@ -207,14 +208,7 @@ body {
         radial-gradient(1px 1px at 80% 10%, white, transparent),
         radial-gradient(2px 2px at 90% 60%, white, transparent),
         radial-gradient(1px 1px at 33% 80%, white, transparent);
-    background-size: 200% 200%;
-    animation: stars 60s linear infinite;
     opacity: 0.6;
-}
-
-@keyframes stars {
-    from { background-position: 0 0; }
-    to { background-position: -200% 200%; }
 }
 
 .hero-title {
@@ -230,12 +224,6 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    animation: gradient-shift 3s ease infinite;
-}
-
-@keyframes gradient-shift {
-    0%, 100% { filter: hue-rotate(0deg); }
-    50% { filter: hue-rotate(20deg); }
 }
 
 .hero-subtitle {
@@ -315,12 +303,11 @@ body {
 }
 
 .stat-card {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.08);
     padding: 1.5rem;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .stat-card:hover {
@@ -827,7 +814,6 @@ body {
 
 .countdown-item {
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
     padding: 1.5rem 2rem;
     border-radius: 12px;
     min-width: 100px;
@@ -1001,4 +987,31 @@ body {
     .section-title {
         font-size: 1.8rem;
     }
+}
+
+/* Scroll-reveal animation (lightweight, CSS-only) */
+.stat-card,
+.step-card,
+.benefit-card,
+.timeline-item,
+.token-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.animate-in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Ensure hero content is above stars overlay */
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.section-cta .container {
+    position: relative;
+    z-index: 2;
 }
