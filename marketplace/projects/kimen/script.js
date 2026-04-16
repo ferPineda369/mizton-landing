@@ -1,3 +1,32 @@
+// Navbar: scroll effect + mobile toggle
+(function () {
+    const navbar = document.getElementById('kimen-navbar');
+    const toggle = document.getElementById('kimen-nav-toggle');
+    const mobileMenu = document.getElementById('kimen-mobile-menu');
+
+    if (navbar) {
+        window.addEventListener('scroll', function () {
+            if (window.scrollY > 40) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        }, { passive: true });
+    }
+
+    if (toggle && mobileMenu) {
+        toggle.addEventListener('click', function () {
+            mobileMenu.classList.toggle('open');
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(function (link) {
+            link.addEventListener('click', function () {
+                mobileMenu.classList.remove('open');
+            });
+        });
+    }
+})();
+
 // Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {

@@ -31,6 +31,156 @@ body {
     padding: 0 20px;
 }
 
+/* ── NAVBAR ─────────────────────────────────────────────── */
+.kimen-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background: rgba(10, 10, 10, 0.0);
+    backdrop-filter: blur(0px);
+    border-bottom: 1px solid transparent;
+    transition: background 0.35s ease, backdrop-filter 0.35s ease, border-color 0.35s ease;
+}
+
+.kimen-navbar.scrolled {
+    background: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(14px);
+    border-bottom-color: rgba(255, 255, 255, 0.07);
+}
+
+.kimen-nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.kimen-nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+
+.nav-logo-k    { font-size: 1.35rem; font-weight: 900; color: var(--primary-color); }
+.nav-logo-imen { font-size: 1.35rem; font-weight: 900; color: #fff; }
+
+.nav-logo-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: rgba(255, 215, 0, 0.12);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    color: var(--primary-color);
+}
+
+.kimen-nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.kimen-nav-links a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 6px;
+    transition: all 0.25s ease;
+}
+
+.kimen-nav-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
+
+.nav-wp-link {
+    color: var(--primary-color) !important;
+    border: 1px solid rgba(255, 215, 0, 0.25) !important;
+}
+
+.nav-wp-link:hover { background: rgba(255, 215, 0, 0.1) !important; }
+
+.nav-cta-link {
+    background: var(--primary-color) !important;
+    color: #0a0a0a !important;
+    font-weight: 700 !important;
+}
+
+.nav-cta-link:hover { opacity: 0.88; transform: translateY(-1px); }
+
+/* Mobile toggle */
+.kimen-mobile-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+    background: none;
+    border: none;
+}
+
+.kimen-mobile-toggle span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #fff;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+}
+
+/* Mobile dropdown menu */
+.kimen-mobile-menu {
+    display: none;
+    flex-direction: column;
+    background: rgba(10, 10, 10, 0.97);
+    border-top: 1px solid rgba(255,255,255,0.07);
+    padding: 1rem 1.25rem 1.25rem;
+    gap: 4px;
+}
+
+.kimen-mobile-menu.open { display: flex; }
+
+.kimen-mobile-menu a {
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    padding: 10px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.kimen-mobile-menu a:hover { background: rgba(255,255,255,0.06); color: #fff; }
+.kimen-mobile-menu .nav-cta-link {
+    background: var(--primary-color) !important;
+    color: #0a0a0a !important;
+    text-align: center;
+    margin-top: 6px;
+}
+
+/* Inline whitepaper button (tokenomics section) */
+.btn-wp-inline {
+    display: inline-block;
+    margin-top: 1.25rem;
+    font-size: 0.875rem;
+    padding: 0.55rem 1.25rem;
+    opacity: 0.85;
+}
+
+.btn-wp-inline:hover { opacity: 1; }
+
+@media (max-width: 768px) {
+    .kimen-nav-links { display: none; }
+    .kimen-mobile-toggle { display: flex; }
+}
+
 /* HERO SECTION */
 .hero-section {
     min-height: 100vh;

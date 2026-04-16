@@ -12,7 +12,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    
+
+    <!-- NAVBAR -->
+    <nav class="kimen-navbar" id="kimen-navbar">
+        <div class="kimen-nav-container">
+            <a href="#hero" class="kimen-nav-logo">
+                <span class="nav-logo-k">K</span><span class="nav-logo-imen">IMEN</span>
+                <span class="nav-logo-badge">TOKEN</span>
+            </a>
+            <ul class="kimen-nav-links">
+                <li><a href="#libro">El Libro</a></li>
+                <li><a href="#tokenomics">Tokenomics</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+                <li><a href="whitepaper.php" class="nav-wp-link">📄 Whitepaper</a></li>
+                <li><a href="#comprar" class="nav-cta-link">Comprar KIMEN</a></li>
+            </ul>
+            <div class="kimen-mobile-toggle" id="kimen-nav-toggle">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div class="kimen-mobile-menu" id="kimen-mobile-menu">
+            <a href="#libro">El Libro</a>
+            <a href="#tokenomics">Tokenomics</a>
+            <a href="#roadmap">Roadmap</a>
+            <a href="whitepaper.php">📄 Whitepaper</a>
+            <a href="#comprar" class="nav-cta-link">Comprar KIMEN</a>
+        </div>
+    </nav>
+
     <!-- HERO SECTION -->
     <section id="hero" class="hero-section">
         <div class="stars-bg"></div>
@@ -200,6 +228,9 @@
                         <div class="check-item">✅ Vesting autor 6+36 meses</div>
                         <div class="check-item">✅ Quema orgánica por NFTs</div>
                     </div>
+                    <a href="whitepaper.php#tokenomics" class="btn btn-outline btn-wp-inline">
+                        Ver Tokenomics completo en Whitepaper →
+                    </a>
                 </div>
             </div>
         </div>
@@ -457,7 +488,7 @@
             <p class="footer-copyright">© 2026 Todos derechos reservados</p>
             
             <div class="footer-links">
-                <a href="#whitepaper">Whitepaper</a>
+                <a href="whitepaper.php">Whitepaper</a>
                 <a href="#contracts">Contratos BSC</a>
                 <a href="#audit">Auditoría</a>
                 <a href="#contact">Contacto</a>
