@@ -27,15 +27,26 @@
     }
 })();
 
-// Smooth scroll for anchor links
+// Smooth scroll for anchor links (solo anchors internos válidos)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
+        const href = this.getAttribute('href');
+        
+        // Ignorar # vacío o links que no sean anchors internos
+        if (!href || href === '#' || href.length <= 1) {
+            e.preventDefault();
+            return;
+        }
+        
+        const target = document.querySelector(href);
         if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
+            e.preventDefault();
+            const navbarHeight = 64;
+            const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+            
+            window.scrollTo({
+                top: targetPosition,
+                behavior: 'smooth'
             });
         }
     });
