@@ -202,13 +202,6 @@ document.querySelectorAll('a[href="#download"]').forEach(btn => {
     });
 });
 
-// Whitepaper button
-document.querySelectorAll('a[href="#whitepaper"]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        // Add your whitepaper link here
-        alert('Whitepaper próximamente disponible.');
-    });
-});
+// Whitepaper button – links directly to whitepaper.php
 
 console.log('KIMEN Token Landing Page - Loaded Successfully');

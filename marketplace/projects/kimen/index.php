@@ -30,7 +30,7 @@
                 <a href="#comprar" class="btn btn-primary btn-large">
                     COMPRAR KIMEN $25 USD → VENTA PÚBLICA
                 </a>
-                <a href="#whitepaper" class="btn btn-outline btn-large">
+                <a href="whitepaper.php" class="btn btn-outline btn-large">
                     LEER WHITEPAPER COMPLETO
                 </a>
             </div>
