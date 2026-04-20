@@ -161,10 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// Live stats simulation (replace with real API calls)
+// Live stats (replace with real API calls when ready)
 function updateLiveStats() {
-    // Simulate token sales progress
-    const tokensSold = 34; // Replace with actual data
+    const tokensSold = 34;
     const totalTokens = 800;
     const percentSold = Math.round((tokensSold / totalTokens) * 100);
     const totalRaised = 850;
@@ -205,13 +204,15 @@ if (bookCover) {
     });
 }
 
-// Buy buttons – #buy-now scrolls to #comprar section
+// Buy buttons – #buy-now scrolls to #obtener section
 document.querySelectorAll('a[href="#buy-now"]').forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const comprar = document.getElementById('comprar');
-        if (comprar) {
-            comprar.scrollIntoView({ behavior: 'smooth' });
+        const obtener = document.getElementById('obtener');
+        if (obtener) {
+            const navbarHeight = 64;
+            const targetPosition = obtener.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+            window.scrollTo({ top: targetPosition, behavior: 'smooth' });
         }
     });
 });

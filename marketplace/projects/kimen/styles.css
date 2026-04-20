@@ -534,6 +534,32 @@ body {
     opacity: 0.7;
 }
 
+.disclaimer-cultural {
+    text-align: left;
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    background: rgba(255, 215, 0, 0.04);
+}
+
+.disclaimer-cultural h4 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.disclaimer-cultural p {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.disclaimer-cultural .diagram-note {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    font-style: italic;
+    margin-bottom: 0;
+}
+
 /* TOKENOMICS */
 .tokenomics-content {
     display: grid;

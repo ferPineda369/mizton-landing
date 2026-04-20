@@ -35,8 +35,8 @@ return [
     // =============================================
     // HERO
     // =============================================
-    'lp.hero_title_main'   => 'Join the Movement That Will Change the Economy:',
-    'lp.hero_title_sub'    => 'A Membership You Could Get Back?',
+    'lp.hero_title_main'   => 'Join in the Movement That Will Change the Economy:',
+    'lp.hero_title_sub'    => 'A Membership That You Could Get Back?',
     'lp.hero_subtitle'     => 'Participate from $20 USD in an innovative and community-driven proposal. Build with us new ways to manage your family\'s economy.',
     'lp.hero_invited_by'   => 'Invited by',
     'lp.hero_loading'      => 'Loading...',
@@ -61,7 +61,7 @@ return [
     // STORYTELLING
     // =============================================
     'lp.story_title'       => 'Join the Financial Revolution',
-    'lp.story_p1'          => 'Humanity is awakening to a <strong>financial revolution</strong> that will change everything we know. Mizton is your gateway to the new paradigm: a <strong>global community</strong> of people who bet on tokenization to protect their family economies and build a real legacy.',
+    'lp.story_p1'          => 'Humanity is awakening to a <strong>financial revolution</strong> that will change everything we have known. Mizton is your gateway to the new paradigm: a <strong>global community</strong> of people who bet on tokenization to protect their family economies and build a real legacy.',
     'lp.story_p2'          => 'It\'s time to leave old models behind and join a <strong>disruptive, inclusive movement with a promising future</strong>.',
     'lp.story_question'    => 'Are you ready to be a pioneer?',
 
@@ -81,7 +81,7 @@ return [
     // SECCIÓN RWA
     // =============================================
     'lp.rwa_title'         => 'Why is it crucial to get involved in RWA tokenization today?',
-    'lp.rwa_p1'            => 'We live in an era where the global economy is experiencing an <strong>unprecedented change</strong>. The tokenization of real-world assets (RWA) represents the natural evolution of money, the economy and investment, digitalizing goods and opportunities that were previously out of reach for most people.',
+    'lp.rwa_p1'            => 'We live in an era where the global economy is experiencing an <strong>unprecedented change</strong>. The tokenization of real-world assets (RWA) represents the natural evolution of money, the economy and investment, digitalizing assets and opportunities that were previously out of reach for most people.',
     'lp.rwa_p2'            => 'From real estate, precious metals, to productive projects, everything can now become a token that is bought, sold and owned in a <strong>secure and transparent</strong> way on the blockchain.',
     'lp.rwa_b1'            => 'Democratizes access',
     'lp.rwa_b2'            => 'Reduces intermediaries',
@@ -114,7 +114,7 @@ return [
     'lp.ben3_title'        => 'Innovative Community',
     'lp.ben3_text'         => 'Be part of the most innovative crypto community and connect with pioneers like you.',
     'lp.ben4_title'        => 'Transform Your Economy',
-    'lp.ben4_text'         => 'An accessible and real opportunity to transform your family economy from $20 USD.',
+    'lp.ben4_text'         => 'An accessible and real opportunity to transform your family economy since $20 USD.',
     'lp.ben5_title'        => 'Exclusive Bonuses',
     'lp.ben5_text'         => 'Access exclusive bonuses for being a pioneer and for referrals you invite to the community.',
     'lp.ben6_title'        => 'Financial Education',

@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="KIMEN Token - El primer libro tokenizado de la saga. Participa desde $25 USD y recibe regalías del 15% de las ventas.">
-    <meta name="keywords" content="KIMEN, token, libro tokenizado, blockchain, BSC, regalías, NFT">
+    <meta name="description" content="KIMEN Token - El primer libro tokenizado de la saga. Únete desde $25 USD. Token de utilidad cultural en BSC.">
+    <meta name="keywords" content="KIMEN, token, libro tokenizado, blockchain, BSC, utilidad cultural, NFT, saga">
     <title>KIMEN Token - Un Bello Mundo por Extrañar Tokenizado</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +25,7 @@
                 <li><a href="#tokenomics">Tokenomics</a></li>
                 <li><a href="#roadmap">Roadmap</a></li>
                 <li><a href="whitepaper.php" class="nav-wp-link">📄 Whitepaper</a></li>
-                <li><a href="#comprar" class="nav-cta-link">Comprar KIMEN</a></li>
+                <li><a href="#obtener" class="nav-cta-link">Obtener KIMEN</a></li>
             </ul>
             <div class="kimen-mobile-toggle" id="kimen-nav-toggle">
                 <span></span><span></span><span></span>
@@ -37,7 +37,7 @@
             <a href="#tokenomics">Tokenomics</a>
             <a href="#roadmap">Roadmap</a>
             <a href="whitepaper.php">📄 Whitepaper</a>
-            <a href="#comprar" class="nav-cta-link">Comprar KIMEN</a>
+            <a href="#obtener" class="nav-cta-link">Obtener KIMEN</a>
         </div>
     </nav>
 
@@ -51,12 +51,12 @@
             </h1>
             <h2 class="hero-subtitle">
                 El primer libro de la saga KIMEN<br>
-                Participa desde $25 USD
+                Únete desde $25 USD
             </h2>
             
             <div class="cta-buttons">
-                <a href="#comprar" class="btn btn-primary btn-large">
-                    COMPRAR KIMEN $25 USD → VENTA PÚBLICA
+                <a href="#obtener" class="btn btn-primary btn-large">
+                    OBTENER KIMEN $25 USD → VENTA PÚBLICA
                 </a>
                 <a href="whitepaper.php" class="btn btn-outline btn-large">
                     LEER WHITEPAPER COMPLETO
@@ -71,10 +71,6 @@
                 <div class="stat-card">
                     <div class="stat-number">800</div>
                     <div class="stat-label">disponibles</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">15%</div>
-                    <div class="stat-label">regalías holders</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number">Jun 2026</div>
@@ -103,7 +99,7 @@
                         "Un Bello Mundo por Extrañar" es la primera entrega de la saga KIMEN, una obra que fusiona filosofía, narrativa especulativa y reflexión humana en un universo expandible.
                     </p>
                     <p class="intro-text">
-                        Con KIMEN no solo lees el libro: <strong>participas en su éxito económico y cultural.</strong>
+                        Con KIMEN no solo lees el libro: <strong>te conviertes en parte activa de su historia y su comunidad.</strong>
                     </p>
                     
                     <div class="features-grid">
@@ -145,39 +141,33 @@
         </div>
     </section>
 
-    <!-- SECCIÓN 2: ¿CÓMO FUNCIONA? -->
+    <!-- SECCIÓN 2: ASÍ FUNCIONA TU PARTICIPACIÓN -->
     <section id="como-funciona" class="section-dark">
         <div class="container">
-            <h2 class="section-title">SIMPLE COMO LEER UN LIBRO</h2>
+            <h2 class="section-title">ASÍ FUNCIONA TU PARTICIPACIÓN</h2>
             
             <div class="steps-grid">
                 <div class="step-card">
                     <div class="step-number">1</div>
-                    <h3>COMPRA KIMEN</h3>
-                    <p>$25 USD por token<br>(800 disponibles)</p>
+                    <h3>OBTÉN KIMEN</h3>
+                    <p>$25 USD por token<br>(800 disponibles)<br><em>Tu llave de acceso al universo KIMEN.</em></p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">2</div>
-                    <h3>RECIBE REGALÍAS</h3>
-                    <p>15% de ventas del libro<br>cada 6 meses</p>
+                    <h3>ACCEDE AL ECOSISTEMA</h3>
+                    <p>Contenido exclusivo, capítulos inéditos,<br>votaciones sobre la saga y decisiones creativas.</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">3</div>
-                    <h3>ACCEDE A EXCLUSIVOS</h3>
-                    <p>NFTs, capítulos extra,<br>votaciones saga</p>
+                    <h3>PARTICIPA EN LA COMUNIDAD</h3>
+                    <p>NFTs, ediciones firmadas, eventos<br>y beneficios que crecen con el proyecto.</p>
                 </div>
             </div>
             
-            <div class="diagram-box">
-                <h4>Flujo de Regalías</h4>
-                <div class="flow-diagram">
-                    <div class="flow-item">Ventas Libro</div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">20% Comunidad</div>
-                    <div class="flow-arrow">→</div>
-                    <div class="flow-item">Claim en tu wallet</div>
-                </div>
-                <p class="diagram-note">(Mizton 5% + Holders KIMEN 15%)</p>
+            <div class="diagram-box disclaimer-cultural">
+                <h4>Nota sobre distribución cultural</h4>
+                <p>Si el proyecto alcanza sus hitos de desarrollo y el autor así lo decide, el 20% de los ingresos generados por ventas del libro podrá distribuirse voluntariamente entre la comunidad KIMEN (15%) y Mizton (5%) como reconocimiento a quienes apoyaron desde el inicio.</p>
+                <p class="diagram-note">Esta distribución no es garantizada, no es un derecho contractual y no constituye promesa de retorno económico. Su ocurrencia depende exclusivamente del cumplimiento de condiciones futuras e inciertas.</p>
             </div>
         </div>
     </section>
@@ -236,89 +226,41 @@
         </div>
     </section>
 
-    <!-- SECCIÓN 4: ¿QUÉ GANAS? -->
+    <!-- SECCIÓN 4: QUÉ OBTIENES -->
     <section id="beneficios" class="section-light">
         <div class="container">
-            <h2 class="section-title">TUS BENEFICIOS REALES</h2>
+            <h2 class="section-title">QUÉ OBTIENES COMO HOLDER KIMEN</h2>
             
             <div class="benefits-grid">
                 <div class="benefit-card">
-                    <div class="benefit-icon">💰</div>
-                    <h3>REGALÍAS REALES</h3>
-                    <p>15% de TODAS las ventas del libro</p>
-                    <p class="benefit-example">(Ej: 50 KIMEN → $15-300/año estimado)</p>
-                </div>
-                
-                <div class="benefit-card">
                     <div class="benefit-icon">🎟️</div>
-                    <h3>ACCESO EXCLUSIVO</h3>
-                    <p>Capítulos inéditos, detrás de cámaras, votaciones decisiones creativas</p>
+                    <h3>ACCESO CULTURAL</h3>
+                    <p>Capítulos inéditos, detrás de cámaras, votaciones sobre decisiones creativas de la saga.</p>
                 </div>
                 
                 <div class="benefit-card">
                     <div class="benefit-icon">🖼️</div>
                     <h3>NFTs COLECCIONABLES</h3>
-                    <p>Ediciones firmadas, ilustraciones originales</p>
+                    <p>Ediciones firmadas, ilustraciones originales.</p>
                     <p class="benefit-example">(staking KIMEN para whitelist)</p>
                 </div>
                 
                 <div class="benefit-card">
+                    <div class="benefit-icon">🌐</div>
+                    <h3>COMUNIDAD ACTIVA</h3>
+                    <p>Sé parte del universo KIMEN desde su primer capítulo.</p>
+                </div>
+                
+                <div class="benefit-card">
                     <div class="benefit-icon">🚀</div>
-                    <h3>VALOR FUTURO</h3>
-                    <p>Saga expandible, traducciones, adaptaciones</p>
+                    <h3>ECOSISTEMA EXPANSIVO</h3>
+                    <p>Saga expandible, traducciones, adaptaciones futuras.</p>
                 </div>
             </div>
-            
-            <div class="callout-box">
-                <p><strong>¡Mizton recibe 5% bajo MISMO mecanismo!</strong></p>
-                <p>Simetría total comunidad ↔ holders</p>
-            </div>
         </div>
     </section>
 
-    <!-- SECCIÓN 5: NÚMEROS CLAROS -->
-    <section id="numeros" class="section-dark">
-        <div class="container">
-            <h2 class="section-title">CUÁNTO PUEDES GANAR (escenarios)</h2>
-            
-            <div class="table-responsive">
-                <table class="earnings-table">
-                    <thead>
-                        <tr>
-                            <th>Regalías Anuales</th>
-                            <th>Pool Holders (15%)</th>
-                            <th>Por 10 KIMEN</th>
-                            <th>Por 50 KIMEN</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>$10,000</td>
-                            <td>$1,500</td>
-                            <td>$3 USD</td>
-                            <td>$16 USD</td>
-                        </tr>
-                        <tr>
-                            <td>$50,000</td>
-                            <td>$7,500</td>
-                            <td>$16 USD</td>
-                            <td>$78 USD</td>
-                        </tr>
-                        <tr>
-                            <td>$200,000</td>
-                            <td>$30,000</td>
-                            <td>$63 USD</td>
-                            <td>$313 USD</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            
-            <p class="disclaimer">*Escenarios ilustrativos. Regalías NO garantizadas.</p>
-        </div>
-    </section>
-
-    <!-- SECCIÓN 6: ROADMAP -->
+    <!-- SECCIÓN 5: ROADMAP -->
     <section id="roadmap" class="section-light">
         <div class="container">
             <h2 class="section-title">CAMINO CLARO 2026-2028</h2>
@@ -331,11 +273,11 @@
                         <p>Smart Contracts Audit ✓</p>
                     </div>
                 </div>
-                <div class="timeline-item completed">
+                <div class="timeline-item">
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
                         <h4>Q2 2026</h4>
-                        <p>Venta Pública $20K ✓</p>
+                        <p>Venta Pública</p>
                     </div>
                 </div>
                 <div class="timeline-item">
@@ -356,7 +298,7 @@
                     <div class="timeline-marker"></div>
                     <div class="timeline-content">
                         <h4>Q1 2027</h4>
-                        <p>Primer Claim Regalías</p>
+                        <p>Primer ciclo de reconocimiento a la comunidad (sujeto a hitos)</p>
                     </div>
                 </div>
                 <div class="timeline-item">
@@ -398,22 +340,24 @@
         </div>
     </section>
 
-    <!-- SECCIÓN 7: DISCLAIMER LEGAL -->
+    <!-- SECCIÓN 6: DISCLAIMER LEGAL -->
     <section id="legal" class="section-legal">
         <div class="container">
-            <h2 class="section-title">IMPORTANT: KIMEN NO ES SECURITY TOKEN</h2>
+            <h2 class="section-title">KIMEN ES UN TOKEN DE UTILIDAD CULTURAL</h2>
             
             <div class="legal-content">
                 <div class="legal-checks">
-                    <div class="legal-item">✅ Token de UTILIDAD cultural + acceso</div>
-                    <div class="legal-item">✅ 15% regalías NO garantizadas</div>
-                    <div class="legal-item">✅ NO propiedad, NO dividendos fijos</div>
-                    <div class="legal-item">✅ NO acciones, NO inversión pasiva</div>
+                    <div class="legal-item">✅ Acceso a contenido y comunidad del universo KIMEN</div>
+                    <div class="legal-item">✅ Participación en decisiones creativas de la saga</div>
+                    <div class="legal-item">✅ Posible distribución voluntaria futura (no garantizada, no contractual)</div>
+                    <div class="legal-item">✅ No representa propiedad, acciones ni dividendos</div>
+                    <div class="legal-item">✅ No es un instrumento de inversión ni valor mobiliario</div>
                 </div>
                 
                 <p class="legal-warning">
-                    <strong>Participar = riesgo total de capital.</strong><br>
-                    Consultar asesor legal local.
+                    <strong>KIMEN es para personas que quieren ser parte de una obra desde su origen, no para quienes buscan un instrumento financiero.</strong><br>
+                    Obtener KIMEN implica riesgo total de los recursos aportados.<br>
+                    Consulta a tu asesor legal antes de participar.
                 </p>
                 
                 <div class="badges">
@@ -427,8 +371,8 @@
         </div>
     </section>
 
-    <!-- SECCIÓN 8: ÚNETE YA -->
-    <section id="comprar" class="section-cta">
+    <!-- SECCIÓN 7: OBTENER KIMEN -->
+    <section id="obtener" class="section-cta">
         <div class="stars-bg"></div>
         <div class="container">
             <h1 class="cta-title">ÚLTIMOS 800 KIMEN DISPONIBLES</h1>
@@ -457,18 +401,18 @@
             
             <div class="live-stats">
                 <div class="stat-live">
-                    <strong>Tokens Vendidos:</strong>
-                    <span id="tokensSold">234</span>/800 (<span id="percentSold">29</span>%)
+                    <strong>Tokens distribuidos:</strong>
+                    <span id="tokensSold">34</span>/800 (<span id="percentSold">4</span>%)
                 </div>
                 <div class="stat-live">
                     <strong>Recaudado:</strong>
-                    $<span id="totalRaised">5,850</span> / $20,000
+                    $<span id="totalRaised">850</span> / $20,000
                 </div>
             </div>
             
             <div class="cta-buttons-final">
                 <a href="#buy-now" class="btn btn-primary btn-xlarge">
-                    COMPRAR AHORA $25 KIMEN
+                    PARTICIPAR AHORA — OBTENER KIMEN $25
                 </a>
             </div>
             
@@ -484,7 +428,6 @@
     <!-- FOOTER -->
     <footer class="footer">
         <div class="container">
-            <p class="footer-title">KIMEN Token - Primer libro tokenizado Mizton</p>
             <p class="footer-copyright">© 2026 Todos derechos reservados</p>
             
             <div class="footer-links">
@@ -494,7 +437,7 @@
                 <a href="#contact">Contacto</a>
             </div>
             
-            <p class="footer-warning">⚠️ Riesgo total de capital. No financial advice.</p>
+            <p class="footer-warning">⚠️ Esto no es asesoría financiera. Obtener KIMEN implica riesgo total del capital aportado. La distribución cultural futura mencionada no está garantizada ni es un derecho exigible.</p>
         </div>
     </footer>
 
