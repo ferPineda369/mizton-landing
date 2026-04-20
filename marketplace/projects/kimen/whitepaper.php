@@ -48,16 +48,15 @@
           <li><a href="#contexto"><span class="section-number">3.</span> Contexto del Proyecto</a></li>
           <li><a href="#objetivo"><span class="section-number">4.</span> Objetivo del Ecosistema</a></li>
           <li><a href="#naturaleza"><span class="section-number">5.</span> Naturaleza del Token</a></li>
-          <li><a href="#enfoque"><span class="section-number">6.</span> Enfoque Corregido</a></li>
-          <li><a href="#arquitectura"><span class="section-number">7.</span> Arquitectura Conceptual</a></li>
-          <li><a href="#emision"><span class="section-number">8.</span> Emisión y Supply</a></li>
-          <li><a href="#utilidades"><span class="section-number">9.</span> Utilidades</a></li>
-          <li><a href="#mecanismos"><span class="section-number">10.</span> Mecanismos Futuros</a></li>
-          <li><a href="#roadmap-detail"><span class="section-number">11.</span> Roadmap Revisado</a></li>
-          <li><a href="#riesgos"><span class="section-number">12.</span> Riesgos</a></li>
-          <li><a href="#marco"><span class="section-number">13.</span> Marco Interpretativo</a></li>
-          <li><a href="#conclusion"><span class="section-number">14.</span> Conclusión</a></li>
-          <li><a href="#disclaimer"><span class="section-number">15.</span> Disclaimer Final</a></li>
+          <li><a href="#arquitectura"><span class="section-number">6.</span> Arquitectura Conceptual</a></li>
+          <li><a href="#emision"><span class="section-number">7.</span> Emisión y Supply</a></li>
+          <li><a href="#utilidades"><span class="section-number">8.</span> Utilidades</a></li>
+          <li><a href="#mecanismos"><span class="section-number">9.</span> Mecanismos Futuros</a></li>
+          <li><a href="#roadmap-detail"><span class="section-number">10.</span> Roadmap</a></li>
+          <li><a href="#riesgos"><span class="section-number">11.</span> Riesgos</a></li>
+          <li><a href="#marco"><span class="section-number">12.</span> Marco Interpretativo</a></li>
+          <li><a href="#conclusion"><span class="section-number">13.</span> Conclusión</a></li>
+          <li><a href="#disclaimer"><span class="section-number">14.</span> Disclaimer Final</a></li>
         </ul>
       </nav>
     </aside>

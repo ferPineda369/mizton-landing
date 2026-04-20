@@ -103,29 +103,9 @@
   </div>
 </section>
 
-<!-- ── 6. Enfoque Corregido ───────────────────────────────── -->
-<section class="wp-section" id="enfoque">
-  <h2><span class="section-number">6</span> Enfoque Corregido sobre Comunidad y Reconocimiento</h2>
-
-  <p>La versión previa del documento utilizaba expresiones como "revenue-sharing", "regalías para holders", "claim en wallet", "cuánto puedes ganar" y otras fórmulas orientadas a retorno económico. Ese lenguaje eleva sustancialmente el riesgo de que el proyecto sea interpretado como oferta de inversión.</p>
-
-  <p>Por ello, el enfoque corregido establece lo siguiente:</p>
-
-  <ul>
-    <li>El proyecto puede contemplar en el futuro <strong>mecanismos voluntarios de reconocimiento comunitario</strong>, pero no como obligación contractual ni como derecho automático del holder.</li>
-    <li>Si alguna vez existiera una asignación de recursos a la comunidad, dependería de variables futuras e inciertas: viabilidad legal, estructura regulatoria adecuada, desempeño del proyecto, sostenibilidad operativa y decisión formal del emisor o estructura correspondiente.</li>
-    <li>Ninguna mención en este documento debe entenderse como promesa de pagos periódicos, retornos, beneficios pasivos, rendimiento variable ni distribución exigible.</li>
-  </ul>
-
-  <div class="wp-callout">
-    <h4>En otras palabras</h4>
-    <p>El token puede llegar a convivir con un ecosistema que reconozca a su comunidad, pero <strong>ese escenario es eventual, condicionado y no garantizado</strong>.</p>
-  </div>
-</section>
-
-<!-- ── 7. Arquitectura Conceptual ─────────────────────────── -->
+<!-- ── 6. Arquitectura Conceptual ──────────────────────────── -->
 <section class="wp-section" id="arquitectura">
-  <h2><span class="section-number">7</span> Arquitectura Conceptual del Proyecto</h2>
+  <h2><span class="section-number">6</span> Arquitectura Conceptual del Proyecto</h2>
 
   <p>La arquitectura propuesta para KIMEN contempla los siguientes componentes:</p>
 
@@ -143,9 +123,9 @@
   </div>
 </section>
 
-<!-- ── 8. Emisión y Supply ────────────────────────────────── -->
+<!-- ── 7. Emisión y Supply ────────────────────────────────── -->
 <section class="wp-section" id="emision">
-  <h2><span class="section-number">8</span> Emisión y Supply</h2>
+  <h2><span class="section-number">7</span> Emisión y Supply</h2>
 
   <p>El diseño tokenómico propuesto considera un suministro total fijo de <strong>4,800 KIMEN</strong>. La finalidad de esta escasez programada es sostener coherencia dentro del ecosistema y ordenar la distribución entre comunidad, creador, actividades de crecimiento y reservas narrativas.</p>
 
@@ -183,9 +163,9 @@
   <p><em>Estos porcentajes son únicamente orientativos y podrían variar. No constituyen obligación rígida ni compromiso irrevocable.</em></p>
 </section>
 
-<!-- ── 9. Utilidades del Ecosistema ────────────────────────── -->
+<!-- ── 8. Utilidades del Ecosistema ────────────────────────── -->
 <section class="wp-section" id="utilidades">
-  <h2><span class="section-number">9</span> Utilidades del Ecosistema</h2>
+  <h2><span class="section-number">8</span> Utilidades del Ecosistema</h2>
 
   <h3>Acceso a contenido exclusivo</h3>
   <p>Los holders podrían tener acceso preferente a materiales no públicos, tales como borradores, capítulos extra, comentarios del autor, artes conceptuales, avances editoriales, notas del proceso creativo y documentos seleccionados del universo narrativo.</p>
@@ -200,9 +180,9 @@
   <p>Los futuros NFTs o activos temáticos del universo KIMEN podrían requerir KIMEN para acceder a listas de espera, descuentos internos, prioridad de adquisición o participación en dinámicas específicas.</p>
 </section>
 
-<!-- ── 10. Mecanismos Comunitarios Futuros ────────────────── -->
+<!-- ── 9. Mecanismos Comunitarios Futuros ─────────────────── -->
 <section class="wp-section" id="mecanismos">
-  <h2><span class="section-number">10</span> Sobre Posibles Mecanismos Comunitarios Futuros</h2>
+  <h2><span class="section-number">9</span> Sobre Posibles Mecanismos Comunitarios Futuros</h2>
 
   <p>Si en una etapa posterior el proyecto lograra madurez comercial, estructura jurídica adecuada y condiciones regulatorias compatibles, podría evaluarse la creación de programas de reconocimiento comunitario.</p>
 
@@ -223,9 +203,9 @@
   </div>
 </section>
 
-<!-- ── 11. Roadmap Revisado ───────────────────────────────── -->
+<!-- ── 10. Roadmap ────────────────────────────────────────── -->
 <section class="wp-section" id="roadmap-detail">
-  <h2><span class="section-number">11</span> Roadmap Revisado</h2>
+  <h2><span class="section-number">10</span> Roadmap</h2>
 
   <p>El roadmap debe leerse como una <strong>ruta tentativa</strong>, no como compromiso cerrado.</p>
 
@@ -242,16 +222,14 @@
     </tbody>
   </table>
 
-  <p><em>Los hitos originalmente expresados como "DEX listing", "claim rewards", "revenue-share" o métricas de retorno para holders se eliminan o reinterpretan como metas opcionales y condicionadas, precisamente para no inducir lectura de inversión.</em></p>
-
   <h3>Liquidez y mercado secundario</h3>
   <p>La existencia futura de un mercado secundario no debe asumirse como parte esencial del proyecto. Aunque técnicamente un token BEP-20 puede ser transferible, eso no equivale a promesa de liquidez, profundidad de mercado, estabilidad de precio, capacidad de salida ni posibilidad real de compraventa en condiciones favorables.</p>
-  <p>En esta versión corregida, KIMEN no debe promoverse por su potencial de trading, apreciación o salida. Si en algún momento existiera negociación secundaria, esta sería un hecho de mercado externo y no un beneficio prometido por el proyecto.</p>
+  <p>Si en algún momento existiera negociación secundaria, esta sería un hecho de mercado externo y no un beneficio prometido por el proyecto.</p>
 </section>
 
-<!-- ── 12. Riesgos ────────────────────────────────────────── -->
+<!-- ── 11. Riesgos ────────────────────────────────────────── -->
 <section class="wp-section" id="riesgos">
-  <h2><span class="section-number">12</span> Riesgos Principales</h2>
+  <h2><span class="section-number">11</span> Riesgos Principales</h2>
 
   <p>KIMEN presenta riesgos materiales que deben expresarse con claridad:</p>
 
@@ -276,49 +254,33 @@
   </div>
 </section>
 
-<!-- ── 13. Marco Interpretativo ───────────────────────────── -->
+<!-- ── 12. Marco Interpretativo ───────────────────────────── -->
 <section class="wp-section" id="marco">
-  <h2><span class="section-number">13</span> Marco Interpretativo Correcto</h2>
+  <h2><span class="section-number">12</span> Marco Interpretativo</h2>
 
-  <p>Para reducir interpretaciones incorrectas, este documento debe leerse bajo estas reglas:</p>
+  <p>Este documento debe leerse bajo las siguientes premisas:</p>
 
   <ul>
-    <li>KIMEN es una herramienta de acceso cultural.</li>
+    <li>KIMEN es una herramienta de acceso cultural, no un instrumento financiero.</li>
     <li>El whitepaper describe una visión de ecosistema, no una garantía de ejecución.</li>
     <li>Ningún apartado debe interpretarse como asesoría legal, financiera o fiscal.</li>
     <li>La posible evolución regulatoria del proyecto será posterior y dependerá de madurez operativa y revisión especializada.</li>
-    <li>Toda comunicación pública del proyecto debe mantener coherencia con este enfoque y evitar lenguaje de inversión.</li>
-  </ul>
-
-  <h3>Comunicación recomendada para el proyecto</h3>
-  <p>Toda la comunicación del ecosistema KIMEN debería centrarse en:</p>
-  <ul>
-    <li>Obra, comunidad, acceso, cultura, coleccionabilidad</li>
-    <li>Narrativa, participación creativa, edición independiente</li>
-    <li>Universo expandible, experiencias digitales</li>
-  </ul>
-
-  <p>Y debería <strong>evitar</strong> expresiones como:</p>
-  <ul>
-    <li>Inversión, retorno, ganancia, rendimiento, payout</li>
-    <li>Revenue-share, claim de regalías, ingresos pasivos</li>
-    <li>Upside, oportunidad financiera, valor futuro del token</li>
-    <li>Cuánto puedes ganar, salida en DEX como beneficio central</li>
+    <li>La adquisición de KIMEN no genera derechos automáticos sobre ingresos, beneficios económicos ni rendimientos de ningún tipo.</li>
   </ul>
 
   <div class="wp-callout">
-    <h4>Diferencia decisiva</h4>
-    <p>Ese cambio no es superficial: es lo que separa un documento de comunidad cultural de un documento que parece una colocación de valores encubierta.</p>
+    <h4>Nota</h4>
+    <p>Todo el ecosistema KIMEN gira alrededor de la obra, la comunidad, el acceso cultural, la narrativa, la participación creativa y las experiencias digitales. Este es el único marco válido para interpretar el presente documento.</p>
   </div>
 </section>
 
-<!-- ── 14. Conclusión ─────────────────────────────────────── -->
+<!-- ── 13. Conclusión ─────────────────────────────────────── -->
 <section class="wp-section" id="conclusion">
-  <h2><span class="section-number">14</span> Conclusión</h2>
+  <h2><span class="section-number">13</span> Conclusión</h2>
 
-  <p>KIMEN puede presentarse de forma coherente como un <strong>proyecto cultural tokenizado orientado a comunidad, acceso y expansión narrativa</strong>. Para ello, debe abandonar cualquier promesa, simulación o expectativa de rendimiento económico y concentrarse en su dimensión creativa, digital y participativa.</p>
+  <p>KIMEN es un <strong>proyecto cultural tokenizado orientado a comunidad, acceso y expansión narrativa</strong>. Su propuesta central es permitir que lectores y entusiastas formen parte, desde el inicio, de un ecosistema literario digital que podría crecer si las condiciones creativas, técnicas y legales lo permiten.</p>
 
-  <p>Su propuesta más defendible no es "invierte en un libro y recibe regalías", sino <strong>"forma parte desde el inicio de un ecosistema literario digital que podría crecer si las condiciones creativas, técnicas y legales lo permiten"</strong>. Esa diferencia es decisiva para el tono legal, comercial y reputacional del proyecto.</p>
+  <p>Con un suministro fijo de 4,800 tokens, una arquitectura pensada para acceso y coordinación comunitaria, y un roadmap sujeto a la evolución real del proyecto, KIMEN aspira a demostrar que la infraestructura digital puede potenciar la relación entre un autor y su comunidad de una forma que el modelo editorial tradicional no ofrece.</p>
 
   <div class="wp-final-cta">
     <h3>Forma parte del universo KIMEN desde su primer capítulo.</h3>
@@ -327,9 +289,9 @@
   </div>
 </section>
 
-<!-- ── 15. Disclaimer Final ───────────────────────────────── -->
+<!-- ── 14. Disclaimer Final ───────────────────────────────── -->
 <section class="wp-section" id="disclaimer">
-  <h2><span class="section-number">15</span> Disclaimer Final</h2>
+  <h2><span class="section-number">14</span> Disclaimer Final</h2>
 
   <div class="wp-risk-box">
     <h4>⚠️ Aviso legal completo</h4>
