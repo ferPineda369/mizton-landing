@@ -66,6 +66,12 @@ async function connectWallet() {
         return;
     }
 
+    const connectBtn = $('btn-connect-wallet');
+    if (connectBtn) {
+        connectBtn.disabled = true;
+        connectBtn.textContent = 'Conectando...';
+    }
+
     try {
         showStatus('Conectando wallet...', 'info');
 

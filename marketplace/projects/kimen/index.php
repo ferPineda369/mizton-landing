@@ -410,6 +410,15 @@
                 </div>
             </div>
             
+            <!-- Security Notice -->
+            <div class="security-notice">
+                <p><strong>⚠️ Aviso de seguridad:</strong> MetaMask puede mostrar una advertencia sobre el contrato. 
+                Esto es normal para contratos nuevos. Verifica siempre la dirección del contrato: 
+                <code>0x27AD...B427</code> 
+                <a href="https://bscscan.com/address/0x27AD8520c8623C3e43cDeE7CDDb8042A63cCB427" target="_blank" rel="noopener">Ver en BscScan</a>
+                </p>
+            </div>
+
             <!-- Buy Widget: Wallet NO conectada -->
             <div id="buy-no-wallet" class="buy-widget-container">
                 <button id="btn-connect-wallet" class="btn btn-primary btn-xlarge">
