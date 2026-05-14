@@ -481,7 +481,7 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js" integrity="sha512-xYSMo0Nh4h9AVg8MKApFfCqOLGMD0RgyOvMFCmEoMU64e88M9GkOAaz/SEZkxfLho2fOhqMHNg/08CXBQYQ7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="buy-widget.js"></script>
     <script src="script.js"></script>
 </body>
