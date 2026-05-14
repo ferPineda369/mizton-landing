@@ -253,8 +253,8 @@ async function buyTokens() {
         return;
     }
 
-    // tokenAmount en unidades del contrato (con 18 decimales)
-    const tokenAmount = ethers.parseUnits(String(amount), 18);
+    // El contrato espera enteros, NO wei. Multiplica internamente por 1e18.
+    const tokenAmount = amount;
 
     try {
         showStatus('Enviando compra... Confirma en tu wallet.', 'info');
