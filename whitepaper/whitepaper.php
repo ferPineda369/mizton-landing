@@ -42,7 +42,7 @@
     <aside class="whitepaper-sidebar">
       <div class="sidebar-header">
         <h2>Whitepaper MZT</h2>
-        <span class="version">Versión 1.1 · Abril 2026</span>
+        <span class="version">Versión 1.1 · Octubre 2024</span>
       </div>
       <ul class="sidebar-nav">
         <li><a href="#aviso"><span class="section-number">01</span> Aviso Importante</a></li>

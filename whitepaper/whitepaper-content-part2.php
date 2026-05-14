@@ -216,7 +216,7 @@
           <td>1 paquete cada 30 días</td>
         </tr>
         <tr>
-          <td>Recuperación garantizada</td>
+          <td>Recompra opcional</td>
           <td>100% de la compra inicial al finalizar el periodo</td>
         </tr>
       </tbody>
@@ -263,10 +263,10 @@
   <h2>5.1 Flujo Operativo del Ecosistema</h2>
   <div class="code-block">
     <pre>1. SOCIOS adquieren paquetes de participación ($20 USD)
-   ↓ (capital consolidado)
+   ↓ (participación consolidada)
 2. MIZTON ejecuta proyectos de tokenización (RWA)
-   ↓ (rendimientos reales)
-3. POOL GLOBAL consolida ingresos de todos los proyectos
+   ↓ (activos reales)
+3. POOL GLOBAL consolida el éxito de todos los proyectos
    ↓ (distribución proporcional)
 4. COMUNIDAD recibe participación según tokens poseídos</pre>
   </div>

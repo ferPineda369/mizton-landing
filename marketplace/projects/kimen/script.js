@@ -161,24 +161,30 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// Live stats (replace with real API calls when ready)
-function updateLiveStats() {
-    const tokensSold = 34;
-    const totalTokens = 800;
-    const percentSold = Math.round((tokensSold / totalTokens) * 100);
-    const totalRaised = 850;
-    
-    const tokensSoldEl = document.getElementById('tokensSold');
-    const percentSoldEl = document.getElementById('percentSold');
-    const totalRaisedEl = document.getElementById('totalRaised');
-    
-    if (tokensSoldEl) tokensSoldEl.textContent = tokensSold;
-    if (percentSoldEl) percentSoldEl.textContent = percentSold;
-    if (totalRaisedEl) totalRaisedEl.textContent = totalRaised.toLocaleString();
+// Live stats — fetch from blockchain indexer API
+const STATS_API = '/marketplace/api/project-stats.php?slug=kimen';
+
+async function updateLiveStats() {
+    try {
+        const res = await fetch(STATS_API);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        const tokensSoldEl = document.getElementById('tokensSold');
+        const percentSoldEl = document.getElementById('percentSold');
+        const totalRaisedEl = document.getElementById('totalRaised');
+
+        if (tokensSoldEl) tokensSoldEl.textContent = Math.floor(data.tokens_sold).toLocaleString();
+        if (percentSoldEl) percentSoldEl.textContent = data.percent_sold;
+        if (totalRaisedEl) totalRaisedEl.textContent = Math.floor(data.total_raised_usdt).toLocaleString();
+    } catch (err) {
+        console.warn('Stats API error:', err.message);
+    }
 }
 
-// Update stats on load
+// Update stats on load + refresh every 60s
 updateLiveStats();
+setInterval(updateLiveStats, 60000);
 
 // Parallax effect removed - was causing slow/transparent effect
 

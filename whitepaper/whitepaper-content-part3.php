@@ -69,7 +69,7 @@
     <div class="feature-card">
       <i data-lucide="server" style="width:24px;height:24px;color:var(--accent-cyan);"></i>
       <h4>Hosting</h4>
-      <p>VPS dedicado con LiteSpeed Web Server + Microservicios Node.js (PM2)</p>
+      <p>VPS dedicado + Microservicios Node.js</p>
     </div>
   </div>
 </section>
@@ -399,7 +399,7 @@
           <li>Crecimiento activo de la comunidad de socios</li>
           <li>Distribución continua de tokens MZT</li>
           <li>Educación y capacitación en blockchain/RWA</li>
-          <li>Lanzamiento de proyectos tokenizados subsidiarios (DMX, KIMEN)</li>
+          <li>Lanzamiento de proyectos tokenizados subsidiarios (DMX, KIMEN, DXIP)</li>
           <li>Desarrollo del dashboard avanzado de tokens</li>
           <li>Integración del indexador blockchain multi-proyecto</li>
         </ul>
@@ -446,7 +446,6 @@
           <li>Evaluación de listado de MZT en exchanges (DEX/CEX)</li>
           <li>Valor de mercado determinado por oferta y demanda</li>
           <li>Evolución del token de participativo a transaccional</li>
-          <li>Expansión internacional fuera de LATAM</li>
         </ul>
       </div>
     </div>
