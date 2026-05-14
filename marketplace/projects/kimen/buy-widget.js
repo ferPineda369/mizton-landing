@@ -52,13 +52,28 @@ function initBuyWidget() {
     if (approveBtn) approveBtn.addEventListener('click', approveUSDT);
     if (buyBtn) buyBtn.addEventListener('click', buyTokens);
 
-    // Check if wallet already connected
-    if (window.ethereum && window.ethereum.selectedAddress) {
-        // Auto-connect silently
-        connectWallet().catch(err => {
-            console.warn('Auto-connect failed:', err);
-            // Show connect button on auto-connect failure
-        });
+    // Check if wallet already connected (wait for MetaMask to be ready)
+    checkAutoConnect();
+}
+
+async function checkAutoConnect() {
+    // Wait for ethereum provider to be ready
+    if (typeof window.ethereum !== 'undefined') {
+        try {
+            // Get accounts without requesting (returns empty if not connected)
+            const accounts = await window.ethereum.request({ 
+                method: 'eth_accounts' 
+            });
+            
+            if (accounts && accounts.length > 0) {
+                // Wallet is already connected, auto-connect silently
+                connectWallet().catch(err => {
+                    console.warn('Auto-connect failed:', err);
+                });
+            }
+        } catch (err) {
+            console.warn('Failed to check wallet connection:', err);
+        }
     }
 }
 
