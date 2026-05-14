@@ -1041,3 +1041,146 @@ body {
     position: relative;
     z-index: 2;
 }
+
+/* ─── BUY WIDGET ──────────────────────────────────────────────── */
+
+.buy-widget-container {
+    margin: 2.5rem auto;
+    max-width: 520px;
+    text-align: center;
+}
+
+.buy-compat {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.buy-step {
+    margin-bottom: 1.25rem;
+}
+
+.buy-wallet-info {
+    font-size: 0.9rem;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,215,0,0.2);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    display: inline-block;
+}
+
+.buy-wallet-info code {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.buy-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.buy-amount-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.buy-input {
+    width: 100px;
+    padding: 0.6rem 1rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+    border-radius: 8px;
+    border: 2px solid var(--primary-color);
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    outline: none;
+}
+
+.buy-input:focus {
+    box-shadow: 0 0 0 3px rgba(255,215,0,0.3);
+}
+
+.buy-cost-display {
+    font-size: 1.1rem;
+}
+
+.buy-cost-display strong {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+}
+
+.buy-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-buy-action {
+    min-width: 180px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-buy-action:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.buy-success {
+    background: rgba(39, 174, 96, 0.15);
+    border: 1px solid rgba(39, 174, 96, 0.5);
+    border-radius: 12px;
+    padding: 2rem;
+}
+
+.buy-success p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    color: #27ae60;
+}
+
+.buy-success .btn {
+    margin: 0 0.5rem;
+}
+
+.buy-status {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.buy-status--info {
+    background: rgba(52,152,219,0.15);
+    border: 1px solid rgba(52,152,219,0.4);
+    color: #85c1e9;
+}
+
+.buy-status--success {
+    background: rgba(39,174,96,0.15);
+    border: 1px solid rgba(39,174,96,0.4);
+    color: #82e0aa;
+}
+
+.buy-status--error {
+    background: rgba(231,76,60,0.15);
+    border: 1px solid rgba(231,76,60,0.4);
+    color: #f1948a;
+}
+
+.buy-status a {
+    color: var(--primary-color);
+    text-decoration: underline;
+}

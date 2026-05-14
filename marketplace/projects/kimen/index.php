@@ -410,10 +410,50 @@
                 </div>
             </div>
             
-            <div class="cta-buttons-final">
-                <a href="#buy-now" class="btn btn-primary btn-xlarge">
-                    PARTICIPAR AHORA — OBTENER KIMEN $25
-                </a>
+            <!-- Buy Widget: Wallet NO conectada -->
+            <div id="buy-no-wallet" class="buy-widget-container">
+                <button id="btn-connect-wallet" class="btn btn-primary btn-xlarge">
+                    🦊 CONECTAR WALLET — OBTENER KIMEN $25
+                </button>
+                <p class="buy-compat">Compatible con MetaMask, Trust Wallet, Coinbase Wallet y otras wallets EVM.</p>
+            </div>
+
+            <!-- Buy Widget: Wallet conectada -->
+            <div id="buy-widget" class="buy-widget-container" style="display:none;">
+                <!-- Paso 1: Info wallet -->
+                <div id="buy-step-wallet" class="buy-step">
+                    <p class="buy-wallet-info">
+                        Wallet: <code id="buy-wallet-address"></code>
+                        &nbsp;|&nbsp; Balance USDT: <strong id="buy-usdt-balance">--</strong>
+                    </p>
+                </div>
+
+                <!-- Paso 2: Cantidad -->
+                <div id="buy-step-amount" class="buy-step">
+                    <label for="buy-amount" class="buy-label">Cantidad de tokens KIMEN:</label>
+                    <div class="buy-amount-row">
+                        <input type="number" id="buy-amount" min="1" max="100" step="1" value="1" class="buy-input">
+                        <span class="buy-cost-display">= <strong id="buy-cost">25</strong> USDT</span>
+                    </div>
+                </div>
+
+                <!-- Paso 3: Approve + Buy -->
+                <div id="buy-step-action" class="buy-step buy-actions">
+                    <button id="btn-approve" class="btn btn-outline btn-buy-action">1. Aprobar USDT</button>
+                    <button id="btn-buy" class="btn btn-primary btn-buy-action" disabled>2. Comprar KIMEN</button>
+                </div>
+
+                <!-- Paso 4: Confirmación -->
+                <div id="buy-step-done" class="buy-step" style="display:none;">
+                    <div class="buy-success">
+                        <p>Compra exitosa. Tu vesting schedule ha sido creado.</p>
+                        <a id="buy-tx-link" href="#" target="_blank" class="btn btn-outline">Ver en BscScan</a>
+                        <a href="https://mizton.cat/panel/chain-portfolio.php" class="btn btn-primary">Ver mi Portfolio</a>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div id="buy-status" class="buy-status" style="display:none;"></div>
             </div>
             
             <div class="social-links">
@@ -441,6 +481,8 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.13.2/ethers.umd.min.js" integrity="sha512-xYSMo0Nh4h9AVg8MKApFfCqOLGMD0RgyOvMFCmEoMU64e88M9GkOAaz/SEZkxfLho2fOhqMHNg/08CXBQYQ7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="buy-widget.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
