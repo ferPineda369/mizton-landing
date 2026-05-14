@@ -54,7 +54,11 @@ function initBuyWidget() {
 
     // Check if wallet already connected
     if (window.ethereum && window.ethereum.selectedAddress) {
-        connectWallet();
+        // Auto-connect silently
+        connectWallet().catch(err => {
+            console.warn('Auto-connect failed:', err);
+            // Show connect button on auto-connect failure
+        });
     }
 }
 
@@ -66,14 +70,17 @@ async function connectWallet() {
         return;
     }
 
+    const isAlreadyConnected = window.ethereum.selectedAddress;
     const connectBtn = $('btn-connect-wallet');
-    if (connectBtn) {
+    
+    // Only show UI feedback if user clicked (not auto-connect)
+    if (!isAlreadyConnected && connectBtn) {
         connectBtn.disabled = true;
         connectBtn.textContent = 'Conectando...';
+        showStatus('Conectando wallet...', 'info');
     }
 
     try {
-        showStatus('Conectando wallet...', 'info');
 
         provider = new ethers.BrowserProvider(window.ethereum);
         const accounts = await provider.send('eth_requestAccounts', []);
@@ -112,7 +119,10 @@ async function connectWallet() {
         $('buy-no-wallet').style.display = 'none';
         $('buy-widget').style.display = 'block';
 
-        showStatus('Wallet conectada correctamente.', 'success');
+        // Only show success message if user manually connected
+        if (!isAlreadyConnected) {
+            showStatus('Wallet conectada correctamente.', 'success');
+        }
         updateCost();
 
     } catch (err) {
