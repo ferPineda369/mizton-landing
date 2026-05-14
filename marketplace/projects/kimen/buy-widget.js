@@ -97,7 +97,7 @@ async function connectWallet() {
         const saleActive = await vestingContract.saleActive();
         if (!saleActive) {
             showStatus('La venta no está activa en este momento.', 'error');
-            return;
+            throw new Error('Sale not active');
         }
 
         // Update UI
@@ -108,7 +108,7 @@ async function connectWallet() {
         const balanceFormatted = ethers.formatUnits(balance, decimals);
         $('buy-usdt-balance').textContent = parseFloat(balanceFormatted).toFixed(2);
 
-        // Show widget, hide connect button
+        // Show widget, hide connect button (only on success)
         $('buy-no-wallet').style.display = 'none';
         $('buy-widget').style.display = 'block';
 
@@ -117,8 +117,22 @@ async function connectWallet() {
 
     } catch (err) {
         console.error('Connect error:', err);
+        
+        // Restore button state on error
+        const connectBtn = $('btn-connect-wallet');
+        if (connectBtn) {
+            connectBtn.disabled = false;
+            connectBtn.textContent = '🦊 CONECTAR WALLET — OBTENER KIMEN $25';
+        }
+        
+        // Keep widget hidden on error
+        $('buy-no-wallet').style.display = 'block';
+        $('buy-widget').style.display = 'none';
+        
         if (err.code === 4001) {
             showStatus('Conexión rechazada por el usuario.', 'error');
+        } else if (err.message === 'Sale not active') {
+            // Already showed status above
         } else {
             showStatus('Error al conectar: ' + (err.shortMessage || err.message), 'error');
         }
