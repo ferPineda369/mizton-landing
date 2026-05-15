@@ -25,6 +25,8 @@ class Presentation {
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowLeft') this.prev();
             if (e.key === 'ArrowRight') this.next();
+            if (e.key === 'Home') { e.preventDefault(); this.goTo(1); }
+            if (e.key === 'End') { e.preventDefault(); this.goTo(this.totalSlides); }
         });
         
         let touchStartX = 0;
