@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Viaje del Token KIMEN | Mizton</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Navigation -->
+        <div class="nav-controls">
+            <button id="prev-btn" class="nav-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <div class="slide-counter">
+                <span id="current-slide">1</span> / <span id="total-slides">11</span>
+            </div>
+            <button id="next-btn" class="nav-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <!-- Slides Container -->
+        <div class="slides-wrapper" id="slides-wrapper">
+            
+            <!-- Slide 1: Intro -->
+            <div class="slide active" data-slide="1">
+                <div class="slide-content">
+                    <h1 class="slide-title fade-in">🗺️ El Viaje del Token KIMEN</h1>
+                    <p class="slide-subtitle fade-in delay-1">De la bóveda del contrato a tu wallet</p>
+                    <div class="token-logo fade-in delay-2">
+                        <img src="assets/KIMEN.png" alt="KIMEN Token" class="kimen-logo">
+                    </div>
+                    <p class="slide-text fade-in delay-3">Una explicación visual completa del sistema de vesting</p>
+                </div>
+            </div>
+
+            <!-- Slide 2: La Bóveda -->
+            <div class="slide" data-slide="2">
+                <div class="slide-content">
+                    <h2 class="slide-title">🏦 El Contrato como Bóveda</h2>
+                    <p class="slide-subtitle">
+                        <a href="https://bscscan.com/address/0x27AD8520c8623C3e43cDeE7CDDb8042A63cCB427" target="_blank" class="bscscan-link">0x27AD8520c8623C3e43cDeE7CDDb8042A63cCB427 ↗</a>
+                    </p>
+                    
+                    <div class="vault-container">
+                        <div class="vault">
+                            <div class="vault-door">
+                                <div class="vault-lock"></div>
+                            </div>
+                            <div class="vault-content">
+                                <div class="token-stack">
+                                    <div class="token-layer"></div>
+                                    <div class="token-layer"></div>
+                                    <div class="token-layer"></div>
+                                    <div class="token-layer"></div>
+                                    <div class="token-layer"></div>
+                                </div>
+                                <p class="vault-label">4,800 KIMEN</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="slide-text">Cuando se desplegó el contrato, se depositaron TODOS los tokens KIMEN aquí.<br>
+                    <strong>Ningún token sale hasta que se cumplan las condiciones de vesting.</strong></p>
+                </div>
+            </div>
+
+            <!-- Slide 3: División Interna -->
+            <div class="slide" data-slide="3">
+                <div class="slide-content">
+                    <h2 class="slide-title">📊 División Interna de la Bóveda</h2>
+                    
+                    <div class="vault-divisions">
+                        <div class="division-item" data-category="free">
+                            <div class="division-icon">✨</div>
+                            <h3>Libres</h3>
+                            <p class="division-amount">Balance - (Pending + Reserved + Staked)</p>
+                            <p class="division-desc">Disponibles para nuevas operaciones</p>
+                        </div>
+                        
+                        <div class="division-item" data-category="reserved">
+                            <div class="division-icon">📁</div>
+                            <h3>Reservados</h3>
+                            <p class="division-amount">totalReservedManagement</p>
+                            <p class="division-desc">Apartados para usuarios sin wallet confirmada</p>
+                        </div>
+                        
+                        <div class="division-item" data-category="pending">
+                            <div class="division-icon">�</div>
+                            <h3>Vendidos (Pending)</h3>
+                            <p class="division-amount">totalPendingTokens</p>
+                            <p class="division-desc">Asignados a vesting schedules de usuarios</p>
+                        </div>
+                        
+                        <div class="division-item" data-category="staked">
+                            <div class="division-icon">🔒</div>
+                            <h3>Staked</h3>
+                            <p class="division-amount">totalStaked</p>
+                            <p class="division-desc">En staking experiencial</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: TX1 - Reserva Batch -->
+            <div class="slide" data-slide="4">
+                <div class="slide-content">
+                    <h2 class="slide-title">📥 TX #1: Reserva Batch (38 KIMEN)</h2>
+                    <p class="slide-subtitle">0x54a1c4e979...</p>
+                    
+                    <div class="transaction-flow">
+                        <div class="state-box before">
+                            <h4>ANTES</h4>
+                            <div class="state-item">Libres: <span class="value">4,800</span></div>
+                            <div class="state-item">Reservados: <span class="value">0</span></div>
+                            <div class="state-item">Pendientes: <span class="value">0</span></div>
+                        </div>
+                        
+                        <div class="arrow-container">
+                            <div class="arrow">→</div>
+                            <div class="action-label">reserveManagementAllocation(38)</div>
+                        </div>
+                        
+                        <div class="state-box after">
+                            <h4>DESPUÉS</h4>
+                            <div class="state-item">Libres: <span class="value highlight-down">3,762</span></div>
+                            <div class="state-item">Reservados: <span class="value highlight-up">38</span></div>
+                            <div class="state-item">Pendientes: <span class="value">0</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="explanation-box">
+                        <p>💡 Se "apartaron" 38 KIMEN dentro de la bóveda.</p>
+                        <p>Como poner 38 monedas en un sobre sellado que dice <strong>"RESERVADO"</strong>.</p>
+                    </div>
+                    
+                    <div class="info-box">
+                        <p>Los tokens NO se movieron a ningún lado. Siguen en la bóveda.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Seguridad Wallet - Parte 1 -->
+            <div class="slide" data-slide="5">
+                <div class="slide-content">
+                    <h2 class="slide-title">🔐 Antes de Migrar: Seguridad de Wallet</h2>
+                    <p class="slide-subtitle">Paso obligatorio antes de asignar tokens</p>
+                    
+                    <div class="security-container">
+                        <div class="security-card">
+                            <div class="security-icon">📝</div>
+                            <h3>1. Guarda tus 12 palabras secretas</h3>
+                            <p>Al crear tu wallet, recibes <strong>12 o 24 palabras</strong> (seed phrase).</p>
+                            <p>Estas palabras son la <strong>única forma</strong> de recuperar tus tokens si pierdes acceso.</p>
+                        </div>
+                        
+                        <div class="security-card">
+                            <div class="security-icon">🔒</div>
+                            <h3>2. Crea 2 o 3 copias físicas</h3>
+                            <p>Escribe las palabras en <strong>papel</strong> (no en digital).</p>
+                            <p>Guarda copias en <strong>lugares seguros y separados</strong>.</p>
+                        </div>
+                        
+                        <div class="security-card">
+                            <div class="security-icon">🚫</div>
+                            <h3>3. NUNCA compartas</h3>
+                            <p>Nadie de Mizton te pedirá estas palabras.</p>
+                            <p>Si las pierdes, <strong>los tokens se pierden para siempre</strong>.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="danger-box">
+                        <p>⚠️ <strong>La blockchain no perdona.</strong></p>
+                        <p>El contrato no tiene "restablecer contraseña". Sin tus 12 palabras, los tokens se pierden para siempre.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Seguridad Wallet - Parte 2 -->
+            <div class="slide" data-slide="6">
+                <div class="slide-content">
+                    <h2 class="slide-title">✅ Verificación antes de On-Chain</h2>
+                    <p class="slide-subtitle">Confirmar que el usuario controla su wallet</p>
+                    
+                    <div class="verification-steps">
+                        <div class="verify-step">
+                            <div class="step-check">1</div>
+                            <div class="step-info">
+                                <h4>Usuario crea wallet</h4>
+                                <p>MetaMask, Trust Wallet o similar</p>
+                            </div>
+                        </div>
+                        
+                        <div class="verify-arrow">↓</div>
+                        
+                        <div class="verify-step">
+                            <div class="step-check">2</div>
+                            <div class="step-info">
+                                <h4>Guarda frases secretas</h4>
+                                <p>2-3 copias físicas en lugares seguros</p>
+                            </div>
+                        </div>
+                        
+                        <div class="verify-arrow">↓</div>
+                        
+                        <div class="verify-step">
+                            <div class="step-check">3</div>
+                            <div class="step-info">
+                                <h4>Conecta wallet al panel</h4>
+                                <p>El sistema valida la dirección BSC</p>
+                            </div>
+                        </div>
+                        
+                        <div class="verify-arrow">↓</div>
+                        
+                        <div class="verify-step">
+                            <div class="step-check">4</div>
+                            <div class="step-info">
+                                <h4>Verifica tu respaldo</h4>
+                                <p>Firma con tu wallet confirmando que tienes respaldadas tus 12 frases secretas</p>
+                            </div>
+                        </div>
+                        
+                        <div class="verify-arrow">↓</div>
+                        
+                        <div class="verify-step highlight">
+                            <div class="step-check">✓</div>
+                            <div class="step-info">
+                                <h4>Listo para migrar</h4>
+                                <p>Admin ejecuta migrate con esta wallet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: TX3 - Migración Parte 1 -->
+            <div class="slide" data-slide="7">
+                <div class="slide-content">
+                    <h2 class="slide-title">🔓 TX #3: Migración - Parte 1</h2>
+                    <p class="slide-subtitle">0x67a0bdfd9fc7... (Operación A)</p>
+                    
+                    <div class="transaction-flow">
+                        <div class="state-box before">
+                            <h4>ANTES</h4>
+                            <div class="state-item">Reservados: <span class="value">39</span></div>
+                        </div>
+                        
+                        <div class="arrow-container">
+                            <div class="arrow">→</div>
+                            <div class="action-label">releaseManagementAllocation(1)</div>
+                        </div>
+                        
+                        <div class="state-box after">
+                            <h4>DESPUÉS</h4>
+                            <div class="state-item">Reservados: <span class="value highlight-down">38</span></div>
+                            <div class="state-item">Libres: <span class="value highlight-up">+1</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="metaphor-separator"></div>
+                    
+                    <div class="visual-metaphor">
+                        <div class="envelope sealed">
+                            <div class="envelope-label">RESERVADO</div>
+                        </div>
+                        <div class="arrow-metaphor">→</div>
+                        <div class="envelope open">
+                            <div class="coin"></div>
+                            <div class="envelope-label">LIBRE</div>
+                        </div>
+                    </div>
+                    
+                    <p class="slide-text">"Abre el sobre sellado y saca 1 moneda. Ahora está libre."</p>
+                </div>
+            </div>
+
+            <!-- Slide 8: TX3 - Migración Parte 2 -->
+            <div class="slide" data-slide="8">
+                <div class="slide-content">
+                    <h2 class="slide-title">📦 TX #3: Migración - Parte 2</h2>
+                    <p class="slide-subtitle">0x67a0bdfd9fc7... (Operación B)</p>
+                    
+                    <div class="transaction-flow">
+                        <div class="state-box before">
+                            <h4>ANTES</h4>
+                            <div class="state-item">Pendientes: <span class="value">X</span></div>
+                            <div class="state-item">Libres: <span class="value">+1</span></div>
+                        </div>
+                        
+                        <div class="arrow-container">
+                            <div class="arrow">→</div>
+                            <div class="action-label">registerManualSale<br>(0x8CA5...E085, 1, t)</div>
+                        </div>
+                        
+                        <div class="state-box after">
+                            <h4>DESPUÉS</h4>
+                            <div class="state-item">Pendientes: <span class="value highlight-up">X+1</span></div>
+                            <div class="state-item">Libres: <span class="value highlight-down">-1</span></div>
+                        </div>
+                    </div>
+                    
+                    <div class="vesting-box-creation">
+                        <div class="box-animation">
+                            <div class="box-label">VestingSchedule #0</div>
+                            <div class="box-owner">0x8CA5...E085</div>
+                            <div class="box-content">
+                                <div class="token-in-box">1 KIMEN</div>
+                            </div>
+                            <div class="box-lock">🔒</div>
+                        </div>
+                    </div>
+                    
+                    <p class="slide-text">"Toma esa moneda libre y ponla en una CAJITA con nombre"</p>
+                </div>
+            </div>
+
+            <!-- Slide 9: Estado Actual -->
+            <div class="slide" data-slide="9">
+                <div class="slide-content">
+                    <h2 class="slide-title">📍 Estado Actual del Token</h2>
+                    
+                    <div class="current-state">
+                        <div class="vault-visual">
+                            <h3>🏦 BÓVEDA (Contrato)</h3>
+                            
+                            <div class="user-box locked">
+                                <div class="box-header">
+                                    <span class="box-icon">📦</span>
+                                    <span class="box-title">Usuario 14 - Mizton</span>
+                                </div>
+                                <div class="box-details">
+                                    <div class="detail-row">
+                                        <span>Wallet:</span>
+                                        <code>0x8CA5...E085</code>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Asignado:</span>
+                                        <strong>1 KIMEN</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Reclamado:</span>
+                                        <strong>0 KIMEN</strong>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span>Cliff:</span>
+                                        <span>180 días desde venta</span>
+                                    </div>
+                                    <div class="detail-row status">
+                                        <span>Estado:</span>
+                                        <span class="badge locked">🔒 BLOQUEADO</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="reserved-envelope">
+                                <div class="envelope-icon">📁</div>
+                                <div class="envelope-content">
+                                    <strong>38 KIMEN Reservados</strong>
+                                    <p>21 usuarios pendientes de migrar</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="user-wallet">
+                            <h3>👛 Wallet del Usuario</h3>
+                            <div class="wallet-address">0x8CA5...E085</div>
+                            <div class="wallet-balance">
+                                <div class="balance-amount">0 KIMEN</div>
+                                <div class="balance-status">✅ CORRECTO</div>
+                            </div>
+                            <p class="wallet-note">El token aún está en la bóveda, asignado a su vesting schedule</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 10: Proceso de Vesting -->
+            <div class="slide" data-slide="10">
+                <div class="slide-content">
+                    <h2 class="slide-title">⏳ Proceso de Vesting</h2>
+                    
+                    <div class="timeline">
+                        <div class="timeline-item" data-phase="sale">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>Día 0 - Venta</h4>
+                                <p>14 mayo 2026</p>
+                                <div class="timeline-status">registerManualSale()</div>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item" data-phase="cliff">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>Día 180 - Cliff</h4>
+                                <p>~10 noviembre 2026</p>
+                                <div class="timeline-status">10% desbloqueado (0.1 KIMEN)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item" data-phase="vesting">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>Día 180-780</h4>
+                                <p>20 meses lineales</p>
+                                <div class="timeline-status">90% gradual (0.9 KIMEN)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="timeline-item" data-phase="complete">
+                            <div class="timeline-dot"></div>
+                            <div class="timeline-content">
+                                <h4>Día 780 - Completo</h4>
+                                <p>~julio 2028</p>
+                                <div class="timeline-status">100% desbloqueado</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="vesting-interactive">
+                        <div class="vesting-slider-container">
+                            <div class="vesting-info">
+                                <div class="vesting-stat">
+                                    <span class="stat-label">Día</span>
+                                    <span class="stat-value" id="vesting-day">0</span>
+                                </div>
+                                <div class="vesting-stat">
+                                    <span class="stat-label">Desbloqueado</span>
+                                    <span class="stat-value" id="vesting-percent">0%</span>
+                                </div>
+                                <div class="vesting-stat">
+                                    <span class="stat-label">KIMEN</span>
+                                    <span class="stat-value" id="vesting-tokens">0.00</span>
+                                </div>
+                            </div>
+                            <input type="range" class="vesting-slider" id="vesting-slider" min="0" max="780" value="0" step="1">
+                            <div class="slider-labels">
+                                <span>0d</span>
+                                <span>180d</span>
+                                <span>780d</span>
+                            </div>
+                            <div class="vesting-progress-bar">
+                                <div class="vesting-progress-fill" id="vesting-progress-fill"></div>
+                            </div>
+                            <div class="vesting-phases">
+                                <div class="phase-label cliff-phase">Cliff 10%</div>
+                                <div class="phase-label linear-phase">Vesting Lineal 90%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 11: Claim Final -->
+            <div class="slide" data-slide="11">
+                <div class="slide-content">
+                    <h2 class="slide-title">🎉 El Destino Final: Tu Wallet</h2>
+                    
+                    <div class="claim-process">
+                        <div class="process-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Usuario hace clic en "Reclamar"</h4>
+                                <p>Desde chain-portfolio.php</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-arrow">↓</div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Contrato verifica vesting</h4>
+                                <p>Calcula tokens desbloqueados</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-arrow">↓</div>
+                        
+                        <div class="process-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Transferencia ERC20</h4>
+                                <p>De la bóveda → Wallet del usuario</p>
+                            </div>
+                        </div>
+                        
+                        <div class="process-arrow">↓</div>
+                        
+                        <div class="process-step highlight">
+                            <div class="step-number">✓</div>
+                            <div class="step-content">
+                                <h4>¡Tokens en tu wallet!</h4>
+                                <p>Ahora SÍ aparecen en MetaMask</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="final-visual">
+                        <div class="token-transfer">
+                            <div class="from-vault">
+                                <div class="vault-icon">🏦</div>
+                                <p>Bóveda</p>
+                            </div>
+                            <div class="transfer-arrow">
+                                <div class="token-flying">
+                                    <span class="token-symbol">KIMEN</span>
+                                </div>
+                            </div>
+                            <div class="to-wallet">
+                                <div class="wallet-icon">👛</div>
+                                <p>Tu Wallet</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="final-message">Ahora puedes usar, transferir o vender tus KIMEN libremente 🚀</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

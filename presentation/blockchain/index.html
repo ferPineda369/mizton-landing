@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blockchain Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="slides-wrapper">
+            <!-- Slide 1: Intro -->
+            <div class="slide active" data-slide="1">
+                <div class="slide-content">
+                    <h1 class="slide-title">&#128187; Blockchain</h1>
+                    <p class="slide-subtitle">Conceptos fundamentales de la tecnología blockchain</p>
+                    <div class="intro-buttons fade-in delay-1">
+                        <button class="intro-btn" data-reveal="hash">Demo 1</button>
+                        <button class="intro-btn" data-reveal="block">Demo 2</button>
+                        <button class="intro-btn" data-reveal="blockchain">Demo 3</button>
+                    </div>
+                    <div class="intro-label fade-in delay-2" id="intro-label"></div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Hash -->
+            <div class="slide" data-slide="2">
+                <div class="slide-content">
+                    <h2 class="slide-title">&#128208; Hash</h2>
+                    <p class="slide-subtitle">Un hash es como una huella digital: cambia completamente con el m&aacute;s m&iacute;nimo cambio en los datos.</p>
+                    <div class="hash-section fade-in delay-1">
+                        <div class="input-row">
+                            <label for="hash-data">Datos</label>
+                            <textarea class="hash-input" id="hash-data" placeholder="Escribe cualquier cosa aqu&iacute;..."></textarea>
+                        </div>
+                        <div class="input-row">
+                            <label for="hash-result">Hash (SHA-256)</label>
+                            <textarea class="hash-output" id="hash-result" readonly rows="2" placeholder="El hash aparecer&aacute; aqu&iacute;..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Bloque -->
+            <div class="slide" data-slide="3">
+                <div class="slide-content">
+                    <h2 class="slide-title">&#128230; Bloque</h2>
+                    <p class="slide-subtitle">Un bloque contiene datos, un n&uacute;mero de bloque, un nonce y su hash. Al minar, se valida el bloque.</p>
+                    <div class="block-card mined" id="single-block">
+                        <div class="block-header">
+                            <span class="block-title">&#128230; Bloque #<span class="block-number">1</span></span>
+                            <span class="block-status">Minado</span>
+                        </div>
+                        <div class="block-inputs">
+                            <div class="input-row">
+                                <span class="block-label">Bloque</span>
+                                <input type="number" class="block-input small" id="sb-number" value="1" min="1">
+                            </div>
+                            <div class="input-row">
+                                <span class="block-label">Nonce</span>
+                                <input type="text" class="block-input small" id="sb-nonce" value="0" inputmode="numeric" pattern="[0-9]*">
+                            </div>
+                            <div class="input-row">
+                                <span class="block-label">Datos</span>
+                                <textarea class="block-input" id="sb-data" rows="3" placeholder="Datos del bloque..."></textarea>
+                            </div>
+                            <div class="input-row">
+                                <span class="block-label">Hash (entrada)</span>
+                                <textarea class="block-input" id="sb-hash" readonly rows="3"></textarea>
+                            </div>
+                            <div class="input-row" style="text-align: center;">
+                                <button class="mine-btn" id="sb-mine">&#9935; Minar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Blockchain -->
+            <div class="slide" data-slide="4">
+                <div class="slide-content">
+                    <h2 class="slide-title">&#128279; Blockchain</h2>
+                    <p class="slide-subtitle">Cada bloque est&aacute; encadenado al anterior. Modificar uno rompe toda la cadena.</p>
+                    <div class="blockchain-container" id="blockchain-container">
+                        <!-- Blocks generated by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Tipos de Blockchain -->
+            <div class="slide" data-slide="5">
+                <div class="slide-content">
+                    <h2 class="slide-title">&#127758; Tipos de Blockchain</h2>
+                    <p class="slide-subtitle">Diferentes redes, un mismo principio fundamental.</p>
+                    <div class="blockchain-types fade-in delay-1">
+                        <div class="type-card">
+                            <div class="type-icon">&#8383;</div>
+                            <h3>Bitcoin</h3>
+                            <p>La primera blockchain. Dise&ntilde;ada para transferir valor (BTC) de forma descentralizada sin intermediarios.</p>
+                        </div>
+                        <div class="type-card">
+                            <div class="type-icon">&#9670;</div>
+                            <h3>Ethereum</h3>
+                            <p>Introdujo los smart contracts. Permite ejecutar c&oacute;digo programable sobre la blockchain.</p>
+                        </div>
+                        <div class="type-card">
+                            <div class="type-icon">&#128077;</div>
+                            <h3>BSC</h3>
+                            <p>Binance Smart Chain. Compatible con Ethereum pero con comisiones m&aacute;s bajas y mayor velocidad.</p>
+                        </div>
+                        <div class="type-card">
+                            <div class="type-icon">&#9889;</div>
+                            <h3>Solana</h3>
+                            <p>Alta velocidad y bajo costo. Usa Proof of History para procesar miles de transacciones por segundo.</p>
+                        </div>
+                    </div>
+                    <div class="common-box fade-in delay-2">
+                        <h3>&#128161; &iquest;Qu&eacute; tienen en com&uacute;n?</h3>
+                        <ul>
+                            <li><strong>Registro inmutable:</strong> Los datos escritos no pueden borrarse ni alterarse.</li>
+                            <li><strong>Descentralizaci&oacute;n:</strong> No hay una entidad &uacute;nica que controle la red.</li>
+                            <li><strong>Consenso distribuido:</strong> Todos los nodos validan y acuerdan el estado de la red.</li>
+                            <li><strong>Criptograf&iacute;a:</strong> Usan hashes y firmas digitales para garantizar seguridad.</li>
+                            <li><strong>Transparencia:</strong> Cualquiera puede auditar la historia completa de transacciones.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Red Descentralizada -->
+            <div class="slide" data-slide="6">
+                <div class="slide-content">
+                    <h2 class="slide-title">&#127760; Red Descentralizada</h2>
+                    <p class="slide-subtitle">Miles de nodos custodian la blockchain. No existe un servidor central.</p>
+                    <div class="network-visual fade-in delay-1" id="network-visual">
+                        <!-- Nodes generated by JS -->
+                    </div>
+                    <div class="network-info fade-in delay-2">
+                        <div class="info-card">
+                            <div class="info-icon">&#128187;</div>
+                            <h4>Nodo Completo</h4>
+                            <p>Almacena toda la blockchain desde el bloque g&eacute;nesis y valida cada transacci&oacute;n independientemente.</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">&#128260;</div>
+                            <h4>Replicaci&oacute;n</h4>
+                            <p>Cada nodo tiene una copia id&eacute;ntica. Si un nodo cae, la red sigue funcionando con los dem&aacute;s.</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">&#9989;</div>
+                            <h4>Validaci&oacute;n</h4>
+                            <p>Los nodos verifican que cada bloque cumpla las reglas del protocolo antes de aceptarlo.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Seguridad M&aacute;xima -->
+            <div class="slide" data-slide="7">
+                <div class="slide-content">
+                    <h2 class="slide-title">&#128274; Seguridad M&aacute;xima</h2>
+                    <p class="slide-subtitle">La descentralizaci&oacute;n elimina puntos &uacute;nicos de fallo y hace extremadamente dif&iacute;cil alterar la red.</p>
+                    <div class="security-grid fade-in delay-1">
+                        <div class="security-card">
+                            <div class="security-icon">&#129302;</div>
+                            <h3>Ataque del 51%</h3>
+                            <p>Un atacante necesitar&iacute;a controlar m&aacute;s del 50% de todos los nodos de la red para alterar la blockchain. Imposible en redes grandes.</p>
+                        </div>
+                        <div class="security-card">
+                            <div class="security-icon">&#128274;</div>
+                            <h3>Inmutabilidad</h3>
+                            <p>Cambiar un bloque anterior requiere recalcular todos los hashes posteriores, superando la dificultad de minado en cada uno.</p>
+                        </div>
+                        <div class="security-card">
+                            <div class="security-icon">&#128752;</div>
+                            <h3>Resistencia a Censura</h3>
+                            <p>No hay autoridad central que puede bloquear transacciones. La red funciona 24/7 sin permisos ni fronteras.</p>
+                        </div>
+                        <div class="security-card">
+                            <div class="security-icon">&#128300;</div>
+                            <h3>Auditable</h3>
+                            <p>Toda la historia de transacciones es p&uacute;blica y verificable. Cualquiera puede consultar y validar la integridad de la cadena.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Resumen -->
+            <div class="slide" data-slide="8">
+                <div class="slide-content">
+                    <h2 class="slide-title">&#128203; Resumen</h2>
+                    <p class="slide-subtitle">Conceptos clave de la tecnolog&iacute;a blockchain</p>
+                    <div class="summary-grid fade-in delay-1">
+                        <div class="summary-card">
+                            <div class="summary-icon">&#128208;</div>
+                            <h3>Hash</h3>
+                            <p>Huella digital &uacute;nica de cualquier dato. Un cambio m&iacute;nimo altera el hash por completo.</p>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-icon">&#128230;</div>
+                            <h3>Bloque</h3>
+                            <p>Contenedor de datos con n&uacute;mero, nonce y hash. Se valida mediante minado.</p>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-icon">&#128279;</div>
+                            <h3>Blockchain</h3>
+                            <p>Cadena de bloques enlazados. Modificar uno rompe todos los posteriores.</p>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-icon">&#127760;</div>
+                            <h3>Red Descentralizada</h3>
+                            <p>Miles de nodos replican y validan la cadena. Sin servidor central.</p>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-icon">&#128274;</div>
+                            <h3>Seguridad</h3>
+                            <p>Inmutable, auditable, resistente a censura y al ataque del 51%.</p>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-icon">&#127758;</div>
+                            <h3>Tipos</h3>
+                            <p>Bitcoin, Ethereum, BSC, Solana... todas comparten los mismos principios.</p>
+                        </div>
+                    </div>
+                    <div class="summary-divider fade-in delay-2"></div>
+                    <div class="summary-cta fade-in delay-3">
+                        <a href="https://mizton.cat/presentation/kimen/" class="kimen-link-btn" target="_blank">&#128279; Token KIMEN</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="nav-controls">
+            <button class="nav-btn" id="prev-btn">&#10094;</button>
+            <div class="slide-counter">
+                <span id="current-slide">1</span> / <span id="total-slides">8</span>
+            </div>
+            <button class="nav-btn" id="next-btn">&#10095;</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
