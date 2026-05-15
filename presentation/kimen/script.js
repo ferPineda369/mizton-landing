@@ -201,8 +201,9 @@ function initVestingSlider() {
     const CLIFF_DAYS = 180;
     const TOTAL_DAYS = 780;
     const CLIFF_PERCENT = 0.10;
-    const LINEAR_PERCENT = 1.0 - CLIFF_PERCENT; // 0.90
-    const LINEAR_DAYS = TOTAL_DAYS - CLIFF_DAYS; // 600
+    const STEP_PERCENT = 0.045;
+    const STEP_DAYS = 30;
+    const TOTAL_STEPS = 20; // 20 pasos mensuales tras el cliff (20 x 4.5% = 90%)
     
     function updateVesting(day) {
         let barPercent = 0;
@@ -212,15 +213,12 @@ function initVestingSlider() {
             // Durante el cliff: barra vacia, 0 tokens
             barPercent = 0;
             tokensUnlocked = 0;
-        } else if (day === CLIFF_DAYS) {
-            // Dia exacto del cliff: salto al 10%
-            barPercent = CLIFF_PERCENT;
-            tokensUnlocked = TOTAL_TOKENS * CLIFF_PERCENT;
-        } else if (day < TOTAL_DAYS) {
-            // Despues del cliff: 10% base + proporcion del 90% restante
-            const daysIntoLinear = day - CLIFF_DAYS;
-            const linearProgress = daysIntoLinear / LINEAR_DAYS;
-            barPercent = CLIFF_PERCENT + (linearProgress * LINEAR_PERCENT);
+        } else if (day >= CLIFF_DAYS && day < TOTAL_DAYS) {
+            // Despues del cliff: 10% base + 20 pasos mensuales de 4.5%
+            const daysAfterCliff = day - CLIFF_DAYS;
+            const completedSteps = Math.floor(daysAfterCliff / STEP_DAYS);
+            const cappedSteps = Math.min(completedSteps, TOTAL_STEPS);
+            barPercent = CLIFF_PERCENT + (cappedSteps * STEP_PERCENT);
             tokensUnlocked = TOTAL_TOKENS * barPercent;
         } else {
             // 780+ dias: 100%
@@ -230,7 +228,7 @@ function initVestingSlider() {
         
         dayEl.textContent = day;
         percentEl.textContent = (barPercent * 100).toFixed(1) + '%';
-        tokensEl.textContent = tokensUnlocked.toFixed(2);
+        tokensEl.textContent = tokensUnlocked.toFixed(3);
         fillEl.style.width = (barPercent * 100) + '%';
     }
     
