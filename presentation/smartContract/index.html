@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Contracts para Dummies</title>
     <link rel="stylesheet" href="../css/presentation.css">
+    <link rel="stylesheet" href="styles-extra.css">
 </head>
 <body>
     <div class="presentation-container">
@@ -236,8 +237,469 @@
                         </div>
                     </div>
                     
-                    <div class="summary-cta fade-in delay-3">
-                        <a href="../kimen/" class="kimen-link-btn">🔗 Explorar Token KIMEN</a>
+                    <div class="explanation-box fade-in delay-3">
+                        <p>Este flujo automatizado elimina intermediarios y garantiza que las reglas se cumplan exactamente como fueron programadas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Condiciones en un Smart Contract -->
+            <div class="slide" data-slide="8">
+                <div class="slide-content">
+                    <h2 class="slide-title">Condiciones en un Smart Contract</h2>
+                    <p class="slide-subtitle">Se pueden programar las condiciones que se quieran</p>
+                    
+                    <div class="explanation-box fade-in delay-1">
+                        <p><strong>Ejemplo con Bitcoin:</strong> Cuando una persona quiere comprar 1 BTC, simplemente oprime un botón y si tiene el saldo suficiente, se le transfiere su BTC a su wallet y al mismo tiempo se le debita la moneda con la que lo compró (USDT, USDC, etc.).</p>
+                    </div>
+                    
+                    <div class="diagram-flow fade-in delay-2">
+                        <div class="diagram-box">
+                            <div class="diagram-icon">👤</div>
+                            <div class="diagram-text">Comprador<br>oprime botón</div>
+                        </div>
+                        <div class="diagram-arrow">➜</div>
+                        <div class="diagram-box highlight">
+                            <div class="diagram-icon">🔍</div>
+                            <div class="diagram-text">Verifica saldo<br>suficiente</div>
+                        </div>
+                        <div class="diagram-arrow">➜</div>
+                        <div class="diagram-box highlight">
+                            <div class="diagram-icon">⚡</div>
+                            <div class="diagram-text">Transfiere BTC<br>+ Debita USDT</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box fade-in delay-3">
+                        <p>Todo ocurre <strong>automáticamente</strong> en una sola transacción atómica. Si no hay saldo, la transacción simplemente no se ejecuta.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: Tokens RWA - Diferente -->
+            <div class="slide" data-slide="9">
+                <div class="slide-content">
+                    <h2 class="slide-title">Tokens RWA como KIMEN</h2>
+                    <p class="slide-subtitle">"Cómo llega un token RWA a la wallet del comprador con cliff y vesting"</p>
+                    
+                    <div class="info-box fade-in delay-1" style="background: rgba(0, 229, 255, 0.1); border-color: #00e5ff;">
+                        <p style="color: #fff;"><strong>Importante:</strong> No siempre el comprador recibe todo de golpe. Muchas veces recibe un <strong>derecho a recibir tokens</strong> según una agenda de desbloqueo programada.</p>
+                    </div>
+                    
+                    <div class="how-steps fade-in delay-2">
+                        <div class="how-step">
+                            <div class="how-step-number">1</div>
+                            <div class="how-step-content">
+                                <h4>Compras tokens RWA</h4>
+                                <p>Realizas el pago completo al momento de la compra.</p>
+                            </div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-number">2</div>
+                            <div class="how-step-content">
+                                <h4>El smart contract registra</h4>
+                                <p>Tu asignación queda guardada en la blockchain con tus condiciones específicas.</p>
+                            </div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-number">3</div>
+                            <div class="how-step-content">
+                                <h4>Esperas el desbloqueo</h4>
+                                <p>Según el calendario de cliff y vesting, recibes tus tokens gradualmente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 10: Idea General del Flujo -->
+            <div class="slide" data-slide="10">
+                <div class="slide-content">
+                    <h2 class="slide-title">Idea General del Proceso</h2>
+                    <p class="slide-subtitle">Del pago al desbloqueo final, paso a paso</p>
+                    
+                    <div class="explanation-box fade-in delay-1">
+                        <p style="font-size: 1.1rem; line-height: 1.7;">
+                            El comprador paga → se confirma la compra → se asigna un saldo bloqueado → 
+                            corre el cliff → empieza el vesting → el comprador reclama o recibe los tokens → 
+                            quedan completamente liberados.
+                        </p>
+                    </div>
+                    
+                    <div class="diagram-flow fade-in delay-2">
+                        <div class="diagram-box">
+                            <div class="diagram-icon">💰</div>
+                            <div class="diagram-text">Comprador<br>paga</div>
+                        </div>
+                        <div class="diagram-arrow">➜</div>
+                        <div class="diagram-box">
+                            <div class="diagram-icon">📝</div>
+                            <div class="diagram-text">Se confirma<br>la compra</div>
+                        </div>
+                        <div class="diagram-arrow">➜</div>
+                        <div class="diagram-box highlight">
+                            <div class="diagram-icon">🔒</div>
+                            <div class="diagram-text">Saldo<br>bloqueado</div>
+                        </div>
+                        <div class="diagram-arrow">➜</div>
+                        <div class="diagram-box">
+                            <div class="diagram-icon">⏳</div>
+                            <div class="diagram-text">Corre<br>el cliff</div>
+                        </div>
+                        <div class="diagram-arrow">➜</div>
+                        <div class="diagram-box">
+                            <div class="diagram-icon">📅</div>
+                            <div class="diagram-text">Empieza<br>el vesting</div>
+                        </div>
+                        <div class="diagram-arrow">➜</div>
+                        <div class="diagram-box highlight">
+                            <div class="diagram-icon">🎉</div>
+                            <div class="diagram-text">Tokens<br>liberados</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box fade-in delay-3">
+                        <p>El smart contract <strong>automatiza esa liberación</strong> siguiendo reglas predefinidas que no pueden alterarse.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 11: Antes de Comprar -->
+            <div class="slide" data-slide="11">
+                <div class="slide-content">
+                    <h2 class="slide-title">Antes de Comprar</h2>
+                    <p class="slide-subtitle">¿Qué existe antes de que veas tokens en tu wallet?</p>
+                    
+                    <div class="example-grid fade-in delay-1">
+                        <div class="example-card">
+                            <div class="example-icon">🪙</div>
+                            <h3>Token Project</h3>
+                            <p>El token ya ha sido creado y desplegado en la blockchain con sus reglas establecidas.</p>
+                        </div>
+                        <div class="example-card">
+                            <div class="example-icon">📊</div>
+                            <h3>Tabla de Asignación</h3>
+                            <p>Un registro que determina cuántos tokens le corresponden a cada dirección de wallet.</p>
+                        </div>
+                        <div class="example-card">
+                            <div class="example-icon">📜</div>
+                            <h3>Contrato Inteligente</h3>
+                            <p>Sabe exactamente cuántos tokens le tocan a cada comprador y cuándo puede liberarlos.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="explanation-box fade-in delay-2">
+                        <p>En proyectos <strong>RWA (Real World Assets)</strong>, el valor del token depende de activos, contratos y controles fuera de la cadena, pero la <strong>distribución del token se ejecuta en blockchain</strong> de forma transparente e inmutable.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 12: Momento de Compra -->
+            <div class="slide" data-slide="12">
+                <div class="slide-content">
+                    <h2 class="slide-title">Momento de Compra</h2>
+                    <p class="slide-subtitle">Compra ≠ Entrega inmediata (cuando hay vesting)</p>
+                    
+                    <div class="process-step fade-in delay-1" style="max-width: 700px; margin: 20px auto;">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>El comprador envía fondos</h4>
+                            <p>Realiza el pago a la dirección de venta o plataforma del proyecto.</p>
+                        </div>
+                    </div>
+                    <div class="process-arrow">⬇</div>
+                    <div class="process-step fade-in delay-2 highlight" style="max-width: 700px; margin: 20px auto;">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Registro de asignación</h4>
+                            <p>Un registro interno u on-chain marca: "<strong>Tú tienes derecho a X tokens</strong>" — pero no los libera aún.</p>
+                        </div>
+                    </div>
+                    <div class="process-arrow">⬇</div>
+                    <div class="process-step fade-in delay-3" style="max-width: 700px; margin: 20px auto;">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Validaciones (si aplica)</h4>
+                            <p>El contrato verifica: ¿Wallet en whitelist? ¿KYC completado? ¿Cumple condiciones previas?</p>
+                        </div>
+                    </div>
+                    
+                    <div class="danger-box fade-in delay-3">
+                        <p><strong>Importante:</strong> La compra y la entrega del token <strong>no siempre ocurren al mismo tiempo</strong>. A veces hay semanas o meses de diferencia.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 13: Qué es el Cliff -->
+            <div class="slide" data-slide="13">
+                <div class="slide-content">
+                    <h2 class="slide-title">¿Qué es el Cliff?</h2>
+                    <p class="slide-subtitle">La etapa de bloqueo inicial</p>
+                    
+                    <div class="explanation-box fade-in delay-1">
+                        <p style="font-size: 1.15rem;">El <strong>cliff</strong> es un período de espera al inicio donde <strong>no se libera nada</strong>. Es como una "cuarentena" obligatoria antes de que empiece cualquier liberación.</p>
+                    </div>
+                    
+                    <div class="analogy-container fade-in delay-2">
+                        <h3 style="color: #00e5ff; margin-bottom: 20px;">Ejemplo: Cliff de 6 meses</h3>
+                        <div class="timeline" style="margin: 20px auto;">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div class="timeline-content">
+                                    <h4>Mes 0 - Compra</h4>
+                                    <p>Compras 1,000 tokens. Asignación registrada en el contrato.</p>
+                                    <span class="timeline-status">🔒 Bloqueado</span>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot" style="background: #ffea00;"></div>
+                                <div class="timeline-content" style="border-color: #ffea00;">
+                                    <h4>Meses 1-5 - Durante el Cliff</h4>
+                                    <p>La asignación existe, pero no puedes retirar ni recibir tokens.</p>
+                                    <span class="timeline-status" style="background: rgba(255, 234, 0, 0.2); color: #ffea00;">⏳ Esperando</span>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-dot" style="background: #00e676;"></div>
+                                <div class="timeline-content" style="border-color: #00e676;">
+                                    <h4>Mes 6 - Fin del Cliff</h4>
+                                    <p>¡Empiezan las liberaciones según el calendario de vesting!</p>
+                                    <span class="timeline-status" style="background: rgba(0, 230, 118, 0.2); color: #00e676;">✅ Liberando</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box fade-in delay-3">
+                        <p>El botón de <strong>"claim"</strong> suele estar deshabilitado durante el cliff o devuelve cero tokens disponibles.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 14: Al Terminar el Cliff -->
+            <div class="slide" data-slide="14">
+                <div class="slide-content">
+                    <h2 class="slide-title">Al Terminar el Cliff</h2>
+                    <p class="slide-subtitle">¿Qué pasa cuando se cumple el tiempo de bloqueo?</p>
+                    
+                    <div class="process-step fade-in delay-1" style="max-width: 700px; margin: 15px auto;">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>El contrato revisa la fecha</h4>
+                            <p>Compara el timestamp actual con la fecha de inicio + duración del cliff.</p>
+                        </div>
+                    </div>
+                    <div class="process-arrow">⬇</div>
+                    <div class="process-step fade-in delay-2 highlight" style="max-width: 700px; margin: 15px auto;">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Libera primera porción (TGE)</h4>
+                            <p>En muchos modelos, al terminar el cliff se desbloquea un % inicial (ej: 10%) inmediatamente.</p>
+                        </div>
+                    </div>
+                    <div class="process-arrow">⬇</div>
+                    <div class="process-step fade-in delay-3" style="max-width: 700px; margin: 15px auto;">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Comienza liberación lineal</h4>
+                            <p>El resto se libera poco a poco, por ejemplo cada mes, hasta completar el 100%.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="security-grid fade-in delay-3" style="max-width: 800px; margin: 25px auto;">
+                        <div class="security-card">
+                            <div class="security-icon">🔒</div>
+                            <h3>Antes del Cliff</h3>
+                            <p style="color: #ff1744; font-weight: bold;">0 tokens disponibles</p>
+                        </div>
+                        <div class="security-card">
+                            <div class="security-icon">🔓</div>
+                            <h3>Al Terminar Cliff</h3>
+                            <p style="color: #ffea00; font-weight: bold;">Primera porción liberada</p>
+                        </div>
+                        <div class="security-card">
+                            <div class="security-icon">💎</div>
+                            <h3>Durante Vesting</h3>
+                            <p style="color: #00e5ff; font-weight: bold;">Más tokens cada mes</p>
+                        </div>
+                        <div class="security-card">
+                            <div class="security-icon">✅</div>
+                            <h3>Final del Vesting</h3>
+                            <p style="color: #00e676; font-weight: bold;">100% liberado</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 15: Cómo Funciona el Vesting -->
+            <div class="slide" data-slide="15">
+                <div class="slide-content">
+                    <h2 class="slide-title">Cómo Funciona el Vesting</h2>
+                    <p class="slide-subtitle">El calendario que libera tokens gradualmente</p>
+                    
+                    <div class="explanation-box fade-in delay-1">
+                        <p style="font-size: 1.1rem;">El <strong>vesting</strong> es el calendario que decide cuánto token se libera en cada momento. No "crea" tokens nuevos — solo <strong>libera los que ya estaban reservados</strong> para esa wallet.</p>
+                    </div>
+                    
+                    <div class="analogy-container fade-in delay-2">
+                        <h3 style="color: #00e5ff; margin-bottom: 15px;">Ejemplo Práctico</h3>
+                        <div class="example-grid" style="max-width: 600px; margin: 0 auto;">
+                            <div class="example-card" style="text-align: center;">
+                                <div class="example-icon">📦</div>
+                                <h3>Total Asignado</h3>
+                                <p style="font-size: 1.5rem; color: #00e5ff; font-weight: bold;">1,000 tokens</p>
+                            </div>
+                            <div class="example-card" style="text-align: center;">
+                                <div class="example-icon">⏳</div>
+                                <h3>Cliff</h3>
+                                <p style="font-size: 1.5rem; color: #ffea00; font-weight: bold;">3 meses</p>
+                            </div>
+                            <div class="example-card" style="text-align: center;">
+                                <div class="example-icon">📅</div>
+                                <h3>Vesting</h3>
+                                <p style="font-size: 1.5rem; color: #00e676; font-weight: bold;">9 meses</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-box" style="margin-top: 25px;">
+                            <p><strong>Resultado:</strong> Durante 3 meses no se libera nada. Después, el contrato libera <span style="color: #00e5ff; font-weight: bold;">~111 tokens por mes</span> durante 9 meses hasta completar los 1,000.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 16: Cómo Llega a la Wallet -->
+            <div class="slide" data-slide="16">
+                <div class="slide-content">
+                    <h2 class="slide-title">Cómo Llega a la Wallet</h2>
+                    <p class="slide-subtitle">Los dos modelos de distribución</p>
+                    
+                    <div class="example-grid fade-in delay-1" style="max-width: 900px;">
+                        <div class="example-card" style="border-color: #00e5ff;">
+                            <div class="example-icon">👆</div>
+                            <h3 style="color: #00e5ff;">Modelo A: Claim Manual</h3>
+                            <p>El comprador conecta su wallet y presiona <strong>"reclamar"</strong>. El contrato verifica cuánto puede liberar y transfiere los tokens a su dirección.</p>
+                            <div style="margin-top: 15px; padding: 10px; background: rgba(0, 229, 255, 0.1); border-radius: 8px;">
+                                <small style="color: #00e5ff;">👤 Iniciativa del usuario</small>
+                            </div>
+                        </div>
+                        <div class="example-card" style="border-color: #e040fb;">
+                            <div class="example-icon">🤖</div>
+                            <h3 style="color: #e040fb;">Modelo B: Automático</h3>
+                            <p>El sistema o un bot ejecuta la liberación automáticamente y envía los tokens a la wallet según el calendario programado.</p>
+                            <div style="margin-top: 15px; padding: 10px; background: rgba(224, 64, 251, 0.1); border-radius: 8px;">
+                                <small style="color: #e040fb;">⚡ Sin intervención del usuario</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box fade-in delay-2">
+                        <p>En ambos casos, la wallet <strong>solo recibe tokens cuando el contrato confirma</strong> que ya se cumplieron las reglas de tiempo y asignación.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 17: Qué Verifica el Contrato -->
+            <div class="slide" data-slide="17">
+                <div class="slide-content">
+                    <h2 class="slide-title">¿Qué Verifica el Contrato?</h2>
+                    <p class="slide-subtitle">Validaciones antes de soltar tokens</p>
+                    
+                    <div class="how-steps fade-in delay-1" style="max-width: 700px;">
+                        <div class="how-step">
+                            <div class="how-step-number">1</div>
+                            <div class="how-step-content">
+                                <h4>¿Esta wallet pertenece al comprador?</h4>
+                                <p>Verifica que la dirección que reclama está en la lista de asignaciones.</p>
+                            </div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-number">2</div>
+                            <div class="how-step-content">
+                                <h4>¿Cuántos tokens tiene asignados?</h4>
+                                <p>Consulta la cantidad total que le corresponde a esa dirección.</p>
+                            </div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-number">3</div>
+                            <div class="how-step-content">
+                                <h4>¿Ya terminó el cliff?</h4>
+                                <p>Comprueba si el período de bloqueo inicial ha finalizado.</p>
+                            </div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-number">4</div>
+                            <div class="how-step-content">
+                                <h4>¿Cuánto toca liberar hoy?</h4>
+                                <p>Calcula basándose en el tiempo transcurrido y el calendario de vesting.</p>
+                            </div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-number">5</div>
+                            <div class="how-step-content">
+                                <h4>¿Cuánto ya se liberó antes?</h4>
+                                <p>Verifica el histórico para no duplicar liberaciones.</p>
+                            </div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-number">6</div>
+                            <div class="how-step-content">
+                                <h4>¿Cuánto queda bloqueado?</h4>
+                                <p>Determina el saldo pendiente para futuras liberaciones.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="explanation-box fade-in delay-2">
+                        <p>Los smart contracts <strong>automatizan toda esta lógica</strong> con reglas programadas previamente que se ejecutan de forma determinista e inmutable.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 18: Caso KIMEN - Interactivo -->
+            <div class="slide" data-slide="18">
+                <div class="slide-content">
+                    <h2 class="slide-title">Caso KIMEN - Simulación</h2>
+                    <p class="slide-subtitle">10 tokens KIMEN con cliff de 6 meses y vesting de 20 meses</p>
+                    
+                    <div class="kimen-vault-visual fade-in delay-1">
+                        <div class="vault-icon-large">🏛️</div>
+                        <div class="vault-label">Smart Contract - Bóveda KIMEN</div>
+                        <div class="vault-tokens" id="vault-tokens">10 KIMEN reservados para ti</div>
+                    </div>
+                    
+                    <div class="kimen-controls">
+                        <button class="kimen-advance-btn" id="kimen-advance-btn" onclick="advanceKimenStep()">
+                            <span>▶</span> Avanzar Paso
+                        </button>
+                        <div class="kimen-step-indicator" id="kimen-step-indicator">Paso 1 de 9</div>
+                    </div>
+                    
+                    <div class="kimen-simulation" id="kimen-simulation">
+                        <div class="kimen-message" id="kimen-message">
+                            Presiona "Avanzar Paso" para ver la simulación del vesting de KIMEN
+                        </div>
+                        
+                        <div class="kimen-grid">
+                            <div class="kimen-column">
+                                <div class="kimen-header">📅 Mes</div>
+                                <div class="kimen-months" id="kimen-months">
+                                    <!-- Meses 1-26 generados por JS -->
+                                </div>
+                            </div>
+                            <div class="kimen-column">
+                                <div class="kimen-header">👛 Tokens en Wallet</div>
+                                <div class="kimen-wallet-amounts" id="kimen-wallet-amounts">
+                                    <!-- Cantidades generadas por JS -->
+                                </div>
+                            </div>
+                            <div class="kimen-column">
+                                <div class="kimen-header">💰 Pool Global</div>
+                                <div class="kimen-pool-amounts" id="kimen-pool-amounts">
+                                    <!-- Pool generado por JS -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -247,9 +709,32 @@
         <div class="nav-controls">
             <button class="nav-btn" id="prev-btn">❮</button>
             <div class="slide-counter">
-                <span id="current-slide">1</span> / <span id="total-slides">7</span>
+                <span id="current-slide">1</span> / <span id="total-slides">18</span>
             </div>
             <button class="nav-btn" id="next-btn">❯</button>
+        </div>
+    </div>
+
+    <!-- Menu Flotante de Presentaciones -->
+    <div class="floating-menu" id="floating-menu">
+        <button class="menu-toggle" id="menu-toggle" title="Ver presentaciones">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="menu-dropdown" id="menu-dropdown">
+            <a href="../blockchain/" class="menu-item">
+                <span class="menu-icon">🔗</span>
+                <span class="menu-text">Blockchain</span>
+            </a>
+            <a href="../smartContract/" class="menu-item active">
+                <span class="menu-icon">📜</span>
+                <span class="menu-text">Smart Contract</span>
+            </a>
+            <a href="../kimen/" class="menu-item">
+                <span class="menu-icon">🪙</span>
+                <span class="menu-text">Kimen</span>
+            </a>
         </div>
     </div>
 
