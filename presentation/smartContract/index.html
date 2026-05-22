@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Contracts para Dummies</title>
+    <link rel="stylesheet" href="../css/presentation.css">
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="slides-wrapper">
+            <!-- Slide 1: Intro -->
+            <div class="slide active" data-slide="1">
+                <div class="slide-content">
+                    <h1 class="slide-title">Smart Contracts para Dummies</h1>
+                    <p class="slide-subtitle">¿Qué son y por qué importan?</p>
+                    <img src="../img/que-es-un-smart-contract.webp" alt="Smart Contract" class="intro-image fade-in delay-1">
+                    <div class="intro-buttons fade-in delay-2">
+                        <button class="intro-btn" onclick="goToSlide(2)">Comenzar</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: ¿Qué es un Smart Contract? -->
+            <div class="slide" data-slide="2">
+                <div class="slide-content">
+                    <h2 class="slide-title">¿Qué es un Smart Contract?</h2>
+                    <div class="info-box fade-in delay-1">
+                        <p>Es un <strong>programa auto-ejecutable</strong> almacenado en una cadena de bloques que realiza acciones automáticamente cuando se cumplen condiciones acordadas.</p>
+                    </div>
+                    <div class="fade-in delay-2">
+                        <p class="slide-text">
+                            Imagina un contrato tradicional, pero en lugar de depender de abogados y tribunales para hacerlo cumplir, 
+                            el código se ejecuta automáticamente cuando se cumplen las condiciones programadas.
+                        </p>
+                    </div>
+                    <div class="explanation-box fade-in delay-3">
+                        <p><strong>Clave:</strong> "Si ocurre X, entonces ejecuta Y" — sin intermediarios, sin demoras, sin posibilidad de no cumplir.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Analogía simple -->
+            <div class="slide" data-slide="3">
+                <div class="slide-content">
+                    <h2 class="slide-title">Analogía Simple</h2>
+                    <p class="slide-subtitle">Una máquina expendedora es el mejor ejemplo</p>
+                    
+                    <div class="analogy-container fade-in delay-1">
+                        <div class="analogy-visual">
+                            <div class="analogy-item">
+                                <div class="analogy-icon">💵</div>
+                                <div class="analogy-label">Insertas dinero</div>
+                            </div>
+                            <div class="analogy-arrow">➜</div>
+                            <div class="analogy-item">
+                                <div class="analogy-icon">🤖</div>
+                                <div class="analogy-label">La máquina verifica</div>
+                            </div>
+                            <div class="analogy-arrow">➜</div>
+                            <div class="analogy-item">
+                                <div class="analogy-icon">🥤</div>
+                                <div class="analogy-label">Recibes tu bebida</div>
+                            </div>
+                        </div>
+                        
+                        <div class="explanation-box">
+                            <p><strong>¿Sin intervención humana?</strong> Exactamente — nadie necesita aprobar tu compra, contar el cambio o entregar la bebida. La máquina ejecuta todo automáticamente.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="fade-in delay-2">
+                        <p class="slide-text">
+                            Un <strong>smart contract</strong> hace lo mismo pero en la blockchain: verifica condiciones y ejecuta acciones 
+                            automáticamente, sin necesidad de confiar en una persona o entidad central.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: Cómo funcionan -->
+            <div class="slide" data-slide="4">
+                <div class="slide-content">
+                    <h2 class="slide-title">Cómo Funcionan</h2>
+                    <p class="slide-subtitle">Tres pasos simples del proceso</p>
+                    
+                    <div class="how-steps fade-in delay-1">
+                        <div class="how-step">
+                            <div class="how-step-number">1</div>
+                            <div class="how-step-content">
+                                <h4>Se escribe la lógica</h4>
+                                <p>Un programador define las reglas "si/entonces" en código. Ejemplo: "Si recibo 1 ETH, entonces transfiero el NFT".</p>
+                            </div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-number">2</div>
+                            <div class="how-step-content">
+                                <h4>Se despliega en la blockchain</h4>
+                                <p>El contrato se sube a la red blockchain donde permanece inmutable y accesible para todos.</p>
+                            </div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-number">3</div>
+                            <div class="how-step-content">
+                                <h4>Espera y ejecuta</h4>
+                                <p>El contrato espera eventos (pagos, fechas, resultados). Cuando se cumplen las condiciones, ejecuta la acción automáticamente.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="explanation-box fade-in delay-2">
+                        <p><strong>Importante:</strong> Una vez desplegado, el código no puede cambiarse. Esto garantiza que nadie puede modificar las reglas a mitad de camino.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: Ejemplos muy simples -->
+            <div class="slide" data-slide="5">
+                <div class="slide-content">
+                    <h2 class="slide-title">Ejemplos Muy Simples</h2>
+                    <p class="slide-subtitle">Casos de uso del mundo real</p>
+                    
+                    <div class="example-grid fade-in delay-1">
+                        <div class="example-card">
+                            <div class="example-icon">📦</div>
+                            <h3>Pago al Cumplimiento</h3>
+                            <p>"Si el paquete llega a su destino, entonces libera el pago al vendedor automáticamente."</p>
+                        </div>
+                        <div class="example-card">
+                            <div class="example-icon">🎨</div>
+                            <h3>Venta de NFT</h3>
+                            <p>"Si recibes 1 ETH en la dirección del contrato, entonces transfiere automáticamente la propiedad del NFT."</p>
+                        </div>
+                        <div class="example-card">
+                            <div class="example-icon">✈️</div>
+                            <h3>Seguro Automático</h3>
+                            <p>"Si el vuelo se retrasa más de 3 horas, entonces paga automáticamente la compensación al pasajero."</p>
+                        </div>
+                    </div>
+                    
+                    <div class="explanation-box fade-in delay-2">
+                        <p><strong>Patrón común:</strong> Todos siguen la lógica <em>condición → verificación → ejecución automática</em>.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: Ventajas -->
+            <div class="slide" data-slide="6">
+                <div class="slide-content">
+                    <h2 class="slide-title">Ventajas de los Smart Contracts</h2>
+                    <p class="slide-subtitle">Por qué están revolucionando los acuerdos</p>
+                    
+                    <div class="security-grid fade-in delay-1">
+                        <div class="security-card">
+                            <div class="security-icon">⚡</div>
+                            <h3>Automatización y Rapidez</h3>
+                            <p>Las acciones se ejecutan instantáneamente cuando se cumplen las condiciones. Menos intermediarios = menos costos y demoras.</p>
+                        </div>
+                        <div class="security-card">
+                            <div class="security-icon">🔍</div>
+                            <h3>Transparencia Total</h3>
+                            <p>Todo el código y las transacciones son públicos y verificables por cualquiera. No hay cláusulas ocultas.</p>
+                        </div>
+                        <div class="security-card">
+                            <div class="security-icon">🛡️</div>
+                            <h3>Registro Inmutable</h3>
+                            <p>Una vez escrito en la blockchain, no se puede borrar ni alterar. El historial permanece para siempre.</p>
+                        </div>
+                        <div class="security-card">
+                            <div class="security-icon">🔐</div>
+                            <h3>Confianza Técnica</h3>
+                            <p>No necesitas confiar en una persona — solo en el código matemáticamente verificable que ejecuta lo acordado.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-box fade-in delay-2">
+                        <p><strong>Resultado:</strong> Acuerdos más rápidos, baratos, seguros y justos para todas las partes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Mini demo/diagrama -->
+            <div class="slide" data-slide="7">
+                <div class="slide-content">
+                    <h2 class="slide-title">Flujo de un Smart Contract</h2>
+                    <p class="slide-subtitle">Visualización del proceso completo</p>
+                    
+                    <div class="diagram-flow fade-in delay-1">
+                        <div class="diagram-box">
+                            <div class="diagram-icon">👤</div>
+                            <div class="diagram-text">Usuario</div>
+                        </div>
+                        <div class="diagram-arrow">➜</div>
+                        <div class="diagram-box highlight">
+                            <div class="diagram-icon">💎</div>
+                            <div class="diagram-text">Envía criptomonedas<br>+ invoca contrato</div>
+                        </div>
+                        <div class="diagram-arrow">➜</div>
+                        <div class="diagram-box">
+                            <div class="diagram-icon">🤖</div>
+                            <div class="diagram-text">Contrato verifica<br>condiciones</div>
+                        </div>
+                        <div class="diagram-arrow">➜</div>
+                        <div class="diagram-box highlight">
+                            <div class="diagram-icon">✅</div>
+                            <div class="diagram-text">Ejecuta acción<br>(transfiere activo)</div>
+                        </div>
+                    </div>
+                    
+                    <div class="how-steps fade-in delay-2">
+                        <div class="how-step">
+                            <div class="how-step-number">1</div>
+                            <div class="how-step-content">
+                                <h4>El usuario inicia</h4>
+                                <p>Envía la criptomoneda requerida e invoca la función del contrato (ej: "comprar NFT").</p>
+                            </div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-number">2</div>
+                            <div class="how-step-content">
+                                <h4>El contrato verifica</h4>
+                                <p>Revisa automáticamente: ¿Se recibió el pago correcto? ¿El NFT está disponible? ¿Cumple todas las reglas?</p>
+                            </div>
+                        </div>
+                        <div class="how-step">
+                            <div class="how-step-number">3</div>
+                            <div class="how-step-content">
+                                <h4>Ejecución instantánea</h4>
+                                <p>Si todo es válido, transfiere el NFT al comprador y el pago al vendedor — todo en una sola transacción atómica.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-cta fade-in delay-3">
+                        <a href="../kimen/" class="kimen-link-btn">🔗 Explorar Token KIMEN</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Controls -->
+        <div class="nav-controls">
+            <button class="nav-btn" id="prev-btn">❮</button>
+            <div class="slide-counter">
+                <span id="current-slide">1</span> / <span id="total-slides">7</span>
+            </div>
+            <button class="nav-btn" id="next-btn">❯</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
