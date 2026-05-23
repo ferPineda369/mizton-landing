@@ -726,6 +726,8 @@
         </div>
     </div>
 
+    <script src="../includes/presentation-common.js"></script>
+
     <!-- Menu Web3 Include -->
     <div id="menuWeb3-container"></div>
     <script>
@@ -733,11 +735,14 @@
             .then(response => response.text())
             .then(html => {
                 document.getElementById('menuWeb3-container').innerHTML = html;
+                // Inicializar menú después de cargar
+                if (typeof initFloatingMenu === 'function') {
+                    initFloatingMenu();
+                }
             })
             .catch(err => console.error('Error cargando menuWeb3:', err));
     </script>
 
-    <script src="../includes/presentation-common.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
