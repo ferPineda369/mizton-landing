@@ -721,12 +721,18 @@
 @media (max-width: 768px) {
     .summary-cards {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
         align-items: center;
     }
     
     .summary-divider {
-        transform: rotate(90deg);
+        width: auto;
+        height: auto;
+        background: none;
+        margin: 0;
+        transform: none;
+        font-size: 1.8rem;
+        font-weight: 700;
     }
     
     .summary-card {
@@ -738,6 +744,7 @@
     
     .summary-total {
         margin-left: 0;
+        margin-top: 5px;
     }
 }
 
