@@ -658,7 +658,7 @@
 
             <!-- Slide 18: Caso KIMEN - Interactivo -->
             <div class="slide" data-slide="18">
-                <div class="slide-content">
+                <div class="slide-content kimen-slide">
                     <h2 class="slide-title">Caso KIMEN - Simulación</h2>
                     <p class="slide-subtitle">10 tokens KIMEN con cliff de 6 meses y vesting de 20 meses</p>
                     
@@ -668,27 +668,32 @@
                         <div class="vault-tokens" id="vault-tokens">10 KIMEN reservados para ti</div>
                     </div>
                     
-                    <div class="kimen-controls">
-                        <button class="kimen-advance-btn" id="kimen-advance-btn" onclick="advanceKimenStep()">
-                            <span>▶</span> Avanzar Paso
-                        </button>
-                        <div class="kimen-step-indicator" id="kimen-step-indicator">Paso 1 de 9</div>
+                    <!-- Bloque fijo superior con controles y mensaje -->
+                    <div class="kimen-sticky-controls">
+                        <div class="kimen-nav-buttons">
+                            <button class="kimen-nav-btn" id="kimen-back-btn" onclick="backKimenStep()" disabled>
+                                ❮ Retroceder
+                            </button>
+                            <div class="kimen-step-indicator" id="kimen-step-indicator">Paso 0 de 13</div>
+                            <button class="kimen-nav-btn" id="kimen-advance-btn" onclick="advanceKimenStep()">
+                                Avanzar ❯
+                            </button>
+                        </div>
+                        <div class="kimen-message" id="kimen-message">
+                            Presiona "Avanzar" para ver la simulación del vesting de KIMEN.
+                        </div>
                     </div>
                     
-                    <div class="kimen-simulation" id="kimen-simulation">
-                        <div class="kimen-message" id="kimen-message">
-                            Presiona "Avanzar Paso" para ver la simulación del vesting de KIMEN
-                        </div>
-                        
+                    <div class="kimen-simulation-scrollable" id="kimen-simulation">
                         <div class="kimen-grid">
                             <div class="kimen-column">
                                 <div class="kimen-header">📅 Mes</div>
                                 <div class="kimen-months" id="kimen-months">
-                                    <!-- Meses 1-26 generados por JS -->
+                                    <!-- Meses 1-30 generados por JS -->
                                 </div>
                             </div>
                             <div class="kimen-column">
-                                <div class="kimen-header">👛 Tokens en Wallet</div>
+                                <div class="kimen-header">👛 Tokens</div>
                                 <div class="kimen-wallet-amounts" id="kimen-wallet-amounts">
                                     <!-- Cantidades generadas por JS -->
                                 </div>
@@ -697,6 +702,12 @@
                                 <div class="kimen-header">💰 Pool Global</div>
                                 <div class="kimen-pool-amounts" id="kimen-pool-amounts">
                                     <!-- Pool generado por JS -->
+                                </div>
+                            </div>
+                            <div class="kimen-column kimen-ganancias-col">
+                                <div class="kimen-header">🪙 Ganancias<br>KIMEN</div>
+                                <div class="kimen-ganancias-amounts" id="kimen-ganancias-amounts">
+                                    <!-- Ganancias KIMEN generadas por JS -->
                                 </div>
                             </div>
                         </div>
