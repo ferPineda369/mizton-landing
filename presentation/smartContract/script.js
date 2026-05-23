@@ -1,4 +1,4 @@
-// Smart Contracts Presentation - Navigation Script
+﻿// Smart Contracts Presentation - Navigation Script
 
 let currentSlide = 1;
 const totalSlides = 18;
@@ -163,20 +163,20 @@ let kimenStep = 0;
 const TOTAL_KIMEN_STEPS = 13;
 
 const kimenMessages = [
-    "Presiona \"Avanzar\" para ver la simulación del vesting de KIMEN.", // Paso 0
-    "Compras 10 tokens KIMEN. El proyecto le asigna esos 10 tokens en el smart contract (bóveda).", // Paso 1
+    "Presiona \"Avanzar\" para ver la simulaciÃ³n del vesting de KIMEN.", // Paso 0
+    "Compras 10 tokens KIMEN. El proyecto le asigna esos 10 tokens en el smart contract (bÃ³veda).", // Paso 1
     "Tienes un cliff de 6 meses y un vesting de 20 meses. Durante el cliff no recibes nada.", // Paso 2
     "Durante los primeros 6 meses no recibes nada. El contrato mantiene tus tokens bloqueados.", // Paso 3
-    "Al terminar el mes 6, el contrato libera la primera porción (10%) = 1 KIMEN a tu wallet.", // Paso 4
-    "Después, cada mes se libera otra parte (4.5%). Mes 7: 1.45 KIMEN, Mes 8: 1.90 KIMEN... hasta que al mes 26...", // Paso 5
+    "Al terminar el mes 6, el contrato libera la primera porciÃ³n (10%) = 1 KIMEN a tu wallet.", // Paso 4
+    "DespuÃ©s, cada mes se libera otra parte (4.5%). Mes 7: 1.45 KIMEN, Mes 8: 1.90 KIMEN... hasta que al mes 26...", // Paso 5
     "ya recibiste los 10 tokens completos en tu wallet.", // Paso 6
     "Pool Global: Adicionalmente a partir del 3er mes en adelante, empiezas a obtener ganancias del Pool Global", // Paso 7
-    "Cada mes seguirá repartiendo al Pool Global por el total de KIMEN que hayas reservado", // Paso 8
-    "Sin importar que sigan bloqueados tus KIMEN o se estén liberando en el Vesting", // Paso 9
+    "Cada mes seguirÃ¡ repartiendo al Pool Global por el total de KIMEN que hayas reservado", // Paso 8
+    "Sin importar que sigan bloqueados tus KIMEN o se estÃ©n liberando en el Vesting", // Paso 9
     "Esto es gracias al token MIZTON", // Paso 10
-    "Entre más token MIZTON poseas, mayor será tu participación en KIMEN y en todos los demás proyectos", // Paso 11
-    "Además participas desde el primer reparto particular por poseer el token KIMEN", // Paso 12
-    "Siempre que tengas alguno de estos tokens, participarás en el reparto de ganancias correspondiente" // Paso 13
+    "Entre mÃ¡s token MIZTON poseas, mayor serÃ¡ tu participaciÃ³n en KIMEN y en todos los demÃ¡s proyectos", // Paso 11
+    "AdemÃ¡s participas desde el primer reparto particular por poseer el token KIMEN", // Paso 12
+    "Siempre que tengas alguno de estos tokens, participarÃ¡s en el reparto de ganancias correspondiente" // Paso 13
 ];
 
 // Estado actual de cada paso (para poder retroceder)
@@ -399,7 +399,7 @@ function advanceKimenStep() {
             break;
             
         case 3: // Paso 3: Reforzar cliff (sin cambios visuales)
-            // Los meses 1-6 ya están en amarillo
+            // Los meses 1-6 ya estÃ¡n en amarillo
             break;
             
         case 4: // Paso 4: Mes 6 libera 10% = 1 KIMEN
@@ -417,17 +417,19 @@ function advanceKimenStep() {
                 const monthEl = document.getElementById(`month-${i}`);
                 const walletEl = document.getElementById(`wallet-${i}`);
                 
-                if (monthEl) monthEl.className = 'kimen-month active';
-                
-                // Cálculo: 1 + (i-6) * 0.45 = progresión
-                // Mes 7: 1.45, Mes 8: 1.90, ..., Mes 25: 9.55
-                const amount = 1 + ((i - 6) * 0.45);
-                const displayAmount = amount.toFixed(2);
-                
-                if (walletEl) {
-                    walletEl.className = 'kimen-amount partial';
-                    walletEl.textContent = `${displayAmount} KIMEN`;
-                }
+                // Delay progresivo de 80ms por mes
+                setTimeout(() => {
+                    if (monthEl) monthEl.className = 'kimen-month active';
+                    
+                    // CÃ¡lculo: 1 + (i-6) * 0.45 = progresiÃ³n
+                    const amount = 1 + ((i - 6) * 0.45);
+                    const displayAmount = amount.toFixed(2);
+                    
+                    if (walletEl) {
+                        walletEl.className = 'kimen-amount partial';
+                        walletEl.textContent = `${displayAmount} KIMEN`;
+                    }
+                }, (i - 7) * 80);
             }
             break;
             
@@ -441,89 +443,95 @@ function advanceKimenStep() {
                 wallet26.textContent = '10.00 KIMEN';
             }
             
-            // También completar meses anteriores
+            // TambiÃ©n completar meses anteriores con delay
             for (let i = 1; i <= 26; i++) {
-                const monthEl = document.getElementById(`month-${i}`);
-                if (monthEl && !monthEl.classList.contains('complete')) {
-                    monthEl.className = 'kimen-month complete';
-                }
+                setTimeout(() => {
+                    const monthEl = document.getElementById(`month-${i}`);
+                    if (monthEl && !monthEl.classList.contains('complete')) {
+                        monthEl.className = 'kimen-month complete';
+                    }
+                }, i * 30);
             }
             break;
             
         case 7: // Paso 7: Pool Global - solo Mes 3
             const pool3 = document.getElementById('pool-3');
             if (pool3) {
-                pool3.className = 'kimen-pool visible';
-                pool3.innerHTML = '<span class="pool-icon">💰</span> Pool';
+                pool3.className = 'kimen-pool visible pool-animate';
+                pool3.innerHTML = '<span class="pool-icon">&#128176;</span> Pool';
             }
             break;
             
         case 8: // Paso 8: Pool Global - Mes 4
             const pool4 = document.getElementById('pool-4');
             if (pool4) {
-                pool4.className = 'kimen-pool visible';
-                pool4.innerHTML = '<span class="pool-icon">💰</span> Pool';
+                pool4.className = 'kimen-pool visible pool-animate';
+                pool4.innerHTML = '<span class="pool-icon">&#128176;</span> Pool';
             }
             break;
             
         case 9: // Paso 9: Pool Global - Mes 5
             const pool5 = document.getElementById('pool-5');
             if (pool5) {
-                pool5.className = 'kimen-pool visible';
-                pool5.innerHTML = '<span class="pool-icon">💰</span> Pool';
+                pool5.className = 'kimen-pool visible pool-animate';
+                pool5.innerHTML = '<span class="pool-icon">&#128176;</span> Pool';
             }
             break;
             
         case 10: // Paso 10: Pool Global - Mes 6
             const pool6 = document.getElementById('pool-6');
             if (pool6) {
-                pool6.className = 'kimen-pool visible';
-                pool6.innerHTML = '<span class="pool-icon">💰</span> Pool';
+                pool6.className = 'kimen-pool visible pool-animate';
+                pool6.innerHTML = '<span class="pool-icon">&#128176;</span> Pool';
             }
             break;
             
         case 11: // Paso 11: Pool Global - Mes 7
             const pool7 = document.getElementById('pool-7');
             if (pool7) {
-                pool7.className = 'kimen-pool visible';
-                pool7.innerHTML = '<span class="pool-icon">💰</span> Pool';
+                pool7.className = 'kimen-pool visible pool-animate';
+                pool7.innerHTML = '<span class="pool-icon">&#128176;</span> Pool';
             }
             break;
             
         case 12: // Paso 12: Ganancias KIMEN - Meses 3-7
             for (let i = 3; i <= 7; i++) {
-                const gananciaEl = document.getElementById(`ganancia-${i}`);
-                const poolEl = document.getElementById(`pool-${i}`);
-                
-                if (gananciaEl) {
-                    gananciaEl.className = 'kimen-ganancia visible';
-                    gananciaEl.innerHTML = '<span class="pool-icon">�</span> KIMEN';
-                }
-                
-                // Cambiar Pool a color verde (participación activa)
-                if (poolEl) {
-                    poolEl.style.background = 'rgba(0, 230, 118, 0.15)';
-                    poolEl.style.borderColor = '#00e676';
-                }
+                setTimeout(() => {
+                    const gananciaEl = document.getElementById(`ganancia-${i}`);
+                    const poolEl = document.getElementById(`pool-${i}`);
+                    
+                    if (gananciaEl) {
+                        gananciaEl.className = 'kimen-ganancia visible pool-animate';
+                        gananciaEl.innerHTML = '<span class="pool-icon">&#128176;</span> KIMEN';
+                    }
+                    
+                    // Cambiar Pool a color verde (participacion activa)
+                    if (poolEl) {
+                        poolEl.style.background = 'rgba(0, 230, 118, 0.15)';
+                        poolEl.style.borderColor = '#00e676';
+                    }
+                }, (i - 3) * 150);
             }
             break;
             
         case 13: // Paso 13: Pool Global y Ganancias KIMEN - Meses 8-30 secuencial
             for (let i = 8; i <= 30; i++) {
-                const poolEl = document.getElementById(`pool-${i}`);
-                const gananciaEl = document.getElementById(`ganancia-${i}`);
-                
-                if (poolEl) {
-                    poolEl.className = 'kimen-pool visible';
-                    poolEl.innerHTML = '<span class="pool-icon">�</span> Pool';
-                    poolEl.style.background = 'rgba(0, 230, 118, 0.15)';
-                    poolEl.style.borderColor = '#00e676';
-                }
-                
-                if (gananciaEl) {
-                    gananciaEl.className = 'kimen-ganancia visible';
-                    gananciaEl.innerHTML = '<span class="pool-icon">💰</span> KIMEN';
-                }
+                setTimeout(() => {
+                    const poolEl = document.getElementById(`pool-${i}`);
+                    const gananciaEl = document.getElementById(`ganancia-${i}`);
+                    
+                    if (poolEl) {
+                        poolEl.className = 'kimen-pool visible pool-animate';
+                        poolEl.innerHTML = '<span class="pool-icon">&#128176;</span> Pool';
+                        poolEl.style.background = 'rgba(0, 230, 118, 0.15)';
+                        poolEl.style.borderColor = '#00e676';
+                    }
+                    
+                    if (gananciaEl) {
+                        gananciaEl.className = 'kimen-ganancia visible pool-animate';
+                        gananciaEl.innerHTML = '<span class="pool-icon">&#128176;</span> KIMEN';
+                    }
+                }, (i - 8) * 60);
             }
             break;
     }
@@ -539,3 +547,4 @@ function highlightMonths(start, end, className) {
         }
     }
 }
+
