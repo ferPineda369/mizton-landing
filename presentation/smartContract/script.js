@@ -171,7 +171,7 @@ const kimenMessages = [
     'Después, cada mes se libera otra parte (4.5%). Mes 7: 1.45 KIMEN, Mes 8: 1.90 KIMEN... hasta que al mes 26...', // Paso 5
     'ya recibiste los 10 tokens completos en tu wallet.', // Paso 6
     'Pool Global: Adicionalmente a partir del 3er mes en adelante, empiezas a obtener ganancias del Pool Global', // Paso 7
-    'Cada mes seguirá repartiendo al Pool Global por el total de KIMEN que hayas reservado', // Paso 8
+    'Cada mes seguirá repartiendo al Pool Global por el total de MIZTON que tengas', // Paso 8
     'Sin importar que sigan bloqueados tus KIMEN o se estén liberando en el Vesting', // Paso 9
     'Esto es gracias al token MIZTON', // Paso 10
     'Entre más token MIZTON poseas, mayor será tu participación en KIMEN y en todos los demás proyectos', // Paso 11
