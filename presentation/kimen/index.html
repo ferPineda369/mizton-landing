@@ -542,16 +542,26 @@
     <!-- Menu Web3 Include -->
     <div id="menuWeb3-container"></div>
     <script>
-        fetch('../includes/menuWeb3.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('menuWeb3-container').innerHTML = html;
-                // Inicializar menú después de cargar
-                if (typeof initFloatingMenu === 'function') {
-                    initFloatingMenu();
-                }
-            })
-            .catch(err => console.error('Error cargando menuWeb3:', err));
+        (function() {
+            const container = document.getElementById('menuWeb3-container');
+            if (!container) return;
+
+            fetch('../includes/menuWeb3.html?v=' + Date.now())
+                .then(response => response.text())
+                .then(html => {
+                    container.innerHTML = html;
+                    // Pequeño delay para asegurar que el DOM esté listo
+                    setTimeout(function() {
+                        if (typeof initFloatingMenu === 'function') {
+                            initFloatingMenu();
+                        }
+                        if (typeof markActiveMenu === 'function') {
+                            markActiveMenu();
+                        }
+                    }, 50);
+                })
+                .catch(err => console.error('Error cargando menuWeb3:', err));
+        })();
     </script>
 
     <script src="script.js"></script>

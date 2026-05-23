@@ -73,12 +73,5 @@ function markActiveMenu() {
 }
 
 /* --------------------------------------------------------------------------
-   INICIALIZAR MENÚ DESPUÉS DE CARGAR INCLUDE
+   INICIALIZAR MENÚ (llamado manualmente después de cargar el include)
    -------------------------------------------------------------------------- */
-document.addEventListener('DOMContentLoaded', function() {
-    // Esperar a que el menú se cargue (si se usa fetch)
-    setTimeout(function() {
-        initFloatingMenu();
-        markActiveMenu();
-    }, 100);
-});
