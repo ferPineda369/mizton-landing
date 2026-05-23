@@ -484,16 +484,37 @@
     align-items: center;
     justify-content: flex-start;
     padding: 20px;
+    overflow-y: auto;
+    max-height: calc(100vh - 100px);
+}
+
+@media (max-width: 768px) {
+    .revenue-slide {
+        padding: 15px;
+        max-height: calc(100vh - 80px);
+    }
 }
 
 .revenue-container {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     gap: 30px;
     margin: 20px 0;
     flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .revenue-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .revenue-arrow {
+        transform: rotate(90deg);
+    }
 }
 
 .revenue-section {
@@ -504,8 +525,17 @@
     border: 2px solid rgba(0, 229, 255, 0.2);
     border-radius: 20px;
     padding: 25px;
-    min-width: 300px;
-    max-width: 350px;
+    min-width: 280px;
+    max-width: 320px;
+    flex: 1;
+}
+
+@media (max-width: 768px) {
+    .revenue-section {
+        min-width: 260px;
+        max-width: 300px;
+        padding: 20px;
+    }
 }
 
 .revenue-title {
@@ -548,6 +578,8 @@
     transform: translate(-50%, -50%);
     text-align: center;
     pointer-events: none;
+    z-index: 10;
+    width: 100%;
 }
 
 .chart-percentage {
@@ -569,9 +601,24 @@
 
 .chart-label {
     display: block;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.7);
-    margin-top: 5px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-top: 2px;
+    line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+    .chart-percentage {
+        font-size: 1.3rem;
+    }
+    
+    .chart-percentage-small {
+        font-size: 1.1rem;
+    }
+    
+    .chart-label {
+        font-size: 0.7rem;
+    }
 }
 
 /* Chart Legend - Estilo Snippet */
@@ -579,8 +626,9 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 15px;
     width: 100%;
+    align-items: center;
 }
 
 .legend-item {
@@ -603,6 +651,18 @@
     flex-shrink: 0;
 }
 
+@media (max-width: 768px) {
+    .chart-legend {
+        margin-top: 12px;
+        gap: 8px;
+    }
+    
+    .legend-item {
+        font-size: 0.8rem;
+        padding: 5px 10px;
+    }
+}
+
 /* Transition Arrow */
 .revenue-arrow {
     font-size: 2.5rem;
@@ -613,6 +673,18 @@
 @keyframes bounceDown {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(10px); }
+}
+
+@media (max-width: 768px) {
+    .revenue-arrow {
+        animation: none;
+        transform: rotate(90deg);
+    }
+    
+    .revenue-title {
+        font-size: 1rem;
+        margin-bottom: 15px;
+    }
 }
 
 /* Summary Cards - Estilo Snippet con separación */
@@ -691,15 +763,53 @@
     font-weight: 300;
 }
 
+@media (max-width: 768px) {
+    .summary-cards {
+        gap: 8px;
+    }
+    
+    .summary-card {
+        padding: 6px 12px;
+        gap: 6px;
+    }
+    
+    .summary-icon {
+        font-size: 1.1rem;
+    }
+    
+    .summary-percentage {
+        font-size: 1rem;
+    }
+    
+    .summary-label {
+        font-size: 0.75rem;
+    }
+    
+    .summary-total {
+        margin-left: 10px;
+    }
+}
+
 /* Revenue Explanation */
 .revenue-explanation {
-    margin-top: 30px;
+    margin-top: 25px;
     background: rgba(0, 0, 0, 0.4);
     border: 2px solid rgba(0, 229, 255, 0.3);
     border-radius: 16px;
-    padding: 20px 30px;
+    padding: 15px 25px;
     text-align: center;
     max-width: 800px;
+}
+
+@media (max-width: 768px) {
+    .revenue-explanation {
+        padding: 12px 15px;
+        margin-top: 20px;
+    }
+    
+    .revenue-explanation p {
+        font-size: 0.9rem;
+    }
 }
 
 .revenue-explanation p {
@@ -723,29 +833,4 @@
     font-weight: 700;
 }
 
-/* Animación de entrada de segmentos */
-.chart-segment-revenue {
-    animation: drawSegment 1.5s ease-out forwards;
-    stroke-dasharray: 0 502;
-}
-
-.chart-segment-others {
-    animation: drawSegment 1.5s ease-out 0.3s forwards;
-    stroke-dasharray: 0 502;
-}
-
-.chart-segment-holders {
-    animation: drawSegment 1.5s ease-out 0.6s forwards;
-    stroke-dasharray: 0 502;
-}
-
-.chart-segment-pool {
-    animation: drawSegment 1.5s ease-out 0.9s forwards;
-    stroke-dasharray: 0 502;
-}
-
-@keyframes drawSegment {
-    to {
-        stroke-dasharray: inherit;
-    }
-}
+/* Animaciones de entrada desactivadas - causaban que los segmentos no se mostraran correctamente */
