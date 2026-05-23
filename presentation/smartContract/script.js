@@ -163,20 +163,20 @@ let kimenStep = 0;
 const TOTAL_KIMEN_STEPS = 13;
 
 const kimenMessages = [
-    "Presiona \"Avanzar\" para ver la simulaciÃ³n del vesting de KIMEN.", // Paso 0
-    "Compras 10 tokens KIMEN. El proyecto le asigna esos 10 tokens en el smart contract (bÃ³veda).", // Paso 1
-    "Tienes un cliff de 6 meses y un vesting de 20 meses. Durante el cliff no recibes nada.", // Paso 2
-    "Durante los primeros 6 meses no recibes nada. El contrato mantiene tus tokens bloqueados.", // Paso 3
-    "Al terminar el mes 6, el contrato libera la primera porciÃ³n (10%) = 1 KIMEN a tu wallet.", // Paso 4
-    "DespuÃ©s, cada mes se libera otra parte (4.5%). Mes 7: 1.45 KIMEN, Mes 8: 1.90 KIMEN... hasta que al mes 26...", // Paso 5
-    "ya recibiste los 10 tokens completos en tu wallet.", // Paso 6
-    "Pool Global: Adicionalmente a partir del 3er mes en adelante, empiezas a obtener ganancias del Pool Global", // Paso 7
-    "Cada mes seguirÃ¡ repartiendo al Pool Global por el total de KIMEN que hayas reservado", // Paso 8
-    "Sin importar que sigan bloqueados tus KIMEN o se estÃ©n liberando en el Vesting", // Paso 9
-    "Esto es gracias al token MIZTON", // Paso 10
-    "Entre mÃ¡s token MIZTON poseas, mayor serÃ¡ tu participaciÃ³n en KIMEN y en todos los demÃ¡s proyectos", // Paso 11
-    "AdemÃ¡s participas desde el primer reparto particular por poseer el token KIMEN", // Paso 12
-    "Siempre que tengas alguno de estos tokens, participarÃ¡s en el reparto de ganancias correspondiente" // Paso 13
+    'Presiona "Avanzar" para ver la simulación del vesting de KIMEN.', // Paso 0
+    'Compras 10 tokens KIMEN. El proyecto le asigna esos 10 tokens en el smart contract (bóveda).', // Paso 1
+    'Tienes un cliff de 6 meses y un vesting de 20 meses. Durante el cliff no recibes nada.', // Paso 2
+    'Durante los primeros 6 meses no recibes nada. El contrato mantiene tus tokens bloqueados.', // Paso 3
+    'Al terminar el mes 6, el contrato libera la primera porción (10%) = 1 KIMEN a tu wallet.', // Paso 4
+    'Después, cada mes se libera otra parte (4.5%). Mes 7: 1.45 KIMEN, Mes 8: 1.90 KIMEN... hasta que al mes 26...', // Paso 5
+    'ya recibiste los 10 tokens completos en tu wallet.', // Paso 6
+    'Pool Global: Adicionalmente a partir del 3er mes en adelante, empiezas a obtener ganancias del Pool Global', // Paso 7
+    'Cada mes seguirá repartiendo al Pool Global por el total de KIMEN que hayas reservado', // Paso 8
+    'Sin importar que sigan bloqueados tus KIMEN o se estén liberando en el Vesting', // Paso 9
+    'Esto es gracias al token MIZTON', // Paso 10
+    'Entre más token MIZTON poseas, mayor será tu participación en KIMEN y en todos los demás proyectos', // Paso 11
+    'Además participas desde el primer reparto particular por poseer el token KIMEN', // Paso 12
+    'Siempre que tengas alguno de estos tokens, participarás en el reparto de ganancias correspondiente' // Paso 13
 ];
 
 // Estado actual de cada paso (para poder retroceder)
@@ -239,9 +239,17 @@ function updateKimenUI() {
     const backBtn = document.getElementById('kimen-back-btn');
     const advanceBtn = document.getElementById('kimen-advance-btn');
     
-    // Update message
+    // Update message con efecto de iluminación
     if (messageEl) {
         messageEl.textContent = kimenMessages[kimenStep];
+        // Agregar clase highlight para animación
+        messageEl.classList.remove('highlight');
+        void messageEl.offsetWidth; // Forzar reflow para reiniciar animación
+        messageEl.classList.add('highlight');
+        // Remover clase después de la animación
+        setTimeout(() => {
+            messageEl.classList.remove('highlight');
+        }, 800);
     }
     
     // Update indicator

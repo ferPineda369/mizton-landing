@@ -121,7 +121,15 @@
     flex-direction: column;
     height: 100%;
     max-height: calc(100vh - 80px);
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+/* Ocultar título y subtítulo cuando se hace scroll */
+.kimen-slide .slide-title,
+.kimen-slide .slide-subtitle {
+    flex-shrink: 0;
 }
 
 .kimen-vault-visual {
@@ -156,13 +164,13 @@
 /* Bloque fijo superior con controles */
 .kimen-sticky-controls {
     position: sticky;
-    top: 0;
+    top: 10px;
     z-index: 100;
     background: linear-gradient(180deg, rgba(10, 10, 26, 0.98) 0%, rgba(10, 10, 26, 0.95) 100%);
     border: 2px solid rgba(0, 229, 255, 0.3);
     border-radius: 16px;
     padding: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 229, 255, 0.15);
     backdrop-filter: blur(10px);
     flex-shrink: 0;
@@ -224,17 +232,37 @@
     border-radius: 10px;
     border-left: 3px solid #00e5ff;
     line-height: 1.5;
+    transition: all 0.3s ease;
 }
 
-/* Contenedor scrollable de la simulación */
+/* Efecto de iluminación temporal al cambiar mensaje */
+.kimen-message.highlight {
+    animation: messageGlow 0.8s ease-out;
+}
+
+@keyframes messageGlow {
+    0% {
+        background: rgba(0, 229, 255, 0.08);
+        box-shadow: 0 0 0 rgba(0, 229, 255, 0);
+    }
+    30% {
+        background: rgba(0, 229, 255, 0.25);
+        box-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+        border-color: #fff;
+    }
+    100% {
+        background: rgba(0, 229, 255, 0.08);
+        box-shadow: 0 0 0 rgba(0, 229, 255, 0);
+    }
+}
+
+/* Contenedor de la simulación (scroll manejado por kimen-slide) */
 .kimen-simulation-scrollable {
     background: rgba(0, 0, 0, 0.3);
     border: 2px solid rgba(0, 229, 255, 0.2);
     border-radius: 16px;
     padding: 15px;
-    overflow-y: auto;
-    flex: 1;
-    max-height: 100%;
+    flex-shrink: 0;
 }
 
 /* Grid con 4 columnas */
