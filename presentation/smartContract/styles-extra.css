@@ -116,6 +116,16 @@
 /* --------------------------------------------------------------------------
    2. KIMEN SIMULATION (Slide 18)
    -------------------------------------------------------------------------- */
+
+/* Eliminar padding superior del slide 18 específicamente */
+.slide[data-slide="18"] {
+    padding: 0 !important;
+}
+
+.slide[data-slide="18"] .slide-content {
+    padding: 0 20px 20px !important;
+}
+
 .kimen-slide {
     display: flex;
     flex-direction: column;
@@ -124,12 +134,16 @@
     overflow-y: auto;
     overflow-x: hidden;
     scroll-behavior: smooth;
+    padding-top: 0 !important;
+    margin-top: 0 !important;
 }
 
 /* Ocultar título y subtítulo cuando se hace scroll */
 .kimen-slide .slide-title,
 .kimen-slide .slide-subtitle {
     flex-shrink: 0;
+    margin-top: 0;
+    padding-top: 5px;
 }
 
 .kimen-vault-visual {
@@ -164,8 +178,8 @@
 /* Bloque fijo superior con controles */
 .kimen-sticky-controls {
     position: sticky;
-    top: 10px;
-    z-index: 100;
+    top: 0;
+    z-index: 95;
     background: linear-gradient(180deg, rgba(10, 10, 26, 0.98) 0%, rgba(10, 10, 26, 0.95) 100%);
     border: 2px solid rgba(0, 229, 255, 0.3);
     border-radius: 16px;
