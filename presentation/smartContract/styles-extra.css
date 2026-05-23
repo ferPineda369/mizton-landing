@@ -247,19 +247,25 @@
 .kimen-column {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 3px;
 }
 
 .kimen-header {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 600;
     color: #00e5ff;
     text-align: center;
-    padding: 8px 5px;
+    padding: 0 5px;
     background: rgba(0, 229, 255, 0.1);
     border-radius: 8px;
     border: 1px solid rgba(0, 229, 255, 0.3);
-    line-height: 1.3;
+    line-height: 1.2;
+    height: 38px;
+    min-height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
 }
 
 .kimen-months,
@@ -271,18 +277,36 @@
     gap: 3px;
 }
 
+/* Asegurar alineación por filas */
+.kimen-months > *,
+.kimen-wallet-amounts > *,
+.kimen-pool-amounts > *,
+.kimen-ganancias-amounts > * {
+    flex-shrink: 0;
+}
+
 .kimen-month,
 .kimen-amount,
 .kimen-pool,
 .kimen-ganancia {
-    padding: 6px 4px;
+    height: 28px;
+    min-height: 28px;
+    max-height: 28px;
+    padding: 0 4px;
     border-radius: 6px;
     text-align: center;
     font-size: 0.75rem;
+    line-height: 26px;
     transition: all 0.3s ease;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #b0bec5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 /* Estados de los meses */
