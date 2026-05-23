@@ -156,6 +156,23 @@ function initFloatingMenu() {
     });
 }
 
+// Toggle para mostrar/ocultar controles de navegación
+function toggleNavControls() {
+    const navControls = document.querySelector('.nav-controls');
+    const toggleCheckbox = document.getElementById('nav-toggle');
+    const menuText = document.querySelector('#nav-toggle-item .menu-text');
+    
+    if (!navControls || !toggleCheckbox) return;
+    
+    if (toggleCheckbox.checked) {
+        navControls.classList.remove('hidden');
+        if (menuText) menuText.textContent = 'Mostrar controles';
+    } else {
+        navControls.classList.add('hidden');
+        if (menuText) menuText.textContent = 'Ocultar controles';
+    }
+}
+
 // ==========================================================================
 // KIMEN SIMULATION (Slide 18)
 // ==========================================================================
