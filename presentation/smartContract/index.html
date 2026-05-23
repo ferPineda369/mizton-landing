@@ -716,11 +716,135 @@
             </div>
         </div>
 
+            <!-- Slide 19: Distribución de Ganancias -->
+            <div class="slide" data-slide="19">
+                <div class="slide-content revenue-slide">
+                    <h2 class="slide-title fade-in">💰 Distribución de Ganancias</h2>
+                    <p class="slide-subtitle fade-in delay-1">Entendiendo los porcentajes absolutos y relativos del reparto</p>
+                    
+                    <div class="revenue-container fade-in delay-2">
+                        <!-- Primera gráfica: Del total de ventas -->
+                        <div class="revenue-section">
+                            <h3 class="revenue-title">📊 Del 100% de las Ventas</h3>
+                            <div class="donut-chart-container">
+                                <svg class="donut-chart" viewBox="0 0 200 200">
+                                    <!-- Círculo base gris -->
+                                    <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="30"/>
+                                    <!-- 80% - Otras áreas -->
+                                    <circle class="chart-segment chart-segment-others" cx="100" cy="100" r="80" fill="none" stroke="#6b7280" stroke-width="30"
+                                        stroke-dasharray="402 502" stroke-dashoffset="0" stroke-linecap="round"/>
+                                    <!-- 20% - Reparto de ganancias -->
+                                    <circle class="chart-segment chart-segment-revenue" cx="100" cy="100" r="80" fill="none" stroke="url(#gradientRevenue)" stroke-width="30"
+                                        stroke-dasharray="100 502" stroke-dashoffset="-402" stroke-linecap="round"/>
+                                    <!-- Gradientes -->
+                                    <defs>
+                                        <linearGradient id="gradientRevenue" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#00e5ff"/>
+                                            <stop offset="100%" stop-color="#e040fb"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <div class="chart-center">
+                                    <span class="chart-percentage">20%</span>
+                                    <span class="chart-label">Reparto de<br>Ganancias</span>
+                                </div>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: linear-gradient(135deg, #00e5ff, #e040fb);"></span>
+                                    <span class="legend-text"><strong>20%</strong> - Reparto de Ganancias (100% relativo)</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: #6b7280;"></span>
+                                    <span class="legend-text"><strong>80%</strong> - Otras áreas (operaciones, desarrollo, etc.)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Flecha de transición -->
+                        <div class="revenue-arrow">⬇️</div>
+
+                        <!-- Segunda gráfica: Distribución del 20% -->
+                        <div class="revenue-section">
+                            <h3 class="revenue-title">🎯 Distribución del 20% (100% Relativo)</h3>
+                            <div class="donut-chart-container">
+                                <svg class="donut-chart" viewBox="0 0 200 200">
+                                    <!-- Círculo base -->
+                                    <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="30"/>
+                                    <!-- 75% - Holders KIMEN -->
+                                    <circle class="chart-segment chart-segment-holders" cx="100" cy="100" r="80" fill="none" stroke="url(#gradientHolders)" stroke-width="30"
+                                        stroke-dasharray="377 502" stroke-dashoffset="0" stroke-linecap="round"/>
+                                    <!-- 25% - Pool Mizton -->
+                                    <circle class="chart-segment chart-segment-pool" cx="100" cy="100" r="80" fill="none" stroke="url(#gradientPool)" stroke-width="30"
+                                        stroke-dasharray="125 502" stroke-dashoffset="-377" stroke-linecap="round"/>
+                                    <!-- Gradientes -->
+                                    <defs>
+                                        <linearGradient id="gradientHolders" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#10b981"/>
+                                            <stop offset="100%" stop-color="#34d399"/>
+                                        </linearGradient>
+                                        <linearGradient id="gradientPool" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" stop-color="#f59e0b"/>
+                                            <stop offset="100%" stop-color="#fbbf24"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <div class="chart-center">
+                                    <span class="chart-percentage-small">100%</span>
+                                    <span class="chart-label">Relativo</span>
+                                </div>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: linear-gradient(135deg, #10b981, #34d399);"></span>
+                                    <span class="legend-text"><strong>75% relativo</strong> (15% absoluto) → Holders de KIMEN 🪙</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);"></span>
+                                    <span class="legend-text"><strong>25% relativo</strong> (5% absoluto) → Pool de Mizton 🏢</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resumen visual -->
+                    <div class="revenue-summary fade-in delay-3">
+                        <div class="summary-cards">
+                            <div class="summary-card summary-mizton">
+                                <div class="summary-icon">🏢</div>
+                                <div class="summary-percentage">5%</div>
+                                <div class="summary-label">Pool Mizton</div>
+                                <div class="summary-sublabel">25% del reparto</div>
+                            </div>
+                            <div class="summary-divider">+</div>
+                            <div class="summary-card summary-holders">
+                                <div class="summary-icon">🪙</div>
+                                <div class="summary-percentage">15%</div>
+                                <div class="summary-label">Holders KIMEN</div>
+                                <div class="summary-sublabel">75% del reparto</div>
+                            </div>
+                            <div class="summary-divider">=</div>
+                            <div class="summary-card summary-total">
+                                <div class="summary-icon">💰</div>
+                                <div class="summary-percentage">20%</div>
+                                <div class="summary-label">Total Reparto</div>
+                                <div class="summary-sublabel">Del 100% de ventas</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="revenue-explanation fade-in delay-4">
+                        <p><strong>📌 En resumen:</strong> Por cada $100 en ventas, <span class="highlight-cyan">$20</span> se destinan al reparto de ganancias. De esos $20, <span class="highlight-green">$15</span> van a los holders de KIMEN y <span class="highlight-orange">$5</span> al Pool de Mizton.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Navigation Controls -->
         <div class="nav-controls">
             <button class="nav-btn" id="prev-btn">❮</button>
             <div class="slide-counter">
-                <span id="current-slide">1</span> / <span id="total-slides">18</span>
+                <span id="current-slide">1</span> / <span id="total-slides">19</span>
             </div>
             <button class="nav-btn" id="next-btn">❯</button>
         </div>

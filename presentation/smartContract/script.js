@@ -1,7 +1,7 @@
 ﻿// Smart Contracts Presentation - Navigation Script
 
 let currentSlide = 1;
-const totalSlides = 18;
+const totalSlides = 19;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
