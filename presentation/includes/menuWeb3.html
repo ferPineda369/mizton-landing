@@ -1,0 +1,48 @@
+<!-- Menu Flotante Web3 - Include común para presentaciones blockchain/smartContract/kimen -->
+<div class="floating-menu" id="floating-menu">
+    <button class="menu-toggle" id="menu-toggle" title="Ver presentaciones">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="menu-dropdown" id="menu-dropdown">
+        <a href="../blockchain/" class="menu-item" data-menu="blockchain">
+            <span class="menu-icon">🔗</span>
+            <span class="menu-text">Blockchain</span>
+        </a>
+        <a href="../smartContract/" class="menu-item" data-menu="smartContract">
+            <span class="menu-icon">📜</span>
+            <span class="menu-text">Smart Contract</span>
+        </a>
+        <a href="../kimen/" class="menu-item" data-menu="kimen">
+            <span class="menu-icon">🪙</span>
+            <span class="menu-text">Kimen</span>
+        </a>
+        <div class="menu-separator"></div>
+        <div class="menu-item toggle-item" id="nav-toggle-item" onclick="toggleNavControls()">
+            <span class="menu-icon">🎮</span>
+            <span class="menu-text">Mostrar controles</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="nav-toggle" checked>
+                <span class="toggle-slider"></span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Detectar presentación actual y marcar como activa
+    (function() {
+        const currentPath = window.location.pathname;
+        const menuItems = document.querySelectorAll('.menu-item[data-menu]');
+        
+        menuItems.forEach(item => {
+            const menuName = item.getAttribute('data-menu');
+            if (currentPath.includes('/' + menuName + '/') || currentPath.includes('/' + menuName)) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    })();
+</script>
