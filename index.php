@@ -83,7 +83,7 @@ include 'config.php';
                 <a href="#beneficios"><?= __('lp.nav_benefits') ?></a>
                 <a href="#faq"><?= __('lp.nav_faq') ?></a>
                 <a href="news/" target="_blank"><?= __('lp.nav_news') ?></a>
-                <a href="meeting.php<?php echo isset($_SESSION['referido']) ? '?ref=' . $_SESSION['referido'] : ''; ?>" class="meeting-nav">
+                <a href="presentation/mizton/index.php<?php echo isset($_SESSION['referido']) ? '?ref=' . $_SESSION['referido'] : ''; ?>" class="meeting-nav">
                     <i class="fas fa-video"></i> <?= __('lp.nav_presentation') ?>
                 </a>
                 <div class="lang-dropdown" id="langDropdown">
