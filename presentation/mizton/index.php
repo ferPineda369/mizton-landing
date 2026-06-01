@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mizton - Ecosistema de Tokenización RWA</title>
-    <link rel="stylesheet" href="../css/presentation.css">
-    <link rel="stylesheet" href="styles-extra.css">
+    <link rel="stylesheet" href="../css/presentation.css?v=2">
+    <link rel="stylesheet" href="styles-extra.css?v=2">
 </head>
 <body>
     <div class="presentation-container">
@@ -1158,6 +1158,7 @@
         <div class="footer-section footer-center">
             <button class="footer-nav-btn" id="prev-btn" title="Diapositiva anterior">❮</button>
             <div class="slide-dots" id="slide-dots"></div>
+            <span class="slide-number-indicator" id="slide-number-indicator">0</span>
             <button class="footer-nav-btn" id="next-btn" title="Diapositiva siguiente">❯</button>
         </div>
 
@@ -1169,7 +1170,7 @@
         </div>
     </div>
 
-    <script src="../includes/presentation-common.js"></script>
-    <script src="script.js"></script>
+    <script src="../includes/presentation-common.js?v=2"></script>
+    <script src="script.js?v=2"></script>
 </body>
 </html>

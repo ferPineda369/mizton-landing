@@ -2298,33 +2298,41 @@
     margin-bottom: 0;
 }
 
-/* Responsive: ocultar labels en pantallas pequeñas */
+/* Indicador de número de slide (visible solo en mobile) */
+.slide-number-indicator {
+    display: none;
+    min-width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #00e5ff;
+    color: #000;
+    font-size: 13px;
+    font-weight: 700;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
+}
+
+/* Responsive: mobile - ocultar slide-dots, mostrar < # > */
 @media (max-width: 768px) {
     .footer-label { display: none; }
     .footer-section { gap: 8px; }
     .slide-dots-container { padding: 0 12px; }
     .footer-autorun-btn { padding: 3px 10px; font-size: 11px; }
-}
-
-/* Footer scrollable horizontal en mobile */
-@media (max-width: 768px) {
-    .slide-dots-container {
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE 10+ */
-    }
-    .slide-dots-container::-webkit-scrollbar {
-        display: none; /* Chrome/Safari */
-    }
-    .footer-section {
-        flex-shrink: 0;
-        white-space: nowrap;
-    }
+    
+    /* Ocultar slide-dots en mobile */
     .slide-dots {
-        flex-shrink: 0;
+        display: none !important;
+    }
+    
+    /* Mostrar indicador de número en mobile */
+    .slide-number-indicator {
+        display: flex;
+    }
+    
+    /* Ajustar footer-center */
+    .footer-center {
+        gap: 8px;
     }
 }
 

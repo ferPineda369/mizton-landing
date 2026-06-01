@@ -288,6 +288,12 @@ function updateSlideDots() {
         const scrollLeft = btnRect.left - containerRect.left + dotsContainer.scrollLeft - (containerRect.width / 2) + (btnRect.width / 2);
         dotsContainer.scrollTo({ left: scrollLeft, behavior: 'smooth' });
     }
+    
+    // Actualizar indicador de número en mobile
+    const indicator = document.getElementById('slide-number-indicator');
+    if (indicator) {
+        indicator.textContent = currentSlide;
+    }
 }
 
 function updateProgressBar() {
