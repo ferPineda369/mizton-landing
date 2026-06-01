@@ -1829,3 +1829,270 @@ function initSlideRevealSequence(slideNumber) {
         activeRevealTimers.push(timer);
     });
 }
+
+// =========================================================================
+// SISTEMA DE PREGUNTAS - Modal
+// =========================================================================
+
+(function() {
+    const API_URL = 'api-questions.php';
+    let questionModalOpen = false;
+    let pausedMedia = []; // Almacena medios pausados al abrir modal
+    let pausedAnimations = false;
+    
+    // Elementos del DOM
+    const overlay = document.getElementById('question-modal-overlay');
+    const openBtn = document.getElementById('question-btn');
+    const closeBtn = document.getElementById('question-modal-close');
+    const submitBtn = document.getElementById('question-submit-btn');
+    const textarea = document.getElementById('question-input');
+    const listContainer = document.getElementById('question-list');
+    const emptyMsg = document.getElementById('question-empty');
+    const waToggle = document.getElementById('question-wa-toggle');
+    const waField = document.getElementById('question-wa-field');
+    const waInput = document.getElementById('question-wa-input');
+    
+    if (!overlay || !openBtn) return;
+    
+    // --- Abrir modal ---
+    openBtn.addEventListener('click', openQuestionModal);
+    
+    // --- Cerrar modal ---
+    closeBtn.addEventListener('click', closeQuestionModal);
+    overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) closeQuestionModal();
+    });
+    
+    // --- Enviar pregunta ---
+    submitBtn.addEventListener('click', submitQuestion);
+    textarea.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && e.ctrlKey) submitQuestion();
+    });
+    
+    // --- Toggle WhatsApp ---
+    waToggle.addEventListener('change', function() {
+        const checked = this.checked;
+        waField.style.display = checked ? 'block' : 'none';
+        waInput.disabled = !checked;
+        if (checked) waInput.focus();
+    });
+    
+    // --- Guardar WhatsApp al salir del campo ---
+    waInput.addEventListener('blur', function() {
+        if (waInput.value.trim()) {
+            updateWhatsapp(waInput.value.trim());
+        }
+    });
+    
+    // --- Funciones principales ---
+    
+    function openQuestionModal() {
+        questionModalOpen = true;
+        overlay.classList.add('active');
+        
+        // Pausar TODA la presentación
+        pausePresentation();
+        
+        // Cargar preguntas existentes
+        loadQuestions();
+        
+        // Focus en el textarea
+        setTimeout(() => textarea.focus(), 300);
+    }
+    
+    function closeQuestionModal() {
+        questionModalOpen = false;
+        overlay.classList.remove('active');
+        
+        // Reanudar presentación
+        resumePresentation();
+    }
+    
+    function pausePresentation() {
+        pausedMedia = [];
+        
+        // Pausar todos los audios en reproducción
+        document.querySelectorAll('audio').forEach(audio => {
+            if (!audio.paused) {
+                pausedMedia.push({ el: audio, time: audio.currentTime });
+                audio.pause();
+            }
+        });
+        
+        // Pausar todos los videos en reproducción
+        document.querySelectorAll('video').forEach(video => {
+            if (!video.paused) {
+                pausedMedia.push({ el: video, time: video.currentTime });
+                video.pause();
+            }
+        });
+        
+        // Pausar animaciones CSS del slide activo
+        const activeSlide = document.querySelector('.slide.active');
+        if (activeSlide) {
+            activeSlide.style.animationPlayState = 'paused';
+            activeSlide.querySelectorAll('*').forEach(el => {
+                el.style.animationPlayState = 'paused';
+            });
+            pausedAnimations = true;
+        }
+    }
+    
+    function resumePresentation() {
+        // Reanudar medios que estaban sonando
+        pausedMedia.forEach(item => {
+            item.el.currentTime = item.time;
+            item.el.play().catch(e => console.log('Resume error:', e));
+        });
+        pausedMedia = [];
+        
+        // Reanudar animaciones CSS
+        if (pausedAnimations) {
+            const activeSlide = document.querySelector('.slide.active');
+            if (activeSlide) {
+                activeSlide.style.animationPlayState = 'running';
+                activeSlide.querySelectorAll('*').forEach(el => {
+                    el.style.animationPlayState = 'running';
+                });
+            }
+            pausedAnimations = false;
+        }
+    }
+    
+    async function loadQuestions() {
+        try {
+            const res = await fetch(API_URL);
+            const data = await res.json();
+            
+            if (data.success) {
+                renderQuestions(data.questions);
+                
+                // Si alguna pregunta tiene whatsapp, rellenar el campo
+                const withWa = data.questions.find(q => q.whatsapp);
+                if (withWa && withWa.whatsapp) {
+                    waInput.value = withWa.whatsapp;
+                    waToggle.checked = true;
+                    waField.style.display = 'block';
+                    waInput.disabled = false;
+                }
+            }
+        } catch (e) {
+            console.log('Error loading questions:', e);
+        }
+    }
+    
+    function renderQuestions(questions) {
+        if (!questions || questions.length === 0) {
+            listContainer.innerHTML = '';
+            listContainer.appendChild(emptyMsg);
+            emptyMsg.style.display = 'block';
+            return;
+        }
+        
+        emptyMsg.style.display = 'none';
+        listContainer.innerHTML = '';
+        
+        questions.forEach(q => {
+            const item = document.createElement('div');
+            item.className = 'question-item';
+            
+            const time = new Date(q.created_at).toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+            
+            item.innerHTML = `
+                <div class="question-item-text">
+                    ${escapeHtml(q.question)}
+                    <div class="question-item-meta">Slide ${q.slide_number || '?'} • ${time}</div>
+                </div>
+                <button class="question-item-delete" data-id="${q.id}" title="Eliminar pregunta">🗑️</button>
+            `;
+            
+            // Evento borrar
+            item.querySelector('.question-item-delete').addEventListener('click', function() {
+                deleteQuestion(q.id, item);
+            });
+            
+            listContainer.appendChild(item);
+        });
+    }
+    
+    async function submitQuestion() {
+        const question = textarea.value.trim();
+        if (!question) return;
+        
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando...';
+        
+        const whatsapp = (waToggle.checked && waInput.value.trim()) ? waInput.value.trim() : '';
+        
+        try {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    question: question,
+                    whatsapp: whatsapp,
+                    slide_number: typeof currentSlide !== 'undefined' ? currentSlide : 0
+                })
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                textarea.value = '';
+                loadQuestions(); // Recargar lista
+            } else {
+                alert(data.error || 'Error al enviar la pregunta');
+            }
+        } catch (e) {
+            console.log('Submit error:', e);
+            alert('Error de conexión. Intenta de nuevo.');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Enviar pregunta';
+        }
+    }
+    
+    async function deleteQuestion(id, element) {
+        try {
+            const res = await fetch(API_URL, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: id })
+            });
+            const data = await res.json();
+            
+            if (data.success) {
+                element.style.opacity = '0';
+                element.style.transform = 'translateX(20px)';
+                element.style.transition = 'all 0.3s ease';
+                setTimeout(() => {
+                    element.remove();
+                    // Mostrar empty si no quedan
+                    if (listContainer.children.length === 0) {
+                        listContainer.appendChild(emptyMsg);
+                        emptyMsg.style.display = 'block';
+                    }
+                }, 300);
+            }
+        } catch (e) {
+            console.log('Delete error:', e);
+        }
+    }
+    
+    async function updateWhatsapp(whatsapp) {
+        try {
+            await fetch(API_URL + '?action=update_whatsapp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ whatsapp: whatsapp })
+            });
+        } catch (e) {
+            console.log('Update WhatsApp error:', e);
+        }
+    }
+    
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+})();

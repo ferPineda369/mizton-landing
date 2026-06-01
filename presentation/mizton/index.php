@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mizton - Ecosistema de Tokenización RWA</title>
-    <link rel="stylesheet" href="../css/presentation.css?v=2">
-    <link rel="stylesheet" href="styles-extra.css?v=2">
+    <link rel="stylesheet" href="../css/presentation.css?v=3">
+    <link rel="stylesheet" href="styles-extra.css?v=3">
 </head>
 <body>
     <div class="presentation-container">
@@ -1156,6 +1156,7 @@
 
         <!-- Centro: navegación + puntos -->
         <div class="footer-section footer-center">
+            <button class="footer-icon-btn" id="question-btn" title="Hacer una pregunta">❓</button>
             <button class="footer-nav-btn" id="prev-btn" title="Diapositiva anterior">❮</button>
             <div class="slide-dots" id="slide-dots"></div>
             <span class="slide-number-indicator" id="slide-number-indicator">0</span>
@@ -1170,7 +1171,45 @@
         </div>
     </div>
 
-    <script src="../includes/presentation-common.js?v=2"></script>
-    <script src="script.js?v=2"></script>
+    <!-- Modal de Preguntas -->
+    <div class="question-modal-overlay" id="question-modal-overlay">
+        <div class="question-modal">
+            <div class="question-modal-header">
+                <h3>💬 Tus Preguntas</h3>
+                <button class="question-modal-close" id="question-modal-close">&times;</button>
+            </div>
+            
+            <div class="question-modal-body">
+                <!-- Lista de preguntas previas -->
+                <div class="question-list" id="question-list">
+                    <p class="question-empty" id="question-empty">No has formulado preguntas aún.</p>
+                </div>
+                
+                <!-- Formulario nueva pregunta -->
+                <div class="question-form">
+                    <textarea id="question-input" class="question-textarea" placeholder="Escribe tu pregunta aquí..." maxlength="1000" rows="3"></textarea>
+                    <button class="question-submit-btn" id="question-submit-btn">Enviar pregunta</button>
+                </div>
+                
+                <!-- Campo WhatsApp opcional -->
+                <div class="question-whatsapp-section">
+                    <label class="question-wa-toggle">
+                        <input type="checkbox" id="question-wa-toggle">
+                        <span>Proporcionar mi WhatsApp para recibir respuestas directamente</span>
+                    </label>
+                    <div class="question-wa-field" id="question-wa-field" style="display: none;">
+                        <input type="tel" id="question-wa-input" class="question-wa-input" placeholder="+52 1 222 123 4567" disabled>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="question-modal-footer">
+                <p>Las respuestas le serán entregadas a la persona que te invitó o de lo contrario proporciónanos tu número de WhatsApp y te enviaremos directamente las respuestas.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="../includes/presentation-common.js?v=3"></script>
+    <script src="script.js?v=3"></script>
 </body>
 </html>
