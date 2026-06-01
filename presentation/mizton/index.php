@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mizton - Ecosistema de Tokenización RWA</title>
-    <link rel="stylesheet" href="../css/presentation.css?v=3">
-    <link rel="stylesheet" href="styles-extra.css?v=3">
+    <link rel="stylesheet" href="../css/presentation.css?v=4">
+    <link rel="stylesheet" href="styles-extra.css?v=4">
 </head>
 <body>
     <div class="presentation-container">
@@ -1209,7 +1209,7 @@
         </div>
     </div>
 
-    <script src="../includes/presentation-common.js?v=3"></script>
-    <script src="script.js?v=3"></script>
+    <script src="../includes/presentation-common.js?v=4"></script>
+    <script src="script.js?v=4"></script>
 </body>
 </html>

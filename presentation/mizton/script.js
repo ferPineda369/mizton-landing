@@ -750,6 +750,16 @@ function toggleFullscreen() {
 }
 
 function handleKeyboard(e) {
+    // No procesar navegación si el modal de preguntas está abierto
+    if (window.isQuestionModalOpen) {
+        // Solo permitir Escape para cerrar el modal
+        if (e.key === 'Escape') {
+            const closeBtn = document.getElementById('question-modal-close');
+            if (closeBtn) closeBtn.click();
+        }
+        return;
+    }
+    
     switch(e.key) {
         case 'ArrowRight':
         case 'ArrowDown':
@@ -1888,6 +1898,7 @@ function initSlideRevealSequence(slideNumber) {
     
     function openQuestionModal() {
         questionModalOpen = true;
+        window.isQuestionModalOpen = true;
         overlay.classList.add('active');
         
         // Pausar TODA la presentación
@@ -1902,6 +1913,7 @@ function initSlideRevealSequence(slideNumber) {
     
     function closeQuestionModal() {
         questionModalOpen = false;
+        window.isQuestionModalOpen = false;
         overlay.classList.remove('active');
         
         // Reanudar presentación
@@ -2095,4 +2107,7 @@ function initSlideRevealSequence(slideNumber) {
         div.textContent = text;
         return div.innerHTML;
     }
+    
+    // Exponer funciones necesarias globalmente
+    window.resumePresentation = resumePresentation;
 })();
