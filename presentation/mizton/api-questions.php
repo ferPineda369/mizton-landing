@@ -126,8 +126,9 @@ function logSecurityEvent($event, $details = []) {
     error_log("[SECURITY] " . json_encode($logEntry));
 }
 
-// Crear tabla si no existe
+// Crear tabla si no existe y migrar si es necesario
 function ensureTable($pdo) {
+    // Crear tabla si no existe
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS `presentation_questions` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -146,6 +147,17 @@ function ensureTable($pdo) {
             KEY `idx_ip` (`ip_address`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
     ");
+    
+    // Migración: agregar ip_address si no existe (tabla creada antes de la actualización)
+    try {
+        $stmt = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'ip_address'");
+        if ($stmt->rowCount() === 0) {
+            $pdo->exec("ALTER TABLE `presentation_questions` ADD COLUMN `ip_address` varchar(45) DEFAULT NULL COMMENT 'IP del cliente' AFTER `slide_number`");
+            $pdo->exec("ALTER TABLE `presentation_questions` ADD KEY `idx_ip` (`ip_address`)");
+        }
+    } catch (PDOException $e) {
+        error_log("Migration error: " . $e->getMessage());
+    }
 }
 
 try {
