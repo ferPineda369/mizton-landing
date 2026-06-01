@@ -222,30 +222,72 @@ function createSlideDots() {
     dotsContainer.innerHTML = '';
     
     for (let i = 0; i < totalSlides; i++) {
-        const dot = document.createElement('div');
-        dot.className = 'dot';
-        dot.setAttribute('data-slide-number', i);
+        const numBtn = document.createElement('button');
+        numBtn.className = 'slide-number-btn';
+        numBtn.textContent = i;
+        numBtn.setAttribute('data-slide-number', i);
         if (i === currentSlide) {
-            dot.classList.add('active');
+            numBtn.classList.add('active');
         }
-        dot.addEventListener('click', () => {
-            // Bloqueado: no se puede saltar a un slide aún no liberado
+        if (i > presentationState.maxReachedSlide) {
+            numBtn.classList.add('locked');
+            numBtn.disabled = true;
+        }
+        numBtn.addEventListener('click', () => {
             if (i > presentationState.maxReachedSlide) return;
             goToSlide(i);
         });
-        dotsContainer.appendChild(dot);
+        dotsContainer.appendChild(numBtn);
     }
+    
+    updateSlideDots();
 }
 
 function updateSlideDots() {
-    const dots = document.querySelectorAll('.dot');
-    dots.forEach((dot, index) => {
+    const numBtns = document.querySelectorAll('.slide-number-btn');
+    const visibleCount = 5; // Mostrar 5 números a la vez
+    const halfVisible = Math.floor(visibleCount / 2); // 2
+    
+    numBtns.forEach((btn, index) => {
+        // Actualizar estado activo
         if (index === currentSlide) {
-            dot.classList.add('active');
+            btn.classList.add('active');
         } else {
-            dot.classList.remove('active');
+            btn.classList.remove('active');
+        }
+        
+        // Calcular rango visible
+        let startVisible = currentSlide - halfVisible;
+        let endVisible = currentSlide + halfVisible;
+        
+        // Ajustar para los bordes
+        if (startVisible < 0) {
+            endVisible += Math.abs(startVisible);
+            startVisible = 0;
+        }
+        if (endVisible >= totalSlides) {
+            startVisible -= (endVisible - totalSlides + 1);
+            endVisible = totalSlides - 1;
+            if (startVisible < 0) startVisible = 0;
+        }
+        
+        // Mostrar/ocultar según esté en el rango visible
+        if (index >= startVisible && index <= endVisible) {
+            btn.style.display = 'flex';
+        } else {
+            btn.style.display = 'none';
         }
     });
+    
+    // Scroll automático para mantener el número activo centrado
+    const dotsContainer = document.getElementById('slide-dots');
+    const activeBtn = dotsContainer?.querySelector('.slide-number-btn.active');
+    if (dotsContainer && activeBtn) {
+        const containerRect = dotsContainer.getBoundingClientRect();
+        const btnRect = activeBtn.getBoundingClientRect();
+        const scrollLeft = btnRect.left - containerRect.left + dotsContainer.scrollLeft - (containerRect.width / 2) + (btnRect.width / 2);
+        dotsContainer.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+    }
 }
 
 function updateProgressBar() {
@@ -1056,15 +1098,26 @@ function handleKeyboard(e) {
         // Touch/swipe support
         let touchStartX = 0;
         let touchEndX = 0;
+        let touchStartedOnFooter = false;
         
         document.addEventListener('touchstart', function(e) {
             touchStartX = e.changedTouches[0].screenX;
-        }, false);
+            // Verificar si el touch inició en el footer
+            const footer = document.querySelector('.slide-dots-container');
+            if (footer && footer.contains(e.target)) {
+                touchStartedOnFooter = true;
+            } else {
+                touchStartedOnFooter = false;
+            }
+        }, { passive: true });
         
         document.addEventListener('touchend', function(e) {
             touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        }, false);
+            // Solo procesar swipe si el touch NO inició en el footer
+            if (!touchStartedOnFooter) {
+                handleSwipe();
+            }
+        }, { passive: true });
         
         function handleSwipe() {
             const swipeThreshold = 50;
