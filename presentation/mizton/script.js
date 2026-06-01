@@ -1165,6 +1165,15 @@ function handleKeyboard(e) {
                 }
             }
         }, 100);
+        
+        // Intentar pantalla completa automáticamente al iniciar
+        setTimeout(() => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(e => {
+                    console.log('Fullscreen auto-start blocked by browser:', e);
+                });
+            }
+        }, 500);
     }
 
     // Iniciar cuando el DOM esté listo
