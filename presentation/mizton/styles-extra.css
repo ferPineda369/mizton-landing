@@ -2762,6 +2762,27 @@
     font-family: 'IntroRust', sans-serif !important;
 }
 
+@media (max-width: 768px) {
+    .cover-title {
+        font-size: 1.8rem;
+        line-height: 1.2;
+        word-break: break-word;
+    }
+}
+
+/* Botón de preguntas - Verde Neón */
+#question-btn {
+    color: #39ff14;
+    text-shadow: 0 0 10px #39ff14, 0 0 20px #39ff14, 0 0 30px #39ff14;
+    transition: all 0.3s ease;
+}
+
+#question-btn:hover {
+    color: #7fff00;
+    text-shadow: 0 0 15px #7fff00, 0 0 30px #7fff00, 0 0 45px #7fff00;
+    transform: scale(1.1);
+}
+
 /* Video de noticias - estilo específico */
 .news-video {
     width: 100%;
