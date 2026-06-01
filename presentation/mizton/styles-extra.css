@@ -1605,6 +1605,26 @@
     .vision-grid,
     .projects-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 12px 0;
+    }
+    
+    .vision-grid .vision-card {
+        grid-column: 1 !important;
+        max-width: 100% !important;
+        padding: 15px;
+    }
+    
+    .vision-card h3 {
+        font-size: 1rem;
+    }
+    
+    .vision-card p {
+        font-size: 0.85rem;
+    }
+    
+    .vision-icon {
+        font-size: 2rem;
     }
     
     .dual-participation,
@@ -1641,6 +1661,37 @@
     
     .meanwhile-visual {
         flex-direction: column;
+    }
+    
+    /* Slide 22: Red Global - scroll horizontal para net-packs */
+    .global-structure {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        padding-bottom: 10px;
+    }
+    
+    .global-structure::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .global-net-visual .net-packs {
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        min-width: max-content;
+        padding: 0 10px;
+    }
+    
+    .global-net-visual .net-branch {
+        min-width: max-content;
+    }
+    
+    .global-net-visual .pack-item {
+        font-size: 1rem;
+        flex-shrink: 0;
     }
 }
 

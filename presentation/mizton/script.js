@@ -1105,6 +1105,7 @@ function handleKeyboard(e) {
         let touchStartX = 0;
         let touchEndX = 0;
         let touchStartedOnFooter = false;
+        let touchStartedOnGlobalStructure = false;
         
         document.addEventListener('touchstart', function(e) {
             touchStartX = e.changedTouches[0].screenX;
@@ -1115,12 +1116,19 @@ function handleKeyboard(e) {
             } else {
                 touchStartedOnFooter = false;
             }
+            // Verificar si el touch inició en global-structure (slide 22)
+            const globalStructure = document.querySelector('.global-structure');
+            if (globalStructure && globalStructure.contains(e.target)) {
+                touchStartedOnGlobalStructure = true;
+            } else {
+                touchStartedOnGlobalStructure = false;
+            }
         }, { passive: true });
         
         document.addEventListener('touchend', function(e) {
             touchEndX = e.changedTouches[0].screenX;
-            // Solo procesar swipe si el touch NO inició en el footer
-            if (!touchStartedOnFooter) {
+            // Solo procesar swipe si el touch NO inició en el footer ni en global-structure
+            if (!touchStartedOnFooter && !touchStartedOnGlobalStructure) {
                 handleSwipe();
             }
         }, { passive: true });
