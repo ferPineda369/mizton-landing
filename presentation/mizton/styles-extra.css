@@ -2749,6 +2749,19 @@
     animation: pulse 1.5s ease-in-out infinite;
 }
 
+/* Fuente IntroRust para título de portada */
+@font-face {
+    font-family: 'IntroRust';
+    src: url('IntroRust.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+.cover-title {
+    font-family: 'IntroRust', sans-serif !important;
+}
+
 /* Video de noticias - estilo específico */
 .news-video {
     width: 100%;
