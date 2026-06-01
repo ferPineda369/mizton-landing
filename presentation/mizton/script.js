@@ -2052,7 +2052,14 @@ function initSlideRevealSequence(slideNumber) {
                 textarea.value = '';
                 loadQuestions(); // Recargar lista
             } else {
-                alert(data.error || 'Error al enviar la pregunta');
+                // Manejar errores de seguridad con mensajes amigables
+                let errorMsg = data.error || 'Error al enviar la pregunta';
+                if (res.status === 429) {
+                    errorMsg = 'Has alcanzado el límite de preguntas. Por favor, espera un momento antes de enviar más.';
+                } else if (res.status === 400 && data.error.includes('no permitido')) {
+                    errorMsg = 'El texto contiene caracteres no permitidos. Por favor revisa tu pregunta.';
+                }
+                alert(errorMsg);
             }
         } catch (e) {
             console.log('Submit error:', e);
@@ -2084,9 +2091,12 @@ function initSlideRevealSequence(slideNumber) {
                         emptyMsg.style.display = 'block';
                     }
                 }, 300);
+            } else {
+                alert(data.error || 'No se pudo eliminar la pregunta');
             }
         } catch (e) {
             console.log('Delete error:', e);
+            alert('Error al eliminar la pregunta');
         }
     }
     
