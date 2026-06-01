@@ -1195,7 +1195,7 @@
                 <div class="question-whatsapp-section">
                     <label class="question-wa-toggle">
                         <input type="checkbox" id="question-wa-toggle">
-                        <span>Proporcionar mi WhatsApp para recibir respuestas directamente</span>
+                        <span class="question-wa-text">Proporcionar mi WhatsApp para recibir respuestas directamente</span>
                     </label>
                     <div class="question-wa-field" id="question-wa-field" style="display: none;">
                         <input type="tel" id="question-wa-input" class="question-wa-input" placeholder="+52 1 222 123 4567" disabled>
@@ -1204,7 +1204,7 @@
             </div>
             
             <div class="question-modal-footer">
-                <p>Las respuestas le serán entregadas a la persona que te invitó o de lo contrario proporciónanos tu número de WhatsApp y te enviaremos directamente las respuestas.</p>
+                <p class="question-footer-text">Las respuestas le serán entregadas a la persona que te invitó o de lo contrario proporciónanos tu número de WhatsApp y te enviaremos directamente las respuestas.</p>
             </div>
         </div>
     </div>

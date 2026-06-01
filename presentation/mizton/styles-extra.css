@@ -3087,6 +3087,19 @@
     text-align: center;
 }
 
+/* Texto del checkbox WhatsApp - tamaño aumentado */
+.question-wa-text {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Texto del footer - tamaño más grande */
+.question-footer-text {
+    font-size: 1rem !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    line-height: 1.6 !important;
+}
+
 /* Responsive modal */
 @media (max-width: 768px) {
     .question-modal-overlay {
