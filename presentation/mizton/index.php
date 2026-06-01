@@ -21,7 +21,7 @@
                     <div class="cover-logo fade-in delay-1">
                         <img src="img/logoMizton.png" alt="Mizton Logo" class="cover-logo-img">
                     </div>
-                    <h1 class="cover-title fade-in delay-2">Comunidad Mizton</h1>
+                    <h1 class="cover-title fade-in delay-2">Comunidad<span class="mobile-break"></span> Mizton</h1>
                 </div>
             </div>
             
