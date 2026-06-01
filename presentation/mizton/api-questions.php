@@ -29,6 +29,9 @@ if (!isset($_SESSION['presentation_guest_id'])) {
 }
 $guestId = $_SESSION['presentation_guest_id'];
 
+// Obtener código de referido del sponsor (si existe)
+$sponsorRefCode = $_SESSION['sponsor_ref_code'] ?? null;
+
 // Generar token CSRF si no existe
 if (!isset($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -133,7 +136,7 @@ function ensureTable($pdo) {
         CREATE TABLE IF NOT EXISTS `presentation_questions` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `guest_id` varchar(50) NOT NULL COMMENT 'ID de sesión del invitado',
-            `sponsor_id` int(11) DEFAULT NULL COMMENT 'ID del patrocinador (futuro)',
+            `sponsor_ref_code` varchar(20) DEFAULT NULL COMMENT 'Código de referido del patrocinador',
             `question` text NOT NULL COMMENT 'Pregunta formulada',
             `whatsapp` varchar(30) DEFAULT NULL COMMENT 'WhatsApp del invitado (opcional)',
             `slide_number` int(11) DEFAULT NULL COMMENT 'Slide donde se formuló la pregunta',
@@ -142,7 +145,7 @@ function ensureTable($pdo) {
             `status` enum('pending','answered','archived') DEFAULT 'pending',
             PRIMARY KEY (`id`),
             KEY `idx_guest` (`guest_id`),
-            KEY `idx_sponsor` (`sponsor_id`),
+            KEY `idx_sponsor` (`sponsor_ref_code`),
             KEY `idx_created` (`created_at`),
             KEY `idx_ip` (`ip_address`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
@@ -157,6 +160,17 @@ function ensureTable($pdo) {
         }
     } catch (PDOException $e) {
         error_log("Migration error: " . $e->getMessage());
+    }
+    
+    // Migración: cambiar sponsor_id a sponsor_ref_code si aún es INT
+    try {
+        $stmt = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'sponsor_id'");
+        $column = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($column && strpos($column['Type'], 'int') !== false) {
+            $pdo->exec("ALTER TABLE `presentation_questions` CHANGE `sponsor_id` `sponsor_ref_code` varchar(20) DEFAULT NULL COMMENT 'Código de referido del patrocinador'");
+        }
+    } catch (PDOException $e) {
+        error_log("Migration sponsor_ref_code error: " . $e->getMessage());
     }
 }
 
@@ -223,6 +237,8 @@ function handleGetQuestions($pdo, $guestId) {
  * Crear nueva pregunta - Con seguridad reforzada
  */
 function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
+    global $sponsorRefCode;
+    
     // Verificar rate limiting
     $rateCheck = checkRateLimit($pdo, $guestId, $clientIp);
     if (!$rateCheck['allowed']) {
@@ -237,7 +253,7 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
     $whatsappInput = sanitizeInput($data['whatsapp'] ?? '', 30);
     $slideNumber = filter_var($data['slide_number'] ?? 0, FILTER_VALIDATE_INT);
     if ($slideNumber === false) $slideNumber = 0;
-    $sponsorId = isset($data['sponsor_id']) ? filter_var($data['sponsor_id'], FILTER_VALIDATE_INT) : null;
+    // Usar sponsor_ref_code de la sesión (capturado de la URL de presentación)
     
     // Validar pregunta
     if (empty($question)) {
@@ -274,12 +290,12 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
     
     try {
         $stmt = $pdo->prepare("
-            INSERT INTO presentation_questions (guest_id, sponsor_id, question, whatsapp, slide_number, ip_address)
+            INSERT INTO presentation_questions (guest_id, sponsor_ref_code, question, whatsapp, slide_number, ip_address)
             VALUES (?, ?, ?, ?, ?, ?)
         ");
         $stmt->execute([
             $guestId,
-            $sponsorId,
+            $sponsorRefCode,
             $question,
             $whatsapp,
             $slideNumber,

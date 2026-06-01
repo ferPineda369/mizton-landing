@@ -1,11 +1,22 @@
+<?php
+// Capturar código de referido de la URL
+$refCode = $_GET['ref'] ?? '';
+$registerUrl = 'https://panel.mizton.cat/register.php';
+if (!empty($refCode) && preg_match('/^[a-zA-Z0-9]+$/', $refCode)) {
+    $registerUrl .= '?ref=' . urlencode($refCode);
+    // Guardar en sesión para usar en la API de preguntas
+    session_start();
+    $_SESSION['sponsor_ref_code'] = $refCode;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mizton - Ecosistema de Tokenización RWA</title>
-    <link rel="stylesheet" href="../css/presentation.css?v=5">
-    <link rel="stylesheet" href="styles-extra.css?v=5">
+    <link rel="stylesheet" href="../css/presentation.css?v=6">
+    <link rel="stylesheet" href="styles-extra.css?v=6">
 </head>
 <body>
     <div class="presentation-container">
@@ -1134,7 +1145,7 @@
                         <div class="vision-splash"></div>
                         <p class="cta-text">Actívate inmediatamente</p>
                         <p class="cta-sub">Entre más pronto lo hagas, mejor lugar en la Red Global</p>
-                        <a href="https://panel.mizton.cat/register.php" class="cta-button" target="_blank">Registrarme Ahora</a>
+                        <a href="<?php echo htmlspecialchars($registerUrl); ?>" class="cta-button" target="_blank">Registrarme Ahora</a>
                     </div>
                 </div>
             </div>
@@ -1209,7 +1220,7 @@
         </div>
     </div>
 
-    <script src="../includes/presentation-common.js?v=5"></script>
-    <script src="script.js?v=5"></script>
+    <script src="../includes/presentation-common.js?v=6"></script>
+    <script src="script.js?v=6"></script>
 </body>
 </html>

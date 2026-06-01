@@ -683,7 +683,7 @@ function initPresentationControls() {
         autoRunBtn.addEventListener('click', function() {
             presentationState.autoRun = !presentationState.autoRun;
             this.classList.toggle('active', presentationState.autoRun);
-            this.textContent = presentationState.autoRun ? '⏸ Pause' : '▶ Auto-Play';
+            this.textContent = presentationState.autoRun ? '⏸ Manual' : '▶ Auto-Play';
             
             if (presentationState.autoRun) {
                 const lastSlide = totalSlides - 1;
