@@ -2865,7 +2865,7 @@
 .question-modal-header h3 {
     margin: 0;
     color: #00e5ff;
-    font-size: 1.2rem;
+    font-size: 1.35rem;
     font-weight: 600;
 }
 
@@ -2912,7 +2912,7 @@
     color: rgba(255, 255, 255, 0.4);
     text-align: center;
     font-style: italic;
-    font-size: 0.9rem;
+    font-size: 1.05rem;
     padding: 12px 0;
 }
 
@@ -2935,12 +2935,12 @@
 .question-item-text {
     flex: 1;
     color: rgba(255, 255, 255, 0.85);
-    font-size: 0.9rem;
+    font-size: 1.05rem;
     line-height: 1.4;
 }
 
 .question-item-meta {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     color: rgba(0, 229, 255, 0.5);
     margin-top: 4px;
 }
@@ -2972,12 +2972,12 @@
     border: 1px solid rgba(0, 229, 255, 0.25);
     border-radius: 10px;
     color: #fff;
-    padding: 12px 14px;
-    font-size: 0.95rem;
+    padding: 14px 16px;
+    font-size: 1.1rem;
     font-family: inherit;
     resize: vertical;
-    min-height: 70px;
-    max-height: 120px;
+    min-height: 80px;
+    max-height: 140px;
     transition: border-color 0.3s, box-shadow 0.3s;
     box-sizing: border-box;
 }
@@ -2990,17 +2990,18 @@
 
 .question-textarea::placeholder {
     color: rgba(255, 255, 255, 0.35);
+    font-size: 1.05rem;
 }
 
 .question-submit-btn {
     width: 100%;
     margin-top: 10px;
-    padding: 12px 20px;
+    padding: 14px 20px;
     background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(0, 229, 255, 0.1));
     border: 1px solid #00e5ff;
     border-radius: 10px;
     color: #00e5ff;
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
