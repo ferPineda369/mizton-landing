@@ -353,35 +353,55 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
     }
     
     try {
-        $stmt = $pdo->prepare("
-            INSERT INTO presentation_questions (guest_id, sponsor_id, question, country_code, phone_number, slide_number, ip_address)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-        ");
+        // Verificar si existen las nuevas columnas
+        $checkColumns = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'country_code'");
         
-        // Separar country_code y phone_number del whatsapp validado
-        $countryCode = null;
-        $phoneNumber = $whatsapp;
-        
-        if ($whatsapp) {
-            // Detectar si incluye código de país
-            if (preg_match('/^\+(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
-                $countryCode = '+' . $matches[1];
-                $phoneNumber = $matches[2];
-            } elseif (preg_match('/^(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
-                $countryCode = $matches[1];
-                $phoneNumber = $matches[2];
+        if ($checkColumns->rowCount() === 0) {
+            // Usar estructura antigua (columna whatsapp)
+            $stmt = $pdo->prepare("
+                INSERT INTO presentation_questions (guest_id, sponsor_id, question, whatsapp, slide_number, ip_address)
+                VALUES (?, ?, ?, ?, ?, ?)
+            ");
+            $stmt->execute([
+                $guestId,
+                $sponsorId,
+                $question,
+                $whatsapp,
+                $slideNumber,
+                $clientIp
+            ]);
+        } else {
+            // Usar estructura nueva (country_code + phone_number)
+            $stmt = $pdo->prepare("
+                INSERT INTO presentation_questions (guest_id, sponsor_id, question, country_code, phone_number, slide_number, ip_address)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            ");
+            
+            // Separar country_code y phone_number del whatsapp validado
+            $countryCode = null;
+            $phoneNumber = $whatsapp;
+            
+            if ($whatsapp) {
+                // Detectar si incluye código de país
+                if (preg_match('/^\+(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
+                    $countryCode = '+' . $matches[1];
+                    $phoneNumber = $matches[2];
+                } elseif (preg_match('/^(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
+                    $countryCode = $matches[1];
+                    $phoneNumber = $matches[2];
+                }
             }
+            
+            $stmt->execute([
+                $guestId,
+                $sponsorId,
+                $question,
+                $countryCode,
+                $phoneNumber,
+                $slideNumber,
+                $clientIp
+            ]);
         }
-        
-        $stmt->execute([
-            $guestId,
-            $sponsorId,
-            $question,
-            $countryCode,
-            $phoneNumber,
-            $slideNumber,
-            $clientIp
-        ]);
         
         $newId = $pdo->lastInsertId();
         
@@ -482,21 +502,33 @@ function handleUpdateWhatsapp($pdo, $guestId, $data, $clientIp) {
         }
     }
     
-    // Limitar número de actualizaciones (máximo 5 por sesión)
+    // Verificar que las columnas existan antes de actualizar
     try {
-        $stmt = $pdo->prepare("
-            SELECT COUNT(*) FROM presentation_questions 
-            WHERE guest_id = ? AND country_code IS NOT NULL
-        ");
-        $stmt->execute([$guestId]);
-        $hasPrevious = $stmt->fetchColumn() > 0;
-        
-        $stmt = $pdo->prepare("
-            UPDATE presentation_questions
-            SET country_code = ?, phone_number = ?
-            WHERE guest_id = ?
-        ");
-        $stmt->execute([$countryCode, $phoneNumber, $guestId]);
+        $checkColumns = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'country_code'");
+        if ($checkColumns->rowCount() === 0) {
+            // Si no existen las columnas, usar la columna whatsapp antigua
+            $stmt = $pdo->prepare("
+                UPDATE presentation_questions
+                SET whatsapp = ?
+                WHERE guest_id = ?
+            ");
+            $stmt->execute([$whatsapp, $guestId]);
+        } else {
+            // Usar las nuevas columnas
+            $stmt = $pdo->prepare("
+                SELECT COUNT(*) FROM presentation_questions 
+                WHERE guest_id = ? AND country_code IS NOT NULL
+            ");
+            $stmt->execute([$guestId]);
+            $hasPrevious = $stmt->fetchColumn() > 0;
+            
+            $stmt = $pdo->prepare("
+                UPDATE presentation_questions
+                SET country_code = ?, phone_number = ?
+                WHERE guest_id = ?
+            ");
+            $stmt->execute([$countryCode, $phoneNumber, $guestId]);
+        }
         
         echo json_encode(['success' => true, 'message' => 'WhatsApp actualizado']);
     } catch (PDOException $e) {
