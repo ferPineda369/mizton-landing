@@ -2085,12 +2085,13 @@ function initSlideRevealSequence(slideNumber) {
         submitBtn.disabled = true;
         submitBtn.textContent = 'Enviando...';
         
-        // Construir número completo de WhatsApp
-        let whatsapp = '';
+        // Obtener datos de WhatsApp por separado
+        let countryCodeOnly = '';
+        let phoneNumberOnly = '';
         if (waToggle.checked && waInput.value.trim() && waCountry.value) {
             const countryData = waCountry.options[waCountry.selectedIndex];
-            const code = countryData.dataset.code;
-            whatsapp = code + waInput.value.trim();
+            countryCodeOnly = countryData.dataset.code.replace('+', '');
+            phoneNumberOnly = waInput.value.trim();
         }
         
         try {
@@ -2099,7 +2100,8 @@ function initSlideRevealSequence(slideNumber) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     question: question,
-                    whatsapp: whatsapp,
+                    country_code: countryCodeOnly,
+                    phone_number: phoneNumberOnly,
                     slide_number: typeof currentSlide !== 'undefined' ? currentSlide : 0
                 })
             });
@@ -2291,8 +2293,7 @@ function initSlideRevealSequence(slideNumber) {
         }
         
         const countryData = waCountry.options[waCountry.selectedIndex];
-        const code = countryData.dataset.code;
-        const fullNumber = code + phoneNumber;
+        const codeOnly = countryData.dataset.code.replace('+', '');
         
         try {
             waSaveBtn.disabled = true;
@@ -2301,14 +2302,14 @@ function initSlideRevealSequence(slideNumber) {
             const res = await fetch(API_URL + '?action=update_whatsapp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ whatsapp: fullNumber })
+                body: JSON.stringify({ country_code: codeOnly, phone_number: phoneNumber })
             });
             
             const data = await res.json();
             
             if (data.success) {
-                savedWhatsApp = fullNumber;
-                savedCountryCode = code;
+                savedWhatsApp = codeOnly + phoneNumber;
+                savedCountryCode = codeOnly;
                 savedPhoneNumber = phoneNumber;
                 whatsappChanged = false;
                 hideSaveButton();

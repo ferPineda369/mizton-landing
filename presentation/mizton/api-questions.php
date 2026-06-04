@@ -339,10 +339,10 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
     
     // Sanitizar inputs
     $question = sanitizeInput($data['question'] ?? '', 1000);
-    $whatsappInput = sanitizeInput($data['whatsapp'] ?? '', 30);
+    $countryCode = preg_replace('/[^0-9]/', '', $data['country_code'] ?? '');
+    $phoneNumber = preg_replace('/[^0-9]/', '', $data['phone_number'] ?? '');
     $slideNumber = filter_var($data['slide_number'] ?? 0, FILTER_VALIDATE_INT);
     if ($slideNumber === false) $slideNumber = 0;
-    // Usar sponsor_ref_code de la sesión (capturado de la URL de presentación)
     
     // Validar pregunta
     if (empty($question)) {
@@ -357,14 +357,21 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
         return;
     }
     
-    // Validar WhatsApp
-    $waValidation = validateWhatsApp($whatsappInput);
-    if (!$waValidation['valid']) {
+    // Validar country_code y phone_number si se proporcionan
+    $countryCodeOnly = null;
+    if (!empty($countryCode)) {
+        $countryCodeOnly = (int)$countryCode;
+        if ($countryCodeOnly < 1 || $countryCodeOnly > 9999) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Código de país no válido']);
+            return;
+        }
+    }
+    if (!empty($phoneNumber) && (strlen($phoneNumber) < 6 || strlen($phoneNumber) > 15)) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => $waValidation['error']]);
+        echo json_encode(['success' => false, 'error' => 'Número de teléfono no válido']);
         return;
     }
-    $whatsapp = $waValidation['value'];
     
     // Detectar contenido sospechoso (XSS básico)
     $suspiciousPatterns = ['/script/i', '/javascript/i', '/on\w+=/i', '/<iframe/i', '/<object/i'];
@@ -378,66 +385,20 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
     }
     
     try {
-        // Verificar si existen las nuevas columnas
-        $checkColumns = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'country_code'");
-        error_log("DEBUG: Checking columns - rowCount: " . $checkColumns->rowCount());
-        
-        if ($checkColumns->rowCount() === 0) {
-            // Usar estructura antigua (columna whatsapp)
-            error_log("DEBUG: Using old structure with whatsapp column");
-            $stmt = $pdo->prepare("
-                INSERT INTO presentation_questions (guest_id, sponsor_id, question, whatsapp, slide_number, ip_address)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ");
-            error_log("DEBUG: Executing old structure insert with: guestId=$guestId, sponsorId=$sponsorId, whatsapp=$whatsapp");
-            $stmt->execute([
-                $guestId,
-                $sponsorId,
-                $question,
-                $whatsapp,
-                $slideNumber,
-                $clientIp
-            ]);
-        } else {
-            // Usar estructura nueva (country_code + country_code_only + phone_number)
-            error_log("DEBUG: Using new structure with country_code/country_code_only/phone_number columns");
-            $stmt = $pdo->prepare("
-                INSERT INTO presentation_questions (guest_id, sponsor_id, question, country_code, country_code_only, phone_number, slide_number, ip_address)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ");
-            
-            // Separar country_code, country_code_only y phone_number del whatsapp validado
-            $countryCode = null;
-            $countryCodeOnly = null;
-            $phoneNumber = $whatsapp;
-            
-            if ($whatsapp) {
-                // Detectar si incluye código de país
-                if (preg_match('/^\+(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
-                    $countryCode = '+' . $matches[1];
-                    $countryCodeOnly = (int)$matches[1];
-                    $phoneNumber = $matches[2];
-                    error_log("DEBUG: Parsed whatsapp: countryCode=$countryCode, countryCodeOnly=$countryCodeOnly, phoneNumber=$phoneNumber");
-                } elseif (preg_match('/^(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
-                    $countryCode = $matches[1];
-                    $countryCodeOnly = (int)$matches[1];
-                    $phoneNumber = $matches[2];
-                    error_log("DEBUG: Parsed whatsapp (no +): countryCode=$countryCode, countryCodeOnly=$countryCodeOnly, phoneNumber=$phoneNumber");
-                }
-            }
-            
-            error_log("DEBUG: Executing new structure insert with: guestId=$guestId, sponsorId=$sponsorId, countryCode=$countryCode, countryCodeOnly=$countryCodeOnly, phoneNumber=$phoneNumber");
-            $stmt->execute([
-                $guestId,
-                $sponsorId,
-                $question,
-                $countryCode,
-                $countryCodeOnly,
-                $phoneNumber,
-                $slideNumber,
-                $clientIp
-            ]);
-        }
+        // INSERT directo con country_code_only y phone_number separados
+        $stmt = $pdo->prepare("
+            INSERT INTO presentation_questions (guest_id, sponsor_id, question, country_code_only, phone_number, slide_number, ip_address)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+        ");
+        $stmt->execute([
+            $guestId,
+            $sponsorId,
+            $question,
+            $countryCodeOnly,
+            !empty($phoneNumber) ? $phoneNumber : null,
+            $slideNumber,
+            $clientIp
+        ]);
         
         $newId = $pdo->lastInsertId();
         error_log("DEBUG: Question inserted successfully with ID: $newId");
@@ -448,7 +409,8 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
             'question' => [
                 'id' => $newId,
                 'question' => $question,
-                'whatsapp' => $whatsapp,
+                'country_code_only' => $countryCodeOnly,
+                'phone_number' => $phoneNumber,
                 'slide_number' => $slideNumber,
                 'created_at' => date('Y-m-d H:i:s'),
                 'status' => 'pending'
@@ -525,76 +487,34 @@ function handleDeleteQuestion($pdo, $guestId, $data) {
  * Actualizar WhatsApp del invitado (para todas sus preguntas) - Con seguridad
  */
 function handleUpdateWhatsapp($pdo, $guestId, $data, $clientIp) {
-    $whatsappInput = sanitizeInput($data['whatsapp'] ?? '', 30);
+    // Recibir country_code y phone_number como campos separados
+    $countryCode = preg_replace('/[^0-9]/', '', $data['country_code'] ?? '');
+    $phoneNumber = preg_replace('/[^0-9]/', '', $data['phone_number'] ?? '');
     
-    // Validar WhatsApp
-    $waValidation = validateWhatsApp($whatsappInput);
-    if (!$waValidation['valid']) {
+    // Validar
+    $countryCodeOnly = null;
+    if (!empty($countryCode)) {
+        $countryCodeOnly = (int)$countryCode;
+        if ($countryCodeOnly < 1 || $countryCodeOnly > 9999) {
+            http_response_code(400);
+            echo json_encode(['success' => false, 'error' => 'Código de país no válido']);
+            return;
+        }
+    }
+    if (empty($phoneNumber) || strlen($phoneNumber) < 6 || strlen($phoneNumber) > 15) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => $waValidation['error']]);
+        echo json_encode(['success' => false, 'error' => 'Número de teléfono no válido']);
         return;
     }
     
-    $whatsapp = $waValidation['value'];
-    
-    // Separar country_code, country_code_only y phone_number
-    $countryCode = null;
-    $countryCodeOnly = null;
-    $phoneNumber = $whatsapp;
-    
-    if ($whatsapp) {
-        // Detectar si incluye código de país
-        if (preg_match('/^\+(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
-            $countryCode = '+' . $matches[1];
-            $countryCodeOnly = (int)$matches[1];
-            $phoneNumber = $matches[2];
-        } elseif (preg_match('/^(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
-            $countryCode = $matches[1];
-            $countryCodeOnly = (int)$matches[1];
-            $phoneNumber = $matches[2];
-        }
-    }
-    
-    // Verificar que las columnas existan antes de actualizar
     try {
-        $checkColumns = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'country_code'");
-        if ($checkColumns->rowCount() === 0) {
-            // Si no existen las columnas, usar la columna whatsapp antigua
-            $stmt = $pdo->prepare("
-                UPDATE presentation_questions
-                SET whatsapp = ?
-                WHERE guest_id = ?
-            ");
-            $stmt->execute([$whatsapp, $guestId]);
-        } else {
-            // Usar las nuevas columnas
-            $stmt = $pdo->prepare("
-                SELECT COUNT(*) FROM presentation_questions 
-                WHERE guest_id = ? AND country_code IS NOT NULL
-            ");
-            $stmt->execute([$guestId]);
-            $hasPrevious = $stmt->fetchColumn() > 0;
-            
-            // Verificar si existe country_code_only
-            $checkCountryOnly = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'country_code_only'");
-            if ($checkCountryOnly->rowCount() > 0) {
-                // Usar estructura completa con country_code_only
-                $stmt = $pdo->prepare("
-                    UPDATE presentation_questions
-                    SET country_code = ?, country_code_only = ?, phone_number = ?
-                    WHERE guest_id = ?
-                ");
-                $stmt->execute([$countryCode, $countryCodeOnly, $phoneNumber, $guestId]);
-            } else {
-                // Usar estructura sin country_code_only
-                $stmt = $pdo->prepare("
-                    UPDATE presentation_questions
-                    SET country_code = ?, phone_number = ?
-                    WHERE guest_id = ?
-                ");
-                $stmt->execute([$countryCode, $phoneNumber, $guestId]);
-            }
-        }
+        // UPDATE directo con country_code_only y phone_number
+        $stmt = $pdo->prepare("
+            UPDATE presentation_questions
+            SET country_code_only = ?, phone_number = ?
+            WHERE guest_id = ?
+        ");
+        $stmt->execute([$countryCodeOnly, $phoneNumber, $guestId]);
         
         echo json_encode(['success' => true, 'message' => 'WhatsApp actualizado']);
     } catch (PDOException $e) {
