@@ -1899,12 +1899,14 @@ function initSlideRevealSequence(slideNumber) {
     // --- Cambio en email ---
     if (emailInput) {
         emailInput.addEventListener('input', function() {
-            if (this.value.trim()) {
+            emailChanged = true;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (emailRegex.test(this.value.trim())) {
                 showSaveButton();
-                emailChanged = true;
             } else {
                 hideSaveButton();
             }
+            updateRequiredMessage();
         });
         emailInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && emailInput.value.trim()) saveEmail();
@@ -2187,15 +2189,11 @@ function initSlideRevealSequence(slideNumber) {
 
         if (!hasSponsorRef) {
             // Sin referido: email SIEMPRE obligatorio y visible
-            if (emailSection) {
-                const requiredMsg = document.createElement('div');
-                requiredMsg.className = 'question-whatsapp-required';
-                requiredMsg.innerHTML = `<span class="required-icon">⚠️</span> <strong>Email requerido:</strong> Necesitamos tu correo para enviarte las respuestas.`;
-                emailSection.insertBefore(requiredMsg, emailSection.firstChild);
-            }
             if (emailToggle) { emailToggle.style.display = 'none'; emailToggle.checked = true; }
             if (emailField) emailField.style.display = 'block';
             if (emailInput) emailInput.disabled = false;
+            // Mostrar u ocultar el aviso según si ya hay email válido
+            updateRequiredMessage();
         } else {
             // Con referido: email opcional
             if (emailToggle) emailToggle.style.display = '';
@@ -2212,6 +2210,24 @@ function initSlideRevealSequence(slideNumber) {
 
         hideSaveButton();
         emailChanged = false;
+    }
+
+    function updateRequiredMessage() {
+        if (!emailSection || hasSponsorRef) return;
+        const existing = emailSection.querySelector('.question-whatsapp-required');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const currentVal = emailInput ? emailInput.value.trim() : '';
+        const isValid = emailRegex.test(currentVal) || (savedEmail && emailRegex.test(savedEmail) && !emailChanged);
+        if (isValid) {
+            if (existing) existing.remove();
+        } else {
+            if (!existing) {
+                const msg = document.createElement('div');
+                msg.className = 'question-whatsapp-required';
+                msg.innerHTML = `<span class="required-icon">⚠️</span> <strong>Email requerido:</strong> Necesitamos tu correo para enviarte las respuestas.`;
+                emailSection.insertBefore(msg, emailSection.firstChild);
+            }
+        }
     }
 
     function showSaveButton() {
@@ -2247,6 +2263,7 @@ function initSlideRevealSequence(slideNumber) {
                 savedEmail = email;
                 emailChanged = false;
                 hideSaveButton();
+                updateRequiredMessage();
                 if (emailInput) emailInput.placeholder = email;
                 if (!hasSponsorRef && emailToggle) emailToggle.style.display = 'none';
                 if (emailSaveBtn) emailSaveBtn.textContent = '✓';
