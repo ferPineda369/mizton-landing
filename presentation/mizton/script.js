@@ -1861,6 +1861,14 @@ function initSlideRevealSequence(slideNumber) {
     const waToggle = document.getElementById('question-wa-toggle');
     const waField = document.getElementById('question-wa-field');
     const waInput = document.getElementById('question-wa-input');
+    const waCountry = document.getElementById('question-wa-country');
+    const waSaveBtn = document.getElementById('question-wa-save-btn');
+    const waSection = document.getElementById('question-whatsapp-section');
+    
+    // Estado de WhatsApp
+    let savedWhatsApp = null;
+    let hasSponsorRef = false;
+    let whatsappChanged = false;
     
     if (!overlay || !openBtn) return;
     
@@ -1884,13 +1892,34 @@ function initSlideRevealSequence(slideNumber) {
         const checked = this.checked;
         waField.style.display = checked ? 'block' : 'none';
         waInput.disabled = !checked;
-        if (checked) waInput.focus();
+        waCountry.disabled = !checked;
+        if (checked) {
+            waCountry.focus();
+        }
+        updateWhatsAppVisibility();
     });
     
-    // --- Guardar WhatsApp al salir del campo ---
-    waInput.addEventListener('blur', function() {
-        if (waInput.value.trim()) {
-            updateWhatsapp(waInput.value.trim());
+    // --- Cambio en país o número ---
+    waCountry.addEventListener('change', function() {
+        if (this.checked && waInput.value.trim()) {
+            showSaveButton();
+            whatsappChanged = true;
+        }
+    });
+    
+    waInput.addEventListener('input', function() {
+        if (this.value.trim() && waCountry.value) {
+            showSaveButton();
+            whatsappChanged = true;
+        }
+    });
+    
+    // --- Guardar WhatsApp ---
+    waSaveBtn.addEventListener('click', saveWhatsApp);
+    
+    waInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && waInput.value.trim() && waCountry.value) {
+            saveWhatsApp();
         }
     });
     
@@ -1904,8 +1933,14 @@ function initSlideRevealSequence(slideNumber) {
         // Pausar TODA la presentación
         pausePresentation();
         
+        // Verificar si hay código de referido (de la URL)
+        checkSponsorReference();
+        
         // Cargar preguntas existentes
         loadQuestions();
+        
+        // Configurar WhatsApp según si hay referido o no
+        setupWhatsAppSection();
         
         // Focus en el textarea
         setTimeout(() => textarea.focus(), 300);
@@ -2031,10 +2066,29 @@ function initSlideRevealSequence(slideNumber) {
         const question = textarea.value.trim();
         if (!question) return;
         
+        // Validar WhatsApp si es obligatorio (no hay referido)
+        if (!hasSponsorRef) {
+            if (!waCountry.value) {
+                alert('Por favor selecciona tu país para continuar');
+                waCountry.focus();
+                return;
+            }
+            if (!waInput.value.trim()) {
+                alert('Por favor ingresa tu número de WhatsApp para recibir las respuestas');
+                waInput.focus();
+                return;
+            }
+        }
+        
         submitBtn.disabled = true;
         submitBtn.textContent = 'Enviando...';
         
-        const whatsapp = (waToggle.checked && waInput.value.trim()) ? waInput.value.trim() : '';
+        // Construir número completo de WhatsApp
+        let whatsapp = '';
+        if (waToggle.checked && waInput.value.trim() && waCountry.value) {
+            const countryData = waCountry.options[waCountry.selectedIndex];
+            whatsapp = countryData.dataset.code + ' ' + waInput.value.trim();
+        }
         
         try {
             const res = await fetch(API_URL, {
@@ -2116,6 +2170,133 @@ function initSlideRevealSequence(slideNumber) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+    
+    // --- Funciones de WhatsApp ---
+    
+    function checkSponsorReference() {
+        // Verificar si hay código de referido en la URL actual
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCode = urlParams.get('ref');
+        hasSponsorRef = !!(refCode && refCode.match(/^[a-zA-Z0-9]+$/));
+    }
+    
+    function setupWhatsAppSection() {
+        // Limpiar mensajes previos
+        const existingMsg = waSection.querySelector('.question-whatsapp-required');
+        if (existingMsg) existingMsg.remove();
+        
+        if (!hasSponsorRef) {
+            // Mostrar mensaje de WhatsApp obligatorio
+            const requiredMsg = document.createElement('div');
+            requiredMsg.className = 'question-whatsapp-required';
+            requiredMsg.innerHTML = `
+                <span class="required-icon">⚠️</span>
+                <strong>WhatsApp requerido:</strong> Como no hay un código de referido, 
+                necesitamos tu WhatsApp para poder enviarte las respuestas a tus preguntas.
+            `;
+            waSection.insertBefore(requiredMsg, waSection.firstChild);
+            
+            // Hacer WhatsApp obligatorio
+            waToggle.checked = true;
+            waField.style.display = 'block';
+            waInput.disabled = false;
+            waCountry.disabled = false;
+        } else {
+            // WhatsApp opcional si hay referido
+            waToggle.checked = false;
+            waField.style.display = 'none';
+            waInput.disabled = true;
+            waCountry.disabled = true;
+        }
+        
+        hideSaveButton();
+        whatsappChanged = false;
+    }
+    
+    function updateWhatsAppVisibility() {
+        if (hasSponsorRef) {
+            // Si hay referido, mostrar/ocultar según el toggle
+            return;
+        }
+        // Si no hay referido, siempre visible
+        waField.style.display = 'block';
+        waInput.disabled = false;
+        waCountry.disabled = false;
+    }
+    
+    function showSaveButton() {
+        waSaveBtn.style.display = 'flex';
+        waSaveBtn.classList.add('highlight');
+    }
+    
+    function hideSaveButton() {
+        waSaveBtn.style.display = 'none';
+        waSaveBtn.classList.remove('highlight');
+    }
+    
+    async function saveWhatsApp() {
+        const countryCode = waCountry.value;
+        const phoneNumber = waInput.value.trim();
+        
+        if (!countryCode) {
+            alert('Por favor selecciona tu país');
+            waCountry.focus();
+            return;
+        }
+        
+        if (!phoneNumber) {
+            alert('Por favor ingresa tu número de WhatsApp');
+            waInput.focus();
+            return;
+        }
+        
+        const countryData = waCountry.options[waCountry.selectedIndex];
+        const fullNumber = countryData.dataset.code + ' ' + phoneNumber;
+        
+        try {
+            waSaveBtn.disabled = true;
+            waSaveBtn.textContent = '⏳';
+            
+            const res = await fetch(API_URL + '?action=update_whatsapp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ whatsapp: fullNumber })
+            });
+            
+            const data = await res.json();
+            
+            if (data.success) {
+                savedWhatsApp = fullNumber;
+                whatsappChanged = false;
+                hideSaveButton();
+                
+                // Si no hay referido, ocultar el checkbox ya que es obligatorio
+                if (!hasSponsorRef) {
+                    waToggle.style.display = 'none';
+                }
+                
+                // Actualizar placeholder con el número guardado
+                waInput.placeholder = fullNumber;
+                
+                // Mostrar confirmación
+                waSaveBtn.textContent = '✓';
+                setTimeout(() => {
+                    waSaveBtn.textContent = '💾';
+                }, 1500);
+                
+            } else {
+                alert(data.error || 'Error al guardar WhatsApp');
+            }
+        } catch (e) {
+            console.log('Save WhatsApp error:', e);
+            alert('Error de conexión al guardar WhatsApp');
+        } finally {
+            waSaveBtn.disabled = false;
+            if (!waSaveBtn.classList.contains('highlight')) {
+                waSaveBtn.textContent = '💾';
+            }
+        }
     }
     
     // Exponer funciones necesarias globalmente

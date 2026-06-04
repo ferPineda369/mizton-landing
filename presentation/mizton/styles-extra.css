@@ -3026,13 +3026,21 @@
     border-top: 1px solid rgba(0, 229, 255, 0.1);
 }
 
+.question-whatsapp-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
 .question-wa-toggle {
     display: flex;
     align-items: center;
     gap: 10px;
     cursor: pointer;
     color: rgba(255, 255, 255, 0.7);
-    font-size: 0.85rem;
+    font-size: 1rem;
+    flex: 1;
 }
 
 .question-wa-toggle input[type="checkbox"] {
@@ -3042,17 +3050,86 @@
     flex-shrink: 0;
 }
 
+.question-wa-save-btn {
+    background: rgba(37, 211, 102, 0.2);
+    border: 1px solid rgba(37, 211, 102, 0.4);
+    color: #25d366;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+}
+
+.question-wa-save-btn:hover {
+    background: rgba(37, 211, 102, 0.3);
+    border-color: #25d366;
+    transform: scale(1.05);
+}
+
+.question-wa-save-btn.highlight {
+    background: rgba(37, 211, 102, 0.4);
+    border-color: #25d366;
+    box-shadow: 0 0 15px rgba(37, 211, 102, 0.5);
+    animation: pulse-save 2s ease-in-out infinite;
+}
+
+@keyframes pulse-save {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
 .question-wa-field {
     margin-top: 10px;
 }
 
+.question-wa-input-group {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+}
+
+.question-wa-country {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(37, 211, 102, 0.3);
+    color: #fff;
+    padding: 10px 8px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    min-width: 140px;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.question-wa-country:focus {
+    outline: none;
+    border-color: #25d366;
+    box-shadow: 0 0 10px rgba(37, 211, 102, 0.2);
+}
+
+.question-wa-country:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.question-wa-country option {
+    background: #1a2332;
+    color: #fff;
+}
+
 .question-wa-input {
-    width: 100%;
+    flex: 1;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(37, 211, 102, 0.3);
     border-radius: 8px;
     color: #fff;
-    padding: 10px 14px;
+    padding: 10px 12px;
     font-size: 0.9rem;
     font-family: inherit;
     transition: border-color 0.3s, box-shadow 0.3s;
@@ -3072,6 +3149,23 @@
 
 .question-wa-input::placeholder {
     color: rgba(255, 255, 255, 0.3);
+}
+
+/* WhatsApp obligatorio mensaje */
+.question-whatsapp-required {
+    background: rgba(255, 100, 100, 0.1);
+    border: 1px solid rgba(255, 100, 100, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.4;
+}
+
+.question-whatsapp-required .required-icon {
+    color: #ff6464;
+    margin-right: 6px;
 }
 
 /* Footer del modal */
