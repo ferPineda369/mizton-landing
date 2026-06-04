@@ -144,18 +144,16 @@ function logSecurityEvent($event, $details = []) {
     error_log("[SECURITY] " . json_encode($logEntry));
 }
 
-// Crear tabla si no existe y migrar si es necesario
+// Crear tabla si no existe
 function ensureTable($pdo) {
-    // Crear tabla si no existe
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS `presentation_questions` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `guest_id` varchar(50) NOT NULL COMMENT 'ID de sesión del invitado',
             `sponsor_id` int(11) DEFAULT NULL COMMENT 'ID del usuario patrocinador',
             `question` text NOT NULL COMMENT 'Pregunta formulada',
-            `country_code` varchar(10) DEFAULT NULL COMMENT 'Código de país del WhatsApp',
             `country_code_only` int(5) DEFAULT NULL COMMENT 'Código de país sin el signo +',
-            `phone_number` varchar(30) DEFAULT NULL COMMENT 'Número de WhatsApp (sin código de país)',
+            `phone_number` varchar(30) DEFAULT NULL COMMENT 'Número de WhatsApp sin código de país',
             `slide_number` int(11) DEFAULT NULL COMMENT 'Slide donde se formuló la pregunta',
             `ip_address` varchar(45) DEFAULT NULL COMMENT 'IP del cliente',
             `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -168,97 +166,6 @@ function ensureTable($pdo) {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
     ");
     
-    // Migración: agregar ip_address si no existe (tabla creada antes de la actualización)
-    try {
-        $stmt = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'ip_address'");
-        if ($stmt->rowCount() === 0) {
-            $pdo->exec("ALTER TABLE `presentation_questions` ADD COLUMN `ip_address` varchar(45) DEFAULT NULL COMMENT 'IP del cliente' AFTER `slide_number`");
-            $pdo->exec("ALTER TABLE `presentation_questions` ADD KEY `idx_ip` (`ip_address`)");
-        }
-    } catch (PDOException $e) {
-        error_log("Migration error: " . $e->getMessage());
-    }
-    
-    // Migración: cambiar sponsor_ref_code a sponsor_id si aún es VARCHAR
-    try {
-        $stmt = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'sponsor_ref_code'");
-        $column = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($column && strpos($column['Type'], 'varchar') !== false) {
-            // Primero, actualizar los datos existentes si hay códigos válidos
-            $pdo->exec("UPDATE `presentation_questions` SET sponsor_ref_code = NULL WHERE sponsor_ref_code NOT IN (SELECT userUser FROM tbluser)");
-            
-            // Cambiar columna a INT
-            $pdo->exec("ALTER TABLE `presentation_questions` CHANGE `sponsor_ref_code` `sponsor_id` int(11) DEFAULT NULL COMMENT 'ID del usuario patrocinador'");
-            
-            // Actualizar datos: convertir códigos a IDs
-            $pdo->exec("
-                UPDATE `presentation_questions` pq 
-                SET sponsor_id = (SELECT idUser FROM tbluser WHERE userUser = pq.sponsor_ref_code LIMIT 1)
-                WHERE sponsor_ref_code IS NOT NULL
-            ");
-            
-            // Actualizar índice
-            $pdo->exec("ALTER TABLE `presentation_questions` DROP KEY IF EXISTS `idx_sponsor`");
-            $pdo->exec("ALTER TABLE `presentation_questions` ADD KEY `idx_sponsor` (`sponsor_id`)");
-        }
-    } catch (PDOException $e) {
-        error_log("Migration sponsor_id error: " . $e->getMessage());
-    }
-    
-    // Migración: separar whatsapp en country_code y phone_number
-    try {
-        $stmt = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'whatsapp'");
-        $column = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($column) {
-            // Agregar nuevas columnas
-            $pdo->exec("ALTER TABLE `presentation_questions` ADD COLUMN `country_code` varchar(10) DEFAULT NULL COMMENT 'Código de país del WhatsApp' AFTER `sponsor_id`");
-            $pdo->exec("ALTER TABLE `presentation_questions` ADD COLUMN `phone_number` varchar(30) DEFAULT NULL COMMENT 'Número de WhatsApp (sin código de país)' AFTER `country_code`");
-            
-            // Migrar datos existentes
-            $pdo->exec("
-                UPDATE `presentation_questions` 
-                SET 
-                    country_code = CASE 
-                        WHEN whatsapp LIKE '+%' THEN SUBSTRING(whatsapp, 1, 4)
-                        WHEN whatsapp REGEXP '^[0-9]{2,3}' THEN SUBSTRING(whatsapp, 1, 3)
-                        ELSE NULL
-                    END,
-                    phone_number = CASE 
-                        WHEN whatsapp LIKE '+%' THEN SUBSTRING(whatsapp, 5)
-                        WHEN whatsapp REGEXP '^[0-9]{2,3}' THEN SUBSTRING(whatsapp, 4)
-                        ELSE whatsapp
-                    END
-                WHERE whatsapp IS NOT NULL AND whatsapp != ''
-            ");
-            
-            // Eliminar columna antigua
-            $pdo->exec("ALTER TABLE `presentation_questions` DROP COLUMN `whatsapp`");
-        }
-    } catch (PDOException $e) {
-        error_log("Migration whatsapp separation error: " . $e->getMessage());
-    }
-    
-    // Migración: agregar country_code_only y actualizar datos
-    try {
-        $checkColumn = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'country_code_only'");
-        if ($checkColumn->rowCount() === 0) {
-            // Agregar nueva columna
-            $pdo->exec("ALTER TABLE `presentation_questions` ADD COLUMN `country_code_only` int(5) DEFAULT NULL COMMENT 'Código de país sin el signo +' AFTER `country_code`");
-            
-            // Actualizar datos existentes
-            $pdo->exec("
-                UPDATE `presentation_questions` 
-                SET country_code_only = CASE 
-                    WHEN country_code LIKE '+%' THEN CAST(SUBSTRING(country_code, 2) AS UNSIGNED)
-                    WHEN country_code REGEXP '^[0-9]+' THEN CAST(country_code AS UNSIGNED)
-                    ELSE NULL
-                END
-                WHERE country_code IS NOT NULL
-            ");
-        }
-    } catch (PDOException $e) {
-        error_log("Migration country_code_only error: " . $e->getMessage());
-    }
 }
 
 try {
@@ -303,7 +210,7 @@ switch ($method) {
 function handleGetQuestions($pdo, $guestId) {
     try {
         $stmt = $pdo->prepare("
-            SELECT id, question, whatsapp, slide_number, created_at, status
+            SELECT id, question, country_code_only, phone_number, slide_number, created_at, status
             FROM presentation_questions
             WHERE guest_id = ?
             ORDER BY created_at DESC
@@ -426,7 +333,8 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
             'guest_id' => $guestId,
             'sponsor_id' => $sponsorId,
             'question' => substr($question, 0, 100),
-            'whatsapp' => $whatsapp,
+            'country_code_only' => $countryCodeOnly,
+            'phone_number' => $phoneNumber,
             'slide_number' => $slideNumber,
             'client_ip' => $clientIp
         ];
@@ -529,55 +437,26 @@ function handleUpdateWhatsapp($pdo, $guestId, $data, $clientIp) {
  */
 function handleGetWhatsAppInfo($pdo, $guestId) {
     try {
-        // Verificar si existe country_code_only
-        $checkCountryOnly = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'country_code_only'");
+        $stmt = $pdo->prepare("
+            SELECT country_code_only, phone_number 
+            FROM presentation_questions 
+            WHERE guest_id = ? AND phone_number IS NOT NULL 
+            ORDER BY created_at DESC 
+            LIMIT 1
+        ");
+        $stmt->execute([$guestId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        if ($checkCountryOnly->rowCount() > 0) {
-            // Usar estructura completa
-            $stmt = $pdo->prepare("
-                SELECT country_code, country_code_only, phone_number 
-                FROM presentation_questions 
-                WHERE guest_id = ? AND country_code_only IS NOT NULL 
-                ORDER BY created_at DESC 
-                LIMIT 1
-            ");
-            $stmt->execute([$guestId]);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if ($result) {
-                echo json_encode([
-                    'success' => true,
-                    'data' => [
-                        'country_code' => $result['country_code'],
-                        'country_code_only' => $result['country_code_only'],
-                        'phone_number' => $result['phone_number']
-                    ]
-                ]);
-            } else {
-                echo json_encode(['success' => false, 'error' => 'No se encontró información de WhatsApp']);
-            }
+        if ($result) {
+            echo json_encode([
+                'success' => true,
+                'data' => [
+                    'country_code_only' => $result['country_code_only'],
+                    'phone_number' => $result['phone_number']
+                ]
+            ]);
         } else {
-            // Usar estructura antigua
-            $stmt = $pdo->prepare("
-                SELECT whatsapp 
-                FROM presentation_questions 
-                WHERE guest_id = ? AND whatsapp IS NOT NULL 
-                ORDER BY created_at DESC 
-                LIMIT 1
-            ");
-            $stmt->execute([$guestId]);
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            if ($result) {
-                echo json_encode([
-                    'success' => true,
-                    'data' => [
-                        'whatsapp' => $result['whatsapp']
-                    ]
-                ]);
-            } else {
-                echo json_encode(['success' => false, 'error' => 'No se encontró información de WhatsApp']);
-            }
+            echo json_encode(['success' => true, 'data' => null]);
         }
     } catch (PDOException $e) {
         error_log("Get WhatsApp info error: " . $e->getMessage());

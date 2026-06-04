@@ -2192,30 +2192,29 @@ function initSlideRevealSequence(slideNumber) {
         if (existingMsg) existingMsg.remove();
         
         // Obtener información guardada desde BD
+        let hasSavedWa = false;
         try {
             const res = await fetch(API_URL + '?action=get_whatsapp_info', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
-            const data = await res.json();
+            const result = await res.json();
             
-            if (data.success && data.data) {
-                if (data.data.country_code_only) {
-                    // Estructura nueva: buscar el option con el country_code_only correspondiente
+            if (result.success && result.data) {
+                hasSavedWa = true;
+                if (result.data.country_code_only) {
+                    const codeStr = result.data.country_code_only.toString();
                     for (let i = 0; i < waCountry.options.length; i++) {
-                        const option = waCountry.options[i];
-                        if (option.value && option.dataset.code) {
-                            const codeOnly = option.dataset.code.replace('+', '');
-                            if (codeOnly === data.data.country_code_only.toString()) {
-                                waCountry.value = option.value;
-                                break;
-                            }
+                        const opt = waCountry.options[i];
+                        if (opt.dataset.code && opt.dataset.code.replace('+', '') === codeStr) {
+                            waCountry.value = opt.value;
+                            break;
                         }
                     }
                 }
-                if (data.data.phone_number) {
-                    waInput.value = data.data.phone_number;
-                    waInput.placeholder = data.data.phone_number;
+                if (result.data.phone_number) {
+                    waInput.value = result.data.phone_number;
+                    waInput.placeholder = result.data.phone_number;
                 }
             }
         } catch (e) {
@@ -2240,7 +2239,7 @@ function initSlideRevealSequence(slideNumber) {
             waCountry.disabled = false;
             
             // Si ya hay datos guardados, ocultar checkbox
-            if (waCountry.value && waInput.value) {
+            if (hasSavedWa) {
                 waToggle.style.display = 'none';
             }
         } else {
