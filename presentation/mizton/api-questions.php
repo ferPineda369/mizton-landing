@@ -154,6 +154,7 @@ function ensureTable($pdo) {
             `sponsor_id` int(11) DEFAULT NULL COMMENT 'ID del usuario patrocinador',
             `question` text NOT NULL COMMENT 'Pregunta formulada',
             `country_code` varchar(10) DEFAULT NULL COMMENT 'Código de país del WhatsApp',
+            `country_code_only` int(5) DEFAULT NULL COMMENT 'Código de país sin el signo +',
             `phone_number` varchar(30) DEFAULT NULL COMMENT 'Número de WhatsApp (sin código de país)',
             `slide_number` int(11) DEFAULT NULL COMMENT 'Slide donde se formuló la pregunta',
             `ip_address` varchar(45) DEFAULT NULL COMMENT 'IP del cliente',
@@ -236,6 +237,28 @@ function ensureTable($pdo) {
     } catch (PDOException $e) {
         error_log("Migration whatsapp separation error: " . $e->getMessage());
     }
+    
+    // Migración: agregar country_code_only y actualizar datos
+    try {
+        $checkColumn = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'country_code_only'");
+        if ($checkColumn->rowCount() === 0) {
+            // Agregar nueva columna
+            $pdo->exec("ALTER TABLE `presentation_questions` ADD COLUMN `country_code_only` int(5) DEFAULT NULL COMMENT 'Código de país sin el signo +' AFTER `country_code`");
+            
+            // Actualizar datos existentes
+            $pdo->exec("
+                UPDATE `presentation_questions` 
+                SET country_code_only = CASE 
+                    WHEN country_code LIKE '+%' THEN CAST(SUBSTRING(country_code, 2) AS UNSIGNED)
+                    WHEN country_code REGEXP '^[0-9]+' THEN CAST(country_code AS UNSIGNED)
+                    ELSE NULL
+                END
+                WHERE country_code IS NOT NULL
+            ");
+        }
+    } catch (PDOException $e) {
+        error_log("Migration country_code_only error: " . $e->getMessage());
+    }
 }
 
 try {
@@ -257,6 +280,8 @@ switch ($method) {
         $data = json_decode(file_get_contents('php://input'), true);
         if ($action === 'update_whatsapp') {
             handleUpdateWhatsapp($pdo, $guestId, $data, $clientIp);
+        } elseif ($action === 'get_whatsapp_info') {
+            handleGetWhatsAppInfo($pdo, $guestId);
         } else {
             handleCreateQuestion($pdo, $guestId, $data, $clientIp);
         }
@@ -374,36 +399,40 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
                 $clientIp
             ]);
         } else {
-            // Usar estructura nueva (country_code + phone_number)
-            error_log("DEBUG: Using new structure with country_code/phone_number columns");
+            // Usar estructura nueva (country_code + country_code_only + phone_number)
+            error_log("DEBUG: Using new structure with country_code/country_code_only/phone_number columns");
             $stmt = $pdo->prepare("
-                INSERT INTO presentation_questions (guest_id, sponsor_id, question, country_code, phone_number, slide_number, ip_address)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO presentation_questions (guest_id, sponsor_id, question, country_code, country_code_only, phone_number, slide_number, ip_address)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ");
             
-            // Separar country_code y phone_number del whatsapp validado
+            // Separar country_code, country_code_only y phone_number del whatsapp validado
             $countryCode = null;
+            $countryCodeOnly = null;
             $phoneNumber = $whatsapp;
             
             if ($whatsapp) {
                 // Detectar si incluye código de país
                 if (preg_match('/^\+(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
                     $countryCode = '+' . $matches[1];
+                    $countryCodeOnly = (int)$matches[1];
                     $phoneNumber = $matches[2];
-                    error_log("DEBUG: Parsed whatsapp: countryCode=$countryCode, phoneNumber=$phoneNumber");
+                    error_log("DEBUG: Parsed whatsapp: countryCode=$countryCode, countryCodeOnly=$countryCodeOnly, phoneNumber=$phoneNumber");
                 } elseif (preg_match('/^(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
                     $countryCode = $matches[1];
+                    $countryCodeOnly = (int)$matches[1];
                     $phoneNumber = $matches[2];
-                    error_log("DEBUG: Parsed whatsapp (no +): countryCode=$countryCode, phoneNumber=$phoneNumber");
+                    error_log("DEBUG: Parsed whatsapp (no +): countryCode=$countryCode, countryCodeOnly=$countryCodeOnly, phoneNumber=$phoneNumber");
                 }
             }
             
-            error_log("DEBUG: Executing new structure insert with: guestId=$guestId, sponsorId=$sponsorId, countryCode=$countryCode, phoneNumber=$phoneNumber");
+            error_log("DEBUG: Executing new structure insert with: guestId=$guestId, sponsorId=$sponsorId, countryCode=$countryCode, countryCodeOnly=$countryCodeOnly, phoneNumber=$phoneNumber");
             $stmt->execute([
                 $guestId,
                 $sponsorId,
                 $question,
                 $countryCode,
+                $countryCodeOnly,
                 $phoneNumber,
                 $slideNumber,
                 $clientIp
@@ -508,17 +537,20 @@ function handleUpdateWhatsapp($pdo, $guestId, $data, $clientIp) {
     
     $whatsapp = $waValidation['value'];
     
-    // Separar country_code y phone_number
+    // Separar country_code, country_code_only y phone_number
     $countryCode = null;
+    $countryCodeOnly = null;
     $phoneNumber = $whatsapp;
     
     if ($whatsapp) {
         // Detectar si incluye código de país
         if (preg_match('/^\+(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
             $countryCode = '+' . $matches[1];
+            $countryCodeOnly = (int)$matches[1];
             $phoneNumber = $matches[2];
         } elseif (preg_match('/^(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
             $countryCode = $matches[1];
+            $countryCodeOnly = (int)$matches[1];
             $phoneNumber = $matches[2];
         }
     }
@@ -543,12 +575,25 @@ function handleUpdateWhatsapp($pdo, $guestId, $data, $clientIp) {
             $stmt->execute([$guestId]);
             $hasPrevious = $stmt->fetchColumn() > 0;
             
-            $stmt = $pdo->prepare("
-                UPDATE presentation_questions
-                SET country_code = ?, phone_number = ?
-                WHERE guest_id = ?
-            ");
-            $stmt->execute([$countryCode, $phoneNumber, $guestId]);
+            // Verificar si existe country_code_only
+            $checkCountryOnly = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'country_code_only'");
+            if ($checkCountryOnly->rowCount() > 0) {
+                // Usar estructura completa con country_code_only
+                $stmt = $pdo->prepare("
+                    UPDATE presentation_questions
+                    SET country_code = ?, country_code_only = ?, phone_number = ?
+                    WHERE guest_id = ?
+                ");
+                $stmt->execute([$countryCode, $countryCodeOnly, $phoneNumber, $guestId]);
+            } else {
+                // Usar estructura sin country_code_only
+                $stmt = $pdo->prepare("
+                    UPDATE presentation_questions
+                    SET country_code = ?, phone_number = ?
+                    WHERE guest_id = ?
+                ");
+                $stmt->execute([$countryCode, $phoneNumber, $guestId]);
+            }
         }
         
         echo json_encode(['success' => true, 'message' => 'WhatsApp actualizado']);
@@ -556,5 +601,67 @@ function handleUpdateWhatsapp($pdo, $guestId, $data, $clientIp) {
         error_log("Update WhatsApp error: " . $e->getMessage());
         http_response_code(500);
         echo json_encode(['success' => false, 'error' => 'Error al actualizar WhatsApp']);
+    }
+}
+
+/**
+ * Obtener información de WhatsApp guardada del invitado
+ */
+function handleGetWhatsAppInfo($pdo, $guestId) {
+    try {
+        // Verificar si existe country_code_only
+        $checkCountryOnly = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'country_code_only'");
+        
+        if ($checkCountryOnly->rowCount() > 0) {
+            // Usar estructura completa
+            $stmt = $pdo->prepare("
+                SELECT country_code, country_code_only, phone_number 
+                FROM presentation_questions 
+                WHERE guest_id = ? AND country_code_only IS NOT NULL 
+                ORDER BY created_at DESC 
+                LIMIT 1
+            ");
+            $stmt->execute([$guestId]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'data' => [
+                        'country_code' => $result['country_code'],
+                        'country_code_only' => $result['country_code_only'],
+                        'phone_number' => $result['phone_number']
+                    ]
+                ]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'No se encontró información de WhatsApp']);
+            }
+        } else {
+            // Usar estructura antigua
+            $stmt = $pdo->prepare("
+                SELECT whatsapp 
+                FROM presentation_questions 
+                WHERE guest_id = ? AND whatsapp IS NOT NULL 
+                ORDER BY created_at DESC 
+                LIMIT 1
+            ");
+            $stmt->execute([$guestId]);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'data' => [
+                        'whatsapp' => $result['whatsapp']
+                    ]
+                ]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'No se encontró información de WhatsApp']);
+            }
+        }
+    } catch (PDOException $e) {
+        error_log("Get WhatsApp info error: " . $e->getMessage());
+        http_response_code(500);
+        echo json_encode(['success' => false, 'error' => 'Error al obtener información de WhatsApp']);
     }
 }
