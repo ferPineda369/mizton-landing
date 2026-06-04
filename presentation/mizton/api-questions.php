@@ -355,13 +355,16 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
     try {
         // Verificar si existen las nuevas columnas
         $checkColumns = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'country_code'");
+        error_log("DEBUG: Checking columns - rowCount: " . $checkColumns->rowCount());
         
         if ($checkColumns->rowCount() === 0) {
             // Usar estructura antigua (columna whatsapp)
+            error_log("DEBUG: Using old structure with whatsapp column");
             $stmt = $pdo->prepare("
                 INSERT INTO presentation_questions (guest_id, sponsor_id, question, whatsapp, slide_number, ip_address)
                 VALUES (?, ?, ?, ?, ?, ?)
             ");
+            error_log("DEBUG: Executing old structure insert with: guestId=$guestId, sponsorId=$sponsorId, whatsapp=$whatsapp");
             $stmt->execute([
                 $guestId,
                 $sponsorId,
@@ -372,6 +375,7 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
             ]);
         } else {
             // Usar estructura nueva (country_code + phone_number)
+            error_log("DEBUG: Using new structure with country_code/phone_number columns");
             $stmt = $pdo->prepare("
                 INSERT INTO presentation_questions (guest_id, sponsor_id, question, country_code, phone_number, slide_number, ip_address)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -386,12 +390,15 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
                 if (preg_match('/^\+(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
                     $countryCode = '+' . $matches[1];
                     $phoneNumber = $matches[2];
+                    error_log("DEBUG: Parsed whatsapp: countryCode=$countryCode, phoneNumber=$phoneNumber");
                 } elseif (preg_match('/^(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
                     $countryCode = $matches[1];
                     $phoneNumber = $matches[2];
+                    error_log("DEBUG: Parsed whatsapp (no +): countryCode=$countryCode, phoneNumber=$phoneNumber");
                 }
             }
             
+            error_log("DEBUG: Executing new structure insert with: guestId=$guestId, sponsorId=$sponsorId, countryCode=$countryCode, phoneNumber=$phoneNumber");
             $stmt->execute([
                 $guestId,
                 $sponsorId,
@@ -404,6 +411,7 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
         }
         
         $newId = $pdo->lastInsertId();
+        error_log("DEBUG: Question inserted successfully with ID: $newId");
         
         echo json_encode([
             'success' => true,
@@ -418,7 +426,20 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
             ]
         ]);
     } catch (PDOException $e) {
-        error_log("Create question error: " . $e->getMessage());
+        $errorDetails = [
+            'message' => $e->getMessage(),
+            'code' => $e->getCode(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => $e->getTraceAsString(),
+            'guest_id' => $guestId,
+            'sponsor_id' => $sponsorId,
+            'question' => substr($question, 0, 100),
+            'whatsapp' => $whatsapp,
+            'slide_number' => $slideNumber,
+            'client_ip' => $clientIp
+        ];
+        error_log("Create question PDO error: " . json_encode($errorDetails));
         http_response_code(500);
         echo json_encode(['success' => false, 'error' => 'Error al guardar la pregunta']);
     }
