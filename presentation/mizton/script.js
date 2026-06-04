@@ -2086,9 +2086,12 @@ function initSlideRevealSequence(slideNumber) {
         submitBtn.textContent = 'Enviando...';
         
         // Obtener datos de WhatsApp por separado
+        // Sin referido: siempre enviar (campo siempre visible)
+        // Con referido: solo si el toggle está activo
         let countryCodeOnly = '';
         let phoneNumberOnly = '';
-        if (waToggle.checked && waInput.value.trim() && waCountry.value) {
+        const waShouldSend = !hasSponsorRef || waToggle.checked;
+        if (waShouldSend && waInput.value.trim() && waCountry.value) {
             const countryData = waCountry.options[waCountry.selectedIndex];
             countryCodeOnly = countryData.dataset.code.replace('+', '');
             phoneNumberOnly = waInput.value.trim();
@@ -2222,7 +2225,7 @@ function initSlideRevealSequence(slideNumber) {
         }
         
         if (!hasSponsorRef) {
-            // Mostrar mensaje de WhatsApp obligatorio
+            // Sin referido: WhatsApp SIEMPRE obligatorio y visible
             const requiredMsg = document.createElement('div');
             requiredMsg.className = 'question-whatsapp-required';
             requiredMsg.innerHTML = `
@@ -2232,22 +2235,27 @@ function initSlideRevealSequence(slideNumber) {
             `;
             waSection.insertBefore(requiredMsg, waSection.firstChild);
             
-            // Hacer WhatsApp obligatorio
+            // Ocultar el toggle — el campo siempre está activo
+            waToggle.style.display = 'none';
             waToggle.checked = true;
             waField.style.display = 'block';
             waInput.disabled = false;
             waCountry.disabled = false;
-            
-            // Si ya hay datos guardados, ocultar checkbox
-            if (hasSavedWa) {
-                waToggle.style.display = 'none';
-            }
         } else {
-            // WhatsApp opcional si hay referido
-            waToggle.checked = false;
-            waField.style.display = 'none';
-            waInput.disabled = true;
-            waCountry.disabled = true;
+            // Con referido: WhatsApp opcional
+            waToggle.style.display = '';
+            if (hasSavedWa) {
+                // Si ya tiene datos guardados, mostrar el campo pre-llenado
+                waToggle.checked = true;
+                waField.style.display = 'block';
+                waInput.disabled = false;
+                waCountry.disabled = false;
+            } else {
+                waToggle.checked = false;
+                waField.style.display = 'none';
+                waInput.disabled = true;
+                waCountry.disabled = true;
+            }
         }
         
         hideSaveButton();
