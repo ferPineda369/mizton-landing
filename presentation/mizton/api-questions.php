@@ -31,6 +31,21 @@ $guestId = $_SESSION['presentation_guest_id'];
 
 // Obtener código de referido del sponsor (si existe)
 $sponsorRefCode = $_SESSION['sponsor_ref_code'] ?? null;
+$sponsorId = null;
+
+// Si hay código de referido, obtener el idUser correspondiente
+if ($sponsorRefCode) {
+    try {
+        $stmt = $pdo->prepare("SELECT idUser FROM tbluser WHERE userUser = ? LIMIT 1");
+        $stmt->execute([$sponsorRefCode]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($user) {
+            $sponsorId = $user['idUser'];
+        }
+    } catch (PDOException $e) {
+        error_log("Error getting sponsor ID: " . $e->getMessage());
+    }
+}
 
 // Generar token CSRF si no existe
 if (!isset($_SESSION['csrf_token'])) {
@@ -136,7 +151,7 @@ function ensureTable($pdo) {
         CREATE TABLE IF NOT EXISTS `presentation_questions` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `guest_id` varchar(50) NOT NULL COMMENT 'ID de sesión del invitado',
-            `sponsor_ref_code` varchar(20) DEFAULT NULL COMMENT 'Código de referido del patrocinador',
+            `sponsor_id` int(11) DEFAULT NULL COMMENT 'ID del usuario patrocinador',
             `question` text NOT NULL COMMENT 'Pregunta formulada',
             `whatsapp` varchar(30) DEFAULT NULL COMMENT 'WhatsApp del invitado (opcional)',
             `slide_number` int(11) DEFAULT NULL COMMENT 'Slide donde se formuló la pregunta',
@@ -145,7 +160,7 @@ function ensureTable($pdo) {
             `status` enum('pending','answered','archived') DEFAULT 'pending',
             PRIMARY KEY (`id`),
             KEY `idx_guest` (`guest_id`),
-            KEY `idx_sponsor` (`sponsor_ref_code`),
+            KEY `idx_sponsor` (`sponsor_id`),
             KEY `idx_created` (`created_at`),
             KEY `idx_ip` (`ip_address`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
@@ -162,15 +177,30 @@ function ensureTable($pdo) {
         error_log("Migration error: " . $e->getMessage());
     }
     
-    // Migración: cambiar sponsor_id a sponsor_ref_code si aún es INT
+    // Migración: cambiar sponsor_ref_code a sponsor_id si aún es VARCHAR
     try {
-        $stmt = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'sponsor_id'");
+        $stmt = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'sponsor_ref_code'");
         $column = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($column && strpos($column['Type'], 'int') !== false) {
-            $pdo->exec("ALTER TABLE `presentation_questions` CHANGE `sponsor_id` `sponsor_ref_code` varchar(20) DEFAULT NULL COMMENT 'Código de referido del patrocinador'");
+        if ($column && strpos($column['Type'], 'varchar') !== false) {
+            // Primero, actualizar los datos existentes si hay códigos válidos
+            $pdo->exec("UPDATE `presentation_questions` SET sponsor_ref_code = NULL WHERE sponsor_ref_code NOT IN (SELECT userUser FROM tbluser)");
+            
+            // Cambiar columna a INT
+            $pdo->exec("ALTER TABLE `presentation_questions` CHANGE `sponsor_ref_code` `sponsor_id` int(11) DEFAULT NULL COMMENT 'ID del usuario patrocinador'");
+            
+            // Actualizar datos: convertir códigos a IDs
+            $pdo->exec("
+                UPDATE `presentation_questions` pq 
+                SET sponsor_id = (SELECT idUser FROM tbluser WHERE userUser = pq.sponsor_ref_code LIMIT 1)
+                WHERE sponsor_ref_code IS NOT NULL
+            ");
+            
+            // Actualizar índice
+            $pdo->exec("ALTER TABLE `presentation_questions` DROP KEY IF EXISTS `idx_sponsor`");
+            $pdo->exec("ALTER TABLE `presentation_questions` ADD KEY `idx_sponsor` (`sponsor_id`)");
         }
     } catch (PDOException $e) {
-        error_log("Migration sponsor_ref_code error: " . $e->getMessage());
+        error_log("Migration sponsor_id error: " . $e->getMessage());
     }
 }
 
@@ -237,7 +267,7 @@ function handleGetQuestions($pdo, $guestId) {
  * Crear nueva pregunta - Con seguridad reforzada
  */
 function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
-    global $sponsorRefCode;
+    global $sponsorId;
     
     // Verificar rate limiting
     $rateCheck = checkRateLimit($pdo, $guestId, $clientIp);
@@ -290,12 +320,12 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
     
     try {
         $stmt = $pdo->prepare("
-            INSERT INTO presentation_questions (guest_id, sponsor_ref_code, question, whatsapp, slide_number, ip_address)
+            INSERT INTO presentation_questions (guest_id, sponsor_id, question, whatsapp, slide_number, ip_address)
             VALUES (?, ?, ?, ?, ?, ?)
         ");
         $stmt->execute([
             $guestId,
-            $sponsorRefCode,
+            $sponsorId,
             $question,
             $whatsapp,
             $slideNumber,

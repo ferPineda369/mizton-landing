@@ -2087,7 +2087,8 @@ function initSlideRevealSequence(slideNumber) {
         let whatsapp = '';
         if (waToggle.checked && waInput.value.trim() && waCountry.value) {
             const countryData = waCountry.options[waCountry.selectedIndex];
-            whatsapp = countryData.dataset.code + ' ' + waInput.value.trim();
+            const code = countryData.dataset.code.replace('+', '');
+            whatsapp = code + waInput.value.trim();
         }
         
         try {
@@ -2252,7 +2253,8 @@ function initSlideRevealSequence(slideNumber) {
         }
         
         const countryData = waCountry.options[waCountry.selectedIndex];
-        const fullNumber = countryData.dataset.code + ' ' + phoneNumber;
+        const code = countryData.dataset.code.replace('+', '');
+        const fullNumber = code + phoneNumber;
         
         try {
             waSaveBtn.disabled = true;
