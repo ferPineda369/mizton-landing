@@ -2070,14 +2070,18 @@ function initSlideRevealSequence(slideNumber) {
         
         // Validar WhatsApp si es obligatorio (no hay referido)
         if (!hasSponsorRef) {
-            if (!waCountry.value) {
-                alert('Por favor selecciona tu país para continuar');
-                waCountry.focus();
-                return;
-            }
-            if (!waInput.value.trim()) {
-                alert('Por favor ingresa tu número de WhatsApp para recibir las respuestas');
-                waInput.focus();
+            const hasNumber = waInput.value.trim() || savedPhoneNumber;
+            const hasCountry = waCountry.value || savedCountryCode;
+            if (!hasNumber || !hasCountry) {
+                Swal.fire({
+                    icon: 'info',
+                    title: '¡Necesitamos tu WhatsApp!',
+                    html: 'Es necesario un número de WhatsApp para que te podamos mandar las respuestas lo más pronto posible.<br><br><small>Usa una pregunta para decirnos si te invitó alguien y si conoces su ID.</small>',
+                    confirmButtonText: 'Entendido',
+                    confirmButtonColor: '#25D366'
+                });
+                if (!hasCountry) waCountry.focus();
+                else waInput.focus();
                 return;
             }
         }
