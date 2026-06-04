@@ -15,8 +15,8 @@ if (!empty($refCode) && preg_match('/^[a-zA-Z0-9]+$/', $refCode)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mizton - Ecosistema de Tokenización RWA</title>
-    <link rel="stylesheet" href="../css/presentation.css?v=17">
-    <link rel="stylesheet" href="styles-extra.css?v=17">
+    <link rel="stylesheet" href="../css/presentation.css?v=18">
+    <link rel="stylesheet" href="styles-extra.css?v=18">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
@@ -1203,57 +1203,32 @@ if (!empty($refCode) && preg_match('/^[a-zA-Z0-9]+$/', $refCode)) {
                     <button class="question-submit-btn" id="question-submit-btn">Enviar pregunta</button>
                 </div>
                 
-                <!-- Campo WhatsApp -->
+                <!-- Campo Email -->
                 <div class="question-whatsapp-section" id="question-whatsapp-section">
                     <div class="question-whatsapp-header">
                         <label class="question-wa-toggle">
                             <input type="checkbox" id="question-wa-toggle">
-                            <span class="question-wa-text">Proporcionar mi WhatsApp para recibir respuestas directamente</span>
+                            <span class="question-wa-text">Proporcionar mi email para recibir respuestas directamente</span>
                         </label>
-                        <button class="question-wa-save-btn" id="question-wa-save-btn" title="Guardar número de WhatsApp" style="display: none;">
+                        <button class="question-wa-save-btn" id="question-wa-save-btn" title="Guardar email" style="display: none;">
                             💾
                         </button>
                     </div>
                     <div class="question-wa-field" id="question-wa-field" style="display: none;">
                         <div class="question-wa-input-group">
-                            <select id="question-wa-country" class="question-wa-country">
-                                <option value="" data-code="">País</option>
-                                <option value="mx" data-code="+52">México (+52)</option>
-                                <option value="us" data-code="+1">Estados Unidos (+1)</option>
-                                <option value="ca" data-code="+1">Canadá (+1)</option>
-                                <option value="gt" data-code="+502">Guatemala (+502)</option>
-                                <option value="sv" data-code="+503">El Salvador (+503)</option>
-                                <option value="hn" data-code="+504">Honduras (+504)</option>
-                                <option value="ni" data-code="+505">Nicaragua (+505)</option>
-                                <option value="cr" data-code="+506">Costa Rica (+506)</option>
-                                <option value="pa" data-code="+507">Panamá (+507)</option>
-                                <option value="pe" data-code="+51">Perú (+51)</option>
-                                <option value="ar" data-code="+54">Argentina (+54)</option>
-                                <option value="br" data-code="+55">Brasil (+55)</option>
-                                <option value="cl" data-code="+56">Chile (+56)</option>
-                                <option value="co" data-code="+57">Colombia (+57)</option>
-                                <option value="ve" data-code="+58">Venezuela (+58)</option>
-                                <option value="ec" data-code="+593">Ecuador (+593)</option>
-                                <option value="py" data-code="+595">Paraguay (+595)</option>
-                                <option value="uy" data-code="+598">Uruguay (+598)</option>
-                                <option value="bo" data-code="+591">Bolivia (+591)</option>
-                                <option value="do" data-code="+1">República Dominicana (+1)</option>
-                                <option value="cu" data-code="+53">Cuba (+53)</option>
-                                <option value="es" data-code="+34">España (+34)</option>
-                            </select>
-                            <input type="tel" id="question-wa-input" class="question-wa-input" placeholder="Número de teléfono" disabled>
+                            <input type="email" id="question-wa-input" class="question-wa-input" placeholder="tu@correo.com" disabled style="width: 100%;">
                         </div>
                     </div>
                 </div>
             </div>
             
             <div class="question-modal-footer">
-                <p class="question-footer-text">Las respuestas le serán entregadas a la persona que te invitó o de lo contrario proporciónanos tu número de WhatsApp y te enviaremos directamente las respuestas.</p>
+                <p class="question-footer-text">Las respuestas le serán entregadas a la persona que te invitó o de lo contrario proporciónanos tu correo electrónico y te enviaremos directamente las respuestas.</p>
             </div>
         </div>
     </div>
 
-    <script src="../includes/presentation-common.js?v=17"></script>
-    <script src="script.js?v=17"></script>
+    <script src="../includes/presentation-common.js?v=18"></script>
+    <script src="script.js?v=18"></script>
 </body>
 </html>

@@ -87,15 +87,14 @@ function sanitizeInput($input, $maxLength = 1000) {
     return trim($input);
 }
 
-// Función para validar WhatsApp
-function validateWhatsApp($number) {
-    if (empty($number)) return ['valid' => true, 'value' => null];
-    // Solo permitir números, espacios, + y paréntesis
-    $cleaned = preg_replace('/[^0-9+\s\(\)\-]/', '', $number);
-    if (strlen($cleaned) < 8 || strlen($cleaned) > 20) {
-        return ['valid' => false, 'error' => 'Número de WhatsApp inválido'];
+// Función para validar email
+function validateEmail($email) {
+    if (empty($email)) return ['valid' => true, 'value' => null];
+    $email = trim($email);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || strlen($email) > 100) {
+        return ['valid' => false, 'error' => 'Correo electrónico inválido'];
     }
-    return ['valid' => true, 'value' => $cleaned];
+    return ['valid' => true, 'value' => strtolower($email)];
 }
 
 // Función para verificar rate limiting
@@ -152,8 +151,7 @@ function ensureTable($pdo) {
             `guest_id` varchar(50) NOT NULL COMMENT 'ID de sesión del invitado',
             `sponsor_id` int(11) DEFAULT NULL COMMENT 'ID del usuario patrocinador',
             `question` text NOT NULL COMMENT 'Pregunta formulada',
-            `country_code_only` int(5) DEFAULT NULL COMMENT 'Código de país sin el signo +',
-            `phone_number` varchar(30) DEFAULT NULL COMMENT 'Número de WhatsApp sin código de país',
+            `email` varchar(100) DEFAULT NULL COMMENT 'Email del invitado para enviar respuestas',
             `slide_number` int(11) DEFAULT NULL COMMENT 'Slide donde se formuló la pregunta',
             `ip_address` varchar(45) DEFAULT NULL COMMENT 'IP del cliente',
             `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -165,7 +163,6 @@ function ensureTable($pdo) {
             KEY `idx_ip` (`ip_address`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
     ");
-    
 }
 
 try {
@@ -185,10 +182,10 @@ switch ($method) {
         
     case 'POST':
         $data = json_decode(file_get_contents('php://input'), true);
-        if ($action === 'update_whatsapp') {
-            handleUpdateWhatsapp($pdo, $guestId, $data, $clientIp);
-        } elseif ($action === 'get_whatsapp_info') {
-            handleGetWhatsAppInfo($pdo, $guestId);
+        if ($action === 'update_email') {
+            handleUpdateEmail($pdo, $guestId, $data);
+        } elseif ($action === 'get_email_info') {
+            handleGetEmailInfo($pdo, $guestId);
         } else {
             handleCreateQuestion($pdo, $guestId, $data, $clientIp);
         }
@@ -210,7 +207,7 @@ switch ($method) {
 function handleGetQuestions($pdo, $guestId) {
     try {
         $stmt = $pdo->prepare("
-            SELECT id, question, country_code_only, phone_number, slide_number, created_at, status
+            SELECT id, question, email, slide_number, created_at, status
             FROM presentation_questions
             WHERE guest_id = ?
             ORDER BY created_at DESC
@@ -246,8 +243,7 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
     
     // Sanitizar inputs
     $question = sanitizeInput($data['question'] ?? '', 1000);
-    $countryCode = preg_replace('/[^0-9]/', '', $data['country_code'] ?? '');
-    $phoneNumber = preg_replace('/[^0-9]/', '', $data['phone_number'] ?? '');
+    $emailInput = sanitizeInput($data['email'] ?? '', 100);
     $slideNumber = filter_var($data['slide_number'] ?? 0, FILTER_VALIDATE_INT);
     if ($slideNumber === false) $slideNumber = 0;
     
@@ -264,21 +260,14 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
         return;
     }
     
-    // Validar country_code y phone_number si se proporcionan
-    $countryCodeOnly = null;
-    if (!empty($countryCode)) {
-        $countryCodeOnly = (int)$countryCode;
-        if ($countryCodeOnly < 1 || $countryCodeOnly > 9999) {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'error' => 'Código de país no válido']);
-            return;
-        }
-    }
-    if (!empty($phoneNumber) && (strlen($phoneNumber) < 6 || strlen($phoneNumber) > 15)) {
+    // Validar email si se proporciona
+    $emailValidation = validateEmail($emailInput);
+    if (!$emailValidation['valid']) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Número de teléfono no válido']);
+        echo json_encode(['success' => false, 'error' => $emailValidation['error']]);
         return;
     }
+    $email = $emailValidation['value'];
     
     // Detectar contenido sospechoso (XSS básico)
     $suspiciousPatterns = ['/script/i', '/javascript/i', '/on\w+=/i', '/<iframe/i', '/<object/i'];
@@ -292,23 +281,13 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
     }
     
     try {
-        // INSERT directo con country_code_only y phone_number separados
         $stmt = $pdo->prepare("
-            INSERT INTO presentation_questions (guest_id, sponsor_id, question, country_code_only, phone_number, slide_number, ip_address)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO presentation_questions (guest_id, sponsor_id, question, email, slide_number, ip_address)
+            VALUES (?, ?, ?, ?, ?, ?)
         ");
-        $stmt->execute([
-            $guestId,
-            $sponsorId,
-            $question,
-            $countryCodeOnly,
-            !empty($phoneNumber) ? $phoneNumber : null,
-            $slideNumber,
-            $clientIp
-        ]);
+        $stmt->execute([$guestId, $sponsorId, $question, $email, $slideNumber, $clientIp]);
         
         $newId = $pdo->lastInsertId();
-        error_log("DEBUG: Question inserted successfully with ID: $newId");
         
         echo json_encode([
             'success' => true,
@@ -316,29 +295,14 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
             'question' => [
                 'id' => $newId,
                 'question' => $question,
-                'country_code_only' => $countryCodeOnly,
-                'phone_number' => $phoneNumber,
+                'email' => $email,
                 'slide_number' => $slideNumber,
                 'created_at' => date('Y-m-d H:i:s'),
                 'status' => 'pending'
             ]
         ]);
     } catch (PDOException $e) {
-        $errorDetails = [
-            'message' => $e->getMessage(),
-            'code' => $e->getCode(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'trace' => $e->getTraceAsString(),
-            'guest_id' => $guestId,
-            'sponsor_id' => $sponsorId,
-            'question' => substr($question, 0, 100),
-            'country_code_only' => $countryCodeOnly,
-            'phone_number' => $phoneNumber,
-            'slide_number' => $slideNumber,
-            'client_ip' => $clientIp
-        ];
-        error_log("Create question PDO error: " . json_encode($errorDetails));
+        error_log("Create question PDO error: " . $e->getMessage());
         http_response_code(500);
         echo json_encode(['success' => false, 'error' => 'Error al guardar la pregunta']);
     }
@@ -392,75 +356,53 @@ function handleDeleteQuestion($pdo, $guestId, $data) {
 }
 
 /**
- * Actualizar WhatsApp del invitado (para todas sus preguntas) - Con seguridad
+ * Actualizar email del invitado (para todas sus preguntas)
  */
-function handleUpdateWhatsapp($pdo, $guestId, $data, $clientIp) {
-    // Recibir country_code y phone_number como campos separados
-    $countryCode = preg_replace('/[^0-9]/', '', $data['country_code'] ?? '');
-    $phoneNumber = preg_replace('/[^0-9]/', '', $data['phone_number'] ?? '');
+function handleUpdateEmail($pdo, $guestId, $data) {
+    $emailInput = sanitizeInput($data['email'] ?? '', 100);
+    $emailValidation = validateEmail($emailInput);
     
-    // Validar
-    $countryCodeOnly = null;
-    if (!empty($countryCode)) {
-        $countryCodeOnly = (int)$countryCode;
-        if ($countryCodeOnly < 1 || $countryCodeOnly > 9999) {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'error' => 'Código de país no válido']);
-            return;
-        }
-    }
-    if (empty($phoneNumber) || strlen($phoneNumber) < 6 || strlen($phoneNumber) > 15) {
+    if (!$emailValidation['valid'] || empty($emailValidation['value'])) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Número de teléfono no válido']);
+        echo json_encode(['success' => false, 'error' => $emailValidation['error'] ?? 'Email requerido']);
         return;
     }
     
+    $email = $emailValidation['value'];
+    
     try {
-        // UPDATE directo con country_code_only y phone_number
         $stmt = $pdo->prepare("
-            UPDATE presentation_questions
-            SET country_code_only = ?, phone_number = ?
-            WHERE guest_id = ?
+            UPDATE presentation_questions SET email = ? WHERE guest_id = ?
         ");
-        $stmt->execute([$countryCodeOnly, $phoneNumber, $guestId]);
-        
-        echo json_encode(['success' => true, 'message' => 'WhatsApp actualizado']);
+        $stmt->execute([$email, $guestId]);
+        echo json_encode(['success' => true, 'message' => 'Email actualizado']);
     } catch (PDOException $e) {
-        error_log("Update WhatsApp error: " . $e->getMessage());
+        error_log("Update email error: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(['success' => false, 'error' => 'Error al actualizar WhatsApp']);
+        echo json_encode(['success' => false, 'error' => 'Error al actualizar email']);
     }
 }
 
 /**
- * Obtener información de WhatsApp guardada del invitado
+ * Obtener email guardado del invitado
  */
-function handleGetWhatsAppInfo($pdo, $guestId) {
+function handleGetEmailInfo($pdo, $guestId) {
     try {
         $stmt = $pdo->prepare("
-            SELECT country_code_only, phone_number 
-            FROM presentation_questions 
-            WHERE guest_id = ? AND phone_number IS NOT NULL 
-            ORDER BY created_at DESC 
-            LIMIT 1
+            SELECT email FROM presentation_questions
+            WHERE guest_id = ? AND email IS NOT NULL
+            ORDER BY created_at DESC LIMIT 1
         ");
         $stmt->execute([$guestId]);
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        if ($result) {
-            echo json_encode([
-                'success' => true,
-                'data' => [
-                    'country_code_only' => $result['country_code_only'],
-                    'phone_number' => $result['phone_number']
-                ]
-            ]);
-        } else {
-            echo json_encode(['success' => true, 'data' => null]);
-        }
+        echo json_encode([
+            'success' => true,
+            'data' => $result ? ['email' => $result['email']] : null
+        ]);
     } catch (PDOException $e) {
-        error_log("Get WhatsApp info error: " . $e->getMessage());
+        error_log("Get email info error: " . $e->getMessage());
         http_response_code(500);
-        echo json_encode(['success' => false, 'error' => 'Error al obtener información de WhatsApp']);
+        echo json_encode(['success' => false, 'error' => 'Error al obtener email']);
     }
 }
