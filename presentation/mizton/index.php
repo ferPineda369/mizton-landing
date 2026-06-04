@@ -15,8 +15,8 @@ if (!empty($refCode) && preg_match('/^[a-zA-Z0-9]+$/', $refCode)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mizton - Ecosistema de Tokenización RWA</title>
-    <link rel="stylesheet" href="../css/presentation.css?v=15">
-    <link rel="stylesheet" href="styles-extra.css?v=15">
+    <link rel="stylesheet" href="../css/presentation.css?v=16">
+    <link rel="stylesheet" href="styles-extra.css?v=16">
 </head>
 <body>
     <div class="presentation-container">
@@ -1252,7 +1252,7 @@ if (!empty($refCode) && preg_match('/^[a-zA-Z0-9]+$/', $refCode)) {
         </div>
     </div>
 
-    <script src="../includes/presentation-common.js?v=15"></script>
-    <script src="script.js?v=15"></script>
+    <script src="../includes/presentation-common.js?v=16"></script>
+    <script src="script.js?v=16"></script>
 </body>
 </html>

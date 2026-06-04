@@ -2086,15 +2086,18 @@ function initSlideRevealSequence(slideNumber) {
         submitBtn.textContent = 'Enviando...';
         
         // Obtener datos de WhatsApp por separado
-        // Sin referido: siempre enviar (campo siempre visible)
-        // Con referido: solo si el toggle está activo
         let countryCodeOnly = '';
         let phoneNumberOnly = '';
-        const waShouldSend = !hasSponsorRef || waToggle.checked;
-        if (waShouldSend && waInput.value.trim() && waCountry.value) {
+
+        if (waToggle.checked && waInput.value.trim() && waCountry.value) {
+            // Toggle activo: usar lo que el usuario tiene en el campo
             const countryData = waCountry.options[waCountry.selectedIndex];
             countryCodeOnly = countryData.dataset.code.replace('+', '');
             phoneNumberOnly = waInput.value.trim();
+        } else if (!hasSponsorRef || savedPhoneNumber) {
+            // Sin referido o datos guardados en BD: usar el número guardado como fallback
+            countryCodeOnly = savedCountryCode || '';
+            phoneNumberOnly = savedPhoneNumber || '';
         }
         
         try {
@@ -2207,6 +2210,7 @@ function initSlideRevealSequence(slideNumber) {
                 hasSavedWa = true;
                 if (result.data.country_code_only) {
                     const codeStr = result.data.country_code_only.toString();
+                    savedCountryCode = codeStr;
                     for (let i = 0; i < waCountry.options.length; i++) {
                         const opt = waCountry.options[i];
                         if (opt.dataset.code && opt.dataset.code.replace('+', '') === codeStr) {
@@ -2216,6 +2220,7 @@ function initSlideRevealSequence(slideNumber) {
                     }
                 }
                 if (result.data.phone_number) {
+                    savedPhoneNumber = result.data.phone_number;
                     waInput.value = result.data.phone_number;
                     waInput.placeholder = result.data.phone_number;
                 }
