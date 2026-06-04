@@ -153,7 +153,8 @@ function ensureTable($pdo) {
             `guest_id` varchar(50) NOT NULL COMMENT 'ID de sesión del invitado',
             `sponsor_id` int(11) DEFAULT NULL COMMENT 'ID del usuario patrocinador',
             `question` text NOT NULL COMMENT 'Pregunta formulada',
-            `whatsapp` varchar(30) DEFAULT NULL COMMENT 'WhatsApp del invitado (opcional)',
+            `country_code` varchar(10) DEFAULT NULL COMMENT 'Código de país del WhatsApp',
+            `phone_number` varchar(30) DEFAULT NULL COMMENT 'Número de WhatsApp (sin código de país)',
             `slide_number` int(11) DEFAULT NULL COMMENT 'Slide donde se formuló la pregunta',
             `ip_address` varchar(45) DEFAULT NULL COMMENT 'IP del cliente',
             `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -201,6 +202,39 @@ function ensureTable($pdo) {
         }
     } catch (PDOException $e) {
         error_log("Migration sponsor_id error: " . $e->getMessage());
+    }
+    
+    // Migración: separar whatsapp en country_code y phone_number
+    try {
+        $stmt = $pdo->query("SHOW COLUMNS FROM `presentation_questions` LIKE 'whatsapp'");
+        $column = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($column) {
+            // Agregar nuevas columnas
+            $pdo->exec("ALTER TABLE `presentation_questions` ADD COLUMN `country_code` varchar(10) DEFAULT NULL COMMENT 'Código de país del WhatsApp' AFTER `sponsor_id`");
+            $pdo->exec("ALTER TABLE `presentation_questions` ADD COLUMN `phone_number` varchar(30) DEFAULT NULL COMMENT 'Número de WhatsApp (sin código de país)' AFTER `country_code`");
+            
+            // Migrar datos existentes
+            $pdo->exec("
+                UPDATE `presentation_questions` 
+                SET 
+                    country_code = CASE 
+                        WHEN whatsapp LIKE '+%' THEN SUBSTRING(whatsapp, 1, 4)
+                        WHEN whatsapp REGEXP '^[0-9]{2,3}' THEN SUBSTRING(whatsapp, 1, 3)
+                        ELSE NULL
+                    END,
+                    phone_number = CASE 
+                        WHEN whatsapp LIKE '+%' THEN SUBSTRING(whatsapp, 5)
+                        WHEN whatsapp REGEXP '^[0-9]{2,3}' THEN SUBSTRING(whatsapp, 4)
+                        ELSE whatsapp
+                    END
+                WHERE whatsapp IS NOT NULL AND whatsapp != ''
+            ");
+            
+            // Eliminar columna antigua
+            $pdo->exec("ALTER TABLE `presentation_questions` DROP COLUMN `whatsapp`");
+        }
+    } catch (PDOException $e) {
+        error_log("Migration whatsapp separation error: " . $e->getMessage());
     }
 }
 
@@ -320,14 +354,31 @@ function handleCreateQuestion($pdo, $guestId, $data, $clientIp) {
     
     try {
         $stmt = $pdo->prepare("
-            INSERT INTO presentation_questions (guest_id, sponsor_id, question, whatsapp, slide_number, ip_address)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO presentation_questions (guest_id, sponsor_id, question, country_code, phone_number, slide_number, ip_address)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
+        
+        // Separar country_code y phone_number del whatsapp validado
+        $countryCode = null;
+        $phoneNumber = $whatsapp;
+        
+        if ($whatsapp) {
+            // Detectar si incluye código de país
+            if (preg_match('/^\+(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
+                $countryCode = '+' . $matches[1];
+                $phoneNumber = $matches[2];
+            } elseif (preg_match('/^(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
+                $countryCode = $matches[1];
+                $phoneNumber = $matches[2];
+            }
+        }
+        
         $stmt->execute([
             $guestId,
             $sponsorId,
             $question,
-            $whatsapp,
+            $countryCode,
+            $phoneNumber,
             $slideNumber,
             $clientIp
         ]);
@@ -416,21 +467,36 @@ function handleUpdateWhatsapp($pdo, $guestId, $data, $clientIp) {
     
     $whatsapp = $waValidation['value'];
     
+    // Separar country_code y phone_number
+    $countryCode = null;
+    $phoneNumber = $whatsapp;
+    
+    if ($whatsapp) {
+        // Detectar si incluye código de país
+        if (preg_match('/^\+(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
+            $countryCode = '+' . $matches[1];
+            $phoneNumber = $matches[2];
+        } elseif (preg_match('/^(\d{1,4})(\d+)$/', $whatsapp, $matches)) {
+            $countryCode = $matches[1];
+            $phoneNumber = $matches[2];
+        }
+    }
+    
     // Limitar número de actualizaciones (máximo 5 por sesión)
     try {
         $stmt = $pdo->prepare("
             SELECT COUNT(*) FROM presentation_questions 
-            WHERE guest_id = ? AND whatsapp IS NOT NULL
+            WHERE guest_id = ? AND country_code IS NOT NULL
         ");
         $stmt->execute([$guestId]);
         $hasPrevious = $stmt->fetchColumn() > 0;
         
         $stmt = $pdo->prepare("
             UPDATE presentation_questions
-            SET whatsapp = ?
+            SET country_code = ?, phone_number = ?
             WHERE guest_id = ?
         ");
-        $stmt->execute([$whatsapp, $guestId]);
+        $stmt->execute([$countryCode, $phoneNumber, $guestId]);
         
         echo json_encode(['success' => true, 'message' => 'WhatsApp actualizado']);
     } catch (PDOException $e) {

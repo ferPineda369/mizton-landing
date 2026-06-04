@@ -1867,6 +1867,8 @@ function initSlideRevealSequence(slideNumber) {
     
     // Estado de WhatsApp
     let savedWhatsApp = null;
+    let savedCountryCode = null;
+    let savedPhoneNumber = null;
     let hasSponsorRef = false;
     let whatsappChanged = false;
     
@@ -2087,7 +2089,7 @@ function initSlideRevealSequence(slideNumber) {
         let whatsapp = '';
         if (waToggle.checked && waInput.value.trim() && waCountry.value) {
             const countryData = waCountry.options[waCountry.selectedIndex];
-            const code = countryData.dataset.code.replace('+', '');
+            const code = countryData.dataset.code;
             whatsapp = code + waInput.value.trim();
         }
         
@@ -2187,6 +2189,18 @@ function initSlideRevealSequence(slideNumber) {
         const existingMsg = waSection.querySelector('.question-whatsapp-required');
         if (existingMsg) existingMsg.remove();
         
+        // Restaurar selección guardada
+        const savedCountry = localStorage.getItem('savedWaCountry');
+        const savedPhone = localStorage.getItem('savedWaPhone');
+        
+        if (savedCountry) {
+            waCountry.value = savedCountry;
+        }
+        if (savedPhone) {
+            waInput.value = savedPhone;
+            waInput.placeholder = savedPhone;
+        }
+        
         if (!hasSponsorRef) {
             // Mostrar mensaje de WhatsApp obligatorio
             const requiredMsg = document.createElement('div');
@@ -2203,6 +2217,11 @@ function initSlideRevealSequence(slideNumber) {
             waField.style.display = 'block';
             waInput.disabled = false;
             waCountry.disabled = false;
+            
+            // Si ya hay datos guardados, ocultar checkbox
+            if (savedCountry && savedPhone) {
+                waToggle.style.display = 'none';
+            }
         } else {
             // WhatsApp opcional si hay referido
             waToggle.checked = false;
@@ -2253,7 +2272,7 @@ function initSlideRevealSequence(slideNumber) {
         }
         
         const countryData = waCountry.options[waCountry.selectedIndex];
-        const code = countryData.dataset.code.replace('+', '');
+        const code = countryData.dataset.code;
         const fullNumber = code + phoneNumber;
         
         try {
@@ -2270,8 +2289,14 @@ function initSlideRevealSequence(slideNumber) {
             
             if (data.success) {
                 savedWhatsApp = fullNumber;
+                savedCountryCode = code;
+                savedPhoneNumber = phoneNumber;
                 whatsappChanged = false;
                 hideSaveButton();
+                
+                // Guardar en localStorage para recordar en futuras preguntas
+                localStorage.setItem('savedWaCountry', countryCode);
+                localStorage.setItem('savedWaPhone', phoneNumber);
                 
                 // Si no hay referido, ocultar el checkbox ya que es obligatorio
                 if (!hasSponsorRef) {
@@ -2279,7 +2304,7 @@ function initSlideRevealSequence(slideNumber) {
                 }
                 
                 // Actualizar placeholder con el número guardado
-                waInput.placeholder = fullNumber;
+                waInput.placeholder = phoneNumber;
                 
                 // Mostrar confirmación
                 waSaveBtn.textContent = '✓';
