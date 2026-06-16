@@ -80,15 +80,14 @@ function initializeSlideElements(slideNumber) {
             }
             break;
         case 7:
-            // Asegurar que el simulador esté visible
-            const simulatorFrame = document.querySelector('.simulator-frame');
-            if (simulatorFrame) {
-                simulatorFrame.style.opacity = '0';
-                setTimeout(() => {
-                    simulatorFrame.style.transition = 'opacity 0.5s ease';
-                    simulatorFrame.style.opacity = '1';
-                }, 300);
-            }
+            // Slide 7 ahora es el Roadmap (sin simulador)
+            break;
+        case 8:
+            // Slide 8 está bloqueado (simulador oculto)
+            // Saltar automáticamente al siguiente slide
+            setTimeout(() => {
+                goToSlide(9);
+            }, 100);
             break;
     }
 }
@@ -167,7 +166,12 @@ function setupSwipeGestures() {
 function updateProgressBar() {
     const progressFill = document.getElementById('progress-fill');
     if (progressFill) {
-        const progress = (currentSlide / totalSlides) * 100;
+        // Ajustar para el slide bloqueado (slide 8)
+        let adjustedSlide = currentSlide;
+        if (currentSlide > 8) {
+            adjustedSlide = currentSlide - 1;
+        }
+        const progress = (adjustedSlide / (totalSlides - 1)) * 100;
         progressFill.style.width = `${progress}%`;
     }
 }
@@ -176,8 +180,14 @@ function updateSlideCounter() {
     const currentSlideEl = document.getElementById('current-slide');
     const totalSlidesEl = document.getElementById('total-slides');
     
-    if (currentSlideEl) currentSlideEl.textContent = currentSlide;
-    if (totalSlidesEl) totalSlidesEl.textContent = totalSlides;
+    // Ajustar para el slide bloqueado
+    let displaySlide = currentSlide;
+    if (currentSlide > 8) {
+        displaySlide = currentSlide - 1;
+    }
+    
+    if (currentSlideEl) currentSlideEl.textContent = displaySlide;
+    if (totalSlidesEl) totalSlidesEl.textContent = totalSlides - 1;
 }
 
 // --------------------------------------------------------------------------
