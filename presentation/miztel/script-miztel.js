@@ -211,35 +211,43 @@ function initializeGrowthChart() {
     // Limpiar canvas
     ctx.clearRect(0, 0, chartWidth, chartHeight);
     
-    // Dibujar fondo
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
+    // Dibujar fondo con gradiente
+    const bgGradient = ctx.createLinearGradient(0, 0, chartWidth, chartHeight);
+    bgGradient.addColorStop(0, 'rgba(26, 26, 46, 0.9)');
+    bgGradient.addColorStop(1, 'rgba(15, 52, 96, 0.9)');
+    ctx.fillStyle = bgGradient;
     ctx.fillRect(0, 0, chartWidth, chartHeight);
     
     // Configurar estilos
-    ctx.strokeStyle = '#00d4ff';
-    ctx.fillStyle = '#00d4ff';
+    ctx.strokeStyle = '#00d9ff';
+    ctx.fillStyle = '#00d9ff';
     ctx.lineWidth = 3;
-    ctx.font = '14px Arial';
+    ctx.font = '14px "Space Grotesk", sans-serif';
     
     // Encontrar valores máximos
     const maxValue = Math.max(...data.values);
     const xStep = plotWidth / (data.labels.length - 1);
     
-    // Dibujar líneas de grid
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+    // Dibujar líneas de grid mejoradas
+    ctx.strokeStyle = 'rgba(0, 217, 255, 0.1)';
     ctx.lineWidth = 1;
     
-    // Grid horizontal
+    // Grid horizontal con efecto neon
     for (let i = 0; i <= 5; i++) {
         const y = padding + (plotHeight / 5) * i;
+        
+        // Línea de grid con glow
+        ctx.shadowColor = 'rgba(0, 217, 255, 0.3)';
+        ctx.shadowBlur = 10;
         ctx.beginPath();
         ctx.moveTo(padding, y);
         ctx.lineTo(padding + plotWidth, y);
         ctx.stroke();
+        ctx.shadowBlur = 0;
         
-        // Etiquetas de valores
+        // Etiquetas de valores con efecto neon
         const value = Math.round(maxValue - (maxValue / 5) * i);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
         ctx.textAlign = 'right';
         ctx.fillText(formatNumber(value), padding - 10, y + 5);
     }
@@ -253,68 +261,107 @@ function initializeGrowthChart() {
         ctx.stroke();
         
         // Etiquetas de años
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
         ctx.textAlign = 'center';
         ctx.fillText(data.labels[i], x, padding + plotHeight + 25);
     }
     
-    // Dibujar línea de crecimiento con gradiente
+    // Dibujar línea de crecimiento con gradiente mejorado
     const gradient = ctx.createLinearGradient(0, padding, 0, padding + plotHeight);
-    gradient.addColorStop(0, 'rgba(0, 212, 255, 0.8)');
-    gradient.addColorStop(1, 'rgba(0, 212, 255, 0.1)');
+    gradient.addColorStop(0, 'rgba(0, 217, 255, 0.9)');
+    gradient.addColorStop(0.5, 'rgba(255, 0, 128, 0.6)');
+    gradient.addColorStop(1, 'rgba(0, 217, 255, 0.1)');
     
-    ctx.strokeStyle = '#00d4ff';
-    ctx.lineWidth = 3;
+    // Línea principal con efecto glow
+    ctx.shadowColor = 'rgba(0, 217, 255, 0.8)';
+    ctx.shadowBlur = 20;
+    ctx.strokeStyle = '#00d9ff';
+    ctx.lineWidth = 4;
     ctx.beginPath();
     
+    // Crear curva suave en lugar de línea recta
     data.values.forEach((value, index) => {
         const x = padding + xStep * index;
         const y = padding + plotHeight - (value / maxValue) * plotHeight;
         
         if (index === 0) {
             ctx.moveTo(x, y);
+        } else if (index === 1) {
+            // Primer segmento curvo
+            const prevX = padding + xStep * (index - 1);
+            const prevY = padding + plotHeight - (data.values[index - 1] / maxValue) * plotHeight;
+            const cpX = (prevX + x) / 2;
+            const cpY = (prevY + y) / 2 - 20;
+            ctx.quadraticCurveTo(cpX, cpY, x, y);
         } else {
             ctx.lineTo(x, y);
         }
     });
     
     ctx.stroke();
+    ctx.shadowBlur = 0;
     
-    // Rellenar área bajo la curva
+    // Rellenar área bajo la curva con gradiente
     ctx.lineTo(padding + plotWidth, padding + plotHeight);
     ctx.lineTo(padding, padding + plotHeight);
     ctx.closePath();
     ctx.fillStyle = gradient;
     ctx.fill();
     
-    // Dibujar puntos de datos
+    // Dibujar puntos de datos con efecto neon
     data.values.forEach((value, index) => {
         const x = padding + xStep * index;
         const y = padding + plotHeight - (value / maxValue) * plotHeight;
         
-        // Punto exterior
-        ctx.beginPath();
-        ctx.arc(x, y, 8, 0, Math.PI * 2);
-        ctx.fillStyle = '#00d4ff';
-        ctx.fill();
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        
-        // Valor en el punto
         if (value > 0) {
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 12px Arial';
+            // Glow exterior
+            ctx.shadowColor = 'rgba(0, 217, 255, 0.8)';
+            ctx.shadowBlur = 20;
+            ctx.beginPath();
+            ctx.arc(x, y, 12, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(0, 217, 255, 0.3)';
+            ctx.fill();
+            
+            // Punto principal
+            ctx.shadowBlur = 0;
+            ctx.beginPath();
+            ctx.arc(x, y, 8, 0, Math.PI * 2);
+            const pointGradient = ctx.createRadialGradient(x, y, 0, x, y, 8);
+            pointGradient.addColorStop(0, '#ffffff');
+            pointGradient.addColorStop(0.7, '#00d9ff');
+            pointGradient.addColorStop(1, '#0099cc');
+            ctx.fillStyle = pointGradient;
+            ctx.fill();
+            
+            // Borde del punto
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Valor con efecto neon
+            ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 14px "Space Grotesk", sans-serif';
             ctx.textAlign = 'center';
-            ctx.fillText(formatNumber(value), x, y - 15);
+            ctx.fillText(formatNumber(value), x, y - 20);
+            ctx.shadowBlur = 0;
         }
     });
     
-    // Título del gráfico
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 18px Arial';
+    // Título del gráfico con efecto neon
+    ctx.shadowColor = 'rgba(0, 217, 255, 0.8)';
+    ctx.shadowBlur = 20;
+    ctx.fillStyle = '#00d9ff';
+    ctx.font = 'bold 24px "Space Grotesk", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Líneas Activas - Proyección 3 Años', chartWidth / 2, 30);
+    ctx.fillText('Líneas Activas - Proyección 3 Años', chartWidth / 2, 40);
+    
+    // Subtítulo
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.font = '14px "Space Grotesk", sans-serif';
+    ctx.fillText('Crecimiento exponencial del ecosistema MIZTEL', chartWidth / 2, 65);
     
     window.growthChartInitialized = true;
 }

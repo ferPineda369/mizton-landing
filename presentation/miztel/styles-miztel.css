@@ -1,41 +1,106 @@
 /* ==========================================================================
-   MIZTEL PRESENTATION - ESTILOS PERSONALIZADOS
+   MIZTEL PRESENTATION - ESTILOS PERSONALIZADOS (DARK-NEON)
+   Inspirado en el sitio oficial Miztel OMV
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
-   1. COLORES Y VARIABLES MIZTEL
+   1. COLORES Y VARIABLES MIZTEL (DARK-NEON)
    -------------------------------------------------------------------------- */
 :root {
-    --miztel-primary: #00d4ff;
-    --miztel-secondary: #7c3aed;
-    --miztel-accent: #f59e0b;
-    --miztel-success: #10b981;
-    --miztel-danger: #ef4444;
-    --miztel-dark: #1e293b;
-    --miztel-light: #f8fafc;
-    --miztel-gradient: linear-gradient(135deg, var(--miztel-primary) 0%, var(--miztel-secondary) 100%);
+  --cyber:      #00d9ff;
+  --magenta:    #ff0080;
+  --terracota:  #e85d04;
+  --purple:     #7b2ff7;
+  --green:      #00c896;
+  --bg-1:       #1a1a2e;
+  --bg-2:       #16213e;
+  --bg-3:       #0f3460;
+  --text:       #ffffff;
+  --text-muted: rgba(255,255,255,0.6);
+  --border:     rgba(0,217,255,0.15);
+  --card-bg:    rgba(255,255,255,0.04);
+  --card-hover: rgba(0,217,255,0.08);
+  --radius:     16px;
+  --radius-lg:  24px;
+  --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+  
+  /* Variables compatibles con diseño anterior */
+  --miztel-primary: var(--cyber);
+  --miztel-secondary: var(--purple);
+  --miztel-accent: var(--terracota);
+  --miztel-success: var(--green);
+  --miztel-danger: var(--magenta);
+  --miztel-dark: var(--bg-1);
+  --miztel-light: var(--text);
+  --miztel-gradient: linear-gradient(45deg, var(--cyber), var(--magenta));
 }
 
 /* --------------------------------------------------------------------------
-   2. SLIDE 1: PORTADA
+   2. ESTILOS GLOBALES Y TIPOGRAFÍA
    -------------------------------------------------------------------------- */
+body {
+  background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+  background-attachment: fixed;
+  color: var(--text);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.presentation-container {
+  background: transparent;
+}
+
+.slide {
+  background: rgba(26, 26, 46, 0.8);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.slide-title {
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, var(--cyber), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.slide-subtitle {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: var(--text-muted);
+  max-width: 640px;
+  margin: 0 auto 2rem auto;
+  line-height: 1.7;
+}
+/* --------------------------------------------------------------------------
+   3. SLIDE 1: PORTADA
+   -------------------------------------------------------------------------- */
+
 .hero-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    text-align: center;
-    background: radial-gradient(circle at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  background: radial-gradient(circle at center, rgba(0, 217, 255, 0.2) 0%, transparent 70%);
 }
 
 .main-title {
-    font-size: 4rem;
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 2rem;
-    color: #fff;
-    text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin-bottom: 2rem;
+  color: var(--text);
+  text-shadow: 0 0 30px rgba(0, 217, 255, 0.5);
 }
 
 .title-line {
@@ -44,11 +109,11 @@
 }
 
 .title-line.highlight {
-    background: var(--miztel-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 4.5rem;
+  background: linear-gradient(90deg, var(--cyber), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: clamp(3.5rem, 9vw, 8rem);
 }
 
 .logo-container {
@@ -56,22 +121,22 @@
 }
 
 .miztel-logo {
-    font-size: 3rem;
-    font-weight: 900;
-    padding: 1.5rem 3rem;
-    border: 3px solid var(--miztel-primary);
-    border-radius: 20px;
-    background: rgba(0, 212, 255, 0.1);
-    color: var(--miztel-primary);
-    text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
-    letter-spacing: 0.2em;
-    box-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  padding: 1.5rem 3rem;
+  border: 3px solid var(--cyber);
+  border-radius: var(--radius);
+  background: rgba(0, 217, 255, 0.1);
+  color: var(--cyber);
+  text-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
+  letter-spacing: 0.2em;
+  box-shadow: 0 0 40px rgba(0, 217, 255, 0.3);
 }
 
 .subtitle {
-    font-size: 1.5rem;
-    color: #94a3b8;
-    margin-top: 2rem;
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  color: var(--text-muted);
+  margin-top: 2rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -85,60 +150,62 @@
 }
 
 .market-card {
-    padding: 2rem;
-    border-radius: 20px;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.05);
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+  padding: 2rem;
+  border-radius: var(--radius);
+  text-align: center;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  backdrop-filter: blur(10px);
+  transition: var(--transition);
 }
 
 .market-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 212, 255, 0.3);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 217, 255, 0.3);
+  border-color: var(--cyber);
 }
 
 .market-card.primary {
-    border-color: var(--miztel-primary);
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+  border-color: var(--cyber);
+  box-shadow: 0 0 30px rgba(0, 217, 255, 0.2);
 }
 
 .market-card.warning {
-    border-color: var(--miztel-accent);
-    box-shadow: 0 0 30px rgba(245, 158, 11, 0.2);
+  border-color: var(--terracota);
+  box-shadow: 0 0 30px rgba(232, 93, 4, 0.2);
 }
 
 .market-card.danger {
-    border-color: var(--miztel-danger);
-    box-shadow: 0 0 30px rgba(239, 68, 68, 0.2);
+  border-color: var(--magenta);
+  box-shadow: 0 0 30px rgba(255, 0, 128, 0.2);
 }
 
 .market-number {
-    font-size: 3rem;
-    font-weight: 900;
-    margin-bottom: 0.5rem;
-    color: #fff;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 900;
+  margin-bottom: 0.5rem;
+  color: var(--text);
 }
 
 .market-label {
-    font-size: 1.2rem;
-    color: #94a3b8;
+  font-size: 1.2rem;
+  color: var(--text-muted);
 }
 
 .market-stats {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 2rem;
-    backdrop-filter: blur(10px);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
 }
 
 .stat-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
 }
 
 .stat-row:last-child {
@@ -146,28 +213,28 @@
 }
 
 .stat-row.highlight {
-    background: rgba(0, 212, 255, 0.1);
-    margin: 0 -2rem;
-    padding: 1rem 2rem;
-    border-radius: 10px;
+  background: rgba(0, 217, 255, 0.1);
+  margin: 0 -2rem;
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
 }
 
 .stat-row.success {
-    background: rgba(16, 185, 129, 0.1);
-    margin: 0 -2rem;
-    padding: 1rem 2rem;
-    border-radius: 10px;
+  background: rgba(0, 200, 150, 0.1);
+  margin: 0 -2rem;
+  padding: 1rem 2rem;
+  border-radius: var(--radius);
 }
 
 .stat-label {
-    font-size: 1.1rem;
-    color: #cbd5e1;
+  font-size: 1.1rem;
+  color: var(--text-muted);
 }
 
 .stat-value {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
 }
 
 /* --------------------------------------------------------------------------
@@ -181,18 +248,18 @@
 }
 
 .feature-card {
-    text-align: center;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+  text-align: center;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  transition: var(--transition);
 }
 
 .feature-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--miztel-primary);
-    box-shadow: 0 15px 30px rgba(0, 212, 255, 0.3);
+  transform: translateY(-5px);
+  border-color: var(--cyber);
+  box-shadow: 0 15px 30px rgba(0, 217, 255, 0.3);
 }
 
 .feature-icon {
@@ -201,55 +268,56 @@
 }
 
 .feature-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--miztel-primary);
-    margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--cyber);
+  margin-bottom: 0.5rem;
 }
 
 .feature-desc {
-    color: #94a3b8;
-    font-size: 1rem;
+  color: var(--text-muted);
+  font-size: 1rem;
 }
 
 .tech-stack {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 2rem;
-    margin-top: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-top: 2rem;
+  border: 1px solid var(--border);
 }
 
 .tech-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
 }
 
 .tech-item:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .tech-label {
-    color: #94a3b8;
-    font-size: 1.1rem;
+  color: var(--text-muted);
+  font-size: 1.1rem;
 }
 
 .tech-value {
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.2rem;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1.2rem;
 }
 
 /* --------------------------------------------------------------------------
    5. SLIDE 4: DISTRIBUCIÓN
    -------------------------------------------------------------------------- */
 .distribution-chart {
-    display: flex;
-    align-items: center;
-    gap: 3rem;
-    margin: 3rem 0;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  margin: 3rem 0;
 }
 
 .chart-container {
@@ -259,18 +327,18 @@
 }
 
 .pie-chart {
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    position: relative;
-    background: conic-gradient(
-        var(--miztel-primary) 0% 65%,
-        var(--miztel-secondary) 65% 85%,
-        var(--miztel-success) 85% 90%,
-        var(--miztel-accent) 90% 95%,
-        var(--miztel-danger) 95% 100%
-    );
-    box-shadow: 0 0 50px rgba(0, 212, 255, 0.3);
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  position: relative;
+  background: conic-gradient(
+    var(--cyber) 0% 65%,
+    var(--purple) 65% 85%,
+    var(--green) 85% 90%,
+    var(--terracota) 90% 95%,
+    var(--magenta) 95% 100%
+  );
+  box-shadow: 0 0 50px rgba(0, 217, 255, 0.3);
 }
 
 .pie-segment {
@@ -297,19 +365,20 @@
 }
 
 .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  transition: var(--transition);
 }
 
 .legend-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateX(5px);
+  background: var(--card-hover);
+  transform: translateX(5px);
 }
 
 .legend-color {
@@ -319,30 +388,30 @@
     flex-shrink: 0;
 }
 
-.legend-color.referidos { background: var(--miztel-primary); }
-.legend-color.holders { background: var(--miztel-secondary); }
-.legend-color.operativa { background: var(--miztel-success); }
-.legend-color.comunidad { background: var(--miztel-accent); }
-.legend-color.tesoreria { background: var(--miztel-danger); }
+.legend-color.referidos { background: var(--cyber); }
+.legend-color.holders { background: var(--purple); }
+.legend-color.operativa { background: var(--green); }
+.legend-color.comunidad { background: var(--terracota); }
+.legend-color.tesoreria { background: var(--magenta); }
 
 .legend-text {
-    color: #cbd5e1;
+  color: var(--text-muted);
 }
 
 .legend-text strong {
-    color: #fff;
-    display: block;
-    margin-bottom: 0.25rem;
+  color: var(--text);
+  display: block;
+  margin-bottom: 0.25rem;
 }
 
 /* --------------------------------------------------------------------------
    6. SLIDE 5: SUPPLY
    -------------------------------------------------------------------------- */
 .supply-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 3rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 3rem 0;
 }
 
 .supply-main {
@@ -351,18 +420,18 @@
 }
 
 .supply-number {
-    font-size: 5rem;
-    font-weight: 900;
-    background: var(--miztel-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 0.5rem;
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 900;
+  background: linear-gradient(90deg, var(--cyber), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
 }
 
 .supply-label {
-    font-size: 1.5rem;
-    color: #94a3b8;
+  font-size: 1.5rem;
+  color: var(--text-muted);
 }
 
 .supply-details {
@@ -373,18 +442,18 @@
 }
 
 .supply-card {
-    text-align: center;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+  text-align: center;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  transition: var(--transition);
 }
 
 .supply-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--miztel-primary);
-    box-shadow: 0 15px 30px rgba(0, 212, 255, 0.3);
+  transform: translateY(-5px);
+  border-color: var(--cyber);
+  box-shadow: 0 15px 30px rgba(0, 217, 255, 0.3);
 }
 
 .supply-icon {
@@ -393,64 +462,67 @@
 }
 
 .supply-title {
-    font-size: 1.3rem;
-    color: var(--miztel-primary);
-    margin-bottom: 0.5rem;
-    font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--cyber);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
 }
 
 .supply-value {
-    font-size: 2rem;
-    font-weight: 900;
-    color: #fff;
-    margin-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 0.5rem;
 }
 
 .supply-desc {
-    color: #94a3b8;
-    font-size: 1rem;
+  color: var(--text-muted);
+  font-size: 1rem;
 }
 
 .tokenomics {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 2rem;
-    margin-top: 2rem;
-    width: 100%;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 2rem;
+  margin-top: 2rem;
+  width: 100%;
+  border: 1px solid var(--border);
 }
 
 .tokenomic-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
 }
 
 .tokenomic-item:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .tokenomic-label {
-    color: #94a3b8;
-    font-size: 1.1rem;
+  color: var(--text-muted);
+  font-size: 1.1rem;
 }
 
 .tokenomic-value {
-    color: #fff;
-    font-weight: 700;
-    font-size: 1.2rem;
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1.2rem;
 }
 
 /* --------------------------------------------------------------------------
    7. SLIDE 6: CRECIMIENTO
    -------------------------------------------------------------------------- */
 .growth-chart {
-    text-align: center;
-    margin: 3rem 0;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 2rem;
+  text-align: center;
+  margin: 3rem 0;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 30px rgba(0, 217, 255, 0.1);
 }
 
 #growthChart {
@@ -466,110 +538,113 @@
 }
 
 .metric-card {
-    text-align: center;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+  text-align: center;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  transition: var(--transition);
 }
 
 .metric-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--miztel-primary);
-    box-shadow: 0 15px 30px rgba(0, 212, 255, 0.3);
+  transform: translateY(-5px);
+  border-color: var(--cyber);
+  box-shadow: 0 15px 30px rgba(0, 217, 255, 0.3);
 }
 
 .metric-year {
-    font-size: 1.3rem;
-    color: var(--miztel-primary);
-    margin-bottom: 0.5rem;
-    font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--cyber);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
 }
 
 .metric-value {
-    font-size: 2rem;
-    font-weight: 900;
-    color: #fff;
-    margin-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--text);
+  margin-bottom: 0.5rem;
 }
 
 .metric-desc {
-    color: #94a3b8;
-    font-size: 1rem;
+  color: var(--text-muted);
+  font-size: 1rem;
 }
 
 /* --------------------------------------------------------------------------
    8. SLIDE 7: SIMULADOR
    -------------------------------------------------------------------------- */
 .simulator-container {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 1rem;
-    backdrop-filter: blur(10px);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
 }
 
 .simulator-frame {
-    border-radius: 15px;
-    background: #fff;
+  border-radius: var(--radius);
+  background: var(--bg-1);
+  border: 1px solid var(--border);
 }
 
 /* --------------------------------------------------------------------------
    9. SLIDE 8: ROADMAP
    -------------------------------------------------------------------------- */
 .roadmap {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin: 3rem 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin: 3rem 0;
 }
 
 .roadmap-item {
-    text-align: center;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    position: relative;
-    transition: all 0.3s ease;
+  text-align: center;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  position: relative;
+  transition: var(--transition);
 }
 
 .roadmap-item:hover {
-    transform: translateY(-5px);
-    border-color: var(--miztel-primary);
-    box-shadow: 0 15px 30px rgba(0, 212, 255, 0.3);
+  transform: translateY(-5px);
+  border-color: var(--cyber);
+  box-shadow: 0 15px 30px rgba(0, 217, 255, 0.3);
 }
 
 .roadmap-phase {
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: var(--miztel-gradient);
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 0.9rem;
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(45deg, var(--cyber), var(--magenta));
+  color: var(--text);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
 }
 
 .roadmap-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--miztel-primary);
-    margin: 1rem 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--cyber);
+  margin: 1rem 0 0.5rem 0;
 }
 
 .roadmap-desc {
-    color: #94a3b8;
-    margin-bottom: 1rem;
-    font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  font-size: 1rem;
 }
 
 .roadmap-date {
-    color: var(--miztel-accent);
-    font-weight: 700;
-    font-size: 1.1rem;
+  color: var(--terracota);
+  font-weight: 700;
+  font-size: 1.1rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -581,19 +656,19 @@
 }
 
 .cta-title {
-    font-size: 3rem;
-    font-weight: 900;
-    background: var(--miztel-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 1rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--cyber), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1rem;
 }
 
 .cta-subtitle {
-    font-size: 1.5rem;
-    color: #94a3b8;
-    margin-bottom: 3rem;
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: var(--text-muted);
+  margin-bottom: 3rem;
 }
 
 .cta-actions {
@@ -604,18 +679,18 @@
 }
 
 .cta-card {
-    text-align: center;
-    padding: 2rem;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+  text-align: center;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  transition: var(--transition);
 }
 
 .cta-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--miztel-primary);
-    box-shadow: 0 15px 30px rgba(0, 212, 255, 0.3);
+  transform: translateY(-5px);
+  border-color: var(--cyber);
+  box-shadow: 0 15px 30px rgba(0, 217, 255, 0.3);
 }
 
 .cta-icon {
@@ -624,28 +699,29 @@
 }
 
 .cta-title {
-    font-size: 1.3rem;
-    color: var(--miztel-primary);
-    margin-bottom: 0.5rem;
-    font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--cyber);
+  margin-bottom: 0.5rem;
+  font-weight: 700;
 }
 
 .cta-desc {
-    color: #94a3b8;
-    font-size: 1rem;
+  color: var(--text-muted);
+  font-size: 1rem;
 }
 
 .cta-contact {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 2rem;
-    backdrop-filter: blur(10px);
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
 }
 
 .cta-contact p {
-    margin: 0.5rem 0;
-    color: #fff;
-    font-size: 1.2rem;
+  margin: 0.5rem 0;
+  color: var(--text);
+  font-size: 1.2rem;
 }
 
 /* --------------------------------------------------------------------------
