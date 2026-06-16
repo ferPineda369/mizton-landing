@@ -50,93 +50,323 @@ $tasaCambioMXN = $exchangeRates['usd_mxn'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <style>
+        /* ESTILOS DARK-NEON MIZTEL FORZADOS */
+        :root {
+            --cyber: #00d9ff;
+            --magenta: #ff0080;
+            --terracota: #e85d04;
+            --purple: #7b2ff7;
+            --green: #00c896;
+            --bg-1: #1a1a2e;
+            --bg-2: #16213e;
+            --bg-3: #0f3460;
+            --text: #ffffff;
+            --text-muted: rgba(255,255,255,0.6);
+            --border: rgba(0,217,255,0.15);
+            --card-bg: rgba(255,255,255,0.04);
+            --card-hover: rgba(0,217,255,0.08);
+            --radius: 16px;
+            --radius-lg: 24px;
+            --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%) !important;
+            background-attachment: fixed !important;
+            color: var(--text) !important;
+            font-family: 'Space Grotesk', system-ui, sans-serif !important;
+            font-weight: 400 !important;
+            line-height: 1.6 !important;
+            overflow-x: hidden !important;
+            min-height: 100vh !important;
         }
+        
         .container-fluid {
-            padding: 20px;
+            padding: 20px !important;
         }
+        
         .card {
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-            background: rgba(255,255,255,0.95);
+            border: 1px solid var(--border) !important;
+            border-radius: var(--radius-lg) !important;
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.1) !important;
+            backdrop-filter: blur(20px) !important;
+            background: var(--card-bg) !important;
         }
+        
         .card-header {
-            border-radius: 15px 15px 0 0 !important;
-            font-weight: 600;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+            font-weight: 700 !important;
+            border-bottom: 1px solid var(--border) !important;
         }
+        
+        .card-header.bg-primary {
+            background: linear-gradient(45deg, var(--cyber), var(--magenta)) !important;
+            color: var(--text) !important;
+        }
+        
+        .card-header.bg-warning {
+            background: linear-gradient(45deg, var(--terracota), var(--magenta)) !important;
+            color: var(--text) !important;
+        }
+        
+        .card-header.bg-success {
+            background: linear-gradient(45deg, var(--green), var(--cyber)) !important;
+            color: var(--text) !important;
+        }
+        
         .btn {
-            border-radius: 10px;
-            font-weight: 500;
+            border-radius: var(--radius) !important;
+            font-weight: 600 !important;
+            border: 2px solid var(--border) !important;
+            transition: var(--transition) !important;
         }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, var(--cyber), var(--magenta)) !important;
+            border-color: var(--cyber) !important;
+            color: var(--text) !important;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 30px rgba(0, 217, 255, 0.35) !important;
+        }
+        
+        .btn-success {
+            background: linear-gradient(45deg, var(--green), var(--cyber)) !important;
+            border-color: var(--green) !important;
+            color: var(--text) !important;
+        }
+        
+        .btn-outline-success {
+            background: transparent !important;
+            border-color: var(--green) !important;
+            color: var(--green) !important;
+        }
+        
+        .btn-outline-success:hover {
+            background: var(--green) !important;
+            color: var(--text) !important;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(45deg, var(--terracota), var(--magenta)) !important;
+            border-color: var(--terracota) !important;
+            color: var(--text) !important;
+        }
+        
+        .btn-outline-warning {
+            background: transparent !important;
+            border-color: var(--terracota) !important;
+            color: var(--terracota) !important;
+        }
+        
+        .btn-outline-warning:hover {
+            background: var(--terracota) !important;
+            color: var(--text) !important;
+        }
+        
         .form-control, .form-select {
-            border-radius: 10px;
-            border: 2px solid #e0e0e0;
+            border-radius: var(--radius) !important;
+            border: 2px solid var(--border) !important;
+            background: var(--card-bg) !important;
+            color: var(--text) !important;
         }
+        
         .form-control:focus, .form-select:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            border-color: var(--cyber) !important;
+            box-shadow: 0 0 0 0.2rem rgba(0, 217, 255, 0.25) !important;
+            background: var(--card-hover) !important;
         }
+        
+        .form-select option {
+            background: var(--bg-1) !important;
+            color: var(--text) !important;
+        }
+        
         .progress {
-            height: 8px;
-            border-radius: 10px;
-            background-color: #e0e0e0;
+            height: 8px !important;
+            border-radius: var(--radius) !important;
+            background-color: var(--border) !important;
         }
+        
         .progress-bar {
-            border-radius: 10px;
+            border-radius: var(--radius) !important;
         }
+        
+        .progress-bar.bg-warning {
+            background: linear-gradient(90deg, var(--terracota), var(--magenta)) !important;
+        }
+        
+        .progress-bar.bg-success {
+            background: linear-gradient(90deg, var(--green), var(--cyber)) !important;
+        }
+        
         .badge {
-            padding: 0.5em 0.8em;
-            border-radius: 8px;
+            padding: 0.5em 0.8em !important;
+            border-radius: var(--radius) !important;
         }
+        
+        .badge.bg-warning {
+            background: linear-gradient(45deg, var(--terracota), var(--magenta)) !important;
+            color: var(--text) !important;
+        }
+        
+        .badge.bg-success {
+            background: linear-gradient(45deg, var(--green), var(--cyber)) !important;
+            color: var(--text) !important;
+        }
+        
         .table {
-            border-radius: 10px;
-            overflow: hidden;
+            border-radius: var(--radius) !important;
+            overflow: hidden !important;
+            background: var(--card-bg) !important;
         }
+        
         .table th {
-            border-top: none;
-            font-weight: 600;
-            font-size: 0.9rem;
+            border-top: none !important;
+            font-weight: 700 !important;
+            font-size: 0.9rem !important;
+            background: var(--bg-2) !important;
+            color: var(--text) !important;
+            border-bottom: 1px solid var(--border) !important;
         }
+        
+        .table td {
+            color: var(--text) !important;
+            border-bottom: 1px solid var(--border) !important;
+        }
+        
+        .table.table-warning th {
+            background: linear-gradient(45deg, var(--terracota), var(--magenta)) !important;
+        }
+        
+        .table.table-success th {
+            background: linear-gradient(45deg, var(--green), var(--cyber)) !important;
+        }
+        
         .alert {
-            border: none;
-            border-radius: 10px;
+            border: none !important;
+            border-radius: var(--radius) !important;
+            backdrop-filter: blur(10px) !important;
         }
+        
+        .alert-info {
+            background: var(--card-bg) !important;
+            border: 1px solid var(--cyber) !important;
+            color: var(--text) !important;
+        }
+        
+        .alert-warning {
+            background: rgba(232, 93, 4, 0.1) !important;
+            border: 1px solid var(--terracota) !important;
+            color: var(--text) !important;
+        }
+        
+        .alert-success {
+            background: rgba(0, 200, 150, 0.1) !important;
+            border: 1px solid var(--green) !important;
+            color: var(--text) !important;
+        }
+        
         .fade-in {
-            animation: fadeIn 0.5s ease-in;
+            animation: fadeIn 0.5s ease-in !important;
         }
+        
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        
         .moneda-badge {
-            font-size: 0.8rem;
-            opacity: 0.8;
+            font-size: 0.8rem !important;
+            opacity: 0.8 !important;
+            color: var(--text-muted) !important;
         }
+        
         .fw-bold {
-            font-weight: 600 !important;
+            font-weight: 700 !important;
+            color: var(--text) !important;
         }
+        
+        .text-warning {
+            color: var(--terracota) !important;
+        }
+        
+        .text-success {
+            color: var(--green) !important;
+        }
+        
+        .text-primary {
+            color: var(--cyber) !important;
+        }
+        
+        .text-muted {
+            color: var(--text-muted) !important;
+        }
+        
         option[style*="background-color: #fff3cd"] {
-            background-color: #fff3cd !important;
-            color: #000 !important;
-            font-weight: bold;
+            background-color: var(--terracota) !important;
+            color: var(--text) !important;
+            font-weight: bold !important;
         }
+        
         details summary {
-            cursor: pointer;
-            padding: 0.5rem;
-            border-radius: 8px;
-            transition: background-color 0.2s;
+            cursor: pointer !important;
+            padding: 0.5rem !important;
+            border-radius: var(--radius) !important;
+            transition: var(--transition) !important;
+            color: var(--text) !important;
         }
+        
         details summary:hover {
-            background-color: rgba(0,0,0,0.05);
+            background: var(--card-hover) !important;
         }
+        
         .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+            opacity: 0.6 !important;
+            cursor: not-allowed !important;
+        }
+        
+        .btn.active-moneda {
+            background: linear-gradient(45deg, var(--green), var(--cyber)) !important;
+            border-color: var(--green) !important;
+            color: var(--text) !important;
+        }
+        
+        h5 {
+            color: var(--text) !important;
+            font-weight: 700 !important;
+        }
+        
+        small {
+            color: var(--text-muted) !important;
+        }
+        
+        .bg-light {
+            background: var(--card-bg) !important;
+            border: 1px solid var(--border) !important;
+        }
+        
+        /* Forzar estilos en elementos específicos */
+        .input-group .btn {
+            border-left: none !important;
+        }
+        
+        .input-group .form-control {
+            border-right: none !important;
+        }
+        
+        .btn-group .btn {
+            border-radius: 0 !important;
+        }
+        
+        .btn-group .btn:first-child {
+            border-radius: var(--radius) 0 0 var(--radius) !important;
+        }
+        
+        .btn-group .btn:last-child {
+            border-radius: 0 var(--radius) var(--radius) 0 !important;
         }
     </style>
 </head>
