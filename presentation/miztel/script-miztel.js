@@ -20,6 +20,7 @@ class Presentation {
         this.updateUI();
         this.bindKeyboard();
         this.bindTouch();
+        this.bindWheel();
     }
 
     positionSlides() {
@@ -117,6 +118,28 @@ class Presentation {
         }, { passive: true });
     }
 
+    bindWheel() {
+        let wheelLock = false;
+        document.addEventListener('wheel', (e) => {
+            if (wheelLock) return;
+            const active = this.getActiveSlide();
+            if (!active) return;
+
+            const atBottom = active.scrollTop + active.clientHeight >= active.scrollHeight - 4;
+            const atTop    = active.scrollTop <= 4;
+
+            if (e.deltaY > 0 && atBottom) {
+                wheelLock = true;
+                this.nextSlide();
+                setTimeout(() => { wheelLock = false; }, 800);
+            } else if (e.deltaY < 0 && atTop) {
+                wheelLock = true;
+                this.prevSlide();
+                setTimeout(() => { wheelLock = false; }, 800);
+            }
+        }, { passive: true });
+    }
+
     prevSlide() {
         if (this.currentSlide > 1) this.goToSlide(this.currentSlide - 1);
     }
@@ -131,6 +154,11 @@ class Presentation {
         this.positionSlides();
         this.updateUI();
         this.onSlideChange(num);
+        // Reset scroll position after transition settles
+        setTimeout(() => {
+            const active = this.getActiveSlide();
+            if (active) active.scrollTop = 0;
+        }, 100);
     }
 
     updateUI() {
