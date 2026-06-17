@@ -5,7 +5,7 @@
 class Presentation {
     constructor() {
         this.currentSlide = 1;
-        this.totalSlides = 10;
+        this.totalSlides = 11;
         this.slides = document.querySelectorAll('.slide');
         this.currentSlideEl = document.getElementById('current-slide');
         this.totalSlidesEl  = document.getElementById('total-slides');
