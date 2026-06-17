@@ -2,90 +2,167 @@
    MIZTEL PRESENTATION - JAVASCRIPT
    ========================================================================== */
 
-// --------------------------------------------------------------------------
-// VARIABLES GLOBALES
-// --------------------------------------------------------------------------
-let currentSlide = 1;
-const totalSlides = 10;
-let isTransitioning = false;
+class Presentation {
+    constructor() {
+        this.currentSlide = 1;
+        this.totalSlides = 10;
+        this.slides = document.querySelectorAll('.slide');
+        this.currentSlideEl = document.getElementById('current-slide');
+        this.totalSlidesEl  = document.getElementById('total-slides');
+        this.progressFill   = document.getElementById('progress-fill');
 
-// --------------------------------------------------------------------------
-// INICIALIZACIÓN
-// --------------------------------------------------------------------------
-document.addEventListener('DOMContentLoaded', () => {
-    initializePresentation();
-    setupEventListeners();
-    updateProgressBar();
-    updateSlideCounter();
-});
-
-function initializePresentation() {
-    // Mostrar primer slide
-    showSlide(1);
-    
-    // Configurar navegación con teclado
-    document.addEventListener('keydown', handleKeyPress);
-    
-    // Configurar swipe para móviles
-    setupSwipeGestures();
-}
-
-// --------------------------------------------------------------------------
-// MANEJO DE SLIDES
-// --------------------------------------------------------------------------
-function showSlide(slideNumber) {
-    if (isTransitioning || slideNumber < 1 || slideNumber > totalSlides) return;
-    
-    isTransitioning = true;
-    
-    // Ocultar slide actual
-    const currentSlideEl = document.querySelector('.slide.active');
-    if (currentSlideEl) {
-        currentSlideEl.classList.remove('active');
+        this.init();
     }
-    
-    // Mostrar nuevo slide
-    const newSlideEl = document.querySelector(`[data-slide="${slideNumber}"]`);
-    if (newSlideEl) {
-        newSlideEl.classList.add('active');
-        
-        // Reiniciar animaciones
-        const animatedElements = newSlideEl.querySelectorAll('.fade-in');
-        animatedElements.forEach(el => {
-            el.style.animation = 'none';
-            el.offsetHeight; // Trigger reflow
-            el.style.animation = null;
+
+    init() {
+        if (this.totalSlidesEl) this.totalSlidesEl.textContent = this.totalSlides;
+        this.positionSlides();
+        this.updateUI();
+        this.bindKeyboard();
+        this.bindTouch();
+    }
+
+    positionSlides() {
+        this.slides.forEach((slide, index) => {
+            const num = index + 1;
+            if (num === this.currentSlide) {
+                slide.style.transform = 'translateX(0)';
+                slide.style.opacity   = '1';
+                slide.classList.add('active');
+            } else if (num < this.currentSlide) {
+                slide.style.transform = 'translateX(-100%)';
+                slide.style.opacity   = '0';
+                slide.classList.remove('active');
+            } else {
+                slide.style.transform = 'translateX(100%)';
+                slide.style.opacity   = '0';
+                slide.classList.remove('active');
+            }
         });
-        
-        // Inicializar elementos específicos del slide
-        initializeSlideElements(slideNumber);
     }
-    
-    currentSlide = slideNumber;
-    updateProgressBar();
-    updateSlideCounter();
-    
-    setTimeout(() => {
-        isTransitioning = false;
-    }, 300);
+
+    getActiveSlide() {
+        return document.querySelector('.slide.active');
+    }
+
+    canScrollDown() {
+        const s = this.getActiveSlide();
+        if (!s) return false;
+        return s.scrollHeight > s.clientHeight && s.scrollTop + s.clientHeight < s.scrollHeight - 2;
+    }
+
+    canScrollUp() {
+        const s = this.getActiveSlide();
+        if (!s) return false;
+        return s.scrollTop > 2;
+    }
+
+    bindKeyboard() {
+        document.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowRight':
+                    e.preventDefault(); this.nextSlide(); break;
+                case 'ArrowLeft':
+                    e.preventDefault(); this.prevSlide(); break;
+                case 'ArrowDown':
+                case ' ':
+                    e.preventDefault();
+                    if (this.canScrollDown()) {
+                        this.getActiveSlide().scrollBy({ top: 120, behavior: 'smooth' });
+                    } else {
+                        this.nextSlide();
+                    }
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    if (this.canScrollUp()) {
+                        this.getActiveSlide().scrollBy({ top: -120, behavior: 'smooth' });
+                    } else {
+                        this.prevSlide();
+                    }
+                    break;
+                case 'Home':
+                    e.preventDefault(); this.goToSlide(1); break;
+                case 'End':
+                    e.preventDefault(); this.goToSlide(this.totalSlides); break;
+            }
+        });
+    }
+
+    bindTouch() {
+        let startX = 0, startY = 0, startScrollTop = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            const active = this.getActiveSlide();
+            startScrollTop = active ? active.scrollTop : 0;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            const diffX = startX - endX;
+            const diffY = startY - endY;
+            const absX = Math.abs(diffX);
+            const absY = Math.abs(diffY);
+
+            if (absX > absY && absX > 50 && absY < 80) {
+                const active = this.getActiveSlide();
+                const scrolled = active ? Math.abs(active.scrollTop - startScrollTop) : 0;
+                if (scrolled < 10) {
+                    diffX > 0 ? this.nextSlide() : this.prevSlide();
+                }
+            }
+        }, { passive: true });
+    }
+
+    prevSlide() {
+        if (this.currentSlide > 1) this.goToSlide(this.currentSlide - 1);
+    }
+
+    nextSlide() {
+        if (this.currentSlide < this.totalSlides) this.goToSlide(this.currentSlide + 1);
+    }
+
+    goToSlide(num) {
+        if (num < 1 || num > this.totalSlides) return;
+        this.currentSlide = num;
+        this.positionSlides();
+        this.updateUI();
+        this.onSlideChange(num);
+    }
+
+    updateUI() {
+        if (this.currentSlideEl) this.currentSlideEl.textContent = this.currentSlide;
+        const progress = (this.currentSlide / this.totalSlides) * 100;
+        if (this.progressFill) this.progressFill.style.width = `${progress}%`;
+        this.retriggerAnimations();
+    }
+
+    retriggerAnimations() {
+        const active = document.querySelector('.slide.active');
+        if (!active) return;
+        active.querySelectorAll('.fade-in').forEach(el => {
+            el.style.animation = 'none';
+            void el.offsetHeight;
+            el.style.animation = '';
+        });
+    }
+
+    onSlideChange(num) {
+        if (num === 6 && !window.donutChartInitialized) {
+            setTimeout(() => initializeDonutChart(), 100);
+        }
+        if (num === 8 && !window.growthChartInitialized) {
+            setTimeout(() => initializeGrowthChart(), 100);
+        }
+    }
 }
 
-function initializeSlideElements(slideNumber) {
-    switch(slideNumber) {
-        case 6:
-            // Inicializar gráfico de dona interactivo
-            if (!window.donutChartInitialized) {
-                setTimeout(() => initializeDonutChart(), 100);
-            }
-            break;
-        case 8:
-            // Inicializar gráfico de crecimiento (Los 12 Niveles)
-            if (!window.growthChartInitialized) {
-                setTimeout(() => initializeGrowthChart(), 100);
-            }
-            break;
-    }
-}
+document.addEventListener('DOMContentLoaded', () => {
+    window._presentation = new Presentation();
+});
 
 // --------------------------------------------------------------------------
 // GRÁFICO DE DONA INTERACTIVO
@@ -256,93 +333,6 @@ function initializeDonutChart() {
 
     drawChart(-1);
     window.donutChartInitialized = true;
-}
-
-// --------------------------------------------------------------------------
-// NAVEGACIÓN
-// --------------------------------------------------------------------------
-function setupEventListeners() {
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    
-    if (prevBtn) {
-        prevBtn.addEventListener('click', () => navigateSlide(-1));
-    }
-    
-    if (nextBtn) {
-        nextBtn.addEventListener('click', () => navigateSlide(1));
-    }
-}
-
-function navigateSlide(direction) {
-    const newSlide = currentSlide + direction;
-    showSlide(newSlide);
-}
-
-function handleKeyPress(e) {
-    switch(e.key) {
-        case 'ArrowLeft':
-            navigateSlide(-1);
-            break;
-        case 'ArrowRight':
-            navigateSlide(1);
-            break;
-        case 'Home':
-            showSlide(1);
-            break;
-        case 'End':
-            showSlide(totalSlides);
-            break;
-        case 'Escape':
-            toggleFullscreen();
-            break;
-    }
-}
-
-function setupSwipeGestures() {
-    let touchStartX = 0;
-    let touchEndX = 0;
-    
-    document.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-    });
-    
-    document.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        handleSwipe();
-    });
-    
-    function handleSwipe() {
-        const swipeThreshold = 50;
-        const diff = touchStartX - touchEndX;
-        
-        if (Math.abs(diff) > swipeThreshold) {
-            if (diff > 0) {
-                navigateSlide(1); // Swipe left - next slide
-            } else {
-                navigateSlide(-1); // Swipe right - previous slide
-            }
-        }
-    }
-}
-
-// --------------------------------------------------------------------------
-// UI UPDATES
-// --------------------------------------------------------------------------
-function updateProgressBar() {
-    const progressFill = document.getElementById('progress-fill');
-    if (progressFill) {
-        const progress = (currentSlide / totalSlides) * 100;
-        progressFill.style.width = `${progress}%`;
-    }
-}
-
-function updateSlideCounter() {
-    const currentSlideEl = document.getElementById('current-slide');
-    const totalSlidesEl = document.getElementById('total-slides');
-    
-    if (currentSlideEl) currentSlideEl.textContent = currentSlide;
-    if (totalSlidesEl) totalSlidesEl.textContent = totalSlides;
 }
 
 // --------------------------------------------------------------------------
@@ -540,195 +530,3 @@ function formatNumber(num) {
     return num.toString();
 }
 
-// --------------------------------------------------------------------------
-// FULLSCREEN
-// --------------------------------------------------------------------------
-function toggleFullscreen() {
-    if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => {
-            console.log(`Error attempting to enable fullscreen: ${err.message}`);
-        });
-    } else {
-        document.exitFullscreen();
-    }
-}
-
-// --------------------------------------------------------------------------
-// PRESENTATION CONTROLS (opcional - para presentador)
-// --------------------------------------------------------------------------
-document.addEventListener('keydown', (e) => {
-    // Ctrl + P para pausar/reanudar
-    if (e.ctrlKey && e.key === 'p') {
-        e.preventDefault();
-        togglePresentationMode();
-    }
-});
-
-function togglePresentationMode() {
-    const isPresentationMode = document.body.classList.toggle('presentation-mode');
-    
-    if (isPresentationMode) {
-        // Ocultar controles de navegación
-        document.querySelector('.navigation').style.display = 'none';
-        document.querySelector('.progress-bar').style.display = 'none';
-        
-        // Mostrar indicador de modo presentación
-        showPresentationIndicator();
-    } else {
-        // Mostrar controles
-        document.querySelector('.navigation').style.display = 'flex';
-        document.querySelector('.progress-bar').style.display = 'block';
-        
-        // Ocultar indicador
-        hidePresentationIndicator();
-    }
-}
-
-function showPresentationIndicator() {
-    const indicator = document.createElement('div');
-    indicator.id = 'presentation-indicator';
-    indicator.innerHTML = '🎯 Modo Presentación';
-    indicator.style.cssText = `
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        background: rgba(0, 212, 255, 0.9);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 25px;
-        font-weight: bold;
-        z-index: 1000;
-        animation: pulse 2s infinite;
-    `;
-    document.body.appendChild(indicator);
-    
-    // Ocultar después de 3 segundos
-    setTimeout(() => {
-        hidePresentationIndicator();
-    }, 3000);
-}
-
-function hidePresentationIndicator() {
-    const indicator = document.getElementById('presentation-indicator');
-    if (indicator) {
-        indicator.remove();
-    }
-}
-
-// --------------------------------------------------------------------------
-// AUTO-PLAY (opcional)
-// --------------------------------------------------------------------------
-let autoPlayInterval = null;
-
-function toggleAutoPlay() {
-    if (autoPlayInterval) {
-        stopAutoPlay();
-    } else {
-        startAutoPlay();
-    }
-}
-
-function startAutoPlay() {
-    autoPlayInterval = setInterval(() => {
-        if (currentSlide < totalSlides) {
-            navigateSlide(1);
-        } else {
-            stopAutoPlay();
-        }
-    }, 5000); // Cambiar slide cada 5 segundos
-}
-
-function stopAutoPlay() {
-    if (autoPlayInterval) {
-        clearInterval(autoPlayInterval);
-        autoPlayInterval = null;
-    }
-}
-
-// --------------------------------------------------------------------------
-// IMPRESIÓN Y EXPORTACIÓN
-// ----------
-function exportToPDF() {
-    window.print();
-}
-
-// Configurar estilos para impresión
-const printStyles = document.createElement('style');
-printStyles.textContent = `
-    @media print {
-        .navigation, .progress-bar {
-            display: none !important;
-        }
-        
-        .slide {
-            page-break-after: always;
-            height: 100vh;
-        }
-        
-        .slide:last-child {
-            page-break-after: auto;
-        }
-    }
-`;
-document.head.appendChild(printStyles);
-
-// --------------------------------------------------------------------------
-// PERFORMANCE OPTIMIZATION
-// --------------------------------------------------------------------------
-// Lazy loading para gráficos y elementos pesados
-const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1
-};
-
-const lazyLoadObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const slideNumber = parseInt(entry.target.dataset.slide);
-            if (slideNumber === 6 && !window.growthChartInitialized) {
-                initializeGrowthChart();
-            }
-        }
-    });
-}, observerOptions);
-
-// Observar todos los slides
-document.querySelectorAll('.slide').forEach(slide => {
-    lazyLoadObserver.observe(slide);
-});
-
-// --------------------------------------------------------------------------
-// ERROR HANDLING
-// ----------
-window.addEventListener('error', (e) => {
-    console.error('Error en presentación:', e.error);
-});
-
-window.addEventListener('unhandledrejection', (e) => {
-    console.error('Promesa rechazada:', e.reason);
-});
-
-// --------------------------------------------------------------------------
-// UTILIDADES
-// ----------
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Redimensionar gráficos cuando cambia el tamaño de ventana
-const resizeHandler = debounce(() => {
-    if (currentSlide === 6) {
-        initializeGrowthChart();
-    }
-}, 250);
-
-window.addEventListener('resize', resizeHandler);
