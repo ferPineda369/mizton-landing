@@ -6,7 +6,7 @@
 // VARIABLES GLOBALES
 // --------------------------------------------------------------------------
 let currentSlide = 1;
-const totalSlides = 9;
+const totalSlides = 10;
 let isTransitioning = false;
 
 // --------------------------------------------------------------------------
@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     updateProgressBar();
     updateSlideCounter();
-    initializeGrowthChart();
 });
 
 function initializePresentation() {
@@ -73,21 +72,11 @@ function showSlide(slideNumber) {
 
 function initializeSlideElements(slideNumber) {
     switch(slideNumber) {
-        case 6:
-            // Inicializar gráfico de crecimiento si no está ya creado
+        case 8:
+            // Inicializar gráfico de crecimiento (Los 12 Niveles)
             if (!window.growthChartInitialized) {
                 setTimeout(() => initializeGrowthChart(), 100);
             }
-            break;
-        case 7:
-            // Slide 7 ahora es el Roadmap (sin simulador)
-            break;
-        case 8:
-            // Slide 8 está bloqueado (simulador oculto)
-            // Saltar automáticamente al siguiente slide
-            setTimeout(() => {
-                goToSlide(9);
-            }, 100);
             break;
     }
 }
@@ -166,12 +155,7 @@ function setupSwipeGestures() {
 function updateProgressBar() {
     const progressFill = document.getElementById('progress-fill');
     if (progressFill) {
-        // Ajustar para el slide bloqueado (slide 8)
-        let adjustedSlide = currentSlide;
-        if (currentSlide > 8) {
-            adjustedSlide = currentSlide - 1;
-        }
-        const progress = (adjustedSlide / (totalSlides - 1)) * 100;
+        const progress = (currentSlide / totalSlides) * 100;
         progressFill.style.width = `${progress}%`;
     }
 }
@@ -180,14 +164,8 @@ function updateSlideCounter() {
     const currentSlideEl = document.getElementById('current-slide');
     const totalSlidesEl = document.getElementById('total-slides');
     
-    // Ajustar para el slide bloqueado
-    let displaySlide = currentSlide;
-    if (currentSlide > 8) {
-        displaySlide = currentSlide - 1;
-    }
-    
-    if (currentSlideEl) currentSlideEl.textContent = displaySlide;
-    if (totalSlidesEl) totalSlidesEl.textContent = totalSlides - 1;
+    if (currentSlideEl) currentSlideEl.textContent = currentSlide;
+    if (totalSlidesEl) totalSlidesEl.textContent = totalSlides;
 }
 
 // --------------------------------------------------------------------------
@@ -206,10 +184,10 @@ function initializeGrowthChart() {
     canvas.height = rect.height * dpr;
     ctx.scale(dpr, dpr);
     
-    // Datos del gráfico
+    // Datos del gráfico - Los 12 Niveles de la Comunidad
     const data = {
-        labels: ['Inicio', 'Año 1', 'Año 2', 'Año 3'],
-        values: [0, 500000, 1200000, 2000000]
+        labels: ['Paso 1', 'Paso 4', 'Paso 8', 'Paso 12'],
+        values: [512, 4096, 65536, 2097150]
     };
     
     const chartWidth = rect.width;
@@ -365,13 +343,13 @@ function initializeGrowthChart() {
     ctx.fillStyle = '#00d9ff';
     ctx.font = 'bold 24px "Space Grotesk", sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('Líneas Activas - Proyección 3 Años', chartWidth / 2, 40);
+    ctx.fillText('Usuarios Conectados - 12 Pasos de Crecimiento', chartWidth / 2, 40);
     
     // Subtítulo
     ctx.shadowBlur = 0;
     ctx.fillStyle = 'rgba(255, 255, 255, 0.6)';
     ctx.font = '14px "Space Grotesk", sans-serif';
-    ctx.fillText('Crecimiento exponencial del ecosistema MIZTEL', chartWidth / 2, 65);
+    ctx.fillText('La red se duplica de 2 en 2 hasta 2,097,150 usuarios', chartWidth / 2, 65);
     
     window.growthChartInitialized = true;
 }

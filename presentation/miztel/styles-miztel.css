@@ -334,11 +334,19 @@ body {
   background: conic-gradient(
     var(--cyber) 0% 65%,
     var(--purple) 65% 85%,
-    var(--green) 85% 90%,
-    var(--terracota) 90% 95%,
-    var(--magenta) 95% 100%
+    var(--terracota) 85% 90%,
+    var(--magenta) 90% 100%
   );
   box-shadow: 0 0 50px rgba(0, 217, 255, 0.3);
+}
+
+.pie-chart::after {
+  content: '';
+  position: absolute;
+  inset: 28%;
+  border-radius: 50%;
+  background: var(--bg-1);
+  box-shadow: inset 0 0 30px rgba(0, 217, 255, 0.2);
 }
 
 .pie-segment {
@@ -757,6 +765,121 @@ body {
 .delay-3 { animation-delay: 0.6s; }
 
 /* --------------------------------------------------------------------------
+   13. ELEMENTOS ADICIONALES (NUEVA ESTRUCTURA)
+   -------------------------------------------------------------------------- */
+/* Nota / aviso destacado */
+.alert-note {
+  margin-top: 2rem;
+  padding: 1.25rem 1.75rem;
+  background: var(--card-bg);
+  border: 1px solid var(--cyber);
+  border-left: 4px solid var(--cyber);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 25px rgba(0, 217, 255, 0.12);
+}
+
+.alert-note.success-note {
+  border-color: var(--green);
+  border-left-color: var(--green);
+  box-shadow: 0 0 25px rgba(0, 200, 150, 0.15);
+}
+
+.alert-note strong {
+  color: var(--cyber);
+}
+
+/* Card de éxito (verde) para market-grid */
+.market-card.success-card {
+  border-color: var(--green);
+  box-shadow: 0 0 30px rgba(0, 200, 150, 0.2);
+}
+
+.market-card.success-card .market-number {
+  color: var(--green);
+}
+
+/* Grid de posicionamiento (Niveles 8 al 1) */
+.positioning-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin: 3rem 0;
+}
+
+.position-card {
+  text-align: center;
+  padding: 1.75rem 1.25rem;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.position-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--cyber);
+  box-shadow: 0 15px 30px rgba(0, 217, 255, 0.3);
+}
+
+.position-card.entry {
+  border-color: var(--green);
+  box-shadow: 0 0 25px rgba(0, 200, 150, 0.15);
+}
+
+.position-card.top {
+  border-color: var(--magenta);
+  box-shadow: 0 0 25px rgba(255, 0, 128, 0.18);
+}
+
+.position-level {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--cyber);
+  margin-bottom: 0.75rem;
+}
+
+.position-card.entry .position-level { color: var(--green); }
+.position-card.top .position-level { color: var(--magenta); }
+
+.position-tokens {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+
+.position-slots {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+}
+
+.position-reward {
+  display: inline-block;
+  padding: 0.4rem 0.9rem;
+  border-radius: 50px;
+  background: linear-gradient(45deg, var(--cyber), var(--magenta));
+  color: var(--text);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+/* Mensaje de bienvenida final */
+.cta-welcome {
+  margin-top: 1.5rem !important;
+  font-size: 1.5rem !important;
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--cyber), var(--magenta));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* --------------------------------------------------------------------------
    12. RESPONSIVE DESIGN
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
@@ -801,6 +924,10 @@ body {
     .cta-actions,
     .roadmap {
         grid-template-columns: 1fr;
+    }
+
+    .positioning-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
