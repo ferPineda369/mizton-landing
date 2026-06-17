@@ -72,6 +72,12 @@ function showSlide(slideNumber) {
 
 function initializeSlideElements(slideNumber) {
     switch(slideNumber) {
+        case 6:
+            // Inicializar gráfico de dona interactivo
+            if (!window.donutChartInitialized) {
+                setTimeout(() => initializeDonutChart(), 100);
+            }
+            break;
         case 8:
             // Inicializar gráfico de crecimiento (Los 12 Niveles)
             if (!window.growthChartInitialized) {
@@ -79,6 +85,177 @@ function initializeSlideElements(slideNumber) {
             }
             break;
     }
+}
+
+// --------------------------------------------------------------------------
+// GRÁFICO DE DONA INTERACTIVO
+// --------------------------------------------------------------------------
+function initializeDonutChart() {
+    const canvas = document.getElementById('donutChart');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    const size = 300;
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    canvas.style.width = size + 'px';
+    canvas.style.height = size + 'px';
+    ctx.scale(dpr, dpr);
+
+    const cx = size / 2;
+    const cy = size / 2;
+    const outerR = 120;
+    const innerR = 68;
+
+    const segments = [
+        { label: 'Red de Recomendación', pct: 65, color: '#00d9ff' },
+        { label: 'Poseedores del Token',  pct: 20, color: '#7b2ff7' },
+        { label: 'Fondo Global (Mizton)', pct:  5, color: '#e85d04' },
+        { label: 'Operación Técnica',     pct:  5, color: '#00c896' },
+        { label: 'Tesorería de Reserva',  pct:  5, color: '#ff0080' }
+    ];
+
+    // Pre-compute arc angles
+    let startAngle = -Math.PI / 2;
+    const arcs = segments.map(seg => {
+        const angle = (seg.pct / 100) * 2 * Math.PI;
+        const arc = { ...seg, startAngle, endAngle: startAngle + angle };
+        startAngle += angle;
+        return arc;
+    });
+
+    let hoveredIndex = -1;
+    const tooltip = document.getElementById('donut-tooltip');
+
+    function drawChart(hovered) {
+        ctx.clearRect(0, 0, size, size);
+
+        arcs.forEach((arc, i) => {
+            const isHovered = i === hovered;
+            const expandBy = isHovered ? 10 : 0;
+            const midAngle = (arc.startAngle + arc.endAngle) / 2;
+            const ox = isHovered ? Math.cos(midAngle) * expandBy : 0;
+            const oy = isHovered ? Math.sin(midAngle) * expandBy : 0;
+
+            // Glow shadow
+            ctx.save();
+            ctx.shadowColor = arc.color;
+            ctx.shadowBlur = isHovered ? 28 : 10;
+
+            // Segment
+            ctx.beginPath();
+            ctx.moveTo(cx + ox, cy + oy);
+            ctx.arc(cx + ox, cy + oy, outerR, arc.startAngle, arc.endAngle);
+            ctx.arc(cx + ox, cy + oy, innerR, arc.endAngle, arc.startAngle, true);
+            ctx.closePath();
+            ctx.fillStyle = arc.color;
+            ctx.globalAlpha = isHovered ? 1 : 0.82;
+            ctx.fill();
+
+            // Border between segments
+            ctx.strokeStyle = 'rgba(15, 52, 96, 0.9)';
+            ctx.lineWidth = isHovered ? 3 : 2;
+            ctx.stroke();
+            ctx.restore();
+
+            // Percentage label
+            const labelR = (outerR + innerR) / 2;
+            const lx = cx + Math.cos(midAngle) * labelR + ox;
+            const ly = cy + Math.sin(midAngle) * labelR + oy;
+            ctx.save();
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${isHovered ? 17 : 14}px "Space Grotesk", sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = 'rgba(0,0,0,0.7)';
+            ctx.shadowBlur = 4;
+            ctx.fillText(arc.pct + '%', lx, ly);
+            ctx.restore();
+        });
+
+        // Center text
+        ctx.save();
+        ctx.fillStyle = hovered >= 0 ? arcs[hovered].color : '#00d9ff';
+        ctx.font = `bold 22px "Space Grotesk", sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = hovered >= 0 ? arcs[hovered].color : '#00d9ff';
+        ctx.shadowBlur = 15;
+        ctx.fillText(hovered >= 0 ? arcs[hovered].pct + '%' : '100%', cx, cy - 10);
+        ctx.font = `13px "Space Grotesk", sans-serif`;
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = 'rgba(255,255,255,0.55)';
+        ctx.fillText(hovered >= 0 ? 'del total' : 'distribuido', cx, cy + 14);
+        ctx.restore();
+    }
+
+    function getSegmentAt(x, y) {
+        const dx = x - cx, dy = y - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < innerR || dist > outerR + 12) return -1;
+        let angle = Math.atan2(dy, dx);
+        if (angle < -Math.PI / 2) angle += 2 * Math.PI;
+        for (let i = 0; i < arcs.length; i++) {
+            if (angle >= arcs[i].startAngle && angle <= arcs[i].endAngle) return i;
+        }
+        return -1;
+    }
+
+    function highlightLegend(index) {
+        document.querySelectorAll('.legend-item[data-segment]').forEach(el => {
+            el.classList.toggle('active', parseInt(el.dataset.segment) === index);
+        });
+    }
+
+    canvas.addEventListener('mousemove', e => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const idx = getSegmentAt(x, y);
+
+        if (idx !== hoveredIndex) {
+            hoveredIndex = idx;
+            drawChart(hoveredIndex);
+            highlightLegend(hoveredIndex);
+        }
+
+        if (idx >= 0) {
+            const seg = arcs[idx];
+            tooltip.textContent = seg.pct + '% — ' + seg.label;
+            tooltip.style.borderColor = seg.color;
+            tooltip.style.left = (e.clientX - canvas.getBoundingClientRect().left + 15) + 'px';
+            tooltip.style.top  = (e.clientY - canvas.getBoundingClientRect().top  - 10) + 'px';
+            tooltip.classList.add('visible');
+        } else {
+            tooltip.classList.remove('visible');
+        }
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+        hoveredIndex = -1;
+        drawChart(-1);
+        highlightLegend(-1);
+        tooltip.classList.remove('visible');
+    });
+
+    // Legend hover → highlight on chart
+    document.querySelectorAll('.legend-item[data-segment]').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            const i = parseInt(el.dataset.segment);
+            hoveredIndex = i;
+            drawChart(i);
+            highlightLegend(i);
+        });
+        el.addEventListener('mouseleave', () => {
+            hoveredIndex = -1;
+            drawChart(-1);
+            highlightLegend(-1);
+        });
+    });
+
+    drawChart(-1);
+    window.donutChartInitialized = true;
 }
 
 // --------------------------------------------------------------------------

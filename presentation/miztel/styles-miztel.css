@@ -324,48 +324,41 @@ body {
     flex: 1;
     display: flex;
     justify-content: center;
+    position: relative;
 }
 
-.pie-chart {
+#donutChart {
+  display: block;
   width: 300px;
   height: 300px;
-  border-radius: 50%;
-  position: relative;
-  background: conic-gradient(
-    var(--cyber) 0% 65%,
-    var(--purple) 65% 85%,
-    var(--terracota) 85% 90%,
-    var(--magenta) 90% 100%
-  );
-  box-shadow: 0 0 50px rgba(0, 217, 255, 0.3);
+  cursor: pointer;
+  filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.3));
+  transition: filter 0.3s ease;
 }
 
-.pie-chart::after {
-  content: '';
+#donutChart:hover {
+  filter: drop-shadow(0 0 35px rgba(0, 217, 255, 0.55));
+}
+
+.donut-tooltip {
   position: absolute;
-  inset: 28%;
-  border-radius: 50%;
-  background: var(--bg-1);
-  box-shadow: inset 0 0 30px rgba(0, 217, 255, 0.2);
+  background: rgba(15, 52, 96, 0.95);
+  border: 1px solid var(--cyber);
+  border-radius: var(--radius);
+  padding: 0.75rem 1.25rem;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 700;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+  box-shadow: 0 0 20px rgba(0, 217, 255, 0.3);
+  z-index: 10;
 }
 
-.pie-segment {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.segment-label {
-    background: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-weight: 700;
-    font-size: 1.2rem;
+.donut-tooltip.visible {
+  opacity: 1;
 }
 
 .distribution-legend {
@@ -384,9 +377,11 @@ body {
   transition: var(--transition);
 }
 
-.legend-item:hover {
+.legend-item:hover,
+.legend-item.active {
   background: var(--card-hover);
   transform: translateX(5px);
+  border-color: var(--cyber);
 }
 
 .legend-color {
