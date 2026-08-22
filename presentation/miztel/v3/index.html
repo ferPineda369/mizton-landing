@@ -424,17 +424,69 @@
                 <div class="slide-content">
                     <div class="tag mono fade-in">14 / LARGO PLAZO</div>
                     <h2 class="titulo fade-in delay-1">Constancia y <span class="cy">visión de largo plazo</span></h2>
-                    <div class="growth-line fade-in delay-2" aria-hidden="true">
-                        <div class="gl-point p1"><span>100</span></div>
-                        <div class="gl-point p2"><span>100K</span></div>
-                        <div class="gl-point p3"><span>2M</span></div>
-                        <div class="gl-track"></div>
+
+                    <div class="growth-chart fade-in delay-2">
+                        <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Curva de crecimiento exponencial de 100 a 2 millones de usuarios">
+                            <defs>
+                                <linearGradient id="gcArea" x1="0" y1="0" x2="0" y2="1">
+                                    <stop offset="0%"  stop-color="#00d9ff" stop-opacity="0.28"/>
+                                    <stop offset="100%" stop-color="#00d9ff" stop-opacity="0"/>
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Rejilla -->
+                            <g class="gc-grid">
+                                <line x1="40" y1="60"  x2="700" y2="60"/>
+                                <line x1="40" y1="120" x2="700" y2="120"/>
+                                <line x1="40" y1="180" x2="700" y2="180"/>
+                                <line x1="40" y1="240" x2="700" y2="240"/>
+                            </g>
+
+                            <!-- Área bajo la curva -->
+                            <path class="gc-area" d="M40,246 C180,244 300,238 400,205 C480,178 560,120 620,62 C640,44 660,34 680,28 L680,246 L40,246 Z"/>
+
+                            <!-- Curva principal -->
+                            <path class="draw-path gc-curve" pathLength="1000"
+                                  d="M40,246 C180,244 300,238 400,205 C480,178 560,120 620,62 C640,44 660,34 680,28"/>
+
+                            <!-- Milestone 1: 100 -->
+                            <line class="gc-guide" x1="70" y1="240" x2="70" y2="262"/>
+                            <circle class="gc-dot d1" cx="70" cy="240" r="7"/>
+                            <text class="gc-val" x="70" y="222">100</text>
+                            <text class="gc-lbl" x="70" y="282">usuarios</text>
+                            <text class="gc-note" x="70" y="205">resultados pequeños</text>
+
+                            <!-- Milestone 2: 100K -->
+                            <line class="gc-guide" x1="400" y1="205" x2="400" y2="262"/>
+                            <circle class="gc-dot d2" cx="400" cy="205" r="9"/>
+                            <text class="gc-val" x="400" y="186">100,000</text>
+                            <text class="gc-lbl" x="400" y="282">usuarios</text>
+
+                            <!-- Milestone 3: 2M -->
+                            <line class="gc-guide" x1="680" y1="28" x2="680" y2="262"/>
+                            <circle class="gc-dot d3" cx="680" cy="28" r="12"/>
+                            <circle class="gc-halo" cx="680" cy="28" r="12"/>
+                            <text class="gc-val big" x="668" y="14" text-anchor="end">2,000,000</text>
+                            <text class="gc-lbl" x="680" y="282">usuarios</text>
+                            <text class="gc-note pink" x="668" y="46" text-anchor="end">la historia es otra</text>
+
+                            <!-- Eje -->
+                            <line class="gc-axis" x1="40" y1="262" x2="700" y2="262"/>
+                        </svg>
                     </div>
-                    <div class="split-text narrow fade-in delay-2">
-                        <p>Con cien usuarios los resultados son pequeños; con dos millones, la historia es otra.</p>
-                        <p>No es una carrera por la posición más alta: es <strong>construir una comunidad</strong>. Si la comunidad no crece, el ecosistema tampoco.</p>
-                        <p class="dim">Quienes participan desde el inicio permanecen en la estructura que ayudaron a construir.</p>
+
+                    <div class="duo-cards fade-in delay-3">
+                        <div class="duo-card cyan">
+                            <div class="duo-head mono">ESCALA</div>
+                            <p>Con cien usuarios los resultados son pequeños; con dos millones, <strong>la historia es otra</strong>.</p>
+                        </div>
+                        <div class="duo-card magenta">
+                            <div class="duo-head mono">PROPÓSITO</div>
+                            <p>No es una carrera por la posición más alta: es <strong>construir una comunidad</strong>. Si la comunidad no crece, el ecosistema tampoco.</p>
+                        </div>
                     </div>
+
+                    <div class="nota fade-in delay-3">Quienes participan desde el inicio permanecen en la estructura que ayudaron a construir.</div>
                 </div>
             </div>
 

@@ -192,7 +192,7 @@ class Presentation {
     retriggerAnimations() {
         const active = document.querySelector('.slide.active');
         if (!active) return;
-        active.querySelectorAll('.fade-in').forEach(el => {
+        active.querySelectorAll('.fade-in, .draw-path, .gc-dot, .gc-halo, .gc-val, .gc-note, .gc-area, .dbar-fill').forEach(el => {
             el.style.animation = 'none';
             void el.offsetHeight;
             el.style.animation = '';
