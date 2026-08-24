@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIZTEL — Una historia en 8 escenas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600;1,9..144,700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Grano de película -->
+    <div class="film-grain" aria-hidden="true"></div>
+
+    <!-- Barras letterbox cinematográficas -->
+    <div class="letterbox lb-top" aria-hidden="true"></div>
+    <div class="letterbox lb-bottom" aria-hidden="true"></div>
+
+    <div class="presentation-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+        </div>
+
+        <div class="slides-wrapper">
+
+            <!-- ============ ESCENA 1: APERTURA ============ -->
+            <div class="slide active scene-dark" data-slide="1">
+                <div class="slide-content">
+                    <div class="slate fx fx-fade" style="--d:.2s">
+                        <span class="slate-tag">MIZTEL</span>
+                        <span class="slate-sep"></span>
+                        <span class="slate-tag">PRESENTA</span>
+                    </div>
+
+                    <div class="signal-core" aria-hidden="true">
+                        <span class="core-dot fx fx-ping" style="--d:.8s"></span>
+                        <span class="core-ring r1 fx fx-ring" style="--d:1.1s"></span>
+                        <span class="core-ring r2 fx fx-ring" style="--d:1.35s"></span>
+                        <span class="core-ring r3 fx fx-ring" style="--d:1.6s"></span>
+                    </div>
+
+                    <h1 class="apertura-titulo">
+                        <span class="word fx fx-word" style="--d:1.4s">Una</span>
+                        <span class="word fx fx-word" style="--d:1.55s">historia</span>
+                        <span class="word fx fx-word" style="--d:1.7s">de</span>
+                        <span class="word fx fx-word serif-i" style="--d:1.85s">conexión</span>
+                    </h1>
+
+                    <p class="apertura-sub mono fx fx-fade" style="--d:2.3s">8 ESCENAS · MÉXICO · HOY</p>
+                </div>
+            </div>
+
+            <!-- ============ ESCENA 2: 132 MILLONES ============ -->
+            <div class="slide" data-slide="2">
+                <div class="slide-content">
+                    <div class="scene-label mono fx fx-fade" style="--d:.1s">ESCENA 01 — EL PAÍS</div>
+
+                    <div class="counter-wrap">
+                        <div class="counter-number mono" id="counter-132">0</div>
+                        <div class="counter-caption fx fx-fade" style="--d:1.9s">millones de mexicanos</div>
+                    </div>
+
+                    <div class="dots-field fx fx-fade" style="--d:2.2s" id="dots-field" aria-hidden="true"></div>
+
+                    <p class="escena-linea fx fx-rise" style="--d:2.7s">
+                        y casi <em class="serif-i acento">la mitad</em> no tiene internet móvil
+                    </p>
+                </div>
+            </div>
+
+            <!-- ============ ESCENA 3: LA PREGUNTA ============ -->
+            <div class="slide scene-dark" data-slide="3">
+                <div class="slide-content">
+                    <div class="scene-label mono light fx fx-fade" style="--d:.1s">ESCENA 02 — LA PREGUNTA</div>
+
+                    <div class="radar" aria-hidden="true">
+                        <span class="radar-sweep fx fx-sweep"></span>
+                        <span class="radar-blip b1 fx fx-blip" style="--d:1.6s"></span>
+                        <span class="radar-blip b2 fx fx-blip" style="--d:2.1s"></span>
+                        <span class="radar-blip b3 fx fx-blip" style="--d:2.6s"></span>
+                    </div>
+
+                    <h2 class="pregunta">
+                        <span class="word fx fx-word" style="--d:.7s">¿Ves</span>
+                        <span class="word fx fx-word" style="--d:1s">una</span>
+                        <span class="word fx fx-word fx-zoom-word" style="--d:1.3s">oportunidad</span>
+                        <span class="word fx fx-word serif-i crema" style="--d:1.8s">enorme</span>
+                        <span class="word fx fx-word" style="--d:2.2s">aquí?</span>
+                    </h2>
+                </div>
+            </div>
+
+            <!-- ============ ESCENA 4: NACE MIZTEL ============ -->
+            <div class="slide" data-slide="4">
+                <div class="slide-content">
+                    <div class="scene-label mono fx fx-fade" style="--d:.1s">ESCENA 03 — EL NACIMIENTO</div>
+
+                    <div class="sunrise" aria-hidden="true">
+                        <div class="sun fx fx-sun"></div>
+                        <div class="sun-flash fx fx-flash" style="--d:1.5s"></div>
+                    </div>
+
+                    <h2 class="escena-titulo">
+                        <span class="word fx fx-word" style="--d:1.2s">Hoy</span>
+                        <span class="word fx fx-word" style="--d:1.35s">nace</span>
+                        <span class="word fx fx-word serif-i tierra" style="--d:1.6s">Miztel</span>
+                    </h2>
+
+                    <p class="escena-linea fx fx-rise" style="--d:2s">
+                        una <strong>cooperativa digital</strong> donde participas<br>de las recargas de
+                    </p>
+
+                    <div class="marquee fx fx-fade" style="--d:2.5s" aria-hidden="true">
+                        <div class="marquee-track">
+                            <span>TODOS SUS USUARIOS</span><span class="mq-dot">●</span>
+                            <span>TODOS SUS USUARIOS</span><span class="mq-dot">●</span>
+                            <span>TODOS SUS USUARIOS</span><span class="mq-dot">●</span>
+                            <span>TODOS SUS USUARIOS</span><span class="mq-dot">●</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ ESCENA 5: SIN LETRAS CHIQUITAS ============ -->
+            <div class="slide" data-slide="5">
+                <div class="slide-content">
+                    <div class="scene-label mono fx fx-fade" style="--d:.1s">ESCENA 04 — LAS REGLAS</div>
+
+                    <h2 class="escena-titulo fx fx-fade" style="--d:.3s">Simple. <em class="serif-i acento">Transparente.</em></h2>
+
+                    <div class="reglas-grid">
+                        <div class="regla-card fx fx-card" style="--d:.8s">
+                            <svg class="check-svg" viewBox="0 0 52 52" aria-hidden="true">
+                                <circle class="check-circle draw" cx="26" cy="26" r="24"/>
+                                <path class="check-mark draw" d="M14 27l8 8 16-17"/>
+                            </svg>
+                            <h3>Invitación personal</h3>
+                            <p class="chip-opcional mono">OPCIONAL</p>
+                        </div>
+
+                        <div class="regla-card fx fx-card" style="--d:1.3s">
+                            <div class="letras-mini" aria-hidden="true">
+                                <span class="mini-txt">términos y condiciones aplican restricciones ver letra chiquita…</span>
+                                <span class="tachado"></span>
+                            </div>
+                            <h3>Sin letras chiquitas</h3>
+                            <p class="chip-opcional mono verde">PARA GANAR</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ============ ESCENA 6: EL CERTIFICADO ============ -->
+            <div class="slide" data-slide="6">
+                <div class="slide-content">
+                    <div class="scene-label mono fx fx-fade" style="--d:.1s">ESCENA 05 — TU LLAVE</div>
+
+                    <div class="cert-stage">
+                        <div class="cert-card fx fx-flip" style="--d:.6s">
+                            <div class="cert-inner">
+                                <div class="cert-front">
+                                    <div class="cert-head mono">CERTIFICADO MIZTEL</div>
+                                    <div class="cert-body">
+                                        <div class="cert-seal" aria-hidden="true">M</div>
+                                        <div class="cert-lines" aria-hidden="true">
+                                            <span></span><span></span><span></span>
+                                        </div>
+                                    </div>
+                                    <div class="cert-foot mono">Nº 0001 / 2,304</div>
+                                </div>
+                                <div class="cert-back">
+                                    <div class="cert-back-txt mono">PARTICIPACIÓN<br>ACTIVA</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="escena-titulo fx fx-fade" style="--d:1.6s">
+                        Desde <em class="serif-i tierra">1 certificado</em><br>ya participas
+                    </h2>
+                </div>
+            </div>
+
+            <!-- ============ ESCENA 7: BLINDAJE ============ -->
+            <div class="slide scene-dark" data-slide="7">
+                <div class="slide-content">
+                    <div class="scene-label mono light fx fx-fade" style="--d:.1s">ESCENA 06 — LA PROTECCIÓN</div>
+
+                    <div class="shield-stage" aria-hidden="true">
+                        <svg class="shield-svg" viewBox="0 0 120 140">
+                            <path class="shield-path draw" d="M60 8 L108 26 V72 C108 104 88 124 60 134 C32 124 12 104 12 72 V26 Z"/>
+                            <path class="shield-check draw" d="M38 70 l16 16 30-34"/>
+                        </svg>
+                        <span class="orbit-chip oc1 fx fx-orbit" style="--d:1.6s">tú</span>
+                        <span class="orbit-chip oc2 fx fx-orbit" style="--d:1.9s">los tuyos</span>
+                        <span class="orbit-chip oc3 fx fx-orbit" style="--d:2.2s">tu economía</span>
+                    </div>
+
+                    <h2 class="pregunta chica">
+                        <span class="word fx fx-word" style="--d:1.4s">Blinda</span>
+                        <span class="word fx fx-word" style="--d:1.6s">tu</span>
+                        <span class="word fx fx-word serif-i crema" style="--d:1.8s">economía</span><br>
+                        <span class="word fx fx-word" style="--d:2.1s">y</span>
+                        <span class="word fx fx-word" style="--d:2.25s">la</span>
+                        <span class="word fx fx-word" style="--d:2.4s">de</span>
+                        <span class="word fx fx-word" style="--d:2.55s">los</span>
+                        <span class="word fx fx-word serif-i crema" style="--d:2.7s">tuyos</span>
+                    </h2>
+                </div>
+            </div>
+
+            <!-- ============ ESCENA 8: CTA ZOOM ============ -->
+            <div class="slide" data-slide="8">
+                <div class="slide-content">
+                    <div class="scene-label mono fx fx-fade" style="--d:.1s">ESCENA FINAL — LA INVITACIÓN</div>
+
+                    <div class="zoom-cam fx fx-cam" aria-hidden="true">
+                        <svg viewBox="0 0 96 64" class="cam-svg">
+                            <rect class="cam-body draw" x="4" y="12" width="56" height="40" rx="8"/>
+                            <path class="cam-lens draw" d="M60 26 L92 12 V52 L60 38 Z"/>
+                            <circle class="cam-dot fx fx-ping" style="--d:1.4s" cx="32" cy="32" r="8"/>
+                        </svg>
+                        <span class="cam-live mono fx fx-fade" style="--d:1.8s">● EN VIVO</span>
+                    </div>
+
+                    <h2 class="escena-titulo">
+                        <span class="word fx fx-word" style="--d:1s">Te</span>
+                        <span class="word fx fx-word" style="--d:1.15s">invito</span>
+                        <span class="word fx fx-word" style="--d:1.3s">a</span>
+                        <span class="word fx fx-word" style="--d:1.45s">un</span>
+                        <span class="word fx fx-word serif-i acento" style="--d:1.6s">Zoom</span>
+                        <span class="word fx fx-word" style="--d:1.75s">informativo</span>
+                    </h2>
+
+                    <p class="escena-linea fx fx-rise" style="--d:2.2s">
+                        para que tomes <strong>la mejor decisión</strong><br>de las últimas <em class="serif-i tierra">décadas</em>
+                    </p>
+
+                    <div class="cta-invita fx fx-pop" style="--d:2.8s">
+                        <span class="invita-pulse" aria-hidden="true"></span>
+                        <span class="invita-txt">¡Miztel invita!</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="slide-counter-badge mono">
+            <span class="rec-dot" aria-hidden="true"></span>
+            ESC <span id="current-slide">1</span> / <span id="total-slides">8</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
