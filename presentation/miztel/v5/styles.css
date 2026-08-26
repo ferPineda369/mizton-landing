@@ -1,0 +1,396 @@
+/* ============================================================
+   MIZTEL v5 — PRESENTACIÓN PROFESIONAL
+   ------------------------------------------------------------
+   PALETA CÁLIDA — modifica estos valores para recolorear todo:
+   ============================================================ */
+:root {
+  --fondo:        #FFF8EF;   /* fondo general cálido */
+  --fondo-card:   #FFFFFF;   /* fondo de cuadros */
+  --tinta:        #3A2A1E;   /* texto principal */
+  --tinta-suave:  #7A6A5C;   /* texto secundario */
+  --primario:     #B85C2B;   /* terracota · acentos fuertes */
+  --acento:       #D9913D;   /* ámbar · highlights */
+  --acento-suave: #F6E3C8;   /* crema · sombras duras / fondos */
+  --teal:         #0E8388;   /* nodo telecom · detalles */
+  --verde:        #5B8C5A;   /* apoyo opcional */
+
+  --font-sans:  "Poppins", system-ui, sans-serif;
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-mono:  "Share Tech Mono", monospace;
+
+  --cine: cubic-bezier(.19, 1, .22, 1);
+  --fade-dur: .45s;          /* duración del fade de cada idea (300–500ms) */
+  --borde: 2px solid var(--tinta);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-sans);
+  background: var(--fondo);
+  color: var(--tinta);
+  overflow: hidden;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Textura sutil de puntos cálida */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(rgba(184, 92, 43, 0.07) 1.5px, transparent 1.5px);
+  background-size: 36px 36px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.mono { font-family: var(--font-mono); }
+.serif-i { font-family: var(--font-serif); font-style: italic; }
+.acc { color: var(--primario); }
+.hl {
+  background: var(--acento-suave);
+  padding: 0 .3em;
+  border-radius: 4px;
+  font-weight: 600;
+  box-shadow: inset 0 -3px 0 var(--acento);
+}
+
+/* ------------------------------------------------------------
+   Motor de slides — crossfade + zoom sutil
+   ------------------------------------------------------------ */
+.presentation-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.slides-wrapper { width: 100%; height: 100vh; position: relative; }
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(1.05);
+  transition: opacity .9s var(--cine), transform .9s var(--cine);
+  pointer-events: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 50px 0 90px;
+}
+
+.slide.active {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: all;
+}
+
+.slide-content {
+  max-width: 1060px;
+  width: 100%;
+  padding: 16px 40px;
+}
+
+.slide-content.center { text-align: center; margin: auto 0; }
+
+/* ------------------------------------------------------------
+   Progress bar + contador
+   ------------------------------------------------------------ */
+.progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 4px;
+  background: rgba(58, 42, 30, 0.08);
+  z-index: 1000;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 6%;
+  background: var(--primario);
+  transition: width .7s var(--cine);
+}
+
+.slide-counter-badge {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--tinta);
+  color: var(--fondo);
+  border-radius: 4px;
+  padding: .4rem 1.1rem;
+  font-size: .82rem;
+  letter-spacing: .16em;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------
+   Sistema FX — fade de .45s, delays en cadena vía --d
+   ------------------------------------------------------------ */
+.fx {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: ideaIn var(--fade-dur) ease-out var(--d, 0s) forwards;
+}
+
+@keyframes ideaIn {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ------------------------------------------------------------
+   Portada
+   ------------------------------------------------------------ */
+.cover-logo {
+  max-width: 280px;
+  width: 55%;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 14px 30px rgba(184, 92, 43, 0.25));
+}
+
+.cover-title {
+  font-size: clamp(1.8rem, 4.4vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -.02em;
+  line-height: 1.2;
+}
+
+.cover-sub {
+  margin-top: 1.4rem;
+  font-size: .8rem;
+  letter-spacing: .3em;
+  color: var(--tinta-suave);
+}
+
+/* ------------------------------------------------------------
+   Encabezados de sección
+   ------------------------------------------------------------ */
+.sec-head {
+  text-align: center;
+  margin-bottom: 1.8rem;
+}
+
+.sec-num {
+  display: inline-block;
+  font-size: .72rem;
+  letter-spacing: .3em;
+  color: var(--primario);
+  border: 1.5px solid var(--primario);
+  border-radius: 3px;
+  padding: .3rem 1rem;
+  margin-bottom: .9rem;
+  background: var(--fondo-card);
+}
+
+.sec-title {
+  font-size: clamp(1.5rem, 3.6vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -.01em;
+  line-height: 1.2;
+}
+
+/* ------------------------------------------------------------
+   Flujo de ideas — cuadros de media anchura alternados
+   ------------------------------------------------------------ */
+.ideas-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.idea,
+.idea-img {
+  width: 48%;
+  min-width: 300px;
+  margin-bottom: 1rem;
+}
+
+/* impar: izquierda · par: a la derecha de la anterior */
+.idea:nth-child(odd),
+.idea-img:nth-child(odd) { align-self: flex-start; }
+.idea:nth-child(even),
+.idea-img:nth-child(even) {
+  align-self: flex-end;
+  margin-top: -.6rem;   /* ligero solape dinámico */
+}
+
+.idea {
+  background: var(--fondo-card);
+  border: var(--borde);
+  border-radius: 14px;
+  box-shadow: 6px 6px 0 var(--acento-suave);
+  padding: 1.2rem 1.5rem;
+  text-align: left;
+  font-size: 1.02rem;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.idea p + p { margin-top: .5rem; }
+
+.idea strong { font-weight: 700; }
+
+.idea-lead { color: var(--tinta-suave); font-size: .95rem; }
+
+.idea-big {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.idea-big.serif-i { font-weight: 600; color: var(--primario); }
+
+.idea-sub {
+  font-size: .9rem;
+  color: var(--tinta-suave);
+  font-weight: 400;
+}
+
+.idea-mega {
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  color: var(--primario);
+  line-height: 1;
+  letter-spacing: -.01em;
+}
+
+/* Cuadro destacado (fondo crema, sombra terracota) */
+.idea.destacada {
+  background: var(--acento-suave);
+  box-shadow: 6px 6px 0 var(--primario);
+}
+
+/* Cita "tachada" (lo que NO es) */
+.idea.quote-tachada .idea-big {
+  position: relative;
+  color: var(--tinta-suave);
+}
+
+.idea.quote-tachada .idea-big::after {
+  content: '';
+  position: absolute;
+  left: -2%; top: 55%;
+  width: 104%; height: 3px;
+  background: var(--primario);
+  transform: rotate(-1.5deg);
+  border-radius: 2px;
+}
+
+/* Cierre final */
+.idea.cierre {
+  width: 100%;
+  text-align: center;
+  background: var(--tinta);
+  color: var(--fondo);
+  box-shadow: 6px 6px 0 var(--acento);
+  border-color: var(--tinta);
+}
+
+.idea.cierre .idea-sub { color: var(--acento-suave); }
+.idea.cierre .idea-mega { color: var(--fondo); }
+.idea.cierre .acc { color: var(--acento); }
+
+/* Pastillas numeradas */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #fff;
+  font-size: .8rem;
+  margin-right: .5rem;
+}
+
+/* Chips de tareas automatizables */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-top: .6rem;
+}
+
+.chip {
+  font-size: .82rem;
+  font-weight: 600;
+  border: 1.5px solid var(--teal);
+  color: var(--teal);
+  border-radius: 50px;
+  padding: .25rem .85rem;
+  background: rgba(14, 131, 136, 0.06);
+}
+
+/* Filas de distribución */
+.dist-row {
+  display: flex;
+  align-items: baseline;
+  gap: .7rem;
+  padding: .35rem 0;
+  border-bottom: 1px dashed rgba(58, 42, 30, 0.2);
+  font-size: .95rem;
+}
+
+.dist-row:last-child { border-bottom: none; }
+
+.dist-row .mono {
+  font-size: 1.15rem;
+  color: var(--primario);
+  min-width: 52px;
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------
+   Imágenes — espacio reservado con placeholder si falta
+   ------------------------------------------------------------ */
+.idea-img {
+  align-self: flex-end;
+}
+
+.ph-img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 14px;
+  border: var(--borde);
+  box-shadow: 6px 6px 0 var(--acento-suave);
+  display: block;
+}
+
+.img-ph {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 14px;
+  border: 2px dashed var(--primario);
+  background: var(--acento-suave);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  padding: 1.1rem;
+  text-align: center;
+}
+
+.img-ph .ph-icon { font-size: 1.8rem; }
+.img-ph .ph-label { font-family: var(--font-mono); font-size: .68rem; letter-spacing: .16em; color: var(--primario); }
+.img-ph .ph-desc { font-size: .8rem; font-weight: 300; color: var(--tinta-suave); max-width: 260px; }
+
+/* ------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------ */
+@media (max-width: 760px) {
+  .slide-content { padding: 14px 20px; }
+  .idea, .idea-img {
+    width: 100%;
+    min-width: 0;
+  }
+  .idea:nth-child(even),
+  .idea-img:nth-child(even) { margin-top: 0; }
+}
