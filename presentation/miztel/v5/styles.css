@@ -87,14 +87,18 @@ body::before {
   text-align: center;
 }
 
-/* Imagen de la lámina: visible desde el inicio, esquina orgánica */
+/* Imagen de la lámina: visible desde el inicio, centrada a la derecha */
 .hero-img {
   position: absolute;
-  top: 6px;
-  right: 8px;
-  width: 165px;
+  top: 50%;
+  right: 10px;
+  width: 240px;
+  margin-top: -120px;
   z-index: 6;
 }
+
+/* Carril derecho reservado para la imagen: los textos no se solapan */
+.has-hero { padding-right: 290px; }
 
 .hero-img .ph-img {
   width: 100%;
@@ -1010,9 +1014,14 @@ body::before {
 /* ------------------------------------------------------------
    Responsive
    ------------------------------------------------------------ */
+@media (max-width: 1060px) {
+  .has-hero { padding-right: 40px; }
+  .hero-img { position: static; margin: 0 auto .8rem; width: 180px; }
+}
+
 @media (max-width: 720px) {
   .slide-content { padding: 14px 20px; }
-  .hero-img { position: static; margin: 0 auto .8rem; width: 130px; }
+  .hero-img { width: 140px; }
   .vf-tag, .vf-end { min-width: 0; }
   .vf-row { flex-wrap: wrap; gap: .4rem; justify-content: center; text-align: center; }
   .bal-label { min-width: 110px; font-size: .8rem; }
