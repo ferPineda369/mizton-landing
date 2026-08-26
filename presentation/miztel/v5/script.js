@@ -18,10 +18,29 @@ class PresentationV5 {
     init() {
         if (this.totalSlidesEl) this.totalSlidesEl.textContent = this.totalSlides;
         this.setupImagePlaceholders();
+        this.buildCrowds();
         this.updateUI();
         this.bindKeyboard();
         this.bindTouch();
         this.bindWheel();
+    }
+
+    /* Campo de puntos-persona: ~48% "apagados" (sin acceso a internet) */
+    buildCrowds() {
+        document.querySelectorAll('.crowd').forEach(field => {
+            const total = 84;
+            const offCount = Math.round(total * 0.48);
+            const offSet = new Set();
+            while (offSet.size < offCount) {
+                offSet.add(Math.floor(Math.random() * total));
+            }
+            for (let i = 0; i < total; i++) {
+                const dot = document.createElement('i');
+                if (offSet.has(i)) dot.classList.add('off');
+                dot.style.animationDelay = `${i * 0.018}s`;
+                field.appendChild(dot);
+            }
+        });
     }
 
     /* Si una imagen no existe, la reemplaza por un placeholder
@@ -173,7 +192,7 @@ class PresentationV5 {
     retriggerFX() {
         const active = this.getActiveSlide();
         if (!active) return;
-        active.querySelectorAll('.fx').forEach(el => {
+        active.querySelectorAll('.fx, .anim, .draw').forEach(el => {
             el.style.animation = 'none';
             void el.offsetHeight;
             el.style.animation = '';
