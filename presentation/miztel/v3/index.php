@@ -1,3 +1,7 @@
+<?php
+$valorMiztel = "$100";
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -202,7 +206,7 @@
                     <div class="big-stats fade-in delay-2">
                         <div class="bstat"><div class="bstat-num mono">3,200</div><div class="bstat-label">registros digitales totales</div></div>
                         <div class="bstat featured"><div class="bstat-num mono">2,304</div><div class="bstat-label">destinados a la comunidad</div></div>
-                        <div class="bstat"><div class="bstat-num mono">$100</div><div class="bstat-label">USD · aportación voluntaria por registro</div></div>
+                        <div class="bstat"><div class="bstat-num mono"><?php echo $valorMiztel; ?></div><div class="bstat-label">USD · aportación voluntaria por registro</div></div>
                     </div>
                     <div class="nota fade-in delay-3">No existen millones de registros. Existe una <strong>cantidad determinada</strong> — y cada uno da derecho a participar en las retribuciones del sistema.</div>
                 </div>
@@ -527,7 +531,7 @@
                         <div class="tag mono">16 / CIERRE</div>
                         <h2 class="cta-pregunta">¿Limitarte a <span class="dim-inline">consumir</span> conectividad…<br>o <span class="cy">construir</span> el ecosistema que la genera?</h2>
                         <div class="cta-tags">
-                            <span class="cta-tag mono">$100 USD</span>
+                            <span class="cta-tag mono"><?php echo $valorMiztel; ?> USD</span>
                             <span class="cta-tag mono">BLOCKCHAIN</span>
                             <span class="cta-tag mono">2,304 REGISTROS</span>
                             <span class="cta-tag mono">510 LUGARES</span>
