@@ -1,5 +1,5 @@
 <?php
-$valorMiztel = "$100";
+$valorMiztel = "$120";
 ?>
 
 <!DOCTYPE html>
